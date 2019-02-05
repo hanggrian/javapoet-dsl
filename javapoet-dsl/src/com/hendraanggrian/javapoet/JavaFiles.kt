@@ -2,90 +2,70 @@
 
 package com.hendraanggrian.javapoet
 
+import com.hendraanggrian.javapoet.internal.TypeSpecManager
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
-import com.squareup.javapoet.MethodSpec
+import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.TypeSpec
 
-interface MethodSpecBuilder {
+interface JavaFileBuilder : TypeSpecManager {
 
-    val nativeBuilder: MethodSpec.Builder
-}
+    var type: TypeSpec?
 
-class MethodSpecBuilderImpl(override val nativeBuilder: MethodSpec.Builder) : MethodSpecBuilder
-
-interface TypeSpecBuilder {
-
-    val nativeBuilder: TypeSpec.Builder
-
-    fun type(name: String, builder: TypeSpecBuilder.() -> Unit) {
-        nativeBuilder.addType(
-            TypeSpecBuilderImpl(TypeSpec.classBuilder(name))
-                .apply(builder)
-                .nativeBuilder
-                .build()
-        )
+    override fun type(name: String, builder: TypeSpecBuilder.() -> Unit) {
+        type = createType(name, builder)
     }
 
-    fun method(name: String, builder: MethodSpecBuilder.() -> Unit) {
-        nativeBuilder.addMethod(
-            MethodSpecBuilderImpl(MethodSpec.methodBuilder(name))
-                .apply(builder)
-                .nativeBuilder
-                .build()
-        )
-    }
-}
-
-class TypeSpecBuilderImpl(override val nativeBuilder: TypeSpec.Builder) : TypeSpecBuilder
-
-interface JavaFileBuilder {
-
-    fun type(name: String, builder: TypeSpecBuilder.() -> Unit) {
-        TypeSpec.classBuilder(name)
+    override fun type(className: ClassName, builder: TypeSpecBuilder.() -> Unit) {
+        type = createType(className, builder)
     }
 
-    fun type(className: ClassName, builder: TypeSpecBuilder.() -> Unit): TypeSpec.Builder =
-        TypeSpec.classBuilder(className)
+    override fun iface(name: String, builder: TypeSpecBuilder.() -> Unit) {
+        type = createInterface(name, builder)
+    }
 
-    fun iface(name: String, builder: TypeSpecBuilder.() -> Unit): TypeSpec.Builder =
-        TypeSpec.interfaceBuilder(name)
+    override fun iface(className: ClassName, builder: TypeSpecBuilder.() -> Unit) {
+        type = createInterface(className, builder)
+    }
 
-    fun iface(className: ClassName, builder: TypeSpecBuilder.() -> Unit): TypeSpec.Builder =
-        TypeSpec.interfaceBuilder(className)
+    override fun enum(name: String, builder: TypeSpecBuilder.() -> Unit) {
+        type = createEnum(name, builder)
+    }
 
-    fun enum(name: String, builder: TypeSpecBuilder.() -> Unit): TypeSpec.Builder =
-        TypeSpec.enumBuilder(name)
+    override fun enum(className: ClassName, builder: TypeSpecBuilder.() -> Unit) {
+        type = createEnum(className, builder)
+    }
 
-    fun enum(className: ClassName, builder: TypeSpecBuilder.() -> Unit): TypeSpec.Builder =
-        TypeSpec.enumBuilder(className)
+    override fun anonymous(typeArgumentsFormat: String, vararg args: Any, builder: TypeSpecBuilder.() -> Unit) {
+        type = createAnonymous(typeArgumentsFormat, *args, builder = builder)
+    }
 
-    fun anonymous(
-        typeArgumentsFormat: String,
-        vararg args: Any,
-        builder: TypeSpecBuilder.() -> Unit
-    ): TypeSpec.Builder = TypeSpec.anonymousClassBuilder(typeArgumentsFormat, *args)
+    override fun anonymous(typeArguments: CodeBlock, builder: TypeSpecBuilder.() -> Unit) {
+        type = createAnonymous(typeArguments, builder)
+    }
 
-    fun anonymous(typeArguments: CodeBlock, builder: TypeSpecBuilder.() -> Unit): TypeSpec.Builder =
-        TypeSpec.anonymousClassBuilder(typeArguments)
+    override fun annotation(name: String, builder: TypeSpecBuilder.() -> Unit) {
+        type = createAnnotation(name, builder)
+    }
 
-    fun annotation(name: String, builder: TypeSpecBuilder.() -> Unit): TypeSpec.Builder =
-        TypeSpec.annotationBuilder(name)
-
-    fun annotation(className: ClassName, builder: TypeSpecBuilder.() -> Unit): TypeSpec.Builder =
-        TypeSpec.annotationBuilder(className)
+    override fun annotation(className: ClassName, builder: TypeSpecBuilder.() -> Unit) {
+        type = createAnnotation(className, builder)
+    }
 }
 
 class JavaFileBuilderImpl : JavaFileBuilder {
 
+    override var type: TypeSpec? = null
 }
 
-inline fun buildJavaFile(packageName: String, builder: JavaFileBuilder.() -> Unit) {
-    // JavaFile.builder(packageName)
-}
+inline fun buildJavaFile(packageName: String, builder: JavaFileBuilder.() -> Unit): JavaFile = JavaFile
+    .builder(packageName, checkNotNull(JavaFileBuilderImpl().apply(builder).type) { "A type must be initialized" })
+    .build()
 
 fun asd() {
     buildJavaFile("cas") {
+        annotation("asd") {
+        }
         type("asd") {
             type("asd") {
 
@@ -94,5 +74,5 @@ fun asd() {
 
             }
         }
-    }
+    }.writeTo(System.out)
 }
