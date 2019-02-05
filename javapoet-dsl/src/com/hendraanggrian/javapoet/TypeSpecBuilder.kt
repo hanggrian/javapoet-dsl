@@ -16,24 +16,31 @@ import java.lang.reflect.Type
 import javax.lang.model.element.Element
 import javax.lang.model.element.Modifier
 
+/** Returns a class builder with custom initialization block. */
 fun buildTypeSpec(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpecBuilder =
     TypeSpecBuilderImpl(TypeSpec.classBuilder(name)).also { builder?.invoke(it) }
 
+/** Returns a class builder with custom initialization block. */
 fun buildTypeSpec(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpecBuilder =
     TypeSpecBuilderImpl(TypeSpec.classBuilder(className)).also { builder?.invoke(it) }
 
+/** Returns an interface builder with custom initialization block. */
 fun buildInterfaceTypeSpec(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpecBuilder =
     TypeSpecBuilderImpl(TypeSpec.interfaceBuilder(name)).also { builder?.invoke(it) }
 
+/** Returns an interface builder with custom initialization block. */
 fun buildInterfaceTypeSpec(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpecBuilder =
     TypeSpecBuilderImpl(TypeSpec.interfaceBuilder(className)).also { builder?.invoke(it) }
 
+/** Returns an enum builder with custom initialization block. */
 fun buildEnumTypeSpec(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpecBuilder =
     TypeSpecBuilderImpl(TypeSpec.enumBuilder(name)).also { builder?.invoke(it) }
 
+/** Returns an enum builder with custom initialization block. */
 fun buildEnumTypeSpec(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpecBuilder =
     TypeSpecBuilderImpl(TypeSpec.enumBuilder(className)).also { builder?.invoke(it) }
 
+/** Returns an anonymous class builder with custom initialization block. */
 fun buildAnonymousTypeSpec(
     typeArgumentsFormat: String,
     vararg args: Any,
@@ -41,12 +48,15 @@ fun buildAnonymousTypeSpec(
 ): TypeSpecBuilder = TypeSpecBuilderImpl(TypeSpec.anonymousClassBuilder(typeArgumentsFormat, *args))
     .also { builder?.invoke(it) }
 
+/** Returns an anonymous class builder with custom initialization block. */
 fun buildAnonymousTypeSpec(typeArguments: CodeBlock, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpecBuilder =
     TypeSpecBuilderImpl(TypeSpec.anonymousClassBuilder(typeArguments)).also { builder?.invoke(it) }
 
+/** Returns an annotation builder with custom initialization block. */
 fun buildAnnotationTypeSpec(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpecBuilder =
     TypeSpecBuilderImpl(TypeSpec.annotationBuilder(name)).also { builder?.invoke(it) }
 
+/** Returns an annotation builder with custom initialization block. */
 fun buildAnnotationTypeSpec(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpecBuilder =
     TypeSpecBuilderImpl(TypeSpec.annotationBuilder(className)).also { builder?.invoke(it) }
 

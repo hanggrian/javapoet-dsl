@@ -8,13 +8,15 @@ import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.TypeName
 import java.lang.reflect.Type
 
+/** Returns a field with custom initialization block. */
 fun buildFieldSpec(type: TypeName, name: String, builder: (FieldSpecBuilder.() -> Unit)? = null): FieldSpecBuilder =
     FieldSpecBuilderImpl(FieldSpec.builder(type, name)).also { builder?.invoke(it) }
 
+/** Returns a field with custom initialization block. */
 fun buildFieldSpec(type: Type, name: String, builder: (FieldSpecBuilder.() -> Unit)? = null): FieldSpecBuilder =
     FieldSpecBuilderImpl(FieldSpec.builder(type, name)).also { builder?.invoke(it) }
 
-interface FieldSpecBuilder : JavadocManager, AnnotationManager, SpecBuilder<FieldSpec> {
+interface FieldSpecBuilder : JavadocManager, AnnotationManager {
 
     val nativeBuilder: FieldSpec.Builder
 
@@ -46,7 +48,7 @@ interface FieldSpecBuilder : JavadocManager, AnnotationManager, SpecBuilder<Fiel
             nativeBuilder.initializer(value)
         }
 
-    override fun build(): FieldSpec = nativeBuilder.build()
+    fun build(): FieldSpec = nativeBuilder.build()
 }
 
 internal class FieldSpecBuilderImpl(override val nativeBuilder: FieldSpec.Builder) : FieldSpecBuilder

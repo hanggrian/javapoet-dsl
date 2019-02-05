@@ -8,9 +8,35 @@ import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.TypeSpec
 
+/** Returns a java file with custom initialization block. */
+inline fun buildJavaFile(packageName: String, builder: JavaFileBuilder.() -> Unit): JavaFile =
+    JavaFileBuilderImpl(packageName).apply(builder).build()
+
 interface JavaFileBuilder : TypeSpecManager {
 
+    val packageName: String
+
     var type: TypeSpec?
+
+    val comments: MutableList<Pair<String, Array<Any>>>
+
+    val staticImports: MutableList<Pair<Any, Array<String>>>
+
+    var isSkipJavaLangImports: Boolean
+
+    var indent: Int
+
+    fun comment(format: String, vararg args: Any) {
+        comments += format to arrayOf(*args)
+    }
+
+    fun staticImport(type: ClassName, vararg names: String) {
+        staticImports += type to arrayOf(*names)
+    }
+
+    fun staticImport(type: Class<*>, vararg names: String) {
+        staticImports += type to arrayOf(*names)
+    }
 
     override fun type(name: String, builder: (TypeSpecBuilder.() -> Unit)?) {
         type = buildTypeSpec(name, builder).build()
@@ -51,14 +77,38 @@ interface JavaFileBuilder : TypeSpecManager {
     override fun annotationType(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
         type = buildAnnotationTypeSpec(className, builder).build()
     }
+
+    fun build(): JavaFile = JavaFile.builder(packageName, checkNotNull(type) { "A type must be initialized" })
+        .apply {
+            comments.forEach { (format, args) ->
+                addFileComment(format, *args)
+            }
+            staticImports.forEach { (type, names) ->
+                when (type) {
+                    is ClassName -> addStaticImport(type, *names)
+                    is Class<*> -> addStaticImport(type, *names)
+                }
+            }
+            skipJavaLangImports(isSkipJavaLangImports)
+            indent(buildString {
+                repeat(indent) {
+                    append(" ")
+                }
+            })
+        }
+        .build()
 }
 
 @PublishedApi
-internal class JavaFileBuilderImpl : JavaFileBuilder {
+internal class JavaFileBuilderImpl(override val packageName: String) : JavaFileBuilder {
 
     override var type: TypeSpec? = null
-}
 
-inline fun buildJavaFile(packageName: String, builder: JavaFileBuilder.() -> Unit): JavaFile = JavaFile
-    .builder(packageName, checkNotNull(JavaFileBuilderImpl().apply(builder).type) { "A type must be initialized" })
-    .build()
+    override val comments: MutableList<Pair<String, Array<Any>>> = mutableListOf()
+
+    override val staticImports: MutableList<Pair<Any, Array<String>>> = mutableListOf()
+
+    override var isSkipJavaLangImports: Boolean = false
+
+    override var indent: Int = 2
+}

@@ -13,9 +13,11 @@ import com.squareup.javapoet.TypeVariableName
 import java.lang.reflect.Type
 import javax.lang.model.element.Modifier
 
+/** Returns a method with custom initialization block. */
 fun buildMethodSpec(name: String, builder: (MethodSpecBuilder.() -> Unit)? = null): MethodSpecBuilder =
     MethodSpecBuilderImpl(MethodSpec.methodBuilder(name)).also { builder?.invoke(it) }
 
+/** Returns a constructor method with custom initialization block. */
 fun buildConstructorMethodSpec(builder: (MethodSpecBuilder.() -> Unit)? = null): MethodSpecBuilder =
     MethodSpecBuilderImpl(MethodSpec.constructorBuilder()).also { builder?.invoke(it) }
 
@@ -23,8 +25,7 @@ interface MethodSpecBuilder : JavadocManager,
     AnnotationManager,
     ModifierManager,
     TypeVariableManager,
-    ParameterSpecManager,
-    SpecBuilder<MethodSpec> {
+    ParameterSpecManager {
 
     val nativeBuilder: MethodSpec.Builder
 
@@ -136,7 +137,7 @@ interface MethodSpecBuilder : JavadocManager,
         nativeBuilder.addStatement(block)
     }
 
-    override fun build(): MethodSpec = nativeBuilder.build()
+    fun build(): MethodSpec = nativeBuilder.build()
 }
 
 internal class MethodSpecBuilderImpl(override val nativeBuilder: MethodSpec.Builder) : MethodSpecBuilder

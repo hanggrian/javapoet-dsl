@@ -8,19 +8,21 @@ import com.squareup.javapoet.TypeName
 import java.lang.reflect.Type
 import javax.lang.model.element.Modifier
 
+/** Returns a parameter with custom initialization block. */
 fun buildParameterSpec(
     type: TypeName,
     name: String,
     builder: (ParameterSpecBuilder.() -> Unit)? = null
 ): ParameterSpecBuilder = ParameterSpecBuilderImpl(ParameterSpec.builder(type, name)).also { builder?.invoke(it) }
 
+/** Returns a parameter with custom initialization block. */
 fun buildParameterSpec(
     type: Type,
     name: String,
     builder: (ParameterSpecBuilder.() -> Unit)? = null
 ): ParameterSpecBuilder = ParameterSpecBuilderImpl(ParameterSpec.builder(type, name)).also { builder?.invoke(it) }
 
-interface ParameterSpecBuilder : AnnotationManager, ModifierManager, SpecBuilder<ParameterSpec> {
+interface ParameterSpecBuilder : AnnotationManager, ModifierManager {
 
     val nativeBuilder: ParameterSpec.Builder
 
@@ -36,7 +38,7 @@ interface ParameterSpecBuilder : AnnotationManager, ModifierManager, SpecBuilder
         nativeBuilder.addModifiers(*modifiers)
     }
 
-    override fun build(): ParameterSpec = nativeBuilder.build()
+    fun build(): ParameterSpec = nativeBuilder.build()
 }
 
 internal class ParameterSpecBuilderImpl(override val nativeBuilder: ParameterSpec.Builder) : ParameterSpecBuilder
