@@ -8,86 +8,86 @@ import com.squareup.javapoet.TypeSpec
 
 interface TypeSpecManager {
 
-    fun type(name: String, builder: TypeSpecBuilder.() -> Unit)
+    fun type(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null)
 
-    fun type(className: ClassName, builder: TypeSpecBuilder.() -> Unit)
+    fun type(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null)
 
-    fun iface(name: String, builder: TypeSpecBuilder.() -> Unit)
+    fun interfaceType(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null)
 
-    fun iface(className: ClassName, builder: TypeSpecBuilder.() -> Unit)
+    fun interfaceType(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null)
 
-    fun enum(name: String, builder: TypeSpecBuilder.() -> Unit)
+    fun enumType(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null)
 
-    fun enum(className: ClassName, builder: TypeSpecBuilder.() -> Unit)
+    fun enumType(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null)
 
-    fun anonymous(typeArgumentsFormat: String, vararg args: Any, builder: TypeSpecBuilder.() -> Unit)
+    fun anonymousType(typeArgumentsFormat: String, vararg args: Any, builder: (TypeSpecBuilder.() -> Unit)? = null)
 
-    fun anonymous(typeArguments: CodeBlock, builder: TypeSpecBuilder.() -> Unit)
+    fun anonymousType(typeArguments: CodeBlock, builder: (TypeSpecBuilder.() -> Unit)? = null)
 
-    fun annotation(name: String, builder: TypeSpecBuilder.() -> Unit)
+    fun annotationType(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null)
 
-    fun annotation(className: ClassName, builder: TypeSpecBuilder.() -> Unit)
+    fun annotationType(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null)
 
-    fun createType(name: String, builder: TypeSpecBuilder.() -> Unit): TypeSpec =
+    fun createType(name: String, builder: (TypeSpecBuilder.() -> Unit)?): TypeSpec =
         TypeSpecBuilderImpl(TypeSpec.classBuilder(name))
-            .apply(builder)
+            .also { builder?.invoke(it) }
             .nativeBuilder
             .build()
 
-    fun createType(className: ClassName, builder: TypeSpecBuilder.() -> Unit): TypeSpec =
+    fun createType(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?): TypeSpec =
         TypeSpecBuilderImpl(TypeSpec.classBuilder(className))
-            .apply(builder)
+            .also { builder?.invoke(it) }
             .nativeBuilder
             .build()
 
-    fun createInterface(name: String, builder: TypeSpecBuilder.() -> Unit): TypeSpec =
+    fun createInterfaceType(name: String, builder: (TypeSpecBuilder.() -> Unit)?): TypeSpec =
         TypeSpecBuilderImpl(TypeSpec.interfaceBuilder(name))
-            .apply(builder)
+            .also { builder?.invoke(it) }
             .nativeBuilder
             .build()
 
-    fun createInterface(className: ClassName, builder: TypeSpecBuilder.() -> Unit): TypeSpec =
+    fun createInterfaceType(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?): TypeSpec =
         TypeSpecBuilderImpl(TypeSpec.interfaceBuilder(className))
-            .apply(builder)
+            .also { builder?.invoke(it) }
             .nativeBuilder
             .build()
 
-    fun createEnum(name: String, builder: TypeSpecBuilder.() -> Unit): TypeSpec =
+    fun createEnumType(name: String, builder: (TypeSpecBuilder.() -> Unit)?): TypeSpec =
         TypeSpecBuilderImpl(TypeSpec.enumBuilder(name))
-            .apply(builder)
+            .also { builder?.invoke(it) }
             .nativeBuilder
             .build()
 
-    fun createEnum(className: ClassName, builder: TypeSpecBuilder.() -> Unit): TypeSpec =
+    fun createEnumType(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?): TypeSpec =
         TypeSpecBuilderImpl(TypeSpec.enumBuilder(className))
-            .apply(builder)
+            .also { builder?.invoke(it) }
             .nativeBuilder
             .build()
 
-    fun createAnonymous(
+    fun createAnonymousType(
         typeArgumentsFormat: String,
         vararg args: Any,
-        builder: TypeSpecBuilder.() -> Unit
+        builder: (TypeSpecBuilder.() -> Unit)?
     ): TypeSpec = TypeSpecBuilderImpl(TypeSpec.anonymousClassBuilder(typeArgumentsFormat, *args))
-        .apply(builder)
+        .also { builder?.invoke(it) }
         .nativeBuilder
         .build()
 
-    fun createAnonymous(typeArguments: CodeBlock, builder: TypeSpecBuilder.() -> Unit): TypeSpec =
+    fun createAnonymousType(typeArguments: CodeBlock, builder: (TypeSpecBuilder.() -> Unit)?): TypeSpec =
         TypeSpecBuilderImpl(TypeSpec.anonymousClassBuilder(typeArguments))
-            .apply(builder)
+            .also { builder?.invoke(it) }
             .nativeBuilder
             .build()
 
-    fun createAnnotation(name: String, builder: TypeSpecBuilder.() -> Unit): TypeSpec =
+    fun createAnnotationType(name: String, builder: (TypeSpecBuilder.() -> Unit)?): TypeSpec =
         TypeSpecBuilderImpl(TypeSpec.annotationBuilder(name))
-            .apply(builder)
+            .also { builder?.invoke(it) }
             .nativeBuilder
             .build()
 
-    fun createAnnotation(className: ClassName, builder: TypeSpecBuilder.() -> Unit): TypeSpec =
+    fun createAnnotationType(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?): TypeSpec =
         TypeSpecBuilderImpl(TypeSpec.annotationBuilder(className))
-            .apply(builder)
+            .also { builder?.invoke(it) }
             .nativeBuilder
             .build()
 }

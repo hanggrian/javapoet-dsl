@@ -1,15 +1,25 @@
 package com.hendraanggrian.javapoet.internal
 
+import com.hendraanggrian.javapoet.AnnotationSpecBuilder
+import com.hendraanggrian.javapoet.AnnotationSpecBuilderImpl
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
 
 interface AnnotationManager {
 
-    fun annotations(annotationSpecs: Iterable<AnnotationSpec>)
+    fun annotation(type: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)? = null)
 
-    fun annotation(annotationSpec: AnnotationSpec)
+    fun annotation(type: Class<*>, builder: (AnnotationSpecBuilder.() -> Unit)? = null)
 
-    fun annotation(annotation: ClassName)
+    fun createAnnotation(type: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)?): AnnotationSpec =
+        AnnotationSpecBuilderImpl(AnnotationSpec.builder(type))
+            .also { builder?.invoke(it) }
+            .nativeBuilder
+            .build()
 
-    fun annotation(annotation: Class<*>)
+    fun createAnnotation(type: Class<*>, builder: (AnnotationSpecBuilder.() -> Unit)?): AnnotationSpec =
+        AnnotationSpecBuilderImpl(AnnotationSpec.builder(type))
+            .also { builder?.invoke(it) }
+            .nativeBuilder
+            .build()
 }

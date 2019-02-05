@@ -8,17 +8,19 @@ import java.lang.reflect.Type
 
 interface FieldSpecManager {
 
-    fun field(type: TypeName, name: String, builder: FieldSpecBuilder.() -> Unit)
+    fun field(type: TypeName, name: String, builder: (FieldSpecBuilder.() -> Unit)? = null)
 
-    fun field(type: Type, name: String, builder: FieldSpecBuilder.() -> Unit)
+    fun field(type: Type, name: String, builder: (FieldSpecBuilder.() -> Unit)? = null)
 
-    fun createField(type: TypeName, name: String, builder: FieldSpecBuilder.() -> Unit): FieldSpec =
+    fun createField(type: TypeName, name: String, builder: (FieldSpecBuilder.() -> Unit)?): FieldSpec =
         FieldSpecBuilderImpl(FieldSpec.builder(type, name))
+            .also { builder?.invoke(it) }
             .nativeBuilder
             .build()
 
-    fun createField(type: Type, name: String, builder: FieldSpecBuilder.() -> Unit): FieldSpec =
+    fun createField(type: Type, name: String, builder: (FieldSpecBuilder.() -> Unit)?): FieldSpec =
         FieldSpecBuilderImpl(FieldSpec.builder(type, name))
+            .also { builder?.invoke(it) }
             .nativeBuilder
             .build()
 }

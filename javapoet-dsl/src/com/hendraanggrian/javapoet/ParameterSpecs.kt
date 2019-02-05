@@ -2,7 +2,6 @@ package com.hendraanggrian.javapoet
 
 import com.hendraanggrian.javapoet.internal.AnnotationManager
 import com.hendraanggrian.javapoet.internal.ModifierManager
-import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.ParameterSpec
 import javax.lang.model.element.Modifier
@@ -11,20 +10,12 @@ interface ParameterSpecBuilder : AnnotationManager, ModifierManager {
 
     val nativeBuilder: ParameterSpec.Builder
 
-    override fun annotations(annotationSpecs: Iterable<AnnotationSpec>) {
-        nativeBuilder.addAnnotations(annotationSpecs)
+    override fun annotation(type: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)?) {
+        nativeBuilder.addAnnotation(createAnnotation(type, builder))
     }
 
-    override fun annotation(annotationSpec: AnnotationSpec) {
-        nativeBuilder.addAnnotation(annotationSpec)
-    }
-
-    override fun annotation(annotation: ClassName) {
-        nativeBuilder.addAnnotation(annotation)
-    }
-
-    override fun annotation(annotation: Class<*>) {
-        nativeBuilder.addAnnotation(annotation)
+    override fun annotation(type: Class<*>, builder: (AnnotationSpecBuilder.() -> Unit)?) {
+        nativeBuilder.addAnnotation(createAnnotation(type, builder))
     }
 
     override fun modifiers(vararg modifiers: Modifier) {
@@ -32,4 +23,4 @@ interface ParameterSpecBuilder : AnnotationManager, ModifierManager {
     }
 }
 
-class ParameterSpecBuilderImpl(override val nativeBuilder: ParameterSpec.Builder) : ParameterSpecBuilder
+internal class ParameterSpecBuilderImpl(override val nativeBuilder: ParameterSpec.Builder) : ParameterSpecBuilder

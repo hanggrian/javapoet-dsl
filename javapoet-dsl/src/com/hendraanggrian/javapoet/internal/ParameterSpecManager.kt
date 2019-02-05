@@ -8,17 +8,19 @@ import java.lang.reflect.Type
 
 interface ParameterSpecManager {
 
-    fun parameter(type: TypeName, name: String, builder: ParameterSpecBuilder.() -> Unit)
+    fun parameter(type: TypeName, name: String, builder: (ParameterSpecBuilder.() -> Unit)? = null)
 
-    fun parameter(type: Type, name: String, builder: ParameterSpecBuilder.() -> Unit)
+    fun parameter(type: Type, name: String, builder: (ParameterSpecBuilder.() -> Unit)? = null)
 
-    fun createParameter(type: TypeName, name: String, builder: ParameterSpecBuilder.() -> Unit): ParameterSpec =
+    fun createParameter(type: TypeName, name: String, builder: (ParameterSpecBuilder.() -> Unit)?): ParameterSpec =
         ParameterSpecBuilderImpl(ParameterSpec.builder(type, name))
+            .also { builder?.invoke(it) }
             .nativeBuilder
             .build()
 
-    fun createParameter(type: Type, name: String, builder: ParameterSpecBuilder.() -> Unit): ParameterSpec =
+    fun createParameter(type: Type, name: String, builder: (ParameterSpecBuilder.() -> Unit)?): ParameterSpec =
         ParameterSpecBuilderImpl(ParameterSpec.builder(type, name))
+            .also { builder?.invoke(it) }
             .nativeBuilder
             .build()
 }

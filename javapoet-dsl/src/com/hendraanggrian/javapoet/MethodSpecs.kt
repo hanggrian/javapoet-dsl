@@ -5,7 +5,6 @@ import com.hendraanggrian.javapoet.internal.JavadocManager
 import com.hendraanggrian.javapoet.internal.ModifierManager
 import com.hendraanggrian.javapoet.internal.ParameterSpecManager
 import com.hendraanggrian.javapoet.internal.TypeVariableManager
-import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.MethodSpec
@@ -26,24 +25,18 @@ interface MethodSpecBuilder : JavadocManager,
         nativeBuilder.addJavadoc(format, *args)
     }
 
-    override fun javadoc(codeBlock: CodeBlock) {
-        nativeBuilder.addJavadoc(codeBlock)
+    override var javadoc: CodeBlock
+        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
+        set(value) {
+            nativeBuilder.addJavadoc(value)
+        }
+
+    override fun annotation(type: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)?) {
+        nativeBuilder.addAnnotation(createAnnotation(type, builder))
     }
 
-    override fun annotations(annotationSpecs: Iterable<AnnotationSpec>) {
-        nativeBuilder.addAnnotations(annotationSpecs)
-    }
-
-    override fun annotation(annotationSpec: AnnotationSpec) {
-        nativeBuilder.addAnnotation(annotationSpec)
-    }
-
-    override fun annotation(annotation: ClassName) {
-        nativeBuilder.addAnnotation(annotation)
-    }
-
-    override fun annotation(annotation: Class<*>) {
-        nativeBuilder.addAnnotation(annotation)
+    override fun annotation(type: Class<*>, builder: (AnnotationSpecBuilder.() -> Unit)?) {
+        nativeBuilder.addAnnotation(createAnnotation(type, builder))
     }
 
     override fun modifiers(vararg modifiers: Modifier) {
@@ -58,29 +51,31 @@ interface MethodSpecBuilder : JavadocManager,
         nativeBuilder.addTypeVariables(typeVariables)
     }
 
-    fun returns(returnType: TypeName) {
-        nativeBuilder.returns(returnType)
-    }
+    var returns: TypeName
+        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
+        set(value) {
+            nativeBuilder.returns(value)
+        }
 
-    fun returns(returnType: Type) {
-        nativeBuilder.returns(returnType)
-    }
+    var returnsType: Type
+        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
+        set(value) {
+            nativeBuilder.returns(value)
+        }
 
-    override fun parameter(type: TypeName, name: String, builder: ParameterSpecBuilder.() -> Unit) {
+    override fun parameter(type: TypeName, name: String, builder: (ParameterSpecBuilder.() -> Unit)?) {
         nativeBuilder.addParameter(createParameter(type, name, builder))
     }
 
-    override fun parameter(type: Type, name: String, builder: ParameterSpecBuilder.() -> Unit) {
+    override fun parameter(type: Type, name: String, builder: (ParameterSpecBuilder.() -> Unit)?) {
         nativeBuilder.addParameter(createParameter(type, name, builder))
     }
 
-    fun varargs() {
-        nativeBuilder.varargs()
-    }
-
-    fun varargs(varargs: Boolean) {
-        nativeBuilder.varargs(varargs)
-    }
+    var varargs: Boolean
+        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
+        set(value) {
+            nativeBuilder.varargs(value)
+        }
 
     fun exceptions(exceptions: Iterable<TypeName>) {
         nativeBuilder.addExceptions(exceptions)
@@ -135,4 +130,4 @@ interface MethodSpecBuilder : JavadocManager,
     }
 }
 
-class MethodSpecBuilderImpl(override val nativeBuilder: MethodSpec.Builder) : MethodSpecBuilder
+internal class MethodSpecBuilderImpl(override val nativeBuilder: MethodSpec.Builder) : MethodSpecBuilder

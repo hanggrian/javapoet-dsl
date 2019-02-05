@@ -6,5 +6,5 @@ interface JavadocManager {
 
     fun javadoc(format: String, vararg args: Any)
 
-    fun javadoc(codeBlock: CodeBlock)
+    var javadoc: CodeBlock
 }

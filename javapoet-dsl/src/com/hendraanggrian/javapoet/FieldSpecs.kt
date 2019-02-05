@@ -2,7 +2,6 @@ package com.hendraanggrian.javapoet
 
 import com.hendraanggrian.javapoet.internal.AnnotationManager
 import com.hendraanggrian.javapoet.internal.JavadocManager
-import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.FieldSpec
@@ -15,33 +14,29 @@ interface FieldSpecBuilder : JavadocManager, AnnotationManager {
         nativeBuilder.addJavadoc(format, *args)
     }
 
-    override fun javadoc(codeBlock: CodeBlock) {
-        nativeBuilder.addJavadoc(codeBlock)
+    override var javadoc: CodeBlock
+        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
+        set(value) {
+            nativeBuilder.addJavadoc(value)
+        }
+
+    override fun annotation(type: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)?) {
+        nativeBuilder.addAnnotation(createAnnotation(type, builder))
     }
 
-    override fun annotations(annotationSpecs: Iterable<AnnotationSpec>) {
-        nativeBuilder.addAnnotations(annotationSpecs)
-    }
-
-    override fun annotation(annotationSpec: AnnotationSpec) {
-        nativeBuilder.addAnnotation(annotationSpec)
-    }
-
-    override fun annotation(annotation: ClassName) {
-        nativeBuilder.addAnnotation(annotation)
-    }
-
-    override fun annotation(annotation: Class<*>) {
-        nativeBuilder.addAnnotation(annotation)
+    override fun annotation(type: Class<*>, builder: (AnnotationSpecBuilder.() -> Unit)?) {
+        nativeBuilder.addAnnotation(createAnnotation(type, builder))
     }
 
     fun initializer(format: String, vararg args: Any) {
         nativeBuilder.initializer(format, *args)
     }
 
-    fun initializer(codeBlock: CodeBlock) {
-        nativeBuilder.initializer(codeBlock)
-    }
+    var initializer: CodeBlock
+        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
+        set(value) {
+            nativeBuilder.initializer(value)
+        }
 }
 
-class FieldSpecBuilderImpl(override val nativeBuilder: FieldSpec.Builder) : FieldSpecBuilder
+internal class FieldSpecBuilderImpl(override val nativeBuilder: FieldSpec.Builder) : FieldSpecBuilder

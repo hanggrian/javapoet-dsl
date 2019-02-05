@@ -12,48 +12,49 @@ interface JavaFileBuilder : TypeSpecManager {
 
     var type: TypeSpec?
 
-    override fun type(name: String, builder: TypeSpecBuilder.() -> Unit) {
+    override fun type(name: String, builder: (TypeSpecBuilder.() -> Unit)?) {
         type = createType(name, builder)
     }
 
-    override fun type(className: ClassName, builder: TypeSpecBuilder.() -> Unit) {
+    override fun type(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
         type = createType(className, builder)
     }
 
-    override fun iface(name: String, builder: TypeSpecBuilder.() -> Unit) {
-        type = createInterface(name, builder)
+    override fun interfaceType(name: String, builder: (TypeSpecBuilder.() -> Unit)?) {
+        type = createInterfaceType(name, builder)
     }
 
-    override fun iface(className: ClassName, builder: TypeSpecBuilder.() -> Unit) {
-        type = createInterface(className, builder)
+    override fun interfaceType(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
+        type = createInterfaceType(className, builder)
     }
 
-    override fun enum(name: String, builder: TypeSpecBuilder.() -> Unit) {
-        type = createEnum(name, builder)
+    override fun enumType(name: String, builder: (TypeSpecBuilder.() -> Unit)?) {
+        type = createEnumType(name, builder)
     }
 
-    override fun enum(className: ClassName, builder: TypeSpecBuilder.() -> Unit) {
-        type = createEnum(className, builder)
+    override fun enumType(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
+        type = createEnumType(className, builder)
     }
 
-    override fun anonymous(typeArgumentsFormat: String, vararg args: Any, builder: TypeSpecBuilder.() -> Unit) {
-        type = createAnonymous(typeArgumentsFormat, *args, builder = builder)
+    override fun anonymousType(typeArgumentsFormat: String, vararg args: Any, builder: (TypeSpecBuilder.() -> Unit)?) {
+        type = createAnonymousType(typeArgumentsFormat, *args, builder = builder)
     }
 
-    override fun anonymous(typeArguments: CodeBlock, builder: TypeSpecBuilder.() -> Unit) {
-        type = createAnonymous(typeArguments, builder)
+    override fun anonymousType(typeArguments: CodeBlock, builder: (TypeSpecBuilder.() -> Unit)?) {
+        type = createAnonymousType(typeArguments, builder)
     }
 
-    override fun annotation(name: String, builder: TypeSpecBuilder.() -> Unit) {
-        type = createAnnotation(name, builder)
+    override fun annotationType(name: String, builder: (TypeSpecBuilder.() -> Unit)?) {
+        type = createAnnotationType(name, builder)
     }
 
-    override fun annotation(className: ClassName, builder: TypeSpecBuilder.() -> Unit) {
-        type = createAnnotation(className, builder)
+    override fun annotationType(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
+        type = createAnnotationType(className, builder)
     }
 }
 
-class JavaFileBuilderImpl : JavaFileBuilder {
+@PublishedApi
+internal class JavaFileBuilderImpl : JavaFileBuilder {
 
     override var type: TypeSpec? = null
 }
@@ -61,18 +62,3 @@ class JavaFileBuilderImpl : JavaFileBuilder {
 inline fun buildJavaFile(packageName: String, builder: JavaFileBuilder.() -> Unit): JavaFile = JavaFile
     .builder(packageName, checkNotNull(JavaFileBuilderImpl().apply(builder).type) { "A type must be initialized" })
     .build()
-
-fun asd() {
-    buildJavaFile("cas") {
-        annotation("asd") {
-        }
-        type("asd") {
-            type("asd") {
-
-            }
-            method("asd") {
-
-            }
-        }
-    }.writeTo(System.out)
-}
