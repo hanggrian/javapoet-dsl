@@ -13,43 +13,43 @@ interface JavaFileBuilder : TypeSpecManager {
     var type: TypeSpec?
 
     override fun type(name: String, builder: (TypeSpecBuilder.() -> Unit)?) {
-        type = createType(name, builder)
+        type = buildTypeSpec(name, builder).build()
     }
 
     override fun type(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
-        type = createType(className, builder)
+        type = buildTypeSpec(className, builder).build()
     }
 
     override fun interfaceType(name: String, builder: (TypeSpecBuilder.() -> Unit)?) {
-        type = createInterfaceType(name, builder)
+        type = buildInterfaceTypeSpec(name, builder).build()
     }
 
     override fun interfaceType(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
-        type = createInterfaceType(className, builder)
+        type = buildInterfaceTypeSpec(className, builder).build()
     }
 
     override fun enumType(name: String, builder: (TypeSpecBuilder.() -> Unit)?) {
-        type = createEnumType(name, builder)
+        type = buildEnumTypeSpec(name, builder).build()
     }
 
     override fun enumType(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
-        type = createEnumType(className, builder)
+        type = buildEnumTypeSpec(className, builder).build()
     }
 
     override fun anonymousType(typeArgumentsFormat: String, vararg args: Any, builder: (TypeSpecBuilder.() -> Unit)?) {
-        type = createAnonymousType(typeArgumentsFormat, *args, builder = builder)
+        type = buildAnonymousTypeSpec(typeArgumentsFormat, *args, builder = builder).build()
     }
 
     override fun anonymousType(typeArguments: CodeBlock, builder: (TypeSpecBuilder.() -> Unit)?) {
-        type = createAnonymousType(typeArguments, builder)
+        type = buildAnonymousTypeSpec(typeArguments, builder).build()
     }
 
     override fun annotationType(name: String, builder: (TypeSpecBuilder.() -> Unit)?) {
-        type = createAnnotationType(name, builder)
+        type = buildAnnotationTypeSpec(name, builder).build()
     }
 
     override fun annotationType(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
-        type = createAnnotationType(className, builder)
+        type = buildAnnotationTypeSpec(className, builder).build()
     }
 }
 

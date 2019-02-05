@@ -13,11 +13,18 @@ import com.squareup.javapoet.TypeVariableName
 import java.lang.reflect.Type
 import javax.lang.model.element.Modifier
 
+fun buildMethodSpec(name: String, builder: (MethodSpecBuilder.() -> Unit)? = null): MethodSpecBuilder =
+    MethodSpecBuilderImpl(MethodSpec.methodBuilder(name)).also { builder?.invoke(it) }
+
+fun buildConstructorMethodSpec(builder: (MethodSpecBuilder.() -> Unit)? = null): MethodSpecBuilder =
+    MethodSpecBuilderImpl(MethodSpec.constructorBuilder()).also { builder?.invoke(it) }
+
 interface MethodSpecBuilder : JavadocManager,
     AnnotationManager,
     ModifierManager,
     TypeVariableManager,
-    ParameterSpecManager {
+    ParameterSpecManager,
+    SpecBuilder<MethodSpec> {
 
     val nativeBuilder: MethodSpec.Builder
 
@@ -32,11 +39,11 @@ interface MethodSpecBuilder : JavadocManager,
         }
 
     override fun annotation(type: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addAnnotation(createAnnotation(type, builder))
+        nativeBuilder.addAnnotation(buildAnnotationSpec(type, builder).build())
     }
 
     override fun annotation(type: Class<*>, builder: (AnnotationSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addAnnotation(createAnnotation(type, builder))
+        nativeBuilder.addAnnotation(buildAnnotationSpec(type, builder).build())
     }
 
     override fun modifiers(vararg modifiers: Modifier) {
@@ -64,11 +71,11 @@ interface MethodSpecBuilder : JavadocManager,
         }
 
     override fun parameter(type: TypeName, name: String, builder: (ParameterSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addParameter(createParameter(type, name, builder))
+        nativeBuilder.addParameter(buildParameterSpec(type, name, builder).build())
     }
 
     override fun parameter(type: Type, name: String, builder: (ParameterSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addParameter(createParameter(type, name, builder))
+        nativeBuilder.addParameter(buildParameterSpec(type, name, builder).build())
     }
 
     var varargs: Boolean
@@ -128,6 +135,8 @@ interface MethodSpecBuilder : JavadocManager,
     fun statement(block: CodeBlock) {
         nativeBuilder.addStatement(block)
     }
+
+    override fun build(): MethodSpec = nativeBuilder.build()
 }
 
 internal class MethodSpecBuilderImpl(override val nativeBuilder: MethodSpec.Builder) : MethodSpecBuilder

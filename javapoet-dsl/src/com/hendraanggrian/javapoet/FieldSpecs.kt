@@ -5,8 +5,16 @@ import com.hendraanggrian.javapoet.internal.JavadocManager
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.FieldSpec
+import com.squareup.javapoet.TypeName
+import java.lang.reflect.Type
 
-interface FieldSpecBuilder : JavadocManager, AnnotationManager {
+fun buildFieldSpec(type: TypeName, name: String, builder: (FieldSpecBuilder.() -> Unit)? = null): FieldSpecBuilder =
+    FieldSpecBuilderImpl(FieldSpec.builder(type, name)).also { builder?.invoke(it) }
+
+fun buildFieldSpec(type: Type, name: String, builder: (FieldSpecBuilder.() -> Unit)? = null): FieldSpecBuilder =
+    FieldSpecBuilderImpl(FieldSpec.builder(type, name)).also { builder?.invoke(it) }
+
+interface FieldSpecBuilder : JavadocManager, AnnotationManager, SpecBuilder<FieldSpec> {
 
     val nativeBuilder: FieldSpec.Builder
 
@@ -21,11 +29,11 @@ interface FieldSpecBuilder : JavadocManager, AnnotationManager {
         }
 
     override fun annotation(type: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addAnnotation(createAnnotation(type, builder))
+        nativeBuilder.addAnnotation(buildAnnotationSpec(type, builder).build())
     }
 
     override fun annotation(type: Class<*>, builder: (AnnotationSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addAnnotation(createAnnotation(type, builder))
+        nativeBuilder.addAnnotation(buildAnnotationSpec(type, builder).build())
     }
 
     fun initializer(format: String, vararg args: Any) {
@@ -37,6 +45,8 @@ interface FieldSpecBuilder : JavadocManager, AnnotationManager {
         set(value) {
             nativeBuilder.initializer(value)
         }
+
+    override fun build(): FieldSpec = nativeBuilder.build()
 }
 
 internal class FieldSpecBuilderImpl(override val nativeBuilder: FieldSpec.Builder) : FieldSpecBuilder

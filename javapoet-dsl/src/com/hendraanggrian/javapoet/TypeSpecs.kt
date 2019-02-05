@@ -16,6 +16,40 @@ import java.lang.reflect.Type
 import javax.lang.model.element.Element
 import javax.lang.model.element.Modifier
 
+fun buildTypeSpec(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpecBuilder =
+    TypeSpecBuilderImpl(TypeSpec.classBuilder(name)).also { builder?.invoke(it) }
+
+fun buildTypeSpec(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpecBuilder =
+    TypeSpecBuilderImpl(TypeSpec.classBuilder(className)).also { builder?.invoke(it) }
+
+fun buildInterfaceTypeSpec(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpecBuilder =
+    TypeSpecBuilderImpl(TypeSpec.interfaceBuilder(name)).also { builder?.invoke(it) }
+
+fun buildInterfaceTypeSpec(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpecBuilder =
+    TypeSpecBuilderImpl(TypeSpec.interfaceBuilder(className)).also { builder?.invoke(it) }
+
+fun buildEnumTypeSpec(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpecBuilder =
+    TypeSpecBuilderImpl(TypeSpec.enumBuilder(name)).also { builder?.invoke(it) }
+
+fun buildEnumTypeSpec(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpecBuilder =
+    TypeSpecBuilderImpl(TypeSpec.enumBuilder(className)).also { builder?.invoke(it) }
+
+fun buildAnonymousTypeSpec(
+    typeArgumentsFormat: String,
+    vararg args: Any,
+    builder: (TypeSpecBuilder.() -> Unit)? = null
+): TypeSpecBuilder = TypeSpecBuilderImpl(TypeSpec.anonymousClassBuilder(typeArgumentsFormat, *args))
+    .also { builder?.invoke(it) }
+
+fun buildAnonymousTypeSpec(typeArguments: CodeBlock, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpecBuilder =
+    TypeSpecBuilderImpl(TypeSpec.anonymousClassBuilder(typeArguments)).also { builder?.invoke(it) }
+
+fun buildAnnotationTypeSpec(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpecBuilder =
+    TypeSpecBuilderImpl(TypeSpec.annotationBuilder(name)).also { builder?.invoke(it) }
+
+fun buildAnnotationTypeSpec(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpecBuilder =
+    TypeSpecBuilderImpl(TypeSpec.annotationBuilder(className)).also { builder?.invoke(it) }
+
 interface TypeSpecBuilder : JavadocManager,
     AnnotationManager,
     ModifierManager,
@@ -37,11 +71,11 @@ interface TypeSpecBuilder : JavadocManager,
         }
 
     override fun annotation(type: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addAnnotation(createAnnotation(type, builder))
+        nativeBuilder.addAnnotation(buildAnnotationSpec(type, builder).build())
     }
 
     override fun annotation(type: Class<*>, builder: (AnnotationSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addAnnotation(createAnnotation(type, builder))
+        nativeBuilder.addAnnotation(buildAnnotationSpec(type, builder).build())
     }
 
     override fun modifiers(vararg modifiers: Modifier) {
@@ -81,15 +115,15 @@ interface TypeSpecBuilder : JavadocManager,
     }
 
     fun enumConstant(name: String, name2: String, builder: TypeSpecBuilder.() -> Unit) {
-        nativeBuilder.addEnumConstant(name, createType(name2, builder))
+        nativeBuilder.addEnumConstant(name, buildTypeSpec(name2, builder).build())
     }
 
     override fun field(type: TypeName, name: String, builder: (FieldSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addField(createField(type, name, builder))
+        nativeBuilder.addField(buildFieldSpec(type, name, builder).build())
     }
 
     override fun field(type: Type, name: String, builder: (FieldSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addField(createField(type, name, builder))
+        nativeBuilder.addField(buildFieldSpec(type, name, builder).build())
     }
 
     fun staticBlock(block: CodeBlock) {
@@ -101,56 +135,58 @@ interface TypeSpecBuilder : JavadocManager,
     }
 
     override fun method(name: String, builder: (MethodSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addMethod(createMethod(name, builder))
+        nativeBuilder.addMethod(buildMethodSpec(name, builder).build())
     }
 
     override fun constructor(builder: (MethodSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addMethod(createConstructor(builder))
+        nativeBuilder.addMethod(buildConstructorMethodSpec(builder).build())
     }
 
     override fun type(name: String, builder: (TypeSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addType(createType(name, builder))
+        nativeBuilder.addType(buildTypeSpec(name, builder).build())
     }
 
     override fun type(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addType(createType(className, builder))
+        nativeBuilder.addType(buildTypeSpec(className, builder).build())
     }
 
     override fun interfaceType(name: String, builder: (TypeSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addType(createInterfaceType(name, builder))
+        nativeBuilder.addType(buildInterfaceTypeSpec(name, builder).build())
     }
 
     override fun interfaceType(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addType(createInterfaceType(className, builder))
+        nativeBuilder.addType(buildInterfaceTypeSpec(className, builder).build())
     }
 
     override fun enumType(name: String, builder: (TypeSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addType(createEnumType(name, builder))
+        nativeBuilder.addType(buildEnumTypeSpec(name, builder).build())
     }
 
     override fun enumType(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addType(createEnumType(className, builder))
+        nativeBuilder.addType(buildEnumTypeSpec(className, builder).build())
     }
 
     override fun anonymousType(typeArgumentsFormat: String, vararg args: Any, builder: (TypeSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addType(createAnonymousType(typeArgumentsFormat, *args, builder = builder))
+        nativeBuilder.addType(buildAnonymousTypeSpec(typeArgumentsFormat, *args, builder = builder).build())
     }
 
     override fun anonymousType(typeArguments: CodeBlock, builder: (TypeSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addType(createAnonymousType(typeArguments, builder))
+        nativeBuilder.addType(buildAnonymousTypeSpec(typeArguments, builder).build())
     }
 
     override fun annotationType(name: String, builder: (TypeSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addType(createAnnotationType(name, builder))
+        nativeBuilder.addType(buildAnnotationTypeSpec(name, builder).build())
     }
 
     override fun annotationType(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addType(createAnnotationType(className, builder))
+        nativeBuilder.addType(buildAnnotationTypeSpec(className, builder).build())
     }
 
     fun originatingElement(originatingElement: Element) {
         nativeBuilder.addOriginatingElement(originatingElement)
     }
+
+    fun build(): TypeSpec = nativeBuilder.build()
 }
 
 internal class TypeSpecBuilderImpl(override val nativeBuilder: TypeSpec.Builder) : TypeSpecBuilder
