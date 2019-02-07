@@ -1,6 +1,7 @@
 package com.hendraanggrian.javapoet
 
 import com.hendraanggrian.javapoet.internal.AnnotationManager
+import com.hendraanggrian.javapoet.internal.ControlFlowManager
 import com.hendraanggrian.javapoet.internal.JavadocManager
 import com.hendraanggrian.javapoet.internal.ModifierManager
 import com.hendraanggrian.javapoet.internal.ParameterSpecManager
@@ -29,7 +30,8 @@ interface MethodSpecBuilder : JavadocManager,
     AnnotationManager,
     ModifierManager,
     TypeVariableManager,
-    ParameterSpecManager {
+    ParameterSpecManager,
+    ControlFlowManager {
 
     val nativeBuilder: MethodSpec.Builder
 
@@ -37,11 +39,9 @@ interface MethodSpecBuilder : JavadocManager,
         nativeBuilder.addJavadoc(format, *args)
     }
 
-    override var javadoc: CodeBlock
-        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
-        set(value) {
-            nativeBuilder.addJavadoc(value)
-        }
+    override fun javadoc(block: CodeBlock) {
+        nativeBuilder.addJavadoc(block)
+    }
 
     override fun annotation(type: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)?) {
         nativeBuilder.addAnnotation(buildAnnotationSpec(type, builder))
@@ -117,19 +117,19 @@ interface MethodSpecBuilder : JavadocManager,
         nativeBuilder.defaultValue(format, *args)
     }
 
-    fun beginControlFlow(format: String, vararg args: Any) {
+    override fun beginControlFlow(format: String, vararg args: Any) {
         nativeBuilder.beginControlFlow(format, *args)
     }
 
-    fun nextControlFlow(format: String, vararg args: Any) {
+    override fun nextControlFlow(format: String, vararg args: Any) {
         nativeBuilder.nextControlFlow(format, *args)
     }
 
-    fun endControlFlow() {
+    override fun endControlFlow() {
         nativeBuilder.endControlFlow()
     }
 
-    fun endControlFlow(format: String, vararg args: Any) {
+    override fun endControlFlow(format: String, vararg args: Any) {
         nativeBuilder.endControlFlow(format, *args)
     }
 

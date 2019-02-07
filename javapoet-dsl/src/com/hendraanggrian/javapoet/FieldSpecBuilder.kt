@@ -30,11 +30,9 @@ interface FieldSpecBuilder : JavadocManager, AnnotationManager, ModifierManager 
         nativeBuilder.addJavadoc(format, *args)
     }
 
-    override var javadoc: CodeBlock
-        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
-        set(value) {
-            nativeBuilder.addJavadoc(value)
-        }
+    override fun javadoc(block: CodeBlock) {
+        nativeBuilder.addJavadoc(block)
+    }
 
     override fun annotation(type: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)?) {
         nativeBuilder.addAnnotation(buildAnnotationSpec(type, builder))
@@ -57,6 +55,10 @@ interface FieldSpecBuilder : JavadocManager, AnnotationManager, ModifierManager 
         set(value) {
             nativeBuilder.initializer(value)
         }
+
+    fun initializer(builder: CodeBlockBuilder.() -> Unit) {
+        nativeBuilder.initializer(buildCodeBlock(builder))
+    }
 
     fun build(): FieldSpec = nativeBuilder.build()
 }

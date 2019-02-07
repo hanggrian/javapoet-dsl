@@ -28,6 +28,8 @@ interface AnnotationSpecBuilder {
         nativeBuilder.addMember(name, block)
     }
 
+    fun member(name: String, builder: CodeBlockBuilder.() -> Unit) = member(name, buildCodeBlock(builder))
+
     fun build(): AnnotationSpec = nativeBuilder.build()
 }
 

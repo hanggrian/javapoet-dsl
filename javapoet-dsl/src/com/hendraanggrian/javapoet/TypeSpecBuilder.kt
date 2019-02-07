@@ -93,11 +93,9 @@ interface TypeSpecBuilder : JavadocManager,
         nativeBuilder.addJavadoc(format, *args)
     }
 
-    override var javadoc: CodeBlock
-        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
-        set(value) {
-            nativeBuilder.addJavadoc(value)
-        }
+    override fun javadoc(block: CodeBlock) {
+        nativeBuilder.addJavadoc(block)
+    }
 
     override fun annotation(type: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)?) {
         nativeBuilder.addAnnotation(buildAnnotationSpec(type, builder))
@@ -159,9 +157,13 @@ interface TypeSpecBuilder : JavadocManager,
         nativeBuilder.addStaticBlock(block)
     }
 
+    fun staticBlock(builder: CodeBlockBuilder.() -> Unit) = staticBlock(buildCodeBlock(builder))
+
     fun initializerBlock(block: CodeBlock) {
         nativeBuilder.addInitializerBlock(block)
     }
+
+    fun initializerBlock(builder: CodeBlockBuilder.() -> Unit) = initializerBlock(buildCodeBlock(builder))
 
     override fun method(name: String, builder: (MethodSpecBuilder.() -> Unit)?) {
         nativeBuilder.addMethod(buildMethodSpec(name, builder))
