@@ -2,7 +2,7 @@ package com.hendraanggrian.javapoet.internal
 
 import com.squareup.javapoet.TypeVariableName
 
-interface TypeVariableManager {
+internal interface TypeVariable {
 
     fun typeVariable(typeVariable: TypeVariableName)
 

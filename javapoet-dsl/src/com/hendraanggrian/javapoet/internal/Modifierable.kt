@@ -2,7 +2,7 @@ package com.hendraanggrian.javapoet.internal
 
 import javax.lang.model.element.Modifier
 
-interface ModifierManager {
+internal interface Modifierable {
 
     fun modifiers(vararg modifiers: Modifier)
 }

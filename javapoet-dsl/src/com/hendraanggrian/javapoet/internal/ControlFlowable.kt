@@ -1,6 +1,6 @@
 package com.hendraanggrian.javapoet.internal
 
-interface ControlFlowManager {
+internal interface ControlFlowable {
 
     fun beginControlFlow(format: String, vararg args: Any)
 

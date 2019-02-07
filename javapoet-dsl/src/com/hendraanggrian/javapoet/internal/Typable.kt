@@ -4,7 +4,7 @@ import com.hendraanggrian.javapoet.TypeSpecBuilder
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 
-interface TypeSpecManager {
+internal interface Typable {
 
     fun type(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null)
 

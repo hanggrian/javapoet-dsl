@@ -1,15 +1,16 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.internal.AnnotationManager
-import com.hendraanggrian.javapoet.internal.JavadocManager
-import com.hendraanggrian.javapoet.internal.ModifierManager
-import com.hendraanggrian.javapoet.internal.TypeSpecManager
-import com.hendraanggrian.javapoet.internal.TypeVariableManager
+import com.hendraanggrian.javapoet.internal.Annotable
+import com.hendraanggrian.javapoet.internal.Javadocable
+import com.hendraanggrian.javapoet.internal.Modifierable
+import com.hendraanggrian.javapoet.internal.Typable
+import com.hendraanggrian.javapoet.internal.TypeVariable
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeSpec
 import com.squareup.javapoet.TypeVariableName
+import java.lang.reflect.Type
 import javax.lang.model.element.Element
 import javax.lang.model.element.Modifier
 
@@ -76,27 +77,31 @@ fun buildAnnotationTypeSpec(className: ClassName, builder: (TypeSpecBuilder.() -
         .also { builder?.invoke(it) }
         .build()
 
-class TypeSpecBuilder(@PublishedApi internal val nativeBuilder: TypeSpec.Builder) : JavadocManager,
-    AnnotationManager,
-    ModifierManager,
-    TypeVariableManager,
-    TypeSpecManager {
+class TypeSpecBuilder(@PublishedApi internal val nativeBuilder: TypeSpec.Builder) :
+    Javadocable,
+    Annotable,
+    Modifierable,
+    TypeVariable,
+    Typable {
 
     override fun javadoc(format: String, vararg args: Any) {
         nativeBuilder.addJavadoc(format, *args)
     }
 
-    override fun javadoc(builder: CodeBlockBuilder.() -> Unit) {
-        nativeBuilder.addJavadoc(buildCodeBlock(builder))
+    override fun javadoc(block: CodeBlock) {
+        nativeBuilder.addJavadoc(block)
     }
 
     override fun annotation(type: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)?) {
         nativeBuilder.addAnnotation(buildAnnotationSpec(type, builder))
     }
 
-    inline fun <reified T> annotation(noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null) {
-        nativeBuilder.addAnnotation(buildAnnotationSpec(T::class.java, builder))
+    override fun annotation(type: Class<*>, builder: (AnnotationSpecBuilder.() -> Unit)?) {
+        nativeBuilder.addAnnotation(buildAnnotationSpec(type, builder))
     }
+
+    inline fun <reified T> annotation(noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null) =
+        annotation(T::class.java, builder)
 
     override fun modifiers(vararg modifiers: Modifier) {
         nativeBuilder.addModifiers(*modifiers)
@@ -116,17 +121,21 @@ class TypeSpecBuilder(@PublishedApi internal val nativeBuilder: TypeSpec.Builder
             nativeBuilder.superclass(value)
         }
 
-    inline fun <reified T> superclass() {
-        nativeBuilder.superclass(T::class.java)
+    fun superclass(type: Type) {
+        nativeBuilder.superclass(type)
     }
+
+    inline fun <reified T> superclass() = superclass(T::class.java)
 
     fun superiface(superiface: TypeName) {
         nativeBuilder.addSuperinterface(superiface)
     }
 
-    inline fun <reified T> superiface() {
-        nativeBuilder.addSuperinterface(T::class.java)
+    fun superiface(type: Type) {
+        nativeBuilder.addSuperinterface(type)
     }
+
+    inline fun <reified T> superiface() = superiface(T::class.java)
 
     fun enumConstant(name: String) {
         nativeBuilder.addEnumConstant(name)
@@ -140,9 +149,12 @@ class TypeSpecBuilder(@PublishedApi internal val nativeBuilder: TypeSpec.Builder
         nativeBuilder.addField(buildFieldSpec(type, name, builder))
     }
 
-    inline fun <reified T> field(name: String, noinline builder: (FieldSpecBuilder.() -> Unit)? = null) {
-        nativeBuilder.addField(buildFieldSpec(T::class.java, name, builder))
+    fun field(type: Type, name: String, builder: (FieldSpecBuilder.() -> Unit)? = null) {
+        nativeBuilder.addField(buildFieldSpec(type, name, builder))
     }
+
+    inline fun <reified T> field(name: String, noinline builder: (FieldSpecBuilder.() -> Unit)? = null) =
+        field(T::class.java, name, builder)
 
     fun staticBlock(builder: CodeBlockBuilder.() -> Unit) {
         nativeBuilder.addStaticBlock(buildCodeBlock(builder))

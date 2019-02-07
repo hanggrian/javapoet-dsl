@@ -1,15 +1,17 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.internal.AnnotationManager
-import com.hendraanggrian.javapoet.internal.ControlFlowManager
-import com.hendraanggrian.javapoet.internal.JavadocManager
-import com.hendraanggrian.javapoet.internal.ModifierManager
-import com.hendraanggrian.javapoet.internal.StatementManager
-import com.hendraanggrian.javapoet.internal.TypeVariableManager
+import com.hendraanggrian.javapoet.internal.Annotable
+import com.hendraanggrian.javapoet.internal.Codable
+import com.hendraanggrian.javapoet.internal.ControlFlowable
+import com.hendraanggrian.javapoet.internal.Javadocable
+import com.hendraanggrian.javapoet.internal.Modifierable
+import com.hendraanggrian.javapoet.internal.TypeVariable
 import com.squareup.javapoet.ClassName
+import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeVariableName
+import java.lang.reflect.Type
 import javax.lang.model.element.Modifier
 
 /** Returns a method with custom initialization block. */
@@ -24,28 +26,32 @@ fun buildConstructorMethodSpec(builder: (MethodSpecBuilder.() -> Unit)? = null):
         .also { builder?.invoke(it) }
         .build()
 
-class MethodSpecBuilder(@PublishedApi internal val nativeBuilder: MethodSpec.Builder) : JavadocManager,
-    AnnotationManager,
-    ModifierManager,
-    TypeVariableManager,
-    ControlFlowManager,
-    StatementManager {
+class MethodSpecBuilder(@PublishedApi internal val nativeBuilder: MethodSpec.Builder) :
+    Javadocable,
+    Annotable,
+    Modifierable,
+    TypeVariable,
+    ControlFlowable,
+    Codable {
 
     override fun javadoc(format: String, vararg args: Any) {
         nativeBuilder.addJavadoc(format, *args)
     }
 
-    override fun javadoc(builder: CodeBlockBuilder.() -> Unit) {
-        nativeBuilder.addJavadoc(buildCodeBlock(builder))
+    override fun javadoc(block: CodeBlock) {
+        nativeBuilder.addJavadoc(block)
     }
 
     override fun annotation(type: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)?) {
         nativeBuilder.addAnnotation(buildAnnotationSpec(type, builder))
     }
 
-    inline fun <reified T> annotation(noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null) {
-        nativeBuilder.addAnnotation(buildAnnotationSpec(T::class.java, builder))
+    override fun annotation(type: Class<*>, builder: (AnnotationSpecBuilder.() -> Unit)?) {
+        nativeBuilder.addAnnotation(buildAnnotationSpec(type, builder))
     }
+
+    inline fun <reified T> annotation(noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null) =
+        annotation(T::class.java, builder)
 
     override fun modifiers(vararg modifiers: Modifier) {
         nativeBuilder.addModifiers(*modifiers)
@@ -65,17 +71,22 @@ class MethodSpecBuilder(@PublishedApi internal val nativeBuilder: MethodSpec.Bui
             nativeBuilder.returns(value)
         }
 
-    inline fun <reified T> returns() {
-        nativeBuilder.returns(T::class.java)
+    fun returns(type: Type) {
+        nativeBuilder.returns(type)
     }
+
+    inline fun <reified T> returns() = returns(T::class.java)
 
     fun parameter(type: TypeName, name: String, builder: (ParameterSpecBuilder.() -> Unit)? = null) {
         nativeBuilder.addParameter(buildParameterSpec(type, name, builder))
     }
 
-    inline fun <reified T> parameter(name: String, noinline builder: (ParameterSpecBuilder.() -> Unit)? = null) {
-        nativeBuilder.addParameter(buildParameterSpec(T::class.java, name, builder))
+    fun parameter(type: Type, name: String, builder: (ParameterSpecBuilder.() -> Unit)? = null) {
+        nativeBuilder.addParameter(buildParameterSpec(type, name, builder))
     }
+
+    inline fun <reified T> parameter(name: String, noinline builder: (ParameterSpecBuilder.() -> Unit)? = null) =
+        parameter(T::class.java, name, builder)
 
     var varargs: Boolean
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
@@ -91,16 +102,18 @@ class MethodSpecBuilder(@PublishedApi internal val nativeBuilder: MethodSpec.Bui
         nativeBuilder.addException(exception)
     }
 
-    inline fun <reified T> exception() {
-        nativeBuilder.addException(T::class.java)
+    fun exception(exception: Type) {
+        nativeBuilder.addException(exception)
     }
 
-    fun code(format: String, vararg args: Any) {
+    inline fun <reified T> exception() = exception(T::class.java)
+
+    override fun code(format: String, vararg args: Any) {
         nativeBuilder.addCode(format, *args)
     }
 
-    fun code(builder: CodeBlockBuilder.() -> Unit) {
-        nativeBuilder.addCode(buildCodeBlock(builder))
+    override fun code(block: CodeBlock) {
+        nativeBuilder.addCode(block)
     }
 
     fun comment(format: String, vararg args: Any) {
@@ -131,8 +144,8 @@ class MethodSpecBuilder(@PublishedApi internal val nativeBuilder: MethodSpec.Bui
         nativeBuilder.addStatement(format, *args)
     }
 
-    override fun statement(builder: CodeBlockBuilder.() -> Unit) {
-        nativeBuilder.addStatement(buildCodeBlock(builder))
+    override fun statement(block: CodeBlock) {
+        nativeBuilder.addStatement(block)
     }
 
     fun build(): MethodSpec = nativeBuilder.build()

@@ -2,7 +2,7 @@
 
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.internal.TypeSpecManager
+import com.hendraanggrian.javapoet.internal.Typable
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.JavaFile
@@ -10,23 +10,16 @@ import com.squareup.javapoet.TypeSpec
 
 /** Returns a java file with custom initialization block. */
 inline fun buildJavaFile(packageName: String, builder: JavaFileBuilder.() -> Unit): JavaFile =
-    JavaFileBuilderImpl(packageName)
+    JavaFileBuilder(packageName)
         .apply(builder)
         .build()
 
-interface JavaFileBuilder : TypeSpecManager {
-
-    val packageName: String
-
-    var type: TypeSpec?
-
-    val comments: MutableList<Pair<String, Array<Any>>>
-
-    val staticImports: MutableList<Pair<Any, Array<String>>>
-
-    var isSkipJavaLangImports: Boolean
-
-    var indent: Int
+class JavaFileBuilder(private val packageName: String) : Typable {
+    private var type: TypeSpec? = null
+    private val comments: MutableList<Pair<String, Array<Any>>> = mutableListOf()
+    private val staticImports: MutableList<Pair<Any, Array<String>>> = mutableListOf()
+    private var isSkipJavaLangImports: Boolean = false
+    private var indent: Int = 2
 
     fun comment(format: String, vararg args: Any) {
         comments += format to arrayOf(*args)
@@ -39,6 +32,8 @@ interface JavaFileBuilder : TypeSpecManager {
     fun staticImport(type: Class<*>, vararg names: String) {
         staticImports += type to arrayOf(*names)
     }
+
+    inline fun <reified T> staticImport(vararg names: String) = staticImport(T::class.java, *names)
 
     override fun type(name: String, builder: (TypeSpecBuilder.() -> Unit)?) {
         type = buildTypeSpec(name, builder)
@@ -99,18 +94,4 @@ interface JavaFileBuilder : TypeSpecManager {
             })
         }
         .build()
-}
-
-@PublishedApi
-internal class JavaFileBuilderImpl(override val packageName: String) : JavaFileBuilder {
-
-    override var type: TypeSpec? = null
-
-    override val comments: MutableList<Pair<String, Array<Any>>> = mutableListOf()
-
-    override val staticImports: MutableList<Pair<Any, Array<String>>> = mutableListOf()
-
-    override var isSkipJavaLangImports: Boolean = false
-
-    override var indent: Int = 2
 }
