@@ -10,7 +10,9 @@ import com.squareup.javapoet.TypeSpec
 
 /** Returns a java file with custom initialization block. */
 inline fun buildJavaFile(packageName: String, builder: JavaFileBuilder.() -> Unit): JavaFile =
-    JavaFileBuilderImpl(packageName).apply(builder).build()
+    JavaFileBuilderImpl(packageName)
+        .apply(builder)
+        .build()
 
 interface JavaFileBuilder : TypeSpecManager {
 
@@ -39,43 +41,43 @@ interface JavaFileBuilder : TypeSpecManager {
     }
 
     override fun type(name: String, builder: (TypeSpecBuilder.() -> Unit)?) {
-        type = buildTypeSpec(name, builder).build()
+        type = buildTypeSpec(name, builder)
     }
 
     override fun type(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
-        type = buildTypeSpec(className, builder).build()
+        type = buildTypeSpec(className, builder)
     }
 
     override fun interfaceType(name: String, builder: (TypeSpecBuilder.() -> Unit)?) {
-        type = buildInterfaceTypeSpec(name, builder).build()
+        type = buildInterfaceTypeSpec(name, builder)
     }
 
     override fun interfaceType(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
-        type = buildInterfaceTypeSpec(className, builder).build()
+        type = buildInterfaceTypeSpec(className, builder)
     }
 
     override fun enumType(name: String, builder: (TypeSpecBuilder.() -> Unit)?) {
-        type = buildEnumTypeSpec(name, builder).build()
+        type = buildEnumTypeSpec(name, builder)
     }
 
     override fun enumType(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
-        type = buildEnumTypeSpec(className, builder).build()
+        type = buildEnumTypeSpec(className, builder)
     }
 
     override fun anonymousType(typeArgumentsFormat: String, vararg args: Any, builder: (TypeSpecBuilder.() -> Unit)?) {
-        type = buildAnonymousTypeSpec(typeArgumentsFormat, *args, builder = builder).build()
+        type = buildAnonymousTypeSpec(typeArgumentsFormat, *args, builder = builder)
     }
 
     override fun anonymousType(typeArguments: CodeBlock, builder: (TypeSpecBuilder.() -> Unit)?) {
-        type = buildAnonymousTypeSpec(typeArguments, builder).build()
+        type = buildAnonymousTypeSpec(typeArguments, builder)
     }
 
     override fun annotationType(name: String, builder: (TypeSpecBuilder.() -> Unit)?) {
-        type = buildAnnotationTypeSpec(name, builder).build()
+        type = buildAnnotationTypeSpec(name, builder)
     }
 
     override fun annotationType(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
-        type = buildAnnotationTypeSpec(className, builder).build()
+        type = buildAnnotationTypeSpec(className, builder)
     }
 
     fun build(): JavaFile = JavaFile.builder(packageName, checkNotNull(type) { "A type must be initialized" })

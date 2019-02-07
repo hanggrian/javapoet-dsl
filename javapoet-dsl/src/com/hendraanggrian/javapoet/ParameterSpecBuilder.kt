@@ -13,25 +13,29 @@ fun buildParameterSpec(
     type: TypeName,
     name: String,
     builder: (ParameterSpecBuilder.() -> Unit)? = null
-): ParameterSpecBuilder = ParameterSpecBuilderImpl(ParameterSpec.builder(type, name)).also { builder?.invoke(it) }
+): ParameterSpec = ParameterSpecBuilderImpl(ParameterSpec.builder(type, name))
+    .also { builder?.invoke(it) }
+    .build()
 
 /** Returns a parameter with custom initialization block. */
 fun buildParameterSpec(
     type: Type,
     name: String,
     builder: (ParameterSpecBuilder.() -> Unit)? = null
-): ParameterSpecBuilder = ParameterSpecBuilderImpl(ParameterSpec.builder(type, name)).also { builder?.invoke(it) }
+): ParameterSpec = ParameterSpecBuilderImpl(ParameterSpec.builder(type, name))
+    .also { builder?.invoke(it) }
+    .build()
 
 interface ParameterSpecBuilder : AnnotationManager, ModifierManager {
 
     val nativeBuilder: ParameterSpec.Builder
 
     override fun annotation(type: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addAnnotation(buildAnnotationSpec(type, builder).build())
+        nativeBuilder.addAnnotation(buildAnnotationSpec(type, builder))
     }
 
     override fun annotation(type: Class<*>, builder: (AnnotationSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addAnnotation(buildAnnotationSpec(type, builder).build())
+        nativeBuilder.addAnnotation(buildAnnotationSpec(type, builder))
     }
 
     override fun modifiers(vararg modifiers: Modifier) {

@@ -14,12 +14,16 @@ import java.lang.reflect.Type
 import javax.lang.model.element.Modifier
 
 /** Returns a method with custom initialization block. */
-fun buildMethodSpec(name: String, builder: (MethodSpecBuilder.() -> Unit)? = null): MethodSpecBuilder =
-    MethodSpecBuilderImpl(MethodSpec.methodBuilder(name)).also { builder?.invoke(it) }
+fun buildMethodSpec(name: String, builder: (MethodSpecBuilder.() -> Unit)? = null): MethodSpec =
+    MethodSpecBuilderImpl(MethodSpec.methodBuilder(name))
+        .also { builder?.invoke(it) }
+        .build()
 
 /** Returns a constructor method with custom initialization block. */
-fun buildConstructorMethodSpec(builder: (MethodSpecBuilder.() -> Unit)? = null): MethodSpecBuilder =
-    MethodSpecBuilderImpl(MethodSpec.constructorBuilder()).also { builder?.invoke(it) }
+fun buildConstructorMethodSpec(builder: (MethodSpecBuilder.() -> Unit)? = null): MethodSpec =
+    MethodSpecBuilderImpl(MethodSpec.constructorBuilder())
+        .also { builder?.invoke(it) }
+        .build()
 
 interface MethodSpecBuilder : JavadocManager,
     AnnotationManager,
@@ -40,11 +44,11 @@ interface MethodSpecBuilder : JavadocManager,
         }
 
     override fun annotation(type: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addAnnotation(buildAnnotationSpec(type, builder).build())
+        nativeBuilder.addAnnotation(buildAnnotationSpec(type, builder))
     }
 
     override fun annotation(type: Class<*>, builder: (AnnotationSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addAnnotation(buildAnnotationSpec(type, builder).build())
+        nativeBuilder.addAnnotation(buildAnnotationSpec(type, builder))
     }
 
     override fun modifiers(vararg modifiers: Modifier) {
@@ -72,11 +76,11 @@ interface MethodSpecBuilder : JavadocManager,
         }
 
     override fun parameter(type: TypeName, name: String, builder: (ParameterSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addParameter(buildParameterSpec(type, name, builder).build())
+        nativeBuilder.addParameter(buildParameterSpec(type, name, builder))
     }
 
     override fun parameter(type: Type, name: String, builder: (ParameterSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addParameter(buildParameterSpec(type, name, builder).build())
+        nativeBuilder.addParameter(buildParameterSpec(type, name, builder))
     }
 
     var varargs: Boolean

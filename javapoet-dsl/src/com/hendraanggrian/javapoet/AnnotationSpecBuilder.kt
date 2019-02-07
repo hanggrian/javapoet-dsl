@@ -5,12 +5,16 @@ import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 
 /** Returns an annotation with custom initialization block. */
-fun buildAnnotationSpec(type: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpecBuilder =
-    AnnotationSpecBuilderImpl(AnnotationSpec.builder(type)).also { builder?.invoke(it) }
+fun buildAnnotationSpec(type: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
+    AnnotationSpecBuilderImpl(AnnotationSpec.builder(type))
+        .also { builder?.invoke(it) }
+        .build()
 
 /** Returns an annotation with custom initialization block. */
-fun buildAnnotationSpec(type: Class<*>, builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpecBuilder =
-    AnnotationSpecBuilderImpl(AnnotationSpec.builder(type)).also { builder?.invoke(it) }
+fun buildAnnotationSpec(type: Class<*>, builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
+    AnnotationSpecBuilderImpl(AnnotationSpec.builder(type))
+        .also { builder?.invoke(it) }
+        .build()
 
 interface AnnotationSpecBuilder {
 
