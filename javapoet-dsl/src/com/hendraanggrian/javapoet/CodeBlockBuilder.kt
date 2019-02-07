@@ -1,17 +1,16 @@
 package com.hendraanggrian.javapoet
 
 import com.hendraanggrian.javapoet.internal.ControlFlowManager
+import com.hendraanggrian.javapoet.internal.StatementManager
 import com.squareup.javapoet.CodeBlock
 
 /** Returns block of code with custom initialization block. */
 fun buildCodeBlock(builder: CodeBlockBuilder.() -> Unit): CodeBlock =
-    CodeBlockBuilderImpl(CodeBlock.builder())
+    CodeBlockBuilder(CodeBlock.builder())
         .apply(builder)
         .build()
 
-interface CodeBlockBuilder : ControlFlowManager {
-
-    val nativeBuilder: CodeBlock.Builder
+class CodeBlockBuilder(private val nativeBuilder: CodeBlock.Builder) : ControlFlowManager, StatementManager {
 
     fun named(format: String, arguments: Map<String, *>) {
         nativeBuilder.addNamed(format, arguments)
@@ -37,16 +36,16 @@ interface CodeBlockBuilder : ControlFlowManager {
         nativeBuilder.endControlFlow(format, *args)
     }
 
-    fun statement(format: String, vararg args: Any) {
+    override fun statement(format: String, vararg args: Any) {
         nativeBuilder.addStatement(format, *args)
     }
 
-    fun statement(block: CodeBlock) {
-        nativeBuilder.addStatement(block)
+    override fun statement(builder: CodeBlockBuilder.() -> Unit) {
+        nativeBuilder.addStatement(buildCodeBlock(builder))
     }
 
-    operator fun plusAssign(block: CodeBlock) {
-        nativeBuilder.add(block)
+    fun add(builder: CodeBlockBuilder.() -> Unit) {
+        nativeBuilder.add(buildCodeBlock(builder))
     }
 
     fun indent() {
@@ -59,5 +58,3 @@ interface CodeBlockBuilder : ControlFlowManager {
 
     fun build(): CodeBlock = nativeBuilder.build()
 }
-
-internal class CodeBlockBuilderImpl(override val nativeBuilder: CodeBlock.Builder) : CodeBlockBuilder

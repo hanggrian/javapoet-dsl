@@ -13,7 +13,7 @@ fun buildParameterSpec(
     type: TypeName,
     name: String,
     builder: (ParameterSpecBuilder.() -> Unit)? = null
-): ParameterSpec = ParameterSpecBuilderImpl(ParameterSpec.builder(type, name))
+): ParameterSpec = ParameterSpecBuilder(ParameterSpec.builder(type, name))
     .also { builder?.invoke(it) }
     .build()
 
@@ -22,20 +22,19 @@ fun buildParameterSpec(
     type: Type,
     name: String,
     builder: (ParameterSpecBuilder.() -> Unit)? = null
-): ParameterSpec = ParameterSpecBuilderImpl(ParameterSpec.builder(type, name))
+): ParameterSpec = ParameterSpecBuilder(ParameterSpec.builder(type, name))
     .also { builder?.invoke(it) }
     .build()
 
-interface ParameterSpecBuilder : AnnotationManager, ModifierManager {
-
-    val nativeBuilder: ParameterSpec.Builder
+class ParameterSpecBuilder(@PublishedApi internal val nativeBuilder: ParameterSpec.Builder) : AnnotationManager,
+    ModifierManager {
 
     override fun annotation(type: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)?) {
         nativeBuilder.addAnnotation(buildAnnotationSpec(type, builder))
     }
 
-    override fun annotation(type: Class<*>, builder: (AnnotationSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addAnnotation(buildAnnotationSpec(type, builder))
+    inline fun <reified T> annotation(noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null) {
+        nativeBuilder.addAnnotation(buildAnnotationSpec(T::class.java, builder))
     }
 
     override fun modifiers(vararg modifiers: Modifier) {
@@ -44,5 +43,3 @@ interface ParameterSpecBuilder : AnnotationManager, ModifierManager {
 
     fun build(): ParameterSpec = nativeBuilder.build()
 }
-
-internal class ParameterSpecBuilderImpl(override val nativeBuilder: ParameterSpec.Builder) : ParameterSpecBuilder

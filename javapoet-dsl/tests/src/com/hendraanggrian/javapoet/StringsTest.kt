@@ -40,9 +40,9 @@ class StringsTest {
         )
     }
 
-    private fun TypeSpecBuilder.nameMethod(name:String){
+    private fun TypeSpecBuilder.nameMethod(name: String) {
         method(name) {
-            returnsType = String::class.java
+            returns<String>()
             statement("return \$S", name)
         }
     }

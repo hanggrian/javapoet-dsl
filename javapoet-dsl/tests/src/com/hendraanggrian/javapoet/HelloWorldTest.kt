@@ -29,7 +29,7 @@ class HelloWorldTest {
                     method("main") {
                         modifiers(Modifier.PUBLIC, Modifier.STATIC)
                         returns = TypeName.VOID
-                        parameter(Array<String>::class.java, "args")
+                        parameter<Array<String>>("args")
                         statement("\$T.out.println(\$S)", System::class.java, "Hello, JavaPoet!")
                     }
                 }
