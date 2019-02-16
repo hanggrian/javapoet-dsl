@@ -1,7 +1,6 @@
 package com.hendraanggrian.javapoet
 
 import org.junit.Test
-import javax.lang.model.element.Modifier
 import kotlin.test.assertEquals
 
 class StringsTest {
@@ -31,7 +30,7 @@ class StringsTest {
             """.trimIndent(),
             buildJavaFile("com.example") {
                 type("HelloWorld") {
-                    modifiers(Modifier.PUBLIC, Modifier.FINAL)
+                    modifiers = public + final
                     nameMethod("slimShady")
                     nameMethod("eminem")
                     nameMethod("marshallMathers")

@@ -53,9 +53,11 @@ class MethodSpecBuilder(@PublishedApi internal val nativeBuilder: MethodSpec.Bui
     inline fun <reified T> annotation(noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null) =
         annotation(T::class.java, builder)
 
-    override fun modifiers(vararg modifiers: Modifier) {
-        nativeBuilder.addModifiers(*modifiers)
-    }
+    override var modifiers: List<Modifier>
+        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
+        set(value) {
+            nativeBuilder.addModifiers(*value.toTypedArray())
+        }
 
     override fun typeVariable(typeVariable: TypeVariableName) {
         nativeBuilder.addTypeVariable(typeVariable)

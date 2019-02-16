@@ -41,9 +41,11 @@ class ParameterSpecBuilder(@PublishedApi internal val nativeBuilder: ParameterSp
     inline fun <reified T> annotation(noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null) =
         annotation(T::class.java, builder)
 
-    override fun modifiers(vararg modifiers: Modifier) {
-        nativeBuilder.addModifiers(*modifiers)
-    }
+    override var modifiers: List<Modifier>
+        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
+        set(value) {
+            nativeBuilder.addModifiers(*value.toTypedArray())
+        }
 
     fun build(): ParameterSpec = nativeBuilder.build()
 }

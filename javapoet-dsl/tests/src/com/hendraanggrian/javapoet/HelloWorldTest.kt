@@ -2,7 +2,6 @@ package com.hendraanggrian.javapoet
 
 import com.squareup.javapoet.TypeName
 import org.junit.Test
-import javax.lang.model.element.Modifier
 import kotlin.test.assertEquals
 
 class HelloWorldTest {
@@ -25,9 +24,9 @@ class HelloWorldTest {
             """.trimIndent(),
             buildJavaFile("com.example") {
                 type("HelloWorld") {
-                    modifiers(Modifier.PUBLIC, Modifier.FINAL)
+                    modifiers = public + final
                     method("main") {
-                        modifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        modifiers = public + static
                         returns = TypeName.VOID
                         parameter<Array<String>>("args")
                         statement("\$T.out.println(\$S)", System::class.java, "Hello, JavaPoet!")

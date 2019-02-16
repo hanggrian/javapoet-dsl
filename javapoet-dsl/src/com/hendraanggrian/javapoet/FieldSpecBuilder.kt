@@ -46,9 +46,11 @@ class FieldSpecBuilder(@PublishedApi internal val nativeBuilder: FieldSpec.Build
     inline fun <reified T> annotation(noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null) =
         annotation(T::class.java, builder)
 
-    override fun modifiers(vararg modifiers: Modifier) {
-        nativeBuilder.addModifiers(*modifiers)
-    }
+    override var modifiers: List<Modifier>
+        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
+        set(value) {
+            nativeBuilder.addModifiers(*value.toTypedArray())
+        }
 
     fun initializer(format: String, vararg args: Any) {
         nativeBuilder.initializer(format, *args)

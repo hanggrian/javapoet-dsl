@@ -39,9 +39,9 @@ Here's how to write it in Kotlin DSL:
 ```kotlin
 buildJavaFile("com.example.helloworld") {
     type("HelloWorld") {
-        modifiers(Modifier.PUBLIC, Modifier.FINAL)
+        modifiers = public + final
         method("main") {
-            modifiers(Modifier.PUBLIC, Modifier.STATIC)
+            modifiers = public + static
             returns = TypeName.VOID
             parameter(Array<String>::class.java, "args")
             statement("\$T.out.println(\$S)", System::class.java, "Hello, JavaPoet!")
