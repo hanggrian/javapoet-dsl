@@ -4,7 +4,7 @@ import com.hendraanggrian.javapoet.CodeBlockBuilder
 import com.hendraanggrian.javapoet.buildCodeBlock
 import com.squareup.javapoet.CodeBlock
 
-internal interface Javadocable {
+internal interface JavadocSpecBuilder {
 
     fun javadoc(format: String, vararg args: Any)
 

@@ -1,7 +1,7 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.internal.Codable
-import com.hendraanggrian.javapoet.internal.ControlFlowable
+import com.hendraanggrian.javapoet.internal.CodedSpecBuilder
+import com.hendraanggrian.javapoet.internal.ControlFlowedSpecBuilder
 import com.squareup.javapoet.CodeBlock
 
 /** Returns block of code with custom initialization block. */
@@ -11,8 +11,8 @@ inline fun buildCodeBlock(builder: CodeBlockBuilder.() -> Unit): CodeBlock =
         .build()
 
 class CodeBlockBuilder(private val nativeBuilder: CodeBlock.Builder) :
-    ControlFlowable,
-    Codable {
+    ControlFlowedSpecBuilder,
+    CodedSpecBuilder {
 
     fun named(format: String, arguments: Map<String, *>) {
         nativeBuilder.addNamed(format, arguments)

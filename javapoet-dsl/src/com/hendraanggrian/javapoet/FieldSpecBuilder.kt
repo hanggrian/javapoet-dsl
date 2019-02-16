@@ -1,8 +1,8 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.internal.Annotable
-import com.hendraanggrian.javapoet.internal.Javadocable
-import com.hendraanggrian.javapoet.internal.Modifierable
+import com.hendraanggrian.javapoet.internal.AnnotatedSpecBuilder
+import com.hendraanggrian.javapoet.internal.JavadocSpecBuilder
+import com.hendraanggrian.javapoet.internal.ModifieredSpecBuilder
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.FieldSpec
@@ -22,10 +22,16 @@ fun buildFieldSpec(type: Type, name: String, builder: (FieldSpecBuilder.() -> Un
         .also { builder?.invoke(it) }
         .build()
 
+/** Returns a field with custom initialization block. */
+inline fun <reified T> buildFieldSpec(
+    name: String,
+    noinline builder: (FieldSpecBuilder.() -> Unit)? = null
+): FieldSpec = buildFieldSpec(T::class.java, name, builder)
+
 class FieldSpecBuilder(@PublishedApi internal val nativeBuilder: FieldSpec.Builder) :
-    Javadocable,
-    Annotable,
-    Modifierable {
+    JavadocSpecBuilder,
+    AnnotatedSpecBuilder,
+    ModifieredSpecBuilder {
 
     override fun javadoc(format: String, vararg args: Any) {
         nativeBuilder.addJavadoc(format, *args)
@@ -46,7 +52,7 @@ class FieldSpecBuilder(@PublishedApi internal val nativeBuilder: FieldSpec.Build
     inline fun <reified T> annotation(noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null) =
         annotation(T::class.java, builder)
 
-    override var modifiers: List<Modifier>
+    override var modifiers: Collection<Modifier>
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
         set(value) {
             nativeBuilder.addModifiers(*value.toTypedArray())

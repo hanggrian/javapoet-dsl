@@ -2,7 +2,7 @@
 
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.internal.Typable
+import com.hendraanggrian.javapoet.internal.TypedSpecBuilder
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.JavaFile
@@ -14,7 +14,7 @@ inline fun buildJavaFile(packageName: String, builder: JavaFileBuilder.() -> Uni
         .apply(builder)
         .build()
 
-class JavaFileBuilder(private val packageName: String) : Typable {
+class JavaFileBuilder(private val packageName: String) : TypedSpecBuilder {
     private var type: TypeSpec? = null
     private val comments: MutableList<Pair<String, Array<Any>>> = mutableListOf()
     private val staticImports: MutableList<Pair<Any, Array<String>>> = mutableListOf()

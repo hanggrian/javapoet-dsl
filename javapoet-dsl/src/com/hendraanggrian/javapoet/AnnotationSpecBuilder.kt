@@ -15,6 +15,10 @@ fun buildAnnotationSpec(type: Class<*>, builder: (AnnotationSpecBuilder.() -> Un
         .also { builder?.invoke(it) }
         .build()
 
+/** Returns an annotation with custom initialization block. */
+inline fun <reified T> buildAnnotationSpec(noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
+    buildAnnotationSpec(T::class.java, builder)
+
 class AnnotationSpecBuilder(private val nativeBuilder: AnnotationSpec.Builder) {
 
     fun member(name: String, format: String, vararg args: Any) {

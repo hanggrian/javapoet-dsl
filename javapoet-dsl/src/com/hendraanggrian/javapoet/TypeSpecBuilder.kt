@@ -1,10 +1,10 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.internal.Annotable
-import com.hendraanggrian.javapoet.internal.Javadocable
-import com.hendraanggrian.javapoet.internal.Modifierable
-import com.hendraanggrian.javapoet.internal.Typable
-import com.hendraanggrian.javapoet.internal.TypeVariable
+import com.hendraanggrian.javapoet.internal.AnnotatedSpecBuilder
+import com.hendraanggrian.javapoet.internal.JavadocSpecBuilder
+import com.hendraanggrian.javapoet.internal.ModifieredSpecBuilder
+import com.hendraanggrian.javapoet.internal.TypeVariabledSpecBuilder
+import com.hendraanggrian.javapoet.internal.TypedSpecBuilder
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.TypeName
@@ -78,11 +78,11 @@ fun buildAnnotationTypeSpec(className: ClassName, builder: (TypeSpecBuilder.() -
         .build()
 
 class TypeSpecBuilder(@PublishedApi internal val nativeBuilder: TypeSpec.Builder) :
-    Javadocable,
-    Annotable,
-    Modifierable,
-    TypeVariable,
-    Typable {
+    JavadocSpecBuilder,
+    AnnotatedSpecBuilder,
+    ModifieredSpecBuilder,
+    TypeVariabledSpecBuilder,
+    TypedSpecBuilder {
 
     override fun javadoc(format: String, vararg args: Any) {
         nativeBuilder.addJavadoc(format, *args)
@@ -103,19 +103,23 @@ class TypeSpecBuilder(@PublishedApi internal val nativeBuilder: TypeSpec.Builder
     inline fun <reified T> annotation(noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null) =
         annotation(T::class.java, builder)
 
-    override var modifiers: List<Modifier>
+    override var modifiers: Collection<Modifier>
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
         set(value) {
             nativeBuilder.addModifiers(*value.toTypedArray())
         }
 
-    override fun typeVariable(typeVariable: TypeVariableName) {
-        nativeBuilder.addTypeVariable(typeVariable)
-    }
+    override var typeVariable: TypeVariableName
+        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
+        set(value) {
+            nativeBuilder.addTypeVariable(value)
+        }
 
-    override fun typeVariable(typeVariables: Iterable<TypeVariableName>) {
-        nativeBuilder.addTypeVariables(typeVariables)
-    }
+    override var typeVariables: Iterable<TypeVariableName>
+        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
+        set(value) {
+            nativeBuilder.addTypeVariables(value)
+        }
 
     var superclass: TypeName
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
