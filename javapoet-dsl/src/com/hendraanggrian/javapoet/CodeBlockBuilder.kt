@@ -1,7 +1,6 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.internal.CodedSpecBuilder
-import com.hendraanggrian.javapoet.internal.ControlFlowedSpecBuilder
+import com.hendraanggrian.javapoet.internal.SpecBuilder
 import com.squareup.javapoet.CodeBlock
 
 /** Returns block of code with custom initialization block. */
@@ -10,7 +9,8 @@ inline fun buildCodeBlock(builder: CodeBlockBuilder.() -> Unit): CodeBlock =
         .apply(builder)
         .build()
 
-class CodeBlockBuilder(private val nativeBuilder: CodeBlock.Builder) : SpecBuilder<CodeBlock>(),
+class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuilder: CodeBlock.Builder) :
+    SpecBuilder<CodeBlock>(),
     ControlFlowedSpecBuilder,
     CodedSpecBuilder {
 

@@ -1,5 +1,6 @@
 package com.hendraanggrian.javapoet
 
+import com.hendraanggrian.javapoet.internal.SpecBuilder
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
 
@@ -19,7 +20,8 @@ fun buildAnnotationSpec(type: Class<*>, builder: (AnnotationSpecBuilder.() -> Un
 inline fun <reified T> buildAnnotationSpec(noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
     buildAnnotationSpec(T::class.java, builder)
 
-class AnnotationSpecBuilder(private val nativeBuilder: AnnotationSpec.Builder) : SpecBuilder<AnnotationSpec>() {
+class AnnotationSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: AnnotationSpec.Builder) :
+    SpecBuilder<AnnotationSpec>() {
 
     fun member(name: String, format: String, vararg args: Any) {
         nativeBuilder.addMember(name, format, *args)

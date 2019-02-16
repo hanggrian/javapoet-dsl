@@ -9,6 +9,7 @@ class HelloWorldTest {
     fun helloWorld() {
         assertEquals(
             """
+                // A boring HelloWorld class
                 package com.example;
 
                 import java.lang.String;
@@ -22,7 +23,8 @@ class HelloWorldTest {
 
             """.trimIndent(),
             buildJavaFile("com.example") {
-                `class`("HelloWorld") {
+                comment = "A boring HelloWorld class"
+                type("HelloWorld") {
                     modifiers = public + final
                     method("main") {
                         modifiers = public + static

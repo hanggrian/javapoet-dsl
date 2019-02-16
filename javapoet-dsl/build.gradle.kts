@@ -19,10 +19,9 @@ val ktlint by configurations.registering
 dependencies {
     compile(kotlin("stdlib", VERSION_KOTLIN))
     compile(javapoet())
-
-    testImplementation(kotlin("test", VERSION_KOTLIN))
-    testImplementation(junit())
-
+    
+    testImplementation(kotlin("test-junit", VERSION_KOTLIN))
+    
     ktlint {
         invoke(ktlint())
     }

@@ -1,7 +1,6 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.internal.AnnotatedSpecBuilder
-import com.hendraanggrian.javapoet.internal.ModifieredSpecBuilder
+import com.hendraanggrian.javapoet.internal.SpecBuilder
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.ParameterSpec
 import com.squareup.javapoet.TypeName
@@ -32,7 +31,7 @@ inline fun <reified T> buildParameterSpec(
     noinline builder: (ParameterSpecBuilder.() -> Unit)? = null
 ): ParameterSpec = buildParameterSpec(T::class.java, name, builder)
 
-class ParameterSpecBuilder(@PublishedApi internal val nativeBuilder: ParameterSpec.Builder) :
+class ParameterSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: ParameterSpec.Builder) :
     SpecBuilder<ParameterSpec>(),
     AnnotatedSpecBuilder,
     ModifieredSpecBuilder {

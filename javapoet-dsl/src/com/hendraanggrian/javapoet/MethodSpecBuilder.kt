@@ -1,11 +1,6 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.internal.AnnotatedSpecBuilder
-import com.hendraanggrian.javapoet.internal.CodedSpecBuilder
-import com.hendraanggrian.javapoet.internal.ControlFlowedSpecBuilder
-import com.hendraanggrian.javapoet.internal.JavadocSpecBuilder
-import com.hendraanggrian.javapoet.internal.ModifieredSpecBuilder
-import com.hendraanggrian.javapoet.internal.TypeVariabledSpecBuilder
+import com.hendraanggrian.javapoet.internal.SpecBuilder
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeName
@@ -25,7 +20,8 @@ fun buildConstructorMethodSpec(builder: (MethodSpecBuilder.() -> Unit)? = null):
         .also { builder?.invoke(it) }
         .build()
 
-class MethodSpecBuilder(@PublishedApi internal val nativeBuilder: MethodSpec.Builder) : SpecBuilder<MethodSpec>(),
+class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: MethodSpec.Builder) :
+    SpecBuilder<MethodSpec>(),
     JavadocSpecBuilder,
     AnnotatedSpecBuilder,
     ModifieredSpecBuilder,

@@ -1,14 +1,14 @@
-package com.hendraanggrian.javapoet
+package com.hendraanggrian.javapoet.internal
 
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.TypeName
 import javax.lang.model.element.Modifier
 
 /**
- * Base class of all JavaPoet DSL spec builders.
- * Subclass of this class have access to many convenient inline functions to JavaPoet constant values.
+ * Base type of all JavaPoet DSL spec builders.
+ * Subclass of this type have access to many convenient inline functions to JavaPoet constant values.
  */
-abstract class SpecBuilder<T> {
+abstract class SpecBuilder<T> internal constructor() {
 
     inline val void: TypeName get() = TypeName.VOID
     inline val boolean: TypeName get() = TypeName.BOOLEAN

@@ -16,5 +16,3 @@ fun DependencyHandler.gitPublish() = "org.ajoberstar:gradle-git-publish:$VERSION
 inline val PluginDependenciesSpec.`git-publish` get() = id("org.ajoberstar.git-publish")
 
 fun DependencyHandler.ktlint() = "com.github.shyiko:ktlint:$VERSION_KTLINT"
-
-fun DependencyHandler.junit() = "junit:junit:$VERSION_JUNIT"

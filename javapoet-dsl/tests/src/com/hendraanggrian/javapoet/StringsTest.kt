@@ -29,7 +29,7 @@ class StringsTest {
 
             """.trimIndent(),
             buildJavaFile("com.example") {
-                `class`("HelloWorld") {
+                type("HelloWorld") {
                     modifiers = public + final
                     nameMethod("slimShady")
                     nameMethod("eminem")
