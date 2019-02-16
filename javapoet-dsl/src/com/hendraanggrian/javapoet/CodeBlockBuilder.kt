@@ -10,7 +10,7 @@ inline fun buildCodeBlock(builder: CodeBlockBuilder.() -> Unit): CodeBlock =
         .apply(builder)
         .build()
 
-class CodeBlockBuilder(private val nativeBuilder: CodeBlock.Builder) :
+class CodeBlockBuilder(private val nativeBuilder: CodeBlock.Builder) : SpecBuilder<CodeBlock>(),
     ControlFlowedSpecBuilder,
     CodedSpecBuilder {
 
@@ -38,16 +38,16 @@ class CodeBlockBuilder(private val nativeBuilder: CodeBlock.Builder) :
         nativeBuilder.addStatement(format, *args)
     }
 
-    override fun statement(block: CodeBlock) {
-        nativeBuilder.addStatement(block)
+    override fun statement(builder: CodeBlockBuilder.() -> Unit) {
+        nativeBuilder.addStatement(buildCodeBlock(builder))
     }
 
     override fun code(format: String, vararg args: Any) {
         nativeBuilder.add(format, *args)
     }
 
-    override fun code(block: CodeBlock) {
-        nativeBuilder.add(block)
+    override fun code(builder: CodeBlockBuilder.() -> Unit) {
+        nativeBuilder.add(buildCodeBlock(builder))
     }
 
     fun indent() {
@@ -58,5 +58,5 @@ class CodeBlockBuilder(private val nativeBuilder: CodeBlock.Builder) :
         nativeBuilder.unindent()
     }
 
-    fun build(): CodeBlock = nativeBuilder.build()
+    override fun build(): CodeBlock = nativeBuilder.build()
 }

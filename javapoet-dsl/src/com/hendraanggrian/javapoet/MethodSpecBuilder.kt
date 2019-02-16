@@ -7,7 +7,6 @@ import com.hendraanggrian.javapoet.internal.JavadocSpecBuilder
 import com.hendraanggrian.javapoet.internal.ModifieredSpecBuilder
 import com.hendraanggrian.javapoet.internal.TypeVariabledSpecBuilder
 import com.squareup.javapoet.ClassName
-import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeVariableName
@@ -26,7 +25,7 @@ fun buildConstructorMethodSpec(builder: (MethodSpecBuilder.() -> Unit)? = null):
         .also { builder?.invoke(it) }
         .build()
 
-class MethodSpecBuilder(@PublishedApi internal val nativeBuilder: MethodSpec.Builder) :
+class MethodSpecBuilder(@PublishedApi internal val nativeBuilder: MethodSpec.Builder) : SpecBuilder<MethodSpec>(),
     JavadocSpecBuilder,
     AnnotatedSpecBuilder,
     ModifieredSpecBuilder,
@@ -38,8 +37,8 @@ class MethodSpecBuilder(@PublishedApi internal val nativeBuilder: MethodSpec.Bui
         nativeBuilder.addJavadoc(format, *args)
     }
 
-    override fun javadoc(block: CodeBlock) {
-        nativeBuilder.addJavadoc(block)
+    override fun javadoc(builder: CodeBlockBuilder.() -> Unit) {
+        nativeBuilder.addJavadoc(buildCodeBlock(builder))
     }
 
     override fun annotation(type: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)?) {
@@ -118,8 +117,8 @@ class MethodSpecBuilder(@PublishedApi internal val nativeBuilder: MethodSpec.Bui
         nativeBuilder.addCode(format, *args)
     }
 
-    override fun code(block: CodeBlock) {
-        nativeBuilder.addCode(block)
+    override fun code(builder: CodeBlockBuilder.() -> Unit) {
+        nativeBuilder.addCode(buildCodeBlock(builder))
     }
 
     fun comment(format: String, vararg args: Any) {
@@ -150,9 +149,9 @@ class MethodSpecBuilder(@PublishedApi internal val nativeBuilder: MethodSpec.Bui
         nativeBuilder.addStatement(format, *args)
     }
 
-    override fun statement(block: CodeBlock) {
-        nativeBuilder.addStatement(block)
+    override fun statement(builder: CodeBlockBuilder.() -> Unit) {
+        nativeBuilder.addStatement(buildCodeBlock(builder))
     }
 
-    fun build(): MethodSpec = nativeBuilder.build()
+    override fun build(): MethodSpec = nativeBuilder.build()
 }

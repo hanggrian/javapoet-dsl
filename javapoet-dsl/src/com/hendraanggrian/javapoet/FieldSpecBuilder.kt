@@ -28,7 +28,7 @@ inline fun <reified T> buildFieldSpec(
     noinline builder: (FieldSpecBuilder.() -> Unit)? = null
 ): FieldSpec = buildFieldSpec(T::class.java, name, builder)
 
-class FieldSpecBuilder(@PublishedApi internal val nativeBuilder: FieldSpec.Builder) :
+class FieldSpecBuilder(@PublishedApi internal val nativeBuilder: FieldSpec.Builder) : SpecBuilder<FieldSpec>(),
     JavadocSpecBuilder,
     AnnotatedSpecBuilder,
     ModifieredSpecBuilder {
@@ -37,8 +37,8 @@ class FieldSpecBuilder(@PublishedApi internal val nativeBuilder: FieldSpec.Build
         nativeBuilder.addJavadoc(format, *args)
     }
 
-    override fun javadoc(block: CodeBlock) {
-        nativeBuilder.addJavadoc(block)
+    override fun javadoc(builder: CodeBlockBuilder.() -> Unit) {
+        nativeBuilder.addJavadoc(buildCodeBlock(builder))
     }
 
     override fun annotation(type: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)?) {
@@ -69,5 +69,5 @@ class FieldSpecBuilder(@PublishedApi internal val nativeBuilder: FieldSpec.Build
     @Suppress("NOTHING_TO_INLINE")
     inline fun initializer(noinline builder: CodeBlockBuilder.() -> Unit) = buildCodeBlock(builder)
 
-    fun build(): FieldSpec = nativeBuilder.build()
+    override fun build(): FieldSpec = nativeBuilder.build()
 }

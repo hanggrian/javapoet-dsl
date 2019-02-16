@@ -1,6 +1,5 @@
 package com.hendraanggrian.javapoet
 
-import com.squareup.javapoet.TypeName
 import org.junit.Test
 import kotlin.test.assertEquals
 
@@ -42,9 +41,9 @@ class CodeControlFlowTest {
         assertEquals(
             expected1,
             buildJavaFile("com.example") {
-                type("HelloWorld") {
+                `class`("HelloWorld") {
                     method("flow") {
-                        returns = TypeName.VOID
+                        returns = void
                         code(
                             """
                                 int total = 0;
@@ -65,9 +64,9 @@ class CodeControlFlowTest {
         assertEquals(
             expected1,
             buildJavaFile("com.example") {
-                type("HelloWorld") {
+                `class`("HelloWorld") {
                     method("flow") {
-                        returns = TypeName.VOID
+                        returns = void
                         statement("int total = 0")
                         beginControlFlow("for (int i = 0; i < 10; i++)")
                         statement("total += i")
@@ -83,9 +82,9 @@ class CodeControlFlowTest {
         assertEquals(
             expected2,
             buildJavaFile("com.example") {
-                type("HelloWorld") {
+                `class`("HelloWorld") {
                     method("multiply10to20") {
-                        returns = TypeName.INT
+                        returns = int
                         statement("int result = 1")
                         beginControlFlow("for (int i = 10; i < 20; i++)")
                         statement("result = result * i")

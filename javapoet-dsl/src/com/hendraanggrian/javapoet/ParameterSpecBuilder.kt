@@ -33,6 +33,7 @@ inline fun <reified T> buildParameterSpec(
 ): ParameterSpec = buildParameterSpec(T::class.java, name, builder)
 
 class ParameterSpecBuilder(@PublishedApi internal val nativeBuilder: ParameterSpec.Builder) :
+    SpecBuilder<ParameterSpec>(),
     AnnotatedSpecBuilder,
     ModifieredSpecBuilder {
 
@@ -53,5 +54,5 @@ class ParameterSpecBuilder(@PublishedApi internal val nativeBuilder: ParameterSp
             nativeBuilder.addModifiers(*value.toTypedArray())
         }
 
-    fun build(): ParameterSpec = nativeBuilder.build()
+    override fun build(): ParameterSpec = nativeBuilder.build()
 }

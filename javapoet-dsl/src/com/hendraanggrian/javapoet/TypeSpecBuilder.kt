@@ -77,7 +77,7 @@ fun buildAnnotationTypeSpec(className: ClassName, builder: (TypeSpecBuilder.() -
         .also { builder?.invoke(it) }
         .build()
 
-class TypeSpecBuilder(@PublishedApi internal val nativeBuilder: TypeSpec.Builder) :
+class TypeSpecBuilder(@PublishedApi internal val nativeBuilder: TypeSpec.Builder) : SpecBuilder<TypeSpec>(),
     JavadocSpecBuilder,
     AnnotatedSpecBuilder,
     ModifieredSpecBuilder,
@@ -88,8 +88,8 @@ class TypeSpecBuilder(@PublishedApi internal val nativeBuilder: TypeSpec.Builder
         nativeBuilder.addJavadoc(format, *args)
     }
 
-    override fun javadoc(block: CodeBlock) {
-        nativeBuilder.addJavadoc(block)
+    override fun javadoc(builder: CodeBlockBuilder.() -> Unit) {
+        nativeBuilder.addJavadoc(buildCodeBlock(builder))
     }
 
     override fun annotation(type: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)?) {
@@ -121,27 +121,29 @@ class TypeSpecBuilder(@PublishedApi internal val nativeBuilder: TypeSpec.Builder
             nativeBuilder.addTypeVariables(value)
         }
 
-    var superclass: TypeName
+    var superClass: TypeName
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
         set(value) {
             nativeBuilder.superclass(value)
         }
 
-    fun superclass(type: Type) {
+    fun superClass(type: Type) {
         nativeBuilder.superclass(type)
     }
 
-    inline fun <reified T> superclass() = superclass(T::class.java)
+    inline fun <reified T> superClass() = superClass(T::class.java)
 
-    fun superiface(superiface: TypeName) {
-        nativeBuilder.addSuperinterface(superiface)
-    }
+    var superInterface: TypeName
+        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
+        set(value) {
+            nativeBuilder.addSuperinterface(value)
+        }
 
-    fun superiface(type: Type) {
+    fun superInterface(type: Type) {
         nativeBuilder.addSuperinterface(type)
     }
 
-    inline fun <reified T> superiface() = superiface(T::class.java)
+    inline fun <reified T> superInterface() = superInterface(T::class.java)
 
     fun enumConstant(name: String) {
         nativeBuilder.addEnumConstant(name)
@@ -178,43 +180,43 @@ class TypeSpecBuilder(@PublishedApi internal val nativeBuilder: TypeSpec.Builder
         nativeBuilder.addMethod(buildConstructorMethodSpec(builder))
     }
 
-    override fun type(name: String, builder: (TypeSpecBuilder.() -> Unit)?) {
+    override fun `class`(name: String, builder: (TypeSpecBuilder.() -> Unit)?) {
         nativeBuilder.addType(buildTypeSpec(name, builder))
     }
 
-    override fun type(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
+    override fun `class`(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
         nativeBuilder.addType(buildTypeSpec(className, builder))
     }
 
-    override fun interfaceType(name: String, builder: (TypeSpecBuilder.() -> Unit)?) {
+    override fun `interface`(name: String, builder: (TypeSpecBuilder.() -> Unit)?) {
         nativeBuilder.addType(buildInterfaceTypeSpec(name, builder))
     }
 
-    override fun interfaceType(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
+    override fun `interface`(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
         nativeBuilder.addType(buildInterfaceTypeSpec(className, builder))
     }
 
-    override fun enumType(name: String, builder: (TypeSpecBuilder.() -> Unit)?) {
+    override fun `enum`(name: String, builder: (TypeSpecBuilder.() -> Unit)?) {
         nativeBuilder.addType(buildEnumTypeSpec(name, builder))
     }
 
-    override fun enumType(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
+    override fun `enum`(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
         nativeBuilder.addType(buildEnumTypeSpec(className, builder))
     }
 
-    override fun anonymousType(typeArgumentsFormat: String, vararg args: Any, builder: (TypeSpecBuilder.() -> Unit)?) {
+    override fun anonymousClass(typeArgumentsFormat: String, vararg args: Any, builder: (TypeSpecBuilder.() -> Unit)?) {
         nativeBuilder.addType(buildAnonymousTypeSpec(typeArgumentsFormat, *args, builder = builder))
     }
 
-    override fun anonymousType(typeArguments: CodeBlock, builder: (TypeSpecBuilder.() -> Unit)?) {
+    override fun anonymousClass(typeArguments: CodeBlock, builder: (TypeSpecBuilder.() -> Unit)?) {
         nativeBuilder.addType(buildAnonymousTypeSpec(typeArguments, builder))
     }
 
-    override fun annotationType(name: String, builder: (TypeSpecBuilder.() -> Unit)?) {
+    override fun annotationInterface(name: String, builder: (TypeSpecBuilder.() -> Unit)?) {
         nativeBuilder.addType(buildAnnotationTypeSpec(name, builder))
     }
 
-    override fun annotationType(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
+    override fun annotationInterface(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
         nativeBuilder.addType(buildAnnotationTypeSpec(className, builder))
     }
 
@@ -222,5 +224,5 @@ class TypeSpecBuilder(@PublishedApi internal val nativeBuilder: TypeSpec.Builder
         nativeBuilder.addOriginatingElement(originatingElement)
     }
 
-    fun build(): TypeSpec = nativeBuilder.build()
+    override fun build(): TypeSpec = nativeBuilder.build()
 }
