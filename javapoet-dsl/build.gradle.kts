@@ -21,6 +21,7 @@ dependencies {
     compile(javapoet())
 
     testImplementation(kotlin("test-junit", VERSION_KOTLIN))
+    testImplementation(truth())
 
     ktlint {
         invoke(ktlint())

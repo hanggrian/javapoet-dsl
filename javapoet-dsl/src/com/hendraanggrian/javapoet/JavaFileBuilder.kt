@@ -11,7 +11,7 @@ inline fun buildJavaFile(packageName: String, builder: JavaFileBuilder.() -> Uni
         .apply(builder)
         .build()
 
-class JavaFileBuilder @PublishedApi internal constructor(private val packageName: String) : TypedSpecBuilder {
+class JavaFileBuilder @PublishedApi internal constructor(private val packageName: String) : TypableSpecBuilder {
     private var type: TypeSpec? = null
     private val comments: MutableList<Pair<String, Array<Any>>> = mutableListOf()
     private val staticImports: MutableList<Pair<Any, Array<String>>> = mutableListOf()
@@ -45,24 +45,24 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
         type = buildTypeSpec(name, builder)
     }
 
-    override fun type(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
-        type = buildTypeSpec(className, builder)
+    override fun type(name: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
+        type = buildTypeSpec(name, builder)
     }
 
     override fun interfaceType(name: String, builder: (TypeSpecBuilder.() -> Unit)?) {
         type = buildInterfaceTypeSpec(name, builder)
     }
 
-    override fun interfaceType(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
-        type = buildInterfaceTypeSpec(className, builder)
+    override fun interfaceType(name: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
+        type = buildInterfaceTypeSpec(name, builder)
     }
 
     override fun enumType(name: String, builder: (TypeSpecBuilder.() -> Unit)?) {
         type = buildEnumTypeSpec(name, builder)
     }
 
-    override fun enumType(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
-        type = buildEnumTypeSpec(className, builder)
+    override fun enumType(name: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
+        type = buildEnumTypeSpec(name, builder)
     }
 
     override fun anonymousType(typeArgumentsFormat: String, vararg args: Any, builder: (TypeSpecBuilder.() -> Unit)?) {
@@ -77,8 +77,8 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
         type = buildAnnotationTypeSpec(name, builder)
     }
 
-    override fun annotationType(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
-        type = buildAnnotationTypeSpec(className, builder)
+    override fun annotationType(name: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
+        type = buildAnnotationTypeSpec(name, builder)
     }
 
     fun build(): JavaFile = JavaFile.builder(packageName, checkNotNull(type) { "A `type` must be initialized" })

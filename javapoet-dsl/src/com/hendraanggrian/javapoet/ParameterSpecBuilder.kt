@@ -33,11 +33,11 @@ inline fun <reified T> buildParameterSpec(
 
 class ParameterSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: ParameterSpec.Builder) :
     SpecBuilder<ParameterSpec>(),
-    AnnotatedSpecBuilder,
-    ModifieredSpecBuilder {
+    AnnotableSpecBuilder,
+    ModifierableSpecBuilder {
 
-    override fun annotation(type: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addAnnotation(buildAnnotationSpec(type, builder))
+    override fun annotation(name: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)?) {
+        nativeBuilder.addAnnotation(buildAnnotationSpec(name, builder))
     }
 
     override fun annotation(type: Class<*>, builder: (AnnotationSpecBuilder.() -> Unit)?) {

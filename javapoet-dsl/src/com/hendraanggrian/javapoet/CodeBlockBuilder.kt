@@ -11,8 +11,8 @@ inline fun buildCodeBlock(builder: CodeBlockBuilder.() -> Unit): CodeBlock =
 
 class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuilder: CodeBlock.Builder) :
     SpecBuilder<CodeBlock>(),
-    ControlFlowedSpecBuilder,
-    CodedSpecBuilder {
+    ControlFlowableSpecBuilder,
+    CodableSpecBuilder {
 
     fun named(format: String, arguments: Map<String, *>) {
         nativeBuilder.addNamed(format, arguments)

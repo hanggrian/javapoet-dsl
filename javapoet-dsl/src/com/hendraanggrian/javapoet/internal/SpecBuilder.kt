@@ -21,18 +21,26 @@ abstract class SpecBuilder<T> internal constructor() {
     inline val double: TypeName get() = TypeName.DOUBLE
     inline val `object`: ClassName get() = TypeName.OBJECT
 
-    inline val public: MutableList<Modifier> get() = arrayListOf(Modifier.PUBLIC)
-    inline val protected: MutableList<Modifier> get() = arrayListOf(Modifier.PROTECTED)
-    inline val private: MutableList<Modifier> get() = arrayListOf(Modifier.PRIVATE)
-    inline val abstract: MutableList<Modifier> get() = arrayListOf(Modifier.ABSTRACT)
-    inline val default: MutableList<Modifier> get() = arrayListOf(Modifier.DEFAULT)
-    inline val static: MutableList<Modifier> get() = arrayListOf(Modifier.STATIC)
-    inline val final: MutableList<Modifier> get() = arrayListOf(Modifier.FINAL)
-    inline val transient: MutableList<Modifier> get() = arrayListOf(Modifier.TRANSIENT)
-    inline val volatile: MutableList<Modifier> get() = arrayListOf(Modifier.VOLATILE)
-    inline val synchronized: MutableList<Modifier> get() = arrayListOf(Modifier.SYNCHRONIZED)
-    inline val native: MutableList<Modifier> get() = arrayListOf(Modifier.NATIVE)
-    inline val strictfp: MutableList<Modifier> get() = arrayListOf(Modifier.STRICTFP)
+    inline val public: Modifier get() = Modifier.PUBLIC
+    inline val protected: Modifier get() = Modifier.PROTECTED
+    inline val private: Modifier get() = Modifier.PRIVATE
+    inline val abstract: Modifier get() = Modifier.ABSTRACT
+    inline val default: Modifier get() = Modifier.DEFAULT
+    inline val static: Modifier get() = Modifier.STATIC
+    inline val final: Modifier get() = Modifier.FINAL
+    inline val transient: Modifier get() = Modifier.TRANSIENT
+    inline val volatile: Modifier get() = Modifier.VOLATILE
+    inline val synchronized: Modifier get() = Modifier.SYNCHRONIZED
+    inline val native: Modifier get() = Modifier.NATIVE
+    inline val strictfp: Modifier get() = Modifier.STRICTFP
 
     abstract fun build(): T
+
+    /**
+     * Instead of recreating a list every [plus], add the item to this list.
+     *
+     * @see com.hendraanggrian.javapoet.TypeVariableSpecBuilder.plus
+     * @see com.hendraanggrian.javapoet.ModifierableSpecBuilder.plus
+     */
+    operator fun <E> ArrayList<E>.plus(other: E): ArrayList<E> = also { it += other }
 }

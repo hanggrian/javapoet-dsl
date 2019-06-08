@@ -22,12 +22,12 @@ fun buildConstructorMethodSpec(builder: (MethodSpecBuilder.() -> Unit)? = null):
 
 class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: MethodSpec.Builder) :
     SpecBuilder<MethodSpec>(),
-    JavadocSpecBuilder,
-    AnnotatedSpecBuilder,
-    ModifieredSpecBuilder,
-    TypeVariabledSpecBuilder,
-    ControlFlowedSpecBuilder,
-    CodedSpecBuilder {
+    JavadocableSpecBuilder,
+    AnnotableSpecBuilder,
+    ModifierableSpecBuilder,
+    TypeVariableSpecBuilder,
+    ControlFlowableSpecBuilder,
+    CodableSpecBuilder {
 
     override fun javadoc(format: String, vararg args: Any) {
         nativeBuilder.addJavadoc(format, *args)
@@ -37,8 +37,8 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
         nativeBuilder.addJavadoc(buildCodeBlock(builder))
     }
 
-    override fun annotation(type: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addAnnotation(buildAnnotationSpec(type, builder))
+    override fun annotation(name: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)?) {
+        nativeBuilder.addAnnotation(buildAnnotationSpec(name, builder))
     }
 
     override fun annotation(type: Class<*>, builder: (AnnotationSpecBuilder.() -> Unit)?) {

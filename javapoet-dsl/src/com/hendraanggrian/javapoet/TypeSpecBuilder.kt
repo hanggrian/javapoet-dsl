@@ -75,11 +75,11 @@ fun buildAnnotationTypeSpec(className: ClassName, builder: (TypeSpecBuilder.() -
 
 class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: TypeSpec.Builder) :
     SpecBuilder<TypeSpec>(),
-    JavadocSpecBuilder,
-    AnnotatedSpecBuilder,
-    ModifieredSpecBuilder,
-    TypeVariabledSpecBuilder,
-    TypedSpecBuilder {
+    JavadocableSpecBuilder,
+    AnnotableSpecBuilder,
+    ModifierableSpecBuilder,
+    TypeVariableSpecBuilder,
+    TypableSpecBuilder {
 
     override fun javadoc(format: String, vararg args: Any) {
         nativeBuilder.addJavadoc(format, *args)
@@ -89,8 +89,8 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
         nativeBuilder.addJavadoc(buildCodeBlock(builder))
     }
 
-    override fun annotation(type: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addAnnotation(buildAnnotationSpec(type, builder))
+    override fun annotation(name: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)?) {
+        nativeBuilder.addAnnotation(buildAnnotationSpec(name, builder))
     }
 
     override fun annotation(type: Class<*>, builder: (AnnotationSpecBuilder.() -> Unit)?) {
@@ -181,24 +181,24 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
         nativeBuilder.addType(buildTypeSpec(name, builder))
     }
 
-    override fun type(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addType(buildTypeSpec(className, builder))
+    override fun type(name: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
+        nativeBuilder.addType(buildTypeSpec(name, builder))
     }
 
     override fun interfaceType(name: String, builder: (TypeSpecBuilder.() -> Unit)?) {
         nativeBuilder.addType(buildInterfaceTypeSpec(name, builder))
     }
 
-    override fun interfaceType(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addType(buildInterfaceTypeSpec(className, builder))
+    override fun interfaceType(name: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
+        nativeBuilder.addType(buildInterfaceTypeSpec(name, builder))
     }
 
     override fun enumType(name: String, builder: (TypeSpecBuilder.() -> Unit)?) {
         nativeBuilder.addType(buildEnumTypeSpec(name, builder))
     }
 
-    override fun enumType(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addType(buildEnumTypeSpec(className, builder))
+    override fun enumType(name: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
+        nativeBuilder.addType(buildEnumTypeSpec(name, builder))
     }
 
     override fun anonymousType(typeArgumentsFormat: String, vararg args: Any, builder: (TypeSpecBuilder.() -> Unit)?) {
@@ -213,8 +213,8 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
         nativeBuilder.addType(buildAnnotationTypeSpec(name, builder))
     }
 
-    override fun annotationType(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addType(buildAnnotationTypeSpec(className, builder))
+    override fun annotationType(name: ClassName, builder: (TypeSpecBuilder.() -> Unit)?) {
+        nativeBuilder.addType(buildAnnotationTypeSpec(name, builder))
     }
 
     fun originatingElement(originatingElement: Element) {

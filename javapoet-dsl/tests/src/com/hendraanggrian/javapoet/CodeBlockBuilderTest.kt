@@ -1,7 +1,7 @@
 package com.hendraanggrian.javapoet
 
 import com.squareup.javapoet.CodeBlock
-import org.junit.Test
+import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class CodeBlockBuilderTest {

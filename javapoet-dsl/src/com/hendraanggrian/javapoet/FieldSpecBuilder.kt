@@ -27,9 +27,9 @@ inline fun <reified T> buildFieldSpec(
 
 class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: FieldSpec.Builder) :
     SpecBuilder<FieldSpec>(),
-    JavadocSpecBuilder,
-    AnnotatedSpecBuilder,
-    ModifieredSpecBuilder {
+    JavadocableSpecBuilder,
+    AnnotableSpecBuilder,
+    ModifierableSpecBuilder {
 
     override fun javadoc(format: String, vararg args: Any) {
         nativeBuilder.addJavadoc(format, *args)
@@ -39,8 +39,8 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
         nativeBuilder.addJavadoc(buildCodeBlock(builder))
     }
 
-    override fun annotation(type: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addAnnotation(buildAnnotationSpec(type, builder))
+    override fun annotation(name: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)?) {
+        nativeBuilder.addAnnotation(buildAnnotationSpec(name, builder))
     }
 
     override fun annotation(type: Class<*>, builder: (AnnotationSpecBuilder.() -> Unit)?) {

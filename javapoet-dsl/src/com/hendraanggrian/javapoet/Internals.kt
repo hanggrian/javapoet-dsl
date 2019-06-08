@@ -11,16 +11,16 @@ internal const val NO_GETTER: String = "Property does not have a getter."
 internal fun noGetter(): Nothing = throw UnsupportedOperationException(NO_GETTER)
 
 /** Don't forget to add inline reified function. */
-internal interface AnnotatedSpecBuilder {
+internal interface AnnotableSpecBuilder {
 
     /** Add annotation to this spec builder */
-    fun annotation(type: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)? = null)
+    fun annotation(name: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)? = null)
 
     /** Add annotation to this spec builder */
     fun annotation(type: Class<*>, builder: (AnnotationSpecBuilder.() -> Unit)? = null)
 }
 
-internal interface CodedSpecBuilder {
+internal interface CodableSpecBuilder {
 
     /** Add a code to this spec builder. */
     fun code(format: String, vararg args: Any)
@@ -35,25 +35,25 @@ internal interface CodedSpecBuilder {
     fun statement(builder: CodeBlockBuilder.() -> Unit)
 }
 
-internal interface TypedSpecBuilder {
+internal interface TypableSpecBuilder {
 
     /** Add type to this spec builder. */
     fun type(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null)
 
     /** Add type to this spec builder. */
-    fun type(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null)
+    fun type(name: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null)
 
     /** Add interface to this spec builder. */
     fun interfaceType(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null)
 
     /** Add interface to this spec builder. */
-    fun interfaceType(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null)
+    fun interfaceType(name: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null)
 
     /** Add enum to this spec builder. */
     fun enumType(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null)
 
     /** Add enum to this spec builder. */
-    fun enumType(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null)
+    fun enumType(name: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null)
 
     /** Add anonymous type to this spec builder. */
     fun anonymousType(typeArgumentsFormat: String, vararg args: Any, builder: (TypeSpecBuilder.() -> Unit)? = null)
@@ -65,10 +65,10 @@ internal interface TypedSpecBuilder {
     fun annotationType(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null)
 
     /** Add annotation interfaceType to this spec builder. */
-    fun annotationType(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null)
+    fun annotationType(name: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null)
 }
 
-internal interface JavadocSpecBuilder {
+internal interface JavadocableSpecBuilder {
 
     /** Add javadoc to this spec builder. */
     fun javadoc(format: String, vararg args: Any)
@@ -82,7 +82,7 @@ internal interface JavadocSpecBuilder {
     fun javadoc(builder: CodeBlockBuilder.() -> Unit)
 }
 
-internal interface TypeVariabledSpecBuilder {
+internal interface TypeVariableSpecBuilder {
 
     /** Add single [TypeVariableName] to this spec builder. */
     var typeVariable: TypeVariableName
@@ -94,15 +94,10 @@ internal interface TypeVariabledSpecBuilder {
     var typeVariables: Iterable<TypeVariableName>
 
     /** Combines two initial values. */
-    operator fun TypeVariableName.plus(other: TypeVariableName): MutableList<TypeVariableName> =
-        arrayListOf(this, other)
-
-    /** Instead of recreating a list every [plus], add the item to this list. */
-    operator fun MutableList<TypeVariableName>.plus(other: TypeVariableName): MutableList<TypeVariableName> =
-        also { it += other }
+    operator fun TypeVariableName.plus(other: TypeVariableName): ArrayList<TypeVariableName> = arrayListOf(this, other)
 }
 
-internal interface ControlFlowedSpecBuilder {
+internal interface ControlFlowableSpecBuilder {
 
     /** Begin a control flow of this spec builder. */
     fun beginControlFlow(format: String, vararg args: Any)
@@ -117,14 +112,24 @@ internal interface ControlFlowedSpecBuilder {
     fun endControlFlow(format: String, vararg args: Any)
 }
 
-internal interface ModifieredSpecBuilder {
+internal interface ModifierableSpecBuilder {
 
     /**
-     * Add single/multiple [Modifier] to this spec builder.
+     * Add single [Modifier] to this spec builder.
+     * A preferable way to achieve this is to use [plus] operator (e.g.: `typeVariables = name1 + name2 + name3`).
+     */
+    var modifier: Modifier
+        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
+        set(value) {
+            modifiers = listOf(value)
+        }
+
+    /**
+     * Add multiple [Modifier] to this spec builder.
      * A preferable way to achieve this is to use [plus] operator (e.g.: `typeVariables = name1 + name2 + name3`).
      */
     var modifiers: Collection<Modifier>
 
-    /** Instead of recreating a list every [plus], add the item to this list. */
-    operator fun MutableList<Modifier>.plus(other: Modifier): MutableList<Modifier> = also { it += other }
+    /** Combines two initial values. */
+    operator fun Modifier.plus(other: Modifier): ArrayList<Modifier> = arrayListOf(this, other)
 }
