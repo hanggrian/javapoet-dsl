@@ -34,10 +34,11 @@ abstract class SpecBuilder<T> internal constructor() {
     inline val native: Modifier get() = Modifier.NATIVE
     inline val strictfp: Modifier get() = Modifier.STRICTFP
 
+    /** Converts this DSL spec builder to native JavaPoet specs. */
     abstract fun build(): T
 
     /**
-     * Instead of recreating a list every [plus], add the item to this list.
+     * Instead of recreating a list every [Collection.plus], add the item to this list.
      *
      * @see com.hendraanggrian.javapoet.TypeVariableSpecBuilder.plus
      * @see com.hendraanggrian.javapoet.ModifierableSpecBuilder.plus

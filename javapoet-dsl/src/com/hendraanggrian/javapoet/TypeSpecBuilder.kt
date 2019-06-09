@@ -73,6 +73,7 @@ fun buildAnnotationTypeSpec(className: ClassName, builder: (TypeSpecBuilder.() -
         .also { builder?.invoke(it) }
         .build()
 
+@SpecBuilderDslMarker
 class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: TypeSpec.Builder) :
     SpecBuilder<TypeSpec>(),
     JavadocableSpecBuilder,

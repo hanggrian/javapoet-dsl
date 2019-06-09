@@ -9,6 +9,7 @@ inline fun buildCodeBlock(builder: CodeBlockBuilder.() -> Unit): CodeBlock =
         .apply(builder)
         .build()
 
+@SpecBuilderDslMarker
 class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuilder: CodeBlock.Builder) :
     SpecBuilder<CodeBlock>(),
     ControlFlowableSpecBuilder,

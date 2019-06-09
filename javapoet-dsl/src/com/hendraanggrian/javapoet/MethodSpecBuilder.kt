@@ -20,6 +20,7 @@ fun buildConstructorMethodSpec(builder: (MethodSpecBuilder.() -> Unit)? = null):
         .also { builder?.invoke(it) }
         .build()
 
+@SpecBuilderDslMarker
 class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: MethodSpec.Builder) :
     SpecBuilder<MethodSpec>(),
     JavadocableSpecBuilder,

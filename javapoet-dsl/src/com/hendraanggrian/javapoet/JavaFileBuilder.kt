@@ -11,6 +11,7 @@ inline fun buildJavaFile(packageName: String, builder: JavaFileBuilder.() -> Uni
         .apply(builder)
         .build()
 
+@SpecBuilderDslMarker
 class JavaFileBuilder @PublishedApi internal constructor(private val packageName: String) : TypableSpecBuilder {
     private var type: TypeSpec? = null
     private val comments: MutableList<Pair<String, Array<Any>>> = mutableListOf()

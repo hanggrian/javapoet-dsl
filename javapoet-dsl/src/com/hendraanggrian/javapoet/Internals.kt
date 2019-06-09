@@ -13,10 +13,10 @@ internal fun noGetter(): Nothing = throw UnsupportedOperationException(NO_GETTER
 /** Don't forget to add inline reified function. */
 internal interface AnnotableSpecBuilder {
 
-    /** Add annotation to this spec builder */
+    /** Add annotation to this spec builder. */
     fun annotation(name: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)? = null)
 
-    /** Add annotation to this spec builder */
+    /** Add annotation to this spec builder. */
     fun annotation(type: Class<*>, builder: (AnnotationSpecBuilder.() -> Unit)? = null)
 }
 

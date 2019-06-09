@@ -20,6 +20,7 @@ fun buildAnnotationSpec(type: Class<*>, builder: (AnnotationSpecBuilder.() -> Un
 inline fun <reified T> buildAnnotationSpec(noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
     buildAnnotationSpec(T::class.java, builder)
 
+@SpecBuilderDslMarker
 class AnnotationSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: AnnotationSpec.Builder) :
     SpecBuilder<AnnotationSpec>() {
 

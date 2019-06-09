@@ -25,6 +25,7 @@ inline fun <reified T> buildFieldSpec(
     noinline builder: (FieldSpecBuilder.() -> Unit)? = null
 ): FieldSpec = buildFieldSpec(T::class.java, name, builder)
 
+@SpecBuilderDslMarker
 class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: FieldSpec.Builder) :
     SpecBuilder<FieldSpec>(),
     JavadocableSpecBuilder,
