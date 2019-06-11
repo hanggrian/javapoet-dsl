@@ -1,0 +1,34 @@
+package com.hendraanggrian.javapoet
+
+import com.squareup.javapoet.AnnotationSpec
+import com.squareup.javapoet.ParameterSpec
+import javax.lang.model.element.Modifier
+import kotlin.test.Test
+import kotlin.test.assertEquals
+
+class ParameterSpecBuilderTest {
+
+    @Test
+    fun simple() {
+        assertEquals(
+            ParameterSpec.builder(String::class.java, "name", Modifier.PUBLIC, Modifier.FINAL).build(),
+            buildParameterSpec<String>("name") {
+                modifiers = public + final
+            }
+        )
+    }
+
+    @Test
+    fun advanced() {
+        assertEquals(
+            ParameterSpec.builder(String::class.java, "name")
+                .addAnnotation(AnnotationSpec.builder(Deprecated::class.java).build())
+                .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                .build(),
+            buildParameterSpec<String>("name") {
+                annotation<Deprecated>()
+                modifiers = public + final
+            }
+        )
+    }
+}

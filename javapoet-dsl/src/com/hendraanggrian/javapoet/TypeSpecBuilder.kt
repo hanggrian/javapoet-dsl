@@ -15,66 +15,63 @@ import java.lang.reflect.Type
 import javax.lang.model.element.Element
 import javax.lang.model.element.Modifier
 
-/** Returns a type builder with custom initialization block. */
-fun buildTypeSpec(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
+/** Returns a class type builder with custom initialization block. */
+fun buildClassTypeSpec(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
     TypeSpecBuilder(TypeSpec.classBuilder(name))
         .also { builder?.invoke(it) }
         .build()
 
-/** Returns a type builder with custom initialization block. */
-fun buildTypeSpec(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
-    TypeSpecBuilder(TypeSpec.classBuilder(className))
+/** Returns a class type builder with custom initialization block. */
+fun buildClassTypeSpec(name: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
+    TypeSpecBuilder(TypeSpec.classBuilder(name))
         .also { builder?.invoke(it) }
         .build()
 
-/** Returns an interfaceType builder with custom initialization block. */
+/** Returns an interface type builder with custom initialization block. */
 fun buildInterfaceTypeSpec(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
     TypeSpecBuilder(TypeSpec.interfaceBuilder(name))
         .also { builder?.invoke(it) }
         .build()
 
-/** Returns an interfaceType builder with custom initialization block. */
-fun buildInterfaceTypeSpec(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
-    TypeSpecBuilder(TypeSpec.interfaceBuilder(className))
+/** Returns an interface type builder with custom initialization block. */
+fun buildInterfaceTypeSpec(name: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
+    TypeSpecBuilder(TypeSpec.interfaceBuilder(name))
         .also { builder?.invoke(it) }
         .build()
 
-/** Returns an enumType builder with custom initialization block. */
+/** Returns an enum type builder with custom initialization block. */
 fun buildEnumTypeSpec(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
     TypeSpecBuilder(TypeSpec.enumBuilder(name))
         .also { builder?.invoke(it) }
         .build()
 
-/** Returns an enumType builder with custom initialization block. */
-fun buildEnumTypeSpec(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
-    TypeSpecBuilder(TypeSpec.enumBuilder(className))
+/** Returns an enum type builder with custom initialization block. */
+fun buildEnumTypeSpec(name: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
+    TypeSpecBuilder(TypeSpec.enumBuilder(name))
         .also { builder?.invoke(it) }
         .build()
 
-/** Returns an anonymousType type builder with custom initialization block. */
-fun buildAnonymousTypeSpec(
-    typeArgumentsFormat: String,
-    vararg args: Any,
-    builder: (TypeSpecBuilder.() -> Unit)? = null
-): TypeSpec = TypeSpecBuilder(TypeSpec.anonymousClassBuilder(typeArgumentsFormat, *args))
-    .also { builder?.invoke(it) }
-    .build()
-
-/** Returns an anonymousType type builder with custom initialization block. */
-fun buildAnonymousTypeSpec(typeArguments: CodeBlock, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
-    TypeSpecBuilder(TypeSpec.anonymousClassBuilder(typeArguments))
+/** Returns an anonymous type builder with custom initialization block. */
+fun buildAnonymousTypeSpec(format: String, vararg args: Any, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
+    TypeSpecBuilder(TypeSpec.anonymousClassBuilder(format, *args))
         .also { builder?.invoke(it) }
         .build()
 
-/** Returns an annotation builder with custom initialization block. */
+/** Returns an anonymous type builder with custom initialization block. */
+fun buildAnonymousTypeSpec(block: CodeBlock, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
+    TypeSpecBuilder(TypeSpec.anonymousClassBuilder(block))
+        .also { builder?.invoke(it) }
+        .build()
+
+/** Returns an annotation type builder with custom initialization block. */
 fun buildAnnotationTypeSpec(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
     TypeSpecBuilder(TypeSpec.annotationBuilder(name))
         .also { builder?.invoke(it) }
         .build()
 
-/** Returns an annotation builder with custom initialization block. */
-fun buildAnnotationTypeSpec(className: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
-    TypeSpecBuilder(TypeSpec.annotationBuilder(className))
+/** Returns an annotation type builder with custom initialization block. */
+fun buildAnnotationTypeSpec(name: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
+    TypeSpecBuilder(TypeSpec.annotationBuilder(name))
         .also { builder?.invoke(it) }
         .build()
 
@@ -143,7 +140,7 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
     }
 
     fun enumConstant(name: String, name2: String, builder: (TypeSpecBuilder.() -> Unit)? = null) {
-        nativeBuilder.addEnumConstant(name, buildTypeSpec(name2, builder))
+        nativeBuilder.addEnumConstant(name, buildClassTypeSpec(name2, builder))
     }
 
     fun field(spec: FieldSpec) {

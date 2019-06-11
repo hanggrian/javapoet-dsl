@@ -58,43 +58,43 @@ internal interface TypableSpecBuilder {
     /** Add type to this spec builder. */
     fun type(spec: TypeSpec)
 
-    /** Add type to this spec builder. */
-    fun type(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null) =
-        type(buildTypeSpec(name, builder))
+    /** Add class type to this spec builder. */
+    fun classType(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null) =
+        type(buildClassTypeSpec(name, builder))
 
-    /** Add type to this spec builder. */
-    fun type(name: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null) =
-        type(buildTypeSpec(name, builder))
+    /** Add class type to this spec builder. */
+    fun classType(name: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null) =
+        type(buildClassTypeSpec(name, builder))
 
-    /** Add interface to this spec builder. */
+    /** Add interface type to this spec builder. */
     fun interfaceType(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null) =
         type(buildInterfaceTypeSpec(name, builder))
 
-    /** Add interface to this spec builder. */
+    /** Add interface type to this spec builder. */
     fun interfaceType(name: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null) =
         type(buildInterfaceTypeSpec(name, builder))
 
-    /** Add enum to this spec builder. */
+    /** Add enum type to this spec builder. */
     fun enumType(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null) =
         type(buildEnumTypeSpec(name, builder))
 
-    /** Add enum to this spec builder. */
+    /** Add enum type to this spec builder. */
     fun enumType(name: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null) =
         type(buildEnumTypeSpec(name, builder))
 
     /** Add anonymous type to this spec builder. */
-    fun anonymousType(typeArgumentsFormat: String, vararg args: Any, builder: (TypeSpecBuilder.() -> Unit)? = null) =
-        type(buildAnonymousTypeSpec(typeArgumentsFormat, *args, builder = builder))
+    fun anonymousType(format: String, vararg args: Any, builder: (TypeSpecBuilder.() -> Unit)? = null) =
+        type(buildAnonymousTypeSpec(format, *args, builder = builder))
 
     /** Add anonymous type to this spec builder. */
-    fun anonymousType(typeArguments: CodeBlock, builder: (TypeSpecBuilder.() -> Unit)? = null) =
-        type(buildAnonymousTypeSpec(typeArguments, builder))
+    fun anonymousType(block: CodeBlock, builder: (TypeSpecBuilder.() -> Unit)? = null) =
+        type(buildAnonymousTypeSpec(block, builder))
 
-    /** Add annotation interfaceType to this spec builder. */
+    /** Add annotation type to this spec builder. */
     fun annotationType(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null) =
         type(buildAnnotationTypeSpec(name, builder))
 
-    /** Add annotation interfaceType to this spec builder. */
+    /** Add annotation type to this spec builder. */
     fun annotationType(name: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null) =
         type(buildAnnotationTypeSpec(name, builder))
 }

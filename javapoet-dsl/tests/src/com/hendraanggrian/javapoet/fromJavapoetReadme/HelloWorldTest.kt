@@ -25,7 +25,7 @@ class HelloWorldTest {
             """.trimIndent(),
             buildJavaFile("com.example") {
                 comment("A boring HelloWorld class")
-                type("HelloWorld") {
+                classType("HelloWorld") {
                     modifiers = public + final
                     method("main") {
                         modifiers = public + static

@@ -43,7 +43,7 @@ class `Code&ControlFlowTest` {
         assertEquals(
             expected1,
             buildJavaFile("com.example") {
-                type("HelloWorld") {
+                classType("HelloWorld") {
                     method("flow") {
                         returns = void
                         code(
@@ -66,7 +66,7 @@ class `Code&ControlFlowTest` {
         assertEquals(
             expected1,
             buildJavaFile("com.example") {
-                type("HelloWorld") {
+                classType("HelloWorld") {
                     method("flow") {
                         returns = void
                         statement("int total = 0")
@@ -84,7 +84,7 @@ class `Code&ControlFlowTest` {
         assertEquals(
             expected2,
             buildJavaFile("com.example") {
-                type("HelloWorld") {
+                classType("HelloWorld") {
                     method("multiply10to20") {
                         returns = int
                         statement("int result = 1")

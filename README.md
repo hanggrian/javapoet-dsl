@@ -37,7 +37,7 @@ Here's how to write it in Kotlin DSL:
 
 ```kotlin
 buildJavaFile("com.example.helloworld") {
-    type("HelloWorld") {
+    classType("HelloWorld") {
         modifiers = public + final
         method("main") {
             modifiers = public + static

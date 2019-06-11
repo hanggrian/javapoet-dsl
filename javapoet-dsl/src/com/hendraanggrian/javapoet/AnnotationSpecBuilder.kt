@@ -6,8 +6,8 @@ import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 
 /** Returns an annotation with custom initialization block. */
-fun buildAnnotationSpec(type: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
-    AnnotationSpecBuilder(AnnotationSpec.builder(type))
+fun buildAnnotationSpec(name: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
+    AnnotationSpecBuilder(AnnotationSpec.builder(name))
         .also { builder?.invoke(it) }
         .build()
 
