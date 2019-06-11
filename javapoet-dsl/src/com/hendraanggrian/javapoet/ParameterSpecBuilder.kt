@@ -1,7 +1,7 @@
 package com.hendraanggrian.javapoet
 
 import com.hendraanggrian.javapoet.internal.SpecBuilder
-import com.squareup.javapoet.ClassName
+import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ParameterSpec
 import com.squareup.javapoet.TypeName
 import java.lang.reflect.Type
@@ -37,12 +37,8 @@ class ParameterSpecBuilder @PublishedApi internal constructor(private val native
     AnnotableSpecBuilder,
     ModifierableSpecBuilder {
 
-    override fun annotation(name: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addAnnotation(buildAnnotationSpec(name, builder))
-    }
-
-    override fun annotation(type: Class<*>, builder: (AnnotationSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addAnnotation(buildAnnotationSpec(type, builder))
+    override fun annotation(spec: AnnotationSpec) {
+        nativeBuilder.addAnnotation(spec)
     }
 
     inline fun <reified T> annotation(noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null) =

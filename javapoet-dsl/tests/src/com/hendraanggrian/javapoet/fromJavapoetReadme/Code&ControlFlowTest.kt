@@ -1,9 +1,11 @@
-package com.hendraanggrian.javapoet
+package com.hendraanggrian.javapoet.fromJavapoetReadme
 
+import com.hendraanggrian.javapoet.buildJavaFile
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class CodeControlFlowTest {
+@Suppress("ClassName")
+class `Code&ControlFlowTest` {
 
     private val expected1 =
         """

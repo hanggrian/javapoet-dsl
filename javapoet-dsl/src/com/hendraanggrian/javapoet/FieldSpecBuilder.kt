@@ -1,7 +1,8 @@
 package com.hendraanggrian.javapoet
 
 import com.hendraanggrian.javapoet.internal.SpecBuilder
-import com.squareup.javapoet.ClassName
+import com.squareup.javapoet.AnnotationSpec
+import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.TypeName
 import java.lang.reflect.Type
@@ -36,16 +37,12 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
         nativeBuilder.addJavadoc(format, *args)
     }
 
-    override fun javadoc(builder: CodeBlockBuilder.() -> Unit) {
-        nativeBuilder.addJavadoc(buildCodeBlock(builder))
+    override fun javadoc(block: CodeBlock) {
+        nativeBuilder.addJavadoc(block)
     }
 
-    override fun annotation(name: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addAnnotation(buildAnnotationSpec(name, builder))
-    }
-
-    override fun annotation(type: Class<*>, builder: (AnnotationSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addAnnotation(buildAnnotationSpec(type, builder))
+    override fun annotation(spec: AnnotationSpec) {
+        nativeBuilder.addAnnotation(spec)
     }
 
     inline fun <reified T> annotation(noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null) =
@@ -61,11 +58,15 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
         nativeBuilder.initializer(format, *args)
     }
 
-    var initializer: String
+    inline var initializer: String
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
         set(value) = initializer(value)
 
-    fun initializer(builder: CodeBlockBuilder.() -> Unit) = buildCodeBlock(builder)
+    fun initializer(block: CodeBlock) {
+        nativeBuilder.initializer(block)
+    }
+
+    inline fun initializer(builder: CodeBlockBuilder.() -> Unit) = initializer(buildCodeBlock(builder))
 
     override fun build(): FieldSpec = nativeBuilder.build()
 }

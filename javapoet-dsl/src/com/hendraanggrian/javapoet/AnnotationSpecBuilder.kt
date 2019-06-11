@@ -3,6 +3,7 @@ package com.hendraanggrian.javapoet
 import com.hendraanggrian.javapoet.internal.SpecBuilder
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
+import com.squareup.javapoet.CodeBlock
 
 /** Returns an annotation with custom initialization block. */
 fun buildAnnotationSpec(type: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
@@ -28,9 +29,11 @@ class AnnotationSpecBuilder @PublishedApi internal constructor(private val nativ
         nativeBuilder.addMember(name, format, *args)
     }
 
-    fun member(name: String, builder: CodeBlockBuilder.() -> Unit) {
-        nativeBuilder.addMember(name, buildCodeBlock(builder))
+    fun member(name: String, block: CodeBlock) {
+        nativeBuilder.addMember(name, block)
     }
+
+    inline fun member(name: String, builder: CodeBlockBuilder.() -> Unit) = member(name, buildCodeBlock(builder))
 
     override fun build(): AnnotationSpec = nativeBuilder.build()
 }

@@ -39,16 +39,16 @@ class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuil
         nativeBuilder.addStatement(format, *args)
     }
 
-    override fun statement(builder: CodeBlockBuilder.() -> Unit) {
-        nativeBuilder.addStatement(buildCodeBlock(builder))
+    override fun statement(block: CodeBlock) {
+        nativeBuilder.addStatement(block)
     }
 
     override fun code(format: String, vararg args: Any) {
         nativeBuilder.add(format, *args)
     }
 
-    override fun code(builder: CodeBlockBuilder.() -> Unit) {
-        nativeBuilder.add(buildCodeBlock(builder))
+    override fun code(block: CodeBlock) {
+        nativeBuilder.add(block)
     }
 
     fun indent() {

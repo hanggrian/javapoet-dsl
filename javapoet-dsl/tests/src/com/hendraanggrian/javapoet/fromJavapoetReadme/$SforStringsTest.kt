@@ -1,9 +1,12 @@
-package com.hendraanggrian.javapoet
+package com.hendraanggrian.javapoet.fromJavapoetReadme
 
+import com.hendraanggrian.javapoet.TypeSpecBuilder
+import com.hendraanggrian.javapoet.buildJavaFile
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class StringsTest {
+@Suppress("ClassName")
+class `$SforStringsTest` {
 
     @Test
     fun dollarSign() {

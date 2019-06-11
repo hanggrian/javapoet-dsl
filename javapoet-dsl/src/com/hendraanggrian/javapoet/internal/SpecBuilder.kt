@@ -7,6 +7,8 @@ import javax.lang.model.element.Modifier
 /**
  * Base type of all JavaPoet DSL spec builders.
  * Subclass of this type have access to many convenient inline functions to JavaPoet constant values.
+ *
+ * @see com.hendraanggrian.javapoet.ModifierableSpecBuilder.plus
  */
 abstract class SpecBuilder<T> internal constructor() {
 
@@ -21,27 +23,19 @@ abstract class SpecBuilder<T> internal constructor() {
     inline val double: TypeName get() = TypeName.DOUBLE
     inline val `object`: ClassName get() = TypeName.OBJECT
 
-    inline val public: Modifier get() = Modifier.PUBLIC
-    inline val protected: Modifier get() = Modifier.PROTECTED
-    inline val private: Modifier get() = Modifier.PRIVATE
-    inline val abstract: Modifier get() = Modifier.ABSTRACT
-    inline val default: Modifier get() = Modifier.DEFAULT
-    inline val static: Modifier get() = Modifier.STATIC
-    inline val final: Modifier get() = Modifier.FINAL
-    inline val transient: Modifier get() = Modifier.TRANSIENT
-    inline val volatile: Modifier get() = Modifier.VOLATILE
-    inline val synchronized: Modifier get() = Modifier.SYNCHRONIZED
-    inline val native: Modifier get() = Modifier.NATIVE
-    inline val strictfp: Modifier get() = Modifier.STRICTFP
+    inline val public: MutableCollection<Modifier> get() = mutableListOf(Modifier.PUBLIC)
+    inline val protected: MutableCollection<Modifier> get() = mutableListOf(Modifier.PROTECTED)
+    inline val private: MutableCollection<Modifier> get() = mutableListOf(Modifier.PRIVATE)
+    inline val abstract: MutableCollection<Modifier> get() = mutableListOf(Modifier.ABSTRACT)
+    inline val default: MutableCollection<Modifier> get() = mutableListOf(Modifier.DEFAULT)
+    inline val static: MutableCollection<Modifier> get() = mutableListOf(Modifier.STATIC)
+    inline val final: MutableCollection<Modifier> get() = mutableListOf(Modifier.FINAL)
+    inline val transient: MutableCollection<Modifier> get() = mutableListOf(Modifier.TRANSIENT)
+    inline val volatile: MutableCollection<Modifier> get() = mutableListOf(Modifier.VOLATILE)
+    inline val synchronized: MutableCollection<Modifier> get() = mutableListOf(Modifier.SYNCHRONIZED)
+    inline val native: MutableCollection<Modifier> get() = mutableListOf(Modifier.NATIVE)
+    inline val strictfp: MutableCollection<Modifier> get() = mutableListOf(Modifier.STRICTFP)
 
     /** Converts this DSL spec builder to native JavaPoet specs. */
     abstract fun build(): T
-
-    /**
-     * Instead of recreating a list every [Collection.plus], add the item to this list.
-     *
-     * @see com.hendraanggrian.javapoet.TypeVariableSpecBuilder.plus
-     * @see com.hendraanggrian.javapoet.ModifierableSpecBuilder.plus
-     */
-    operator fun <E> ArrayList<E>.plus(other: E): ArrayList<E> = also { it += other }
 }

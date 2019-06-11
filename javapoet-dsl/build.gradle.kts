@@ -1,6 +1,5 @@
 plugins {
-    `java-gradle-plugin`
-    `kotlin-dsl`
+    kotlin("jvm")
     dokka()
     bintray
     `bintray-release`

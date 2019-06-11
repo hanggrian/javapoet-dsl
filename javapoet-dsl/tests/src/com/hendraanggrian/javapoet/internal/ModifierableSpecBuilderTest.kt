@@ -10,7 +10,7 @@ class ModifierableSpecBuilderTest {
     @Test
     fun single() {
         Truth.assertThat(buildFieldSpec<String>("yo") {
-            modifier = public
+            modifiers = public
         }.modifiers).containsExactly(Modifier.PUBLIC)
     }
 

@@ -1,5 +1,6 @@
-package com.hendraanggrian.javapoet
+package com.hendraanggrian.javapoet.fromJavapoetReadme
 
+import com.hendraanggrian.javapoet.buildJavaFile
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -23,7 +24,7 @@ class HelloWorldTest {
 
             """.trimIndent(),
             buildJavaFile("com.example") {
-                comment = "A boring HelloWorld class"
+                comment("A boring HelloWorld class")
                 type("HelloWorld") {
                     modifiers = public + final
                     method("main") {

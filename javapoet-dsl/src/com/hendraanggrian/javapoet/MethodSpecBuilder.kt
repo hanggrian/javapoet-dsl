@@ -1,8 +1,12 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package com.hendraanggrian.javapoet
 
 import com.hendraanggrian.javapoet.internal.SpecBuilder
-import com.squareup.javapoet.ClassName
+import com.squareup.javapoet.AnnotationSpec
+import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.MethodSpec
+import com.squareup.javapoet.ParameterSpec
 import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeVariableName
 import java.lang.reflect.Type
@@ -34,16 +38,12 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
         nativeBuilder.addJavadoc(format, *args)
     }
 
-    override fun javadoc(builder: CodeBlockBuilder.() -> Unit) {
-        nativeBuilder.addJavadoc(buildCodeBlock(builder))
+    override fun javadoc(block: CodeBlock) {
+        nativeBuilder.addJavadoc(block)
     }
 
-    override fun annotation(name: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addAnnotation(buildAnnotationSpec(name, builder))
-    }
-
-    override fun annotation(type: Class<*>, builder: (AnnotationSpecBuilder.() -> Unit)?) {
-        nativeBuilder.addAnnotation(buildAnnotationSpec(type, builder))
+    override fun annotation(spec: AnnotationSpec) {
+        nativeBuilder.addAnnotation(spec)
     }
 
     inline fun <reified T> annotation(noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null) =
@@ -55,17 +55,13 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
             nativeBuilder.addModifiers(*value.toTypedArray())
         }
 
-    override var typeVariable: TypeVariableName
-        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
-        set(value) {
-            nativeBuilder.addTypeVariable(value)
-        }
+    override fun typeVariable(name: TypeVariableName) {
+        nativeBuilder.addTypeVariable(name)
+    }
 
-    override var typeVariables: Iterable<TypeVariableName>
-        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
-        set(value) {
-            nativeBuilder.addTypeVariables(value)
-        }
+    override fun typeVariables(names: Iterable<TypeVariableName>) {
+        nativeBuilder.addTypeVariables(names)
+    }
 
     var returns: TypeName
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
@@ -79,13 +75,15 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
 
     inline fun <reified T> returns() = returns(T::class.java)
 
-    fun parameter(type: TypeName, name: String, builder: (ParameterSpecBuilder.() -> Unit)? = null) {
-        nativeBuilder.addParameter(buildParameterSpec(type, name, builder))
+    fun parameter(spec: ParameterSpec) {
+        nativeBuilder.addParameter(spec)
     }
 
-    fun parameter(type: Type, name: String, builder: (ParameterSpecBuilder.() -> Unit)? = null) {
-        nativeBuilder.addParameter(buildParameterSpec(type, name, builder))
-    }
+    inline fun parameter(type: TypeName, name: String, noinline builder: (ParameterSpecBuilder.() -> Unit)? = null) =
+        parameter(buildParameterSpec(type, name, builder))
+
+    inline fun parameter(type: Type, name: String, noinline builder: (ParameterSpecBuilder.() -> Unit)? = null) =
+        parameter(buildParameterSpec(type, name, builder))
 
     inline fun <reified T> parameter(name: String, noinline builder: (ParameterSpecBuilder.() -> Unit)? = null) =
         parameter(T::class.java, name, builder)
@@ -114,8 +112,8 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
         nativeBuilder.addCode(format, *args)
     }
 
-    override fun code(builder: CodeBlockBuilder.() -> Unit) {
-        nativeBuilder.addCode(buildCodeBlock(builder))
+    override fun code(block: CodeBlock) {
+        nativeBuilder.addCode(block)
     }
 
     fun comment(format: String, vararg args: Any) {
@@ -125,6 +123,10 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
     fun defaultValue(format: String, vararg args: Any) {
         nativeBuilder.defaultValue(format, *args)
     }
+
+    inline var defaultValue: String
+        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
+        set(value) = defaultValue(value)
 
     override fun beginControlFlow(format: String, vararg args: Any) {
         nativeBuilder.beginControlFlow(format, *args)
@@ -146,8 +148,8 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
         nativeBuilder.addStatement(format, *args)
     }
 
-    override fun statement(builder: CodeBlockBuilder.() -> Unit) {
-        nativeBuilder.addStatement(buildCodeBlock(builder))
+    override fun statement(block: CodeBlock) {
+        nativeBuilder.addStatement(block)
     }
 
     override fun build(): MethodSpec = nativeBuilder.build()

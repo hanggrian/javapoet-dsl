@@ -7,11 +7,15 @@ import kotlin.test.assertEquals
 class CodeBlockBuilderTest {
 
     @Test
-    fun of() {
+    fun simple() {
         assertEquals(
             CodeBlock.of("Hello world"),
             buildCodeBlock { code("Hello world") }
         )
+    }
+
+    @Test
+    fun advanced() {
         assertEquals(
             CodeBlock.builder()
                 .addStatement("int total = 0")
