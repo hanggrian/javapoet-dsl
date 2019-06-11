@@ -8,18 +8,25 @@
 <a href="../../index.html">javapoet-dsl</a>&nbsp;/&nbsp;<a href="../index.html">com.hendraanggrian.javapoet</a>&nbsp;/&nbsp;<a href="./index.html">MethodSpecBuilder</a><br/>
 <br/>
 <h1>MethodSpecBuilder</h1>
-<code><span class="keyword">class </span><span class="identifier">MethodSpecBuilder</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../com.hendraanggrian.javapoet.internal/-spec-builder/index.html"><span class="identifier">SpecBuilder</span></a><span class="symbol">&lt;</span><span class="identifier">MethodSpec</span><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier">JavadocSpecBuilder</span><span class="symbol">, </span><span class="identifier">AnnotatedSpecBuilder</span><span class="symbol">, </span><span class="identifier">ModifieredSpecBuilder</span><span class="symbol">, </span><span class="identifier">TypeVariabledSpecBuilder</span><span class="symbol">, </span><span class="identifier">ControlFlowedSpecBuilder</span><span class="symbol">, </span><span class="identifier">CodedSpecBuilder</span></code>
+<code><span class="keyword">class </span><span class="identifier">MethodSpecBuilder</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../com.hendraanggrian.javapoet.internal/-spec-builder/index.html"><span class="identifier">SpecBuilder</span></a><span class="symbol">&lt;</span><span class="identifier">MethodSpec</span><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier">JavadocableSpecBuilder</span><span class="symbol">, </span><span class="identifier">AnnotableSpecBuilder</span><span class="symbol">, </span><span class="identifier">ModifierableSpecBuilder</span><span class="symbol">, </span><span class="identifier">TypeVariableSpecBuilder</span><span class="symbol">, </span><span class="identifier">ControlFlowableSpecBuilder</span><span class="symbol">, </span><span class="identifier">CodableSpecBuilder</span></code>
 <h3>Properties</h3>
 <table>
 <tbody>
 <tr>
 <td>
+<p><a href="default-value.html">defaultValue</a></p>
+</td>
+<td>
+<code><span class="keyword">var </span><span class="identifier">defaultValue</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+</tr>
+<tr>
+<td>
 <p><a href="modifiers.html">modifiers</a></p>
 </td>
 <td>
-<code><span class="keyword">var </span><span class="identifier">modifiers</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-collection/index.html"><span class="identifier">Collection</span></a><span class="symbol">&lt;</span><a href="http://docs.oracle.com/javase/6/docs/api/javax/lang/model/element/Modifier.html"><span class="identifier">Modifier</span></a><span class="symbol">&gt;</span></code>
-<p>Add single/multiple <a href="http://docs.oracle.com/javase/6/docs/api/javax/lang/model/element/Modifier.html">Modifier</a> to this spec builder.
-A preferable way to achieve this is to use <a href="#">plus</a> operator (e.g.: <code>typeVariables = name1 + name2 + name3</code>).</p>
+<code><span class="keyword">var </span><span class="identifier">modifiers</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-collection/index.html"><span class="identifier">Collection</span></a><span class="symbol">&lt;</span><a href="https://docs.oracle.com/javase/6/docs/api/javax/lang/model/element/Modifier.html"><span class="identifier">Modifier</span></a><span class="symbol">&gt;</span></code>
+<p>Add single/multiple <a href="https://docs.oracle.com/javase/6/docs/api/javax/lang/model/element/Modifier.html">Modifier</a> to this spec builder.
+A preferable way to achieve this is to use <a href="#">plus</a> operator (e.g.: <code>modifiers = public + static</code>).</p>
 </td>
 </tr>
 <tr>
@@ -28,25 +35,6 @@ A preferable way to achieve this is to use <a href="#">plus</a> operator (e.g.: 
 </td>
 <td>
 <code><span class="keyword">var </span><span class="identifier">returns</span><span class="symbol">: </span><span class="identifier">TypeName</span></code></td>
-</tr>
-<tr>
-<td>
-<p><a href="type-variable.html">typeVariable</a></p>
-</td>
-<td>
-<code><span class="keyword">var </span><span class="identifier">typeVariable</span><span class="symbol">: </span><span class="identifier">TypeVariableName</span></code>
-<p>Add single <a href="#">TypeVariableName</a> to this spec builder.</p>
-</td>
-</tr>
-<tr>
-<td>
-<p><a href="type-variables.html">typeVariables</a></p>
-</td>
-<td>
-<code><span class="keyword">var </span><span class="identifier">typeVariables</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-iterable/index.html"><span class="identifier">Iterable</span></a><span class="symbol">&lt;</span><span class="identifier">TypeVariableName</span><span class="symbol">&gt;</span></code>
-<p>Add multiple <a href="#">TypeVariableName</a> to this spec builder.
-A preferable way to achieve this is to use <a href="#">plus</a> operator (e.g.: <code>typeVariables = name1 + name2 + name3</code>).</p>
-</td>
 </tr>
 <tr>
 <td>
@@ -65,7 +53,7 @@ A preferable way to achieve this is to use <a href="#">plus</a> operator (e.g.: 
 <p><a href="../../com.hendraanggrian.javapoet.internal/-spec-builder/abstract.html">abstract</a></p>
 </td>
 <td>
-<code><span class="keyword">val </span><span class="identifier">abstract</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html"><span class="identifier">MutableList</span></a><span class="symbol">&lt;</span><a href="http://docs.oracle.com/javase/6/docs/api/javax/lang/model/element/Modifier.html"><span class="identifier">Modifier</span></a><span class="symbol">&gt;</span></code></td>
+<code><span class="keyword">val </span><span class="identifier">abstract</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-collection/index.html"><span class="identifier">MutableCollection</span></a><span class="symbol">&lt;</span><a href="https://docs.oracle.com/javase/6/docs/api/javax/lang/model/element/Modifier.html"><span class="identifier">Modifier</span></a><span class="symbol">&gt;</span></code></td>
 </tr>
 <tr>
 <td>
@@ -93,7 +81,7 @@ A preferable way to achieve this is to use <a href="#">plus</a> operator (e.g.: 
 <p><a href="../../com.hendraanggrian.javapoet.internal/-spec-builder/default.html">default</a></p>
 </td>
 <td>
-<code><span class="keyword">val </span><span class="identifier">default</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html"><span class="identifier">MutableList</span></a><span class="symbol">&lt;</span><a href="http://docs.oracle.com/javase/6/docs/api/javax/lang/model/element/Modifier.html"><span class="identifier">Modifier</span></a><span class="symbol">&gt;</span></code></td>
+<code><span class="keyword">val </span><span class="identifier">default</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-collection/index.html"><span class="identifier">MutableCollection</span></a><span class="symbol">&lt;</span><a href="https://docs.oracle.com/javase/6/docs/api/javax/lang/model/element/Modifier.html"><span class="identifier">Modifier</span></a><span class="symbol">&gt;</span></code></td>
 </tr>
 <tr>
 <td>
@@ -107,7 +95,7 @@ A preferable way to achieve this is to use <a href="#">plus</a> operator (e.g.: 
 <p><a href="../../com.hendraanggrian.javapoet.internal/-spec-builder/final.html">final</a></p>
 </td>
 <td>
-<code><span class="keyword">val </span><span class="identifier">final</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html"><span class="identifier">MutableList</span></a><span class="symbol">&lt;</span><a href="http://docs.oracle.com/javase/6/docs/api/javax/lang/model/element/Modifier.html"><span class="identifier">Modifier</span></a><span class="symbol">&gt;</span></code></td>
+<code><span class="keyword">val </span><span class="identifier">final</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-collection/index.html"><span class="identifier">MutableCollection</span></a><span class="symbol">&lt;</span><a href="https://docs.oracle.com/javase/6/docs/api/javax/lang/model/element/Modifier.html"><span class="identifier">Modifier</span></a><span class="symbol">&gt;</span></code></td>
 </tr>
 <tr>
 <td>
@@ -135,7 +123,7 @@ A preferable way to achieve this is to use <a href="#">plus</a> operator (e.g.: 
 <p><a href="../../com.hendraanggrian.javapoet.internal/-spec-builder/native.html">native</a></p>
 </td>
 <td>
-<code><span class="keyword">val </span><span class="identifier">native</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html"><span class="identifier">MutableList</span></a><span class="symbol">&lt;</span><a href="http://docs.oracle.com/javase/6/docs/api/javax/lang/model/element/Modifier.html"><span class="identifier">Modifier</span></a><span class="symbol">&gt;</span></code></td>
+<code><span class="keyword">val </span><span class="identifier">native</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-collection/index.html"><span class="identifier">MutableCollection</span></a><span class="symbol">&lt;</span><a href="https://docs.oracle.com/javase/6/docs/api/javax/lang/model/element/Modifier.html"><span class="identifier">Modifier</span></a><span class="symbol">&gt;</span></code></td>
 </tr>
 <tr>
 <td>
@@ -149,21 +137,21 @@ A preferable way to achieve this is to use <a href="#">plus</a> operator (e.g.: 
 <p><a href="../../com.hendraanggrian.javapoet.internal/-spec-builder/private.html">private</a></p>
 </td>
 <td>
-<code><span class="keyword">val </span><span class="identifier">private</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html"><span class="identifier">MutableList</span></a><span class="symbol">&lt;</span><a href="http://docs.oracle.com/javase/6/docs/api/javax/lang/model/element/Modifier.html"><span class="identifier">Modifier</span></a><span class="symbol">&gt;</span></code></td>
+<code><span class="keyword">val </span><span class="identifier">private</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-collection/index.html"><span class="identifier">MutableCollection</span></a><span class="symbol">&lt;</span><a href="https://docs.oracle.com/javase/6/docs/api/javax/lang/model/element/Modifier.html"><span class="identifier">Modifier</span></a><span class="symbol">&gt;</span></code></td>
 </tr>
 <tr>
 <td>
 <p><a href="../../com.hendraanggrian.javapoet.internal/-spec-builder/protected.html">protected</a></p>
 </td>
 <td>
-<code><span class="keyword">val </span><span class="identifier">protected</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html"><span class="identifier">MutableList</span></a><span class="symbol">&lt;</span><a href="http://docs.oracle.com/javase/6/docs/api/javax/lang/model/element/Modifier.html"><span class="identifier">Modifier</span></a><span class="symbol">&gt;</span></code></td>
+<code><span class="keyword">val </span><span class="identifier">protected</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-collection/index.html"><span class="identifier">MutableCollection</span></a><span class="symbol">&lt;</span><a href="https://docs.oracle.com/javase/6/docs/api/javax/lang/model/element/Modifier.html"><span class="identifier">Modifier</span></a><span class="symbol">&gt;</span></code></td>
 </tr>
 <tr>
 <td>
 <p><a href="../../com.hendraanggrian.javapoet.internal/-spec-builder/public.html">public</a></p>
 </td>
 <td>
-<code><span class="keyword">val </span><span class="identifier">public</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html"><span class="identifier">MutableList</span></a><span class="symbol">&lt;</span><a href="http://docs.oracle.com/javase/6/docs/api/javax/lang/model/element/Modifier.html"><span class="identifier">Modifier</span></a><span class="symbol">&gt;</span></code></td>
+<code><span class="keyword">val </span><span class="identifier">public</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-collection/index.html"><span class="identifier">MutableCollection</span></a><span class="symbol">&lt;</span><a href="https://docs.oracle.com/javase/6/docs/api/javax/lang/model/element/Modifier.html"><span class="identifier">Modifier</span></a><span class="symbol">&gt;</span></code></td>
 </tr>
 <tr>
 <td>
@@ -177,28 +165,28 @@ A preferable way to achieve this is to use <a href="#">plus</a> operator (e.g.: 
 <p><a href="../../com.hendraanggrian.javapoet.internal/-spec-builder/static.html">static</a></p>
 </td>
 <td>
-<code><span class="keyword">val </span><span class="identifier">static</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html"><span class="identifier">MutableList</span></a><span class="symbol">&lt;</span><a href="http://docs.oracle.com/javase/6/docs/api/javax/lang/model/element/Modifier.html"><span class="identifier">Modifier</span></a><span class="symbol">&gt;</span></code></td>
+<code><span class="keyword">val </span><span class="identifier">static</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-collection/index.html"><span class="identifier">MutableCollection</span></a><span class="symbol">&lt;</span><a href="https://docs.oracle.com/javase/6/docs/api/javax/lang/model/element/Modifier.html"><span class="identifier">Modifier</span></a><span class="symbol">&gt;</span></code></td>
 </tr>
 <tr>
 <td>
 <p><a href="../../com.hendraanggrian.javapoet.internal/-spec-builder/strictfp.html">strictfp</a></p>
 </td>
 <td>
-<code><span class="keyword">val </span><span class="identifier">strictfp</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html"><span class="identifier">MutableList</span></a><span class="symbol">&lt;</span><a href="http://docs.oracle.com/javase/6/docs/api/javax/lang/model/element/Modifier.html"><span class="identifier">Modifier</span></a><span class="symbol">&gt;</span></code></td>
+<code><span class="keyword">val </span><span class="identifier">strictfp</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-collection/index.html"><span class="identifier">MutableCollection</span></a><span class="symbol">&lt;</span><a href="https://docs.oracle.com/javase/6/docs/api/javax/lang/model/element/Modifier.html"><span class="identifier">Modifier</span></a><span class="symbol">&gt;</span></code></td>
 </tr>
 <tr>
 <td>
 <p><a href="../../com.hendraanggrian.javapoet.internal/-spec-builder/synchronized.html">synchronized</a></p>
 </td>
 <td>
-<code><span class="keyword">val </span><span class="identifier">synchronized</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html"><span class="identifier">MutableList</span></a><span class="symbol">&lt;</span><a href="http://docs.oracle.com/javase/6/docs/api/javax/lang/model/element/Modifier.html"><span class="identifier">Modifier</span></a><span class="symbol">&gt;</span></code></td>
+<code><span class="keyword">val </span><span class="identifier">synchronized</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-collection/index.html"><span class="identifier">MutableCollection</span></a><span class="symbol">&lt;</span><a href="https://docs.oracle.com/javase/6/docs/api/javax/lang/model/element/Modifier.html"><span class="identifier">Modifier</span></a><span class="symbol">&gt;</span></code></td>
 </tr>
 <tr>
 <td>
 <p><a href="../../com.hendraanggrian.javapoet.internal/-spec-builder/transient.html">transient</a></p>
 </td>
 <td>
-<code><span class="keyword">val </span><span class="identifier">transient</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html"><span class="identifier">MutableList</span></a><span class="symbol">&lt;</span><a href="http://docs.oracle.com/javase/6/docs/api/javax/lang/model/element/Modifier.html"><span class="identifier">Modifier</span></a><span class="symbol">&gt;</span></code></td>
+<code><span class="keyword">val </span><span class="identifier">transient</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-collection/index.html"><span class="identifier">MutableCollection</span></a><span class="symbol">&lt;</span><a href="https://docs.oracle.com/javase/6/docs/api/javax/lang/model/element/Modifier.html"><span class="identifier">Modifier</span></a><span class="symbol">&gt;</span></code></td>
 </tr>
 <tr>
 <td>
@@ -212,7 +200,7 @@ A preferable way to achieve this is to use <a href="#">plus</a> operator (e.g.: 
 <p><a href="../../com.hendraanggrian.javapoet.internal/-spec-builder/volatile.html">volatile</a></p>
 </td>
 <td>
-<code><span class="keyword">val </span><span class="identifier">volatile</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html"><span class="identifier">MutableList</span></a><span class="symbol">&lt;</span><a href="http://docs.oracle.com/javase/6/docs/api/javax/lang/model/element/Modifier.html"><span class="identifier">Modifier</span></a><span class="symbol">&gt;</span></code></td>
+<code><span class="keyword">val </span><span class="identifier">volatile</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-collection/index.html"><span class="identifier">MutableCollection</span></a><span class="symbol">&lt;</span><a href="https://docs.oracle.com/javase/6/docs/api/javax/lang/model/element/Modifier.html"><span class="identifier">Modifier</span></a><span class="symbol">&gt;</span></code></td>
 </tr>
 </tbody>
 </table>
@@ -224,10 +212,9 @@ A preferable way to achieve this is to use <a href="#">plus</a> operator (e.g.: 
 <p><a href="annotation.html">annotation</a></p>
 </td>
 <td>
-<code><span class="keyword">fun </span><span class="identifier">annotation</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$annotation(com.squareup.javapoet.ClassName, kotlin.Function1((com.hendraanggrian.javapoet.AnnotationSpecBuilder, kotlin.Unit)))/type">type</span><span class="symbol">:</span>&nbsp;<span class="identifier">ClassName</span><span class="symbol">, </span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$annotation(com.squareup.javapoet.ClassName, kotlin.Function1((com.hendraanggrian.javapoet.AnnotationSpecBuilder, kotlin.Unit)))/builder">builder</span><span class="symbol">:</span>&nbsp;<a href="../-annotation-spec-builder/index.html"><span class="identifier">AnnotationSpecBuilder</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code><br/>
-<code><span class="keyword">fun </span><span class="identifier">annotation</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$annotation(java.lang.Class((kotlin.Any)), kotlin.Function1((com.hendraanggrian.javapoet.AnnotationSpecBuilder, kotlin.Unit)))/type">type</span><span class="symbol">:</span>&nbsp;<a href="http://docs.oracle.com/javase/6/docs/api/java/lang/Class.html"><span class="identifier">Class</span></a><span class="symbol">&lt;</span><span class="identifier">*</span><span class="symbol">&gt;</span><span class="symbol">, </span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$annotation(java.lang.Class((kotlin.Any)), kotlin.Function1((com.hendraanggrian.javapoet.AnnotationSpecBuilder, kotlin.Unit)))/builder">builder</span><span class="symbol">:</span>&nbsp;<a href="../-annotation-spec-builder/index.html"><span class="identifier">AnnotationSpecBuilder</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
-<p>Add annotation to this spec builder</p>
-<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span> <span class="identifier">annotation</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$annotation(kotlin.Function1((com.hendraanggrian.javapoet.AnnotationSpecBuilder, kotlin.Unit)))/builder">builder</span><span class="symbol">:</span>&nbsp;<a href="../-annotation-spec-builder/index.html"><span class="identifier">AnnotationSpecBuilder</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">fun </span><span class="identifier">annotation</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$annotation(com.squareup.javapoet.AnnotationSpec)/spec">spec</span><span class="symbol">:</span>&nbsp;<span class="identifier">AnnotationSpec</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Add annotation to this spec builder.</p>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span> <span class="identifier">annotation</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$annotation(kotlin.Function1((com.hendraanggrian.javapoet.AnnotationSpecBuilder, kotlin.Unit)))/builder">builder</span><span class="symbol">:</span>&nbsp;<span class="symbol">(</span><a href="../-annotation-spec-builder/index.html"><span class="identifier">AnnotationSpecBuilder</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
 </tr>
 <tr>
 <td>
@@ -243,17 +230,18 @@ A preferable way to achieve this is to use <a href="#">plus</a> operator (e.g.: 
 <p><a href="build.html">build</a></p>
 </td>
 <td>
-<code><span class="keyword">fun </span><span class="identifier">build</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">MethodSpec</span></code></td>
+<code><span class="keyword">fun </span><span class="identifier">build</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">MethodSpec</span></code>
+<p>Converts this DSL spec builder to native JavaPoet specs.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="code.html">code</a></p>
 </td>
 <td>
-<code><span class="keyword">fun </span><span class="identifier">code</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$code(kotlin.String, kotlin.Array((kotlin.Any)))/format">format</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="keyword">vararg</span> <span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$code(kotlin.String, kotlin.Array((kotlin.Any)))/args">args</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<code><span class="keyword">fun </span><span class="identifier">code</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$code(kotlin.String, kotlin.Array((kotlin.Any)))/format">format</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="keyword">vararg</span> <span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$code(kotlin.String, kotlin.Array((kotlin.Any)))/args">args</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code><br/>
+<code><span class="keyword">fun </span><span class="identifier">code</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$code(com.squareup.javapoet.CodeBlock)/block">block</span><span class="symbol">:</span>&nbsp;<span class="identifier">CodeBlock</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
 <p>Add a code to this spec builder.</p>
-<code><span class="keyword">fun </span><span class="identifier">code</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$code(kotlin.Function1((com.hendraanggrian.javapoet.CodeBlockBuilder, kotlin.Unit)))/builder">builder</span><span class="symbol">:</span>&nbsp;<a href="../-code-block-builder/index.html"><span class="identifier">CodeBlockBuilder</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
-<p>Build a code block and add it to this spec builder.</p>
 </td>
 </tr>
 <tr>
@@ -286,7 +274,7 @@ A preferable way to achieve this is to use <a href="#">plus</a> operator (e.g.: 
 </td>
 <td>
 <code><span class="keyword">fun </span><span class="identifier">exception</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$exception(com.squareup.javapoet.TypeName)/exception">exception</span><span class="symbol">:</span>&nbsp;<span class="identifier">TypeName</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code><br/>
-<code><span class="keyword">fun </span><span class="identifier">exception</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$exception(java.lang.reflect.Type)/exception">exception</span><span class="symbol">:</span>&nbsp;<a href="http://docs.oracle.com/javase/6/docs/api/java/lang/reflect/Type.html"><span class="identifier">Type</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code><br/>
+<code><span class="keyword">fun </span><span class="identifier">exception</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$exception(java.lang.reflect.Type)/exception">exception</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/lang/reflect/Type.html"><span class="identifier">Type</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code><br/>
 <code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span> <span class="identifier">exception</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
 </tr>
 <tr>
@@ -301,10 +289,9 @@ A preferable way to achieve this is to use <a href="#">plus</a> operator (e.g.: 
 <p><a href="javadoc.html">javadoc</a></p>
 </td>
 <td>
-<code><span class="keyword">fun </span><span class="identifier">javadoc</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$javadoc(kotlin.String, kotlin.Array((kotlin.Any)))/format">format</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="keyword">vararg</span> <span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$javadoc(kotlin.String, kotlin.Array((kotlin.Any)))/args">args</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<code><span class="keyword">fun </span><span class="identifier">javadoc</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$javadoc(kotlin.String, kotlin.Array((kotlin.Any)))/format">format</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="keyword">vararg</span> <span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$javadoc(kotlin.String, kotlin.Array((kotlin.Any)))/args">args</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code><br/>
+<code><span class="keyword">fun </span><span class="identifier">javadoc</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$javadoc(com.squareup.javapoet.CodeBlock)/block">block</span><span class="symbol">:</span>&nbsp;<span class="identifier">CodeBlock</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
 <p>Add javadoc to this spec builder.</p>
-<code><span class="keyword">fun </span><span class="identifier">javadoc</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$javadoc(kotlin.Function1((com.hendraanggrian.javapoet.CodeBlockBuilder, kotlin.Unit)))/builder">builder</span><span class="symbol">:</span>&nbsp;<a href="../-code-block-builder/index.html"><span class="identifier">CodeBlockBuilder</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
-<p>Build javadoc and add it to this spec builder.</p>
 </td>
 </tr>
 <tr>
@@ -321,16 +308,17 @@ A preferable way to achieve this is to use <a href="#">plus</a> operator (e.g.: 
 <p><a href="parameter.html">parameter</a></p>
 </td>
 <td>
-<code><span class="keyword">fun </span><span class="identifier">parameter</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$parameter(com.squareup.javapoet.TypeName, kotlin.String, kotlin.Function1((com.hendraanggrian.javapoet.ParameterSpecBuilder, kotlin.Unit)))/type">type</span><span class="symbol">:</span>&nbsp;<span class="identifier">TypeName</span><span class="symbol">, </span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$parameter(com.squareup.javapoet.TypeName, kotlin.String, kotlin.Function1((com.hendraanggrian.javapoet.ParameterSpecBuilder, kotlin.Unit)))/name">name</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$parameter(com.squareup.javapoet.TypeName, kotlin.String, kotlin.Function1((com.hendraanggrian.javapoet.ParameterSpecBuilder, kotlin.Unit)))/builder">builder</span><span class="symbol">:</span>&nbsp;<a href="../-parameter-spec-builder/index.html"><span class="identifier">ParameterSpecBuilder</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code><br/>
-<code><span class="keyword">fun </span><span class="identifier">parameter</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$parameter(java.lang.reflect.Type, kotlin.String, kotlin.Function1((com.hendraanggrian.javapoet.ParameterSpecBuilder, kotlin.Unit)))/type">type</span><span class="symbol">:</span>&nbsp;<a href="http://docs.oracle.com/javase/6/docs/api/java/lang/reflect/Type.html"><span class="identifier">Type</span></a><span class="symbol">, </span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$parameter(java.lang.reflect.Type, kotlin.String, kotlin.Function1((com.hendraanggrian.javapoet.ParameterSpecBuilder, kotlin.Unit)))/name">name</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$parameter(java.lang.reflect.Type, kotlin.String, kotlin.Function1((com.hendraanggrian.javapoet.ParameterSpecBuilder, kotlin.Unit)))/builder">builder</span><span class="symbol">:</span>&nbsp;<a href="../-parameter-spec-builder/index.html"><span class="identifier">ParameterSpecBuilder</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code><br/>
-<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span> <span class="identifier">parameter</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$parameter(kotlin.String, kotlin.Function1((com.hendraanggrian.javapoet.ParameterSpecBuilder, kotlin.Unit)))/name">name</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$parameter(kotlin.String, kotlin.Function1((com.hendraanggrian.javapoet.ParameterSpecBuilder, kotlin.Unit)))/builder">builder</span><span class="symbol">:</span>&nbsp;<a href="../-parameter-spec-builder/index.html"><span class="identifier">ParameterSpecBuilder</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<code><span class="keyword">fun </span><span class="identifier">parameter</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$parameter(com.squareup.javapoet.ParameterSpec)/spec">spec</span><span class="symbol">:</span>&nbsp;<span class="identifier">ParameterSpec</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code><br/>
+<code><span class="keyword">fun </span><span class="identifier">parameter</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$parameter(com.squareup.javapoet.TypeName, kotlin.String, kotlin.Function1((com.hendraanggrian.javapoet.ParameterSpecBuilder, kotlin.Unit)))/type">type</span><span class="symbol">:</span>&nbsp;<span class="identifier">TypeName</span><span class="symbol">, </span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$parameter(com.squareup.javapoet.TypeName, kotlin.String, kotlin.Function1((com.hendraanggrian.javapoet.ParameterSpecBuilder, kotlin.Unit)))/name">name</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$parameter(com.squareup.javapoet.TypeName, kotlin.String, kotlin.Function1((com.hendraanggrian.javapoet.ParameterSpecBuilder, kotlin.Unit)))/builder">builder</span><span class="symbol">:</span>&nbsp;<span class="symbol">(</span><a href="../-parameter-spec-builder/index.html"><span class="identifier">ParameterSpecBuilder</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code><br/>
+<code><span class="keyword">fun </span><span class="identifier">parameter</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$parameter(java.lang.reflect.Type, kotlin.String, kotlin.Function1((com.hendraanggrian.javapoet.ParameterSpecBuilder, kotlin.Unit)))/type">type</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/lang/reflect/Type.html"><span class="identifier">Type</span></a><span class="symbol">, </span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$parameter(java.lang.reflect.Type, kotlin.String, kotlin.Function1((com.hendraanggrian.javapoet.ParameterSpecBuilder, kotlin.Unit)))/name">name</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$parameter(java.lang.reflect.Type, kotlin.String, kotlin.Function1((com.hendraanggrian.javapoet.ParameterSpecBuilder, kotlin.Unit)))/builder">builder</span><span class="symbol">:</span>&nbsp;<span class="symbol">(</span><a href="../-parameter-spec-builder/index.html"><span class="identifier">ParameterSpecBuilder</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code><br/>
+<code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span> <span class="identifier">parameter</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$parameter(kotlin.String, kotlin.Function1((com.hendraanggrian.javapoet.ParameterSpecBuilder, kotlin.Unit)))/name">name</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$parameter(kotlin.String, kotlin.Function1((com.hendraanggrian.javapoet.ParameterSpecBuilder, kotlin.Unit)))/builder">builder</span><span class="symbol">:</span>&nbsp;<span class="symbol">(</span><a href="../-parameter-spec-builder/index.html"><span class="identifier">ParameterSpecBuilder</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
 </tr>
 <tr>
 <td>
 <p><a href="returns.html">returns</a></p>
 </td>
 <td>
-<code><span class="keyword">fun </span><span class="identifier">returns</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$returns(java.lang.reflect.Type)/type">type</span><span class="symbol">:</span>&nbsp;<a href="http://docs.oracle.com/javase/6/docs/api/java/lang/reflect/Type.html"><span class="identifier">Type</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code><br/>
+<code><span class="keyword">fun </span><span class="identifier">returns</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$returns(java.lang.reflect.Type)/type">type</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/lang/reflect/Type.html"><span class="identifier">Type</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code><br/>
 <code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span> <span class="identifier">returns</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
 </tr>
 <tr>
@@ -338,10 +326,28 @@ A preferable way to achieve this is to use <a href="#">plus</a> operator (e.g.: 
 <p><a href="statement.html">statement</a></p>
 </td>
 <td>
-<code><span class="keyword">fun </span><span class="identifier">statement</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$statement(kotlin.String, kotlin.Array((kotlin.Any)))/format">format</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="keyword">vararg</span> <span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$statement(kotlin.String, kotlin.Array((kotlin.Any)))/args">args</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<code><span class="keyword">fun </span><span class="identifier">statement</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$statement(kotlin.String, kotlin.Array((kotlin.Any)))/format">format</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="keyword">vararg</span> <span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$statement(kotlin.String, kotlin.Array((kotlin.Any)))/args">args</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code><br/>
+<code><span class="keyword">fun </span><span class="identifier">statement</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$statement(com.squareup.javapoet.CodeBlock)/block">block</span><span class="symbol">:</span>&nbsp;<span class="identifier">CodeBlock</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
 <p>Add a statement to this spec builder.</p>
-<code><span class="keyword">fun </span><span class="identifier">statement</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$statement(kotlin.Function1((com.hendraanggrian.javapoet.CodeBlockBuilder, kotlin.Unit)))/builder">builder</span><span class="symbol">:</span>&nbsp;<a href="../-code-block-builder/index.html"><span class="identifier">CodeBlockBuilder</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
-<p>Build a statement block and add it to this spec builder.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="type-variable.html">typeVariable</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">typeVariable</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$typeVariable(com.squareup.javapoet.TypeVariableName)/name">name</span><span class="symbol">:</span>&nbsp;<span class="identifier">TypeVariableName</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Add single <a href="#">TypeVariableName</a> to this spec builder.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="type-variables.html">typeVariables</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">typeVariables</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$typeVariables(kotlin.collections.Iterable((com.squareup.javapoet.TypeVariableName)))/names">names</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-iterable/index.html"><span class="identifier">Iterable</span></a><span class="symbol">&lt;</span><span class="identifier">TypeVariableName</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Add multiple <a href="#">TypeVariableName</a> to this spec builder.
+A preferable way to achieve this is to use <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/java.math.-big-decimal/plus.html">plus</a> operator (e.g.: <code>typeVariables = name1 + name2</code>).</p>
 </td>
 </tr>
 </tbody>
