@@ -8,7 +8,7 @@ import javax.lang.model.element.Modifier
  * Base type of all JavaPoet DSL spec builders.
  * Subclass of this type have access to many convenient inline functions to JavaPoet constant values.
  *
- * @see com.hendraanggrian.javapoet.ModifierableSpecBuilder.plus
+ * @see com.hendraanggrian.javapoet.ModifieredSpecBuilder.plus
  */
 abstract class SpecBuilder<T> internal constructor() {
 

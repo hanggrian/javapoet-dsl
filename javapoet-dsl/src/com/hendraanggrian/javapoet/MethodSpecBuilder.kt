@@ -27,22 +27,22 @@ fun buildConstructorMethodSpec(builder: (MethodSpecBuilder.() -> Unit)? = null):
 @SpecBuilderDslMarker
 class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: MethodSpec.Builder) :
     SpecBuilder<MethodSpec>(),
-    JavadocableSpecBuilder,
-    AnnotableSpecBuilder,
-    ModifierableSpecBuilder,
-    TypeVariableSpecBuilder,
-    ControlFlowableSpecBuilder,
-    CodableSpecBuilder {
+    JavadocedSpecBuilder,
+    AnnotatedSpecBuilder,
+    ModifieredSpecBuilder,
+    TypeVariabledSpecBuilder,
+    ControlFlowedSpecBuilder,
+    CodedSpecBuilder {
 
-    override fun javadoc(format: String, vararg args: Any) {
+    override fun addJavadoc(format: String, vararg args: Any) {
         nativeBuilder.addJavadoc(format, *args)
     }
 
-    override fun javadoc(block: CodeBlock) {
+    override fun addJavadoc(block: CodeBlock) {
         nativeBuilder.addJavadoc(block)
     }
 
-    override fun annotation(spec: AnnotationSpec) {
+    override fun addAnnotation(spec: AnnotationSpec) {
         nativeBuilder.addAnnotation(spec)
     }
 
@@ -55,11 +55,11 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
             nativeBuilder.addModifiers(*value.toTypedArray())
         }
 
-    override fun typeVariable(name: TypeVariableName) {
+    override fun addTypeVariable(name: TypeVariableName) {
         nativeBuilder.addTypeVariable(name)
     }
 
-    override fun typeVariables(names: Iterable<TypeVariableName>) {
+    override fun addTypeVariables(names: Iterable<TypeVariableName>) {
         nativeBuilder.addTypeVariables(names)
     }
 
@@ -108,11 +108,11 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
 
     inline fun <reified T> exception() = exception(T::class.java)
 
-    override fun code(format: String, vararg args: Any) {
+    override fun addCode(format: String, vararg args: Any) {
         nativeBuilder.addCode(format, *args)
     }
 
-    override fun code(block: CodeBlock) {
+    override fun addCode(block: CodeBlock) {
         nativeBuilder.addCode(block)
     }
 
@@ -144,11 +144,11 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
         nativeBuilder.endControlFlow(format, *args)
     }
 
-    override fun statement(format: String, vararg args: Any) {
+    override fun addStatement(format: String, vararg args: Any) {
         nativeBuilder.addStatement(format, *args)
     }
 
-    override fun statement(block: CodeBlock) {
+    override fun addStatement(block: CodeBlock) {
         nativeBuilder.addStatement(block)
     }
 

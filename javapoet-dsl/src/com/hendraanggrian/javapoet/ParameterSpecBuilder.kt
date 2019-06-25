@@ -34,10 +34,10 @@ inline fun <reified T> buildParameterSpec(
 @SpecBuilderDslMarker
 class ParameterSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: ParameterSpec.Builder) :
     SpecBuilder<ParameterSpec>(),
-    AnnotableSpecBuilder,
-    ModifierableSpecBuilder {
+    AnnotatedSpecBuilder,
+    ModifieredSpecBuilder {
 
-    override fun annotation(spec: AnnotationSpec) {
+    override fun addAnnotation(spec: AnnotationSpec) {
         nativeBuilder.addAnnotation(spec)
     }
 

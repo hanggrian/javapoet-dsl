@@ -29,19 +29,19 @@ inline fun <reified T> buildFieldSpec(
 @SpecBuilderDslMarker
 class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: FieldSpec.Builder) :
     SpecBuilder<FieldSpec>(),
-    JavadocableSpecBuilder,
-    AnnotableSpecBuilder,
-    ModifierableSpecBuilder {
+    JavadocedSpecBuilder,
+    AnnotatedSpecBuilder,
+    ModifieredSpecBuilder {
 
-    override fun javadoc(format: String, vararg args: Any) {
+    override fun addJavadoc(format: String, vararg args: Any) {
         nativeBuilder.addJavadoc(format, *args)
     }
 
-    override fun javadoc(block: CodeBlock) {
+    override fun addJavadoc(block: CodeBlock) {
         nativeBuilder.addJavadoc(block)
     }
 
-    override fun annotation(spec: AnnotationSpec) {
+    override fun addAnnotation(spec: AnnotationSpec) {
         nativeBuilder.addAnnotation(spec)
     }
 

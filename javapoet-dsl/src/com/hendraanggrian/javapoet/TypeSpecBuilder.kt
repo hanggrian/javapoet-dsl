@@ -78,21 +78,21 @@ fun buildAnnotationTypeSpec(name: ClassName, builder: (TypeSpecBuilder.() -> Uni
 @SpecBuilderDslMarker
 class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: TypeSpec.Builder) :
     SpecBuilder<TypeSpec>(),
-    JavadocableSpecBuilder,
-    AnnotableSpecBuilder,
-    ModifierableSpecBuilder,
-    TypeVariableSpecBuilder,
-    TypableSpecBuilder {
+    JavadocedSpecBuilder,
+    AnnotatedSpecBuilder,
+    ModifieredSpecBuilder,
+    TypeVariabledSpecBuilder,
+    TypedSpecBuilder {
 
-    override fun javadoc(format: String, vararg args: Any) {
+    override fun addJavadoc(format: String, vararg args: Any) {
         nativeBuilder.addJavadoc(format, *args)
     }
 
-    override fun javadoc(block: CodeBlock) {
+    override fun addJavadoc(block: CodeBlock) {
         nativeBuilder.addJavadoc(block)
     }
 
-    override fun annotation(spec: AnnotationSpec) {
+    override fun addAnnotation(spec: AnnotationSpec) {
         nativeBuilder.addAnnotation(spec)
     }
 
@@ -105,11 +105,11 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
             nativeBuilder.addModifiers(*value.toTypedArray())
         }
 
-    override fun typeVariable(name: TypeVariableName) {
+    override fun addTypeVariable(name: TypeVariableName) {
         nativeBuilder.addTypeVariable(name)
     }
 
-    override fun typeVariables(names: Iterable<TypeVariableName>) {
+    override fun addTypeVariables(names: Iterable<TypeVariableName>) {
         nativeBuilder.addTypeVariables(names)
     }
 
@@ -178,7 +178,7 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
     inline fun constructor(noinline builder: (MethodSpecBuilder.() -> Unit)? = null) =
         method(buildConstructorMethodSpec(builder))
 
-    override fun type(spec: TypeSpec) {
+    override fun addType(spec: TypeSpec) {
         nativeBuilder.addType(spec)
     }
 

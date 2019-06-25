@@ -5,7 +5,7 @@ import com.hendraanggrian.javapoet.buildFieldSpec
 import javax.lang.model.element.Modifier
 import kotlin.test.Test
 
-class ModifierableSpecBuilderTest {
+class ModifieredSpecBuilderTest {
 
     @Test
     fun single() {

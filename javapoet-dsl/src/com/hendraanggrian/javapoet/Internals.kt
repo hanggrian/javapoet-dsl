@@ -16,115 +16,115 @@ internal const val NO_GETTER: String = "Property does not have a getter."
 internal fun noGetter(): Nothing = throw UnsupportedOperationException(NO_GETTER)
 
 /** Don't forget to add inline reified function. */
-internal interface AnnotableSpecBuilder {
+internal interface AnnotatedSpecBuilder {
 
     /** Add annotation to this spec builder. */
-    fun annotation(spec: AnnotationSpec)
+    fun addAnnotation(spec: AnnotationSpec)
 
     /** Add annotation to this spec builder. */
     fun annotation(name: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)? = null) =
-        annotation(buildAnnotationSpec(name, builder))
+        addAnnotation(buildAnnotationSpec(name, builder))
 
     /** Add annotation to this spec builder. */
     fun annotation(type: Class<*>, builder: (AnnotationSpecBuilder.() -> Unit)? = null) =
-        annotation(buildAnnotationSpec(type, builder))
+        addAnnotation(buildAnnotationSpec(type, builder))
 }
 
-internal interface CodableSpecBuilder {
+internal interface CodedSpecBuilder {
 
     /** Add a code to this spec builder. */
-    fun code(format: String, vararg args: Any)
+    fun addCode(format: String, vararg args: Any)
 
     /** Add a code to this spec builder. */
-    fun code(block: CodeBlock)
+    fun addCode(block: CodeBlock)
 
     /** Build a code block and add it to this spec builder. */
     fun code(builder: CodeBlockBuilder.() -> Unit) =
-        code(buildCodeBlock(builder))
+        addCode(buildCodeBlock(builder))
 
     /** Add a statement to this spec builder. */
-    fun statement(format: String, vararg args: Any)
+    fun addStatement(format: String, vararg args: Any)
 
     /** Add a statement to this spec builder. */
-    fun statement(block: CodeBlock)
+    fun addStatement(block: CodeBlock)
 
     /** Build a statement block and add it to this spec builder. */
     fun statement(builder: CodeBlockBuilder.() -> Unit) =
-        statement(buildCodeBlock(builder))
+        addStatement(buildCodeBlock(builder))
 }
 
-internal interface TypableSpecBuilder {
+internal interface TypedSpecBuilder {
 
     /** Add type to this spec builder. */
-    fun type(spec: TypeSpec)
+    fun addType(spec: TypeSpec)
 
     /** Add class type to this spec builder. */
     fun classType(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null) =
-        type(buildClassTypeSpec(name, builder))
+        addType(buildClassTypeSpec(name, builder))
 
     /** Add class type to this spec builder. */
     fun classType(name: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null) =
-        type(buildClassTypeSpec(name, builder))
+        addType(buildClassTypeSpec(name, builder))
 
     /** Add interface type to this spec builder. */
     fun interfaceType(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null) =
-        type(buildInterfaceTypeSpec(name, builder))
+        addType(buildInterfaceTypeSpec(name, builder))
 
     /** Add interface type to this spec builder. */
     fun interfaceType(name: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null) =
-        type(buildInterfaceTypeSpec(name, builder))
+        addType(buildInterfaceTypeSpec(name, builder))
 
     /** Add enum type to this spec builder. */
     fun enumType(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null) =
-        type(buildEnumTypeSpec(name, builder))
+        addType(buildEnumTypeSpec(name, builder))
 
     /** Add enum type to this spec builder. */
     fun enumType(name: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null) =
-        type(buildEnumTypeSpec(name, builder))
+        addType(buildEnumTypeSpec(name, builder))
 
     /** Add anonymous type to this spec builder. */
     fun anonymousType(format: String, vararg args: Any, builder: (TypeSpecBuilder.() -> Unit)? = null) =
-        type(buildAnonymousTypeSpec(format, *args, builder = builder))
+        addType(buildAnonymousTypeSpec(format, *args, builder = builder))
 
     /** Add anonymous type to this spec builder. */
     fun anonymousType(block: CodeBlock, builder: (TypeSpecBuilder.() -> Unit)? = null) =
-        type(buildAnonymousTypeSpec(block, builder))
+        addType(buildAnonymousTypeSpec(block, builder))
 
     /** Add annotation type to this spec builder. */
     fun annotationType(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null) =
-        type(buildAnnotationTypeSpec(name, builder))
+        addType(buildAnnotationTypeSpec(name, builder))
 
     /** Add annotation type to this spec builder. */
     fun annotationType(name: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null) =
-        type(buildAnnotationTypeSpec(name, builder))
+        addType(buildAnnotationTypeSpec(name, builder))
 }
 
-internal interface JavadocableSpecBuilder {
+internal interface JavadocedSpecBuilder {
 
     /** Add javadoc to this spec builder. */
-    fun javadoc(format: String, vararg args: Any)
+    fun addJavadoc(format: String, vararg args: Any)
 
     /** Add javadoc to this spec builder. */
-    fun javadoc(block: CodeBlock)
+    fun addJavadoc(block: CodeBlock)
 
     /** Build javadoc and add it to this spec builder. */
     fun javadoc(builder: CodeBlockBuilder.() -> Unit) =
-        javadoc(buildCodeBlock(builder))
+        addJavadoc(buildCodeBlock(builder))
 }
 
-internal interface TypeVariableSpecBuilder {
+internal interface TypeVariabledSpecBuilder {
 
     /** Add single [TypeVariableName] to this spec builder. */
-    fun typeVariable(name: TypeVariableName)
+    fun addTypeVariable(name: TypeVariableName)
 
     /**
      * Add multiple [TypeVariableName] to this spec builder.
-     * A preferable way to achieve this is to use [plus] operator (e.g.: `typeVariables = name1 + name2`).
+     * A preferable way to achieve this is to use [plus] operator (e.g.: `addTypeVariables = name1 + name2`).
      */
-    fun typeVariables(names: Iterable<TypeVariableName>)
+    fun addTypeVariables(names: Iterable<TypeVariableName>)
 }
 
-internal interface ControlFlowableSpecBuilder {
+internal interface ControlFlowedSpecBuilder {
 
     /** Begin a control flow of this spec builder. */
     fun beginControlFlow(format: String, vararg args: Any)
@@ -139,7 +139,7 @@ internal interface ControlFlowableSpecBuilder {
     fun endControlFlow(format: String, vararg args: Any)
 }
 
-internal interface ModifierableSpecBuilder {
+internal interface ModifieredSpecBuilder {
 
     /**
      * Add single/multiple [Modifier] to this spec builder.

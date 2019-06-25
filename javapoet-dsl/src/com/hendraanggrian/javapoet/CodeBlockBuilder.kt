@@ -12,10 +12,10 @@ inline fun buildCodeBlock(builder: CodeBlockBuilder.() -> Unit): CodeBlock =
 @SpecBuilderDslMarker
 class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuilder: CodeBlock.Builder) :
     SpecBuilder<CodeBlock>(),
-    ControlFlowableSpecBuilder,
-    CodableSpecBuilder {
+    ControlFlowedSpecBuilder,
+    CodedSpecBuilder {
 
-    fun named(format: String, arguments: Map<String, *>) {
+    fun addNamed(format: String, arguments: Map<String, *>) {
         nativeBuilder.addNamed(format, arguments)
     }
 
@@ -35,19 +35,19 @@ class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuil
         nativeBuilder.endControlFlow(format, *args)
     }
 
-    override fun statement(format: String, vararg args: Any) {
+    override fun addStatement(format: String, vararg args: Any) {
         nativeBuilder.addStatement(format, *args)
     }
 
-    override fun statement(block: CodeBlock) {
+    override fun addStatement(block: CodeBlock) {
         nativeBuilder.addStatement(block)
     }
 
-    override fun code(format: String, vararg args: Any) {
+    override fun addCode(format: String, vararg args: Any) {
         nativeBuilder.add(format, *args)
     }
 
-    override fun code(block: CodeBlock) {
+    override fun addCode(block: CodeBlock) {
         nativeBuilder.add(block)
     }
 

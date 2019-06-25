@@ -11,7 +11,7 @@ inline fun buildJavaFile(packageName: String, builder: JavaFileBuilder.() -> Uni
         .build()
 
 @SpecBuilderDslMarker
-class JavaFileBuilder @PublishedApi internal constructor(private val packageName: String) : TypableSpecBuilder {
+class JavaFileBuilder @PublishedApi internal constructor(private val packageName: String) : TypedSpecBuilder {
     private var type: TypeSpec? = null
     private var comments: MutableMap<String, Array<Any>>? = null
     private var staticImports: MutableList<Pair<Any, Array<String>>>? = null
@@ -66,7 +66,7 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
             _skipJavaLangImports = value
         }
 
-    override fun type(spec: TypeSpec) {
+    override fun addType(spec: TypeSpec) {
         type = spec
     }
 

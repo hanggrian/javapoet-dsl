@@ -25,15 +25,15 @@ inline fun <reified T> buildAnnotationSpec(noinline builder: (AnnotationSpecBuil
 class AnnotationSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: AnnotationSpec.Builder) :
     SpecBuilder<AnnotationSpec>() {
 
-    fun member(name: String, format: String, vararg args: Any) {
+    fun addMember(name: String, format: String, vararg args: Any) {
         nativeBuilder.addMember(name, format, *args)
     }
 
-    fun member(name: String, block: CodeBlock) {
+    fun addMember(name: String, block: CodeBlock) {
         nativeBuilder.addMember(name, block)
     }
 
-    inline fun member(name: String, builder: CodeBlockBuilder.() -> Unit) = member(name, buildCodeBlock(builder))
+    inline fun member(name: String, builder: CodeBlockBuilder.() -> Unit) = addMember(name, buildCodeBlock(builder))
 
     override fun build(): AnnotationSpec = nativeBuilder.build()
 }
