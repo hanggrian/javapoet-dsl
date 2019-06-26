@@ -70,9 +70,6 @@ class `Code&ControlFlowTest` {
             buildJavaFile("com.example") {
                 classType("HelloWorld") {
                     methods {
-                        constructor {
-
-                        }
                         "flow" {
                             returns = void
                             addStatement("int total = 0")

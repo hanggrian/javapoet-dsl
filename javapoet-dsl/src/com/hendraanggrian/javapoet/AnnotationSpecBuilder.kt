@@ -33,7 +33,8 @@ class AnnotationSpecBuilder @PublishedApi internal constructor(private val nativ
         nativeBuilder.addMember(name, block)
     }
 
-    inline fun member(name: String, builder: CodeBlockBuilder.() -> Unit) = addMember(name, buildCodeBlock(builder))
+    inline fun addMember(name: String, builder: CodeBlockBuilder.() -> Unit) =
+        addMember(name, buildCodeBlock(builder))
 
     override fun build(): AnnotationSpec = nativeBuilder.build()
 }

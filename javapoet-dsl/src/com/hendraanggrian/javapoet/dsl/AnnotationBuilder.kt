@@ -1,11 +1,13 @@
 package com.hendraanggrian.javapoet.dsl
 
 import com.hendraanggrian.javapoet.AnnotationSpecBuilder
+import com.hendraanggrian.javapoet.SpecBuilderDslMarker
 import com.hendraanggrian.javapoet.buildAnnotationSpec
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
 import kotlin.reflect.KClass
 
+@SpecBuilderDslMarker
 abstract class AnnotationBuilder {
 
     /** Add annotation to this spec builder. */

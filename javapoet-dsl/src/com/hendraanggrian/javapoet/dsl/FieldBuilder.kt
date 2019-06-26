@@ -1,11 +1,13 @@
 package com.hendraanggrian.javapoet.dsl
 
 import com.hendraanggrian.javapoet.FieldSpecBuilder
+import com.hendraanggrian.javapoet.SpecBuilderDslMarker
 import com.hendraanggrian.javapoet.buildFieldSpec
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.TypeName
 import kotlin.reflect.KClass
 
+@SpecBuilderDslMarker
 abstract class FieldBuilder {
 
     abstract fun add(spec: FieldSpec)

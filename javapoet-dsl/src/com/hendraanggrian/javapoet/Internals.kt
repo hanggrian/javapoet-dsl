@@ -46,7 +46,7 @@ internal interface CodedSpecBuilder {
     fun addCode(block: CodeBlock)
 
     /** Build a code block and add it to this spec builder. */
-    fun code(builder: CodeBlockBuilder.() -> Unit) =
+    fun addCode(builder: CodeBlockBuilder.() -> Unit) =
         addCode(buildCodeBlock(builder))
 
     /** Add a statement to this spec builder. */
@@ -56,7 +56,7 @@ internal interface CodedSpecBuilder {
     fun addStatement(block: CodeBlock)
 
     /** Build a statement block and add it to this spec builder. */
-    fun statement(builder: CodeBlockBuilder.() -> Unit) =
+    fun addStatement(builder: CodeBlockBuilder.() -> Unit) =
         addStatement(buildCodeBlock(builder))
 }
 
@@ -115,7 +115,7 @@ internal interface JavadocedSpecBuilder {
     fun addJavadoc(block: CodeBlock)
 
     /** Build javadoc and add it to this spec builder. */
-    fun javadoc(builder: CodeBlockBuilder.() -> Unit) =
+    fun addJavadoc(builder: CodeBlockBuilder.() -> Unit) =
         addJavadoc(buildCodeBlock(builder))
 }
 
