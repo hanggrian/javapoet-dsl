@@ -1,5 +1,6 @@
 package com.hendraanggrian.javapoet
 
+import com.hendraanggrian.javapoet.container.AnnotationContainer
 import com.hendraanggrian.javapoet.internal.SpecBuilder
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ParameterSpec
@@ -37,8 +38,10 @@ class ParameterSpecBuilder @PublishedApi internal constructor(private val native
     AnnotatedSpecBuilder,
     ModifieredSpecBuilder {
 
-    override fun addAnnotation(spec: AnnotationSpec) {
-        nativeBuilder.addAnnotation(spec)
+    override val annotations: AnnotationContainer = object : AnnotationContainer() {
+        override fun plusAssign(spec: AnnotationSpec) {
+            nativeBuilder.addAnnotation(spec)
+        }
     }
 
     override var modifiers: Collection<Modifier>

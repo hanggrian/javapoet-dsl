@@ -26,9 +26,7 @@ class ParameterSpecBuilderTest {
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 .build(),
             buildParameterSpec<String>("name") {
-                annotations {
-                    Deprecated::class()
-                }
+                annotations.add<Deprecated>()
                 modifiers = public + final
             }
         )

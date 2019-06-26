@@ -34,13 +34,13 @@ class FieldSpecBuilderTest {
                 .initializer("value")
                 .build(),
             buildFieldSpec<String>("name") {
-                addJavadoc("firstJavadoc")
-                javadoc {
-                    addCode("secondJavadoc")
+                javadocs {
+                    add("firstJavadoc")
+                    add {
+                        addCode("secondJavadoc")
+                    }
                 }
-                annotations {
-                    Deprecated::class()
-                }
+                annotations.add<Deprecated>()
                 modifiers = public + final
                 initializer = "value"
             }

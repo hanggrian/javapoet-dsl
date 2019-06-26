@@ -1,5 +1,7 @@
 package com.hendraanggrian.javapoet
 
+import com.hendraanggrian.javapoet.container.AnnotationContainer
+import com.hendraanggrian.javapoet.container.JavadocContainer
 import com.hendraanggrian.javapoet.internal.SpecBuilder
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.CodeBlock
@@ -33,16 +35,20 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
     AnnotatedSpecBuilder,
     ModifieredSpecBuilder {
 
-    override fun addJavadoc(format: String, vararg args: Any) {
-        nativeBuilder.addJavadoc(format, *args)
+    override val javadocs: JavadocContainer = object : JavadocContainer() {
+        override fun plusAssign(block: CodeBlock) {
+            nativeBuilder.addJavadoc(block)
+        }
+
+        override fun add(format: String, vararg args: Any) {
+            nativeBuilder.addJavadoc(format, *args)
+        }
     }
 
-    override fun addJavadoc(block: CodeBlock) {
-        nativeBuilder.addJavadoc(block)
-    }
-
-    override fun addAnnotation(spec: AnnotationSpec) {
-        nativeBuilder.addAnnotation(spec)
+    override val annotations: AnnotationContainer = object : AnnotationContainer() {
+        override fun plusAssign(spec: AnnotationSpec) {
+            nativeBuilder.addAnnotation(spec)
+        }
     }
 
     override var modifiers: Collection<Modifier>

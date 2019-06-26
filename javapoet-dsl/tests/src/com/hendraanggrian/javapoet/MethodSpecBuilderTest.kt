@@ -40,13 +40,13 @@ class MethodSpecBuilderTest {
                 .addCode("doSomething()")
                 .build(),
             buildMethodSpec("main") {
-                addJavadoc("firstJavadoc")
-                addJavadoc {
-                    addCode("secondJavadoc")
+                javadocs {
+                    add("firstJavadoc")
+                    add {
+                        addCode("secondJavadoc")
+                    }
                 }
-                annotations {
-                    add<Deprecated>()
-                }
+                annotations.add<Deprecated>()
                 modifiers = public + static
                 returns = void
                 parameter<Array<String>>("param")

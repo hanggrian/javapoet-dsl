@@ -2,7 +2,10 @@
 
 package com.hendraanggrian.javapoet
 
+import com.hendraanggrian.javapoet.container.AnnotationContainer
+import com.hendraanggrian.javapoet.container.JavadocContainer
 import com.hendraanggrian.javapoet.dsl.AnnotationBuilder
+import com.hendraanggrian.javapoet.dsl.JavadocBuilder
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
@@ -16,23 +19,15 @@ internal const val NO_GETTER: String = "Property does not have a getter."
 @PublishedApi
 internal fun noGetter(): Nothing = throw UnsupportedOperationException(NO_GETTER)
 
-/** Don't forget to add inline reified function. */
 internal interface AnnotatedSpecBuilder {
 
-    /** Add annotation to this spec builder. */
-    fun addAnnotation(spec: AnnotationSpec)
+    val annotations: AnnotationContainer
 
-    /** Add annotation to this spec builder. */
-    fun addAnnotation(name: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)? = null) =
-        addAnnotation(buildAnnotationSpec(name, builder))
-
-    /** Add annotation to this spec builder. */
-    fun addAnnotation(type: Class<*>, builder: (AnnotationSpecBuilder.() -> Unit)? = null) =
-        addAnnotation(buildAnnotationSpec(type, builder))
-
-    fun annotations(builder: AnnotationBuilder.() -> Unit) {
+    operator fun AnnotationContainer.invoke(builder: AnnotationBuilder.() -> Unit) {
         object : AnnotationBuilder() {
-            override fun add(spec: AnnotationSpec) = addAnnotation(spec)
+            override fun add(spec: AnnotationSpec) {
+                plusAssign(spec)
+            }
         }.apply(builder)
     }
 }
@@ -108,15 +103,19 @@ internal interface TypedSpecBuilder {
 
 internal interface JavadocedSpecBuilder {
 
-    /** Add javadoc to this spec builder. */
-    fun addJavadoc(format: String, vararg args: Any)
+    val javadocs: JavadocContainer
 
-    /** Add javadoc to this spec builder. */
-    fun addJavadoc(block: CodeBlock)
+    operator fun JavadocContainer.invoke(builder: JavadocBuilder.() -> Unit) {
+        object : JavadocBuilder() {
+            override fun add(block: CodeBlock) {
+                plusAssign(block)
+            }
 
-    /** Build javadoc and add it to this spec builder. */
-    fun addJavadoc(builder: CodeBlockBuilder.() -> Unit) =
-        addJavadoc(buildCodeBlock(builder))
+            override fun add(format: String, vararg args: Any) {
+                this@invoke.add(format, *args)
+            }
+        }.apply(builder)
+    }
 }
 
 internal interface TypeVariabledSpecBuilder {
