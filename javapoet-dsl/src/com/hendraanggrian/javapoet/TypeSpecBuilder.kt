@@ -2,6 +2,8 @@
 
 package com.hendraanggrian.javapoet
 
+import com.hendraanggrian.javapoet.dsl.FieldBuilder
+import com.hendraanggrian.javapoet.dsl.MethodBuilder
 import com.hendraanggrian.javapoet.internal.SpecBuilder
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
@@ -96,9 +98,6 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
         nativeBuilder.addAnnotation(spec)
     }
 
-    inline fun <reified T> annotation(noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null) =
-        annotation(T::class.java, builder)
-
     override var modifiers: Collection<Modifier>
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
         set(value) {
@@ -143,18 +142,24 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
         nativeBuilder.addEnumConstant(name, buildClassTypeSpec(name2, builder))
     }
 
-    fun field(spec: FieldSpec) {
+    fun addField(spec: FieldSpec) {
         nativeBuilder.addField(spec)
     }
 
-    inline fun field(type: TypeName, name: String, noinline builder: (FieldSpecBuilder.() -> Unit)? = null) =
-        field(buildFieldSpec(type, name, builder))
+    fun addField(type: TypeName, name: String, builder: (FieldSpecBuilder.() -> Unit)? = null) =
+        addField(buildFieldSpec(type, name, builder))
 
-    inline fun field(type: Type, name: String, noinline builder: (FieldSpecBuilder.() -> Unit)? = null) =
-        field(buildFieldSpec(type, name, builder))
+    fun addField(type: Type, name: String, builder: (FieldSpecBuilder.() -> Unit)? = null) =
+        addField(buildFieldSpec(type, name, builder))
 
-    inline fun <reified T> field(name: String, noinline builder: (FieldSpecBuilder.() -> Unit)? = null) =
-        field(T::class.java, name, builder)
+    inline fun <reified T> addField(name: String, noinline builder: (FieldSpecBuilder.() -> Unit)? = null) =
+        addField(T::class.java, name, builder)
+
+    fun fields(builder: FieldBuilder.() -> Unit) {
+        object : FieldBuilder() {
+            override fun add(spec: FieldSpec) = addField(spec)
+        }.apply(builder)
+    }
 
     fun staticBlock(block: CodeBlock) {
         nativeBuilder.addStaticBlock(block)
@@ -168,15 +173,21 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
 
     inline fun initializerBlock(builder: CodeBlockBuilder.() -> Unit) = initializerBlock(buildCodeBlock(builder))
 
-    fun method(spec: MethodSpec) {
+    fun addMethod(spec: MethodSpec) {
         nativeBuilder.addMethod(spec)
     }
 
-    inline fun method(name: String, noinline builder: (MethodSpecBuilder.() -> Unit)? = null) =
-        method(buildMethodSpec(name, builder))
+    fun addMethod(name: String, builder: (MethodSpecBuilder.() -> Unit)? = null) =
+        addMethod(buildMethodSpec(name, builder))
 
-    inline fun constructor(noinline builder: (MethodSpecBuilder.() -> Unit)? = null) =
-        method(buildConstructorMethodSpec(builder))
+    fun addConstructor(builder: (MethodSpecBuilder.() -> Unit)? = null) =
+        addMethod(buildConstructorMethodSpec(builder))
+
+    fun methods(builder: MethodBuilder.() -> Unit) {
+        object : MethodBuilder() {
+            override fun add(spec: MethodSpec) = addMethod(spec)
+        }.apply(builder)
+    }
 
     override fun addType(spec: TypeSpec) {
         nativeBuilder.addType(spec)

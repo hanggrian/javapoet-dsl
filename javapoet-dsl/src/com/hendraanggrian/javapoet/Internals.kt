@@ -2,6 +2,7 @@
 
 package com.hendraanggrian.javapoet
 
+import com.hendraanggrian.javapoet.dsl.AnnotationBuilder
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
@@ -22,12 +23,18 @@ internal interface AnnotatedSpecBuilder {
     fun addAnnotation(spec: AnnotationSpec)
 
     /** Add annotation to this spec builder. */
-    fun annotation(name: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)? = null) =
+    fun addAnnotation(name: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)? = null) =
         addAnnotation(buildAnnotationSpec(name, builder))
 
     /** Add annotation to this spec builder. */
-    fun annotation(type: Class<*>, builder: (AnnotationSpecBuilder.() -> Unit)? = null) =
+    fun addAnnotation(type: Class<*>, builder: (AnnotationSpecBuilder.() -> Unit)? = null) =
         addAnnotation(buildAnnotationSpec(type, builder))
+
+    fun annotations(builder: AnnotationBuilder.() -> Unit) {
+        object : AnnotationBuilder() {
+            override fun add(spec: AnnotationSpec) = addAnnotation(spec)
+        }.apply(builder)
+    }
 }
 
 internal interface CodedSpecBuilder {

@@ -45,9 +45,6 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
         nativeBuilder.addAnnotation(spec)
     }
 
-    inline fun <reified T> annotation(noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null) =
-        annotation(T::class.java, builder)
-
     override var modifiers: Collection<Modifier>
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
         set(value) {

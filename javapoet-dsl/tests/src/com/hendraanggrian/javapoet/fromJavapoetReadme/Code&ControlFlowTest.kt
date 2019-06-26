@@ -44,17 +44,19 @@ class `Code&ControlFlowTest` {
             expected1,
             buildJavaFile("com.example") {
                 classType("HelloWorld") {
-                    method("flow") {
-                        returns = void
-                        code(
-                            """
+                    methods {
+                        "flow" {
+                            returns = void
+                            addCode(
+                                """
                                 int total = 0;
                                 for (int i = 0; i < 10; i++) {
                                   total += i;
                                 }
 
                             """.trimIndent()
-                        )
+                            )
+                        }
                     }
                 }
             }.toString()
@@ -67,12 +69,17 @@ class `Code&ControlFlowTest` {
             expected1,
             buildJavaFile("com.example") {
                 classType("HelloWorld") {
-                    method("flow") {
-                        returns = void
-                        statement("int total = 0")
-                        beginControlFlow("for (int i = 0; i < 10; i++)")
-                        statement("total += i")
-                        endControlFlow()
+                    methods {
+                        constructor {
+
+                        }
+                        "flow" {
+                            returns = void
+                            addStatement("int total = 0")
+                            beginControlFlow("for (int i = 0; i < 10; i++)")
+                            addStatement("total += i")
+                            endControlFlow()
+                        }
                     }
                 }
             }.toString()
@@ -85,13 +92,15 @@ class `Code&ControlFlowTest` {
             expected2,
             buildJavaFile("com.example") {
                 classType("HelloWorld") {
-                    method("multiply10to20") {
-                        returns = int
-                        statement("int result = 1")
-                        beginControlFlow("for (int i = 10; i < 20; i++)")
-                        statement("result = result * i")
-                        endControlFlow()
-                        statement("return result")
+                    methods {
+                        "multiply10to20" {
+                            returns = int
+                            addStatement("int result = 1")
+                            beginControlFlow("for (int i = 10; i < 20; i++)")
+                            addStatement("result = result * i")
+                            endControlFlow()
+                            addStatement("return result")
+                        }
                     }
                 }
             }.toString()

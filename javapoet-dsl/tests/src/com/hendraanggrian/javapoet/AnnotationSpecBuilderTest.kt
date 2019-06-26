@@ -28,9 +28,9 @@ class AnnotationSpecBuilderTest {
                 )
                 .build(),
             buildAnnotationSpec(ClassName.OBJECT) {
-                member("string", "stringValue")
+                addMember("string", "stringValue")
                 member("code") {
-                    code("codeValue")
+                    addCode("codeValue")
                 }
             }
         )

@@ -1,7 +1,7 @@
 package com.hendraanggrian.javapoet.fromJavapoetReadme
 
-import com.hendraanggrian.javapoet.TypeSpecBuilder
 import com.hendraanggrian.javapoet.buildJavaFile
+import com.hendraanggrian.javapoet.dsl.MethodBuilder
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -34,18 +34,20 @@ class `$SforStringsTest` {
             buildJavaFile("com.example") {
                 classType("HelloWorld") {
                     modifiers = public + final
-                    nameMethod("slimShady")
-                    nameMethod("eminem")
-                    nameMethod("marshallMathers")
+                    methods {
+                        nameMethod("slimShady")
+                        nameMethod("eminem")
+                        nameMethod("marshallMathers")
+                    }
                 }
             }.toString()
         )
     }
 
-    private fun TypeSpecBuilder.nameMethod(name: String) {
-        method(name) {
+    private fun MethodBuilder.nameMethod(name: String) {
+        name {
             returns<String>()
-            statement("return \$S", name)
+            addStatement("return \$S", name)
         }
     }
 }
