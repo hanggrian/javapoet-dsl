@@ -19,7 +19,7 @@ class TypeSpecBuilderTest {
         assertEquals(
             TypeSpec.enumBuilder("myEnum").addEnumConstant("A").build(),
             buildEnumTypeSpec("myEnum") {
-                enumConstant("A")
+                addEnumConstant("A")
             }
         )
         assertEquals(

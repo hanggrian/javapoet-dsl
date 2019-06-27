@@ -32,7 +32,7 @@ inline fun <reified T> buildParameterSpec(
     noinline builder: (ParameterSpecBuilder.() -> Unit)? = null
 ): ParameterSpec = buildParameterSpec(T::class.java, name, builder)
 
-@SpecBuilderDslMarker
+@JavapoetDslMarker
 class ParameterSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: ParameterSpec.Builder) :
     SpecBuilder<ParameterSpec>(),
     AnnotatedSpecBuilder,

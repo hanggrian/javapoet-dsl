@@ -2,6 +2,7 @@ package com.hendraanggrian.javapoet.container
 
 import com.hendraanggrian.javapoet.FieldSpecBuilder
 import com.hendraanggrian.javapoet.buildFieldSpec
+import com.hendraanggrian.javapoet.scope.FieldContainerScope
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.TypeName
 import kotlin.reflect.KClass
@@ -18,4 +19,7 @@ abstract class FieldContainer {
 
     inline fun <reified T> add(name: String, noinline builder: (FieldSpecBuilder.() -> Unit)? = null) =
         add(T::class, name, builder)
+
+    operator fun invoke(configuration: FieldContainerScope.() -> Unit) =
+        configuration(FieldContainerScope(this))
 }

@@ -31,8 +31,8 @@ class HelloWorldTest {
                         "main" {
                             modifiers = public + static
                             returns = void
-                            parameter<Array<String>>("args")
-                            addStatement("\$T.out.println(\$S)", System::class.java, "Hello, JavaPoet!")
+                            parameters.add<Array<String>>("args")
+                            statements.add("\$T.out.println(\$S)", System::class.java, "Hello, JavaPoet!")
                         }
                     }
                 }

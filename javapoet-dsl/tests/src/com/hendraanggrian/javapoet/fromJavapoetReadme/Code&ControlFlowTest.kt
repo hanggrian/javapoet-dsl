@@ -47,14 +47,14 @@ class `Code&ControlFlowTest` {
                     methods {
                         "flow" {
                             returns = void
-                            addCode(
+                            codes.add(
                                 """
                                 int total = 0;
                                 for (int i = 0; i < 10; i++) {
                                   total += i;
                                 }
 
-                            """.trimIndent()
+                                """.trimIndent()
                             )
                         }
                     }
@@ -72,9 +72,9 @@ class `Code&ControlFlowTest` {
                     methods {
                         "flow" {
                             returns = void
-                            addStatement("int total = 0")
+                            statements.add("int total = 0")
                             beginControlFlow("for (int i = 0; i < 10; i++)")
-                            addStatement("total += i")
+                            statements.add("total += i")
                             endControlFlow()
                         }
                     }
@@ -92,11 +92,11 @@ class `Code&ControlFlowTest` {
                     methods {
                         "multiply10to20" {
                             returns = int
-                            addStatement("int result = 1")
+                            statements.add("int result = 1")
                             beginControlFlow("for (int i = 10; i < 20; i++)")
-                            addStatement("result = result * i")
+                            statements.add("result = result * i")
                             endControlFlow()
-                            addStatement("return result")
+                            statements.add("return result")
                         }
                     }
                 }

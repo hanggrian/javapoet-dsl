@@ -1,5 +1,6 @@
 package com.hendraanggrian.javapoet
 
+import com.hendraanggrian.javapoet.container.CodeContainer
 import com.hendraanggrian.javapoet.internal.SpecBuilder
 import com.squareup.javapoet.CodeBlock
 
@@ -9,7 +10,7 @@ inline fun buildCodeBlock(builder: CodeBlockBuilder.() -> Unit): CodeBlock =
         .apply(builder)
         .build()
 
-@SpecBuilderDslMarker
+@JavapoetDslMarker
 class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuilder: CodeBlock.Builder) :
     SpecBuilder<CodeBlock>(),
     ControlFlowedSpecBuilder,
@@ -35,20 +36,24 @@ class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuil
         nativeBuilder.endControlFlow(format, *args)
     }
 
-    override fun addStatement(format: String, vararg args: Any) {
-        nativeBuilder.addStatement(format, *args)
+    override val statements: CodeContainer = object : CodeContainer() {
+        override fun plusAssign(block: CodeBlock) {
+            nativeBuilder.addStatement(block)
+        }
+
+        override fun add(format: String, vararg args: Any) {
+            nativeBuilder.addStatement(format, *args)
+        }
     }
 
-    override fun addStatement(block: CodeBlock) {
-        nativeBuilder.addStatement(block)
-    }
+    override val codes: CodeContainer = object : CodeContainer() {
+        override fun plusAssign(block: CodeBlock) {
+            nativeBuilder.add(block)
+        }
 
-    override fun addCode(format: String, vararg args: Any) {
-        nativeBuilder.add(format, *args)
-    }
-
-    override fun addCode(block: CodeBlock) {
-        nativeBuilder.add(block)
+        override fun add(format: String, vararg args: Any) {
+            nativeBuilder.add(format, *args)
+        }
     }
 
     fun indent() {

@@ -1,5 +1,6 @@
 package com.hendraanggrian.javapoet
 
+import com.hendraanggrian.javapoet.container.MemberContainer
 import com.hendraanggrian.javapoet.internal.SpecBuilder
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
@@ -21,20 +22,19 @@ fun buildAnnotationSpec(type: Class<*>, builder: (AnnotationSpecBuilder.() -> Un
 inline fun <reified T> buildAnnotationSpec(noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
     buildAnnotationSpec(T::class.java, builder)
 
-@SpecBuilderDslMarker
+@JavapoetDslMarker
 class AnnotationSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: AnnotationSpec.Builder) :
     SpecBuilder<AnnotationSpec>() {
 
-    fun addMember(name: String, format: String, vararg args: Any) {
-        nativeBuilder.addMember(name, format, *args)
-    }
+    val members: MemberContainer = object : MemberContainer() {
+        override fun add(name: String, block: CodeBlock) {
+            nativeBuilder.addMember(name, block)
+        }
 
-    fun addMember(name: String, block: CodeBlock) {
-        nativeBuilder.addMember(name, block)
+        override fun add(name: String, format: String, vararg args: Any) {
+            nativeBuilder.addMember(name, format, *args)
+        }
     }
-
-    inline fun addMember(name: String, builder: CodeBlockBuilder.() -> Unit) =
-        addMember(name, buildCodeBlock(builder))
 
     override fun build(): AnnotationSpec = nativeBuilder.build()
 }

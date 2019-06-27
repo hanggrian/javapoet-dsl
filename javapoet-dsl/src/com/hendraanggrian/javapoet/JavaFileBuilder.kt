@@ -10,7 +10,7 @@ inline fun buildJavaFile(packageName: String, builder: JavaFileBuilder.() -> Uni
         .apply(builder)
         .build()
 
-@SpecBuilderDslMarker
+@JavapoetDslMarker
 class JavaFileBuilder @PublishedApi internal constructor(private val packageName: String) : TypedSpecBuilder {
     private var type: TypeSpec? = null
     private var comments: MutableMap<String, Array<Any>>? = null

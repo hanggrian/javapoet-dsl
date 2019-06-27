@@ -1,7 +1,7 @@
 package com.hendraanggrian.javapoet
 
 import com.hendraanggrian.javapoet.container.AnnotationContainer
-import com.hendraanggrian.javapoet.container.JavadocContainer
+import com.hendraanggrian.javapoet.container.CodeContainer
 import com.hendraanggrian.javapoet.internal.SpecBuilder
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.CodeBlock
@@ -28,14 +28,14 @@ inline fun <reified T> buildFieldSpec(
     noinline builder: (FieldSpecBuilder.() -> Unit)? = null
 ): FieldSpec = buildFieldSpec(T::class.java, name, builder)
 
-@SpecBuilderDslMarker
+@JavapoetDslMarker
 class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: FieldSpec.Builder) :
     SpecBuilder<FieldSpec>(),
     JavadocedSpecBuilder,
     AnnotatedSpecBuilder,
     ModifieredSpecBuilder {
 
-    override val javadocs: JavadocContainer = object : JavadocContainer() {
+    override val javadocs: CodeContainer = object : CodeContainer() {
         override fun plusAssign(block: CodeBlock) {
             nativeBuilder.addJavadoc(block)
         }

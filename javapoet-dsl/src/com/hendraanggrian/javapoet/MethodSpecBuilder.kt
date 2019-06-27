@@ -3,7 +3,8 @@
 package com.hendraanggrian.javapoet
 
 import com.hendraanggrian.javapoet.container.AnnotationContainer
-import com.hendraanggrian.javapoet.container.JavadocContainer
+import com.hendraanggrian.javapoet.container.CodeContainer
+import com.hendraanggrian.javapoet.container.ParameterContainer
 import com.hendraanggrian.javapoet.internal.SpecBuilder
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.CodeBlock
@@ -26,7 +27,7 @@ fun buildConstructorMethodSpec(builder: (MethodSpecBuilder.() -> Unit)? = null):
         .also { builder?.invoke(it) }
         .build()
 
-@SpecBuilderDslMarker
+@JavapoetDslMarker
 class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: MethodSpec.Builder) :
     SpecBuilder<MethodSpec>(),
     JavadocedSpecBuilder,
@@ -36,7 +37,7 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
     ControlFlowedSpecBuilder,
     CodedSpecBuilder {
 
-    override val javadocs: JavadocContainer = object : JavadocContainer() {
+    override val javadocs: CodeContainer = object : CodeContainer() {
         override fun plusAssign(block: CodeBlock) {
             nativeBuilder.addJavadoc(block)
         }
@@ -78,18 +79,11 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
 
     inline fun <reified T> returns() = returns(T::class.java)
 
-    fun parameter(spec: ParameterSpec) {
-        nativeBuilder.addParameter(spec)
+    val parameters: ParameterContainer = object : ParameterContainer() {
+        override fun plusAssign(spec: ParameterSpec) {
+            nativeBuilder.addParameter(spec)
+        }
     }
-
-    inline fun parameter(type: TypeName, name: String, noinline builder: (ParameterSpecBuilder.() -> Unit)? = null) =
-        parameter(buildParameterSpec(type, name, builder))
-
-    inline fun parameter(type: Type, name: String, noinline builder: (ParameterSpecBuilder.() -> Unit)? = null) =
-        parameter(buildParameterSpec(type, name, builder))
-
-    inline fun <reified T> parameter(name: String, noinline builder: (ParameterSpecBuilder.() -> Unit)? = null) =
-        parameter(T::class.java, name, builder)
 
     var varargs: Boolean
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
@@ -97,29 +91,31 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
             nativeBuilder.varargs(value)
         }
 
-    fun exceptions(exceptions: Iterable<TypeName>) {
+    fun addExceptions(exceptions: Iterable<TypeName>) {
         nativeBuilder.addExceptions(exceptions)
     }
 
-    fun exception(exception: TypeName) {
+    fun addException(exception: TypeName) {
         nativeBuilder.addException(exception)
     }
 
-    fun exception(exception: Type) {
+    fun addException(exception: Type) {
         nativeBuilder.addException(exception)
     }
 
-    inline fun <reified T> exception() = exception(T::class.java)
+    inline fun <reified T> addException() = addException(T::class.java)
 
-    override fun addCode(format: String, vararg args: Any) {
-        nativeBuilder.addCode(format, *args)
+    override val codes: CodeContainer = object : CodeContainer() {
+        override fun plusAssign(block: CodeBlock) {
+            nativeBuilder.addCode(block)
+        }
+
+        override fun add(format: String, vararg args: Any) {
+            nativeBuilder.addCode(format, *args)
+        }
     }
 
-    override fun addCode(block: CodeBlock) {
-        nativeBuilder.addCode(block)
-    }
-
-    fun comment(format: String, vararg args: Any) {
+    fun addComment(format: String, vararg args: Any) {
         nativeBuilder.addComment(format, *args)
     }
 
@@ -147,12 +143,14 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
         nativeBuilder.endControlFlow(format, *args)
     }
 
-    override fun addStatement(format: String, vararg args: Any) {
-        nativeBuilder.addStatement(format, *args)
-    }
+    override val statements: CodeContainer = object : CodeContainer() {
+        override fun plusAssign(block: CodeBlock) {
+            nativeBuilder.addStatement(block)
+        }
 
-    override fun addStatement(block: CodeBlock) {
-        nativeBuilder.addStatement(block)
+        override fun add(format: String, vararg args: Any) {
+            nativeBuilder.addStatement(format, *args)
+        }
     }
 
     override fun build(): MethodSpec = nativeBuilder.build()

@@ -1,7 +1,7 @@
 package com.hendraanggrian.javapoet.fromJavapoetReadme
 
 import com.hendraanggrian.javapoet.buildJavaFile
-import com.hendraanggrian.javapoet.dsl.MethodBuilder
+import com.hendraanggrian.javapoet.scope.MethodContainerScope
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -44,10 +44,10 @@ class `$SforStringsTest` {
         )
     }
 
-    private fun MethodBuilder.nameMethod(name: String) {
+    private fun MethodContainerScope.nameMethod(name: String) {
         name {
             returns<String>()
-            addStatement("return \$S", name)
+            statements.add("return \$S", name)
         }
     }
 }

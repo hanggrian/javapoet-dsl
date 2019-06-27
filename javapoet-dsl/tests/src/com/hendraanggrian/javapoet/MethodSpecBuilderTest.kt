@@ -43,17 +43,17 @@ class MethodSpecBuilderTest {
                 javadocs {
                     add("firstJavadoc")
                     add {
-                        addCode("secondJavadoc")
+                        codes.add("secondJavadoc")
                     }
                 }
                 annotations.add<Deprecated>()
                 modifiers = public + static
                 returns = void
-                parameter<Array<String>>("param")
+                parameters.add<Array<String>>("param")
                 varargs = true
-                exception<IOException>()
-                comment("Some comment")
-                addCode("doSomething()")
+                addException<IOException>()
+                addComment("Some comment")
+                codes.add("doSomething()")
             }
         )
     }

@@ -3,11 +3,9 @@
 package com.hendraanggrian.javapoet
 
 import com.hendraanggrian.javapoet.container.AnnotationContainer
+import com.hendraanggrian.javapoet.container.CodeContainer
 import com.hendraanggrian.javapoet.container.FieldContainer
-import com.hendraanggrian.javapoet.container.JavadocContainer
 import com.hendraanggrian.javapoet.container.MethodContainer
-import com.hendraanggrian.javapoet.dsl.FieldBuilder
-import com.hendraanggrian.javapoet.dsl.MethodBuilder
 import com.hendraanggrian.javapoet.internal.SpecBuilder
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
@@ -81,7 +79,7 @@ fun buildAnnotationTypeSpec(name: ClassName, builder: (TypeSpecBuilder.() -> Uni
         .also { builder?.invoke(it) }
         .build()
 
-@SpecBuilderDslMarker
+@JavapoetDslMarker
 class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: TypeSpec.Builder) :
     SpecBuilder<TypeSpec>(),
     JavadocedSpecBuilder,
@@ -90,7 +88,7 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
     TypeVariabledSpecBuilder,
     TypedSpecBuilder {
 
-    override val javadocs: JavadocContainer = object : JavadocContainer() {
+    override val javadocs: CodeContainer = object : CodeContainer() {
         override fun plusAssign(block: CodeBlock) {
             nativeBuilder.addJavadoc(block)
         }
@@ -130,23 +128,25 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
         nativeBuilder.superclass(type)
     }
 
-    inline fun <reified T> superClass() = superClass(T::class.java)
+    inline fun <reified T> superClass() =
+        superClass(T::class.java)
 
-    fun superInterface(name: TypeName) {
+    fun addSuperInterface(name: TypeName) {
         nativeBuilder.addSuperinterface(name)
     }
 
-    fun superInterface(type: Type) {
+    fun addSuperInterface(type: Type) {
         nativeBuilder.addSuperinterface(type)
     }
 
-    inline fun <reified T> superInterface() = superInterface(T::class.java)
+    inline fun <reified T> addSuperInterface() =
+        addSuperInterface(T::class.java)
 
-    fun enumConstant(name: String) {
+    fun addEnumConstant(name: String) {
         nativeBuilder.addEnumConstant(name)
     }
 
-    fun enumConstant(name: String, name2: String, builder: (TypeSpecBuilder.() -> Unit)? = null) {
+    fun addEnumConstant(name: String, name2: String, builder: (TypeSpecBuilder.() -> Unit)? = null) {
         nativeBuilder.addEnumConstant(name, buildClassTypeSpec(name2, builder))
     }
 
@@ -156,23 +156,19 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
         }
     }
 
-    operator fun FieldContainer.invoke(builder: FieldBuilder.() -> Unit) {
-        object : FieldBuilder() {
-            override fun add(spec: FieldSpec) = plusAssign(spec)
-        }.apply(builder)
-    }
-
-    fun staticBlock(block: CodeBlock) {
+    fun addStaticBlock(block: CodeBlock) {
         nativeBuilder.addStaticBlock(block)
     }
 
-    inline fun staticBlock(builder: CodeBlockBuilder.() -> Unit) = staticBlock(buildCodeBlock(builder))
+    inline fun addStaticBlock(builder: CodeBlockBuilder.() -> Unit) =
+        addStaticBlock(buildCodeBlock(builder))
 
-    fun initializerBlock(block: CodeBlock) {
+    fun addInitializerBlock(block: CodeBlock) {
         nativeBuilder.addInitializerBlock(block)
     }
 
-    inline fun initializerBlock(builder: CodeBlockBuilder.() -> Unit) = initializerBlock(buildCodeBlock(builder))
+    inline fun addInitializerBlock(builder: CodeBlockBuilder.() -> Unit) =
+        addInitializerBlock(buildCodeBlock(builder))
 
     val methods: MethodContainer = object : MethodContainer() {
         override fun plusAssign(spec: MethodSpec) {
@@ -180,17 +176,11 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
         }
     }
 
-    operator fun MethodContainer.invoke(builder: MethodBuilder.() -> Unit) {
-        object : MethodBuilder() {
-            override fun add(spec: MethodSpec) = plusAssign(spec)
-        }.apply(builder)
-    }
-
     override fun addType(spec: TypeSpec) {
         nativeBuilder.addType(spec)
     }
 
-    fun originatingElement(originatingElement: Element) {
+    fun addOriginatingElement(originatingElement: Element) {
         nativeBuilder.addOriginatingElement(originatingElement)
     }
 
