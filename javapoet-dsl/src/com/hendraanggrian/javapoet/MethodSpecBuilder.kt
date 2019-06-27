@@ -38,17 +38,17 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
     CodedSpecBuilder {
 
     override val javadocs: CodeContainer = object : CodeContainer() {
-        override fun plusAssign(block: CodeBlock) {
-            nativeBuilder.addJavadoc(block)
-        }
-
         override fun add(format: String, vararg args: Any) {
             nativeBuilder.addJavadoc(format, *args)
+        }
+
+        override fun add(block: CodeBlock) {
+            nativeBuilder.addJavadoc(block)
         }
     }
 
     override val annotations: AnnotationContainer = object : AnnotationContainer() {
-        override fun plusAssign(spec: AnnotationSpec) {
+        override fun add(spec: AnnotationSpec) {
             nativeBuilder.addAnnotation(spec)
         }
     }
@@ -80,7 +80,7 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
     inline fun <reified T> returns() = returns(T::class)
 
     val parameters: ParameterContainer = object : ParameterContainer() {
-        override fun plusAssign(spec: ParameterSpec) {
+        override fun add(spec: ParameterSpec) {
             nativeBuilder.addParameter(spec)
         }
     }
@@ -106,12 +106,12 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
     inline fun <reified T> addException() = addException(T::class)
 
     override val codes: CodeContainer = object : CodeContainer() {
-        override fun plusAssign(block: CodeBlock) {
-            nativeBuilder.addCode(block)
-        }
-
         override fun add(format: String, vararg args: Any) {
             nativeBuilder.addCode(format, *args)
+        }
+
+        override fun add(block: CodeBlock) {
+            nativeBuilder.addCode(block)
         }
     }
 
@@ -144,12 +144,12 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
     }
 
     override val statements: CodeContainer = object : CodeContainer() {
-        override fun plusAssign(block: CodeBlock) {
-            nativeBuilder.addStatement(block)
-        }
-
         override fun add(format: String, vararg args: Any) {
             nativeBuilder.addStatement(format, *args)
+        }
+
+        override fun add(block: CodeBlock) {
+            nativeBuilder.addStatement(block)
         }
     }
 

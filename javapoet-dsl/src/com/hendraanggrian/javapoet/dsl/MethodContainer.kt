@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package com.hendraanggrian.javapoet.dsl
 
 import com.hendraanggrian.javapoet.JavapoetDslMarker
@@ -6,28 +8,31 @@ import com.hendraanggrian.javapoet.buildConstructorMethodSpec
 import com.hendraanggrian.javapoet.buildMethodSpec
 import com.squareup.javapoet.MethodSpec
 
-abstract class MethodContainer {
+abstract class MethodContainer : MethodContainerDelegate {
 
-    abstract operator fun plusAssign(spec: MethodSpec)
+    operator fun plusAssign(spec: MethodSpec) = add(spec)
 
-    fun add(name: String, builder: (MethodSpecBuilder.() -> Unit)? = null) =
-        plusAssign(buildMethodSpec(name, builder))
-
-    fun addConstructor(builder: (MethodSpecBuilder.() -> Unit)? = null) =
-        plusAssign(buildConstructorMethodSpec(builder))
-
-    operator fun invoke(configuration: MethodContainerScope.() -> Unit) =
+    inline operator fun invoke(configuration: MethodContainerScope.() -> Unit) =
         configuration(MethodContainerScope(this))
 }
 
 @JavapoetDslMarker
-class MethodContainerScope internal constructor(private val container: MethodContainer) {
+class MethodContainerScope @PublishedApi internal constructor(private val container: MethodContainer) :
+    MethodContainerDelegate {
 
-    operator fun String.invoke(builder: (MethodSpecBuilder.() -> Unit)? = null) {
-        container += buildMethodSpec(this, builder)
-    }
+    override fun add(spec: MethodSpec) = container.add(spec)
 
-    fun constructor(builder: (MethodSpecBuilder.() -> Unit)? = null) {
-        container += buildConstructorMethodSpec(builder)
-    }
+    inline operator fun String.invoke(noinline builder: (MethodSpecBuilder.() -> Unit)? = null) =
+        add(this, builder)
+}
+
+internal interface MethodContainerDelegate {
+
+    fun add(spec: MethodSpec)
+
+    fun add(name: String, builder: (MethodSpecBuilder.() -> Unit)? = null) =
+        add(buildMethodSpec(name, builder))
+
+    fun addConstructor(builder: (MethodSpecBuilder.() -> Unit)? = null) =
+        add(buildConstructorMethodSpec(builder))
 }

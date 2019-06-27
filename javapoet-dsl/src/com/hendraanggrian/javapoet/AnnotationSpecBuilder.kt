@@ -28,12 +28,12 @@ class AnnotationSpecBuilder @PublishedApi internal constructor(private val nativ
     SpecBuilder<AnnotationSpec>() {
 
     val members: MemberContainer = object : MemberContainer() {
-        override fun add(name: String, block: CodeBlock) {
-            nativeBuilder.addMember(name, block)
-        }
-
         override fun add(name: String, format: String, vararg args: Any) {
             nativeBuilder.addMember(name, format, *args)
+        }
+
+        override fun add(name: String, block: CodeBlock) {
+            nativeBuilder.addMember(name, block)
         }
     }
 

@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package com.hendraanggrian.javapoet
 
 import com.hendraanggrian.javapoet.dsl.CodeContainer
@@ -16,9 +18,14 @@ class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuil
     ControlFlowedSpecBuilder,
     CodedSpecBuilder {
 
+    fun isEmpty(): Boolean = nativeBuilder.isEmpty
+
     fun addNamed(format: String, arguments: Map<String, *>) {
         nativeBuilder.addNamed(format, arguments)
     }
+
+    inline fun addNamed(format: String, vararg arguments: Pair<String, *>) =
+        addNamed(format, mapOf(*arguments))
 
     override fun beginControlFlow(format: String, vararg args: Any) {
         nativeBuilder.beginControlFlow(format, *args)
@@ -36,23 +43,23 @@ class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuil
         nativeBuilder.endControlFlow(format, *args)
     }
 
-    override val statements: CodeContainer = object : CodeContainer() {
-        override fun plusAssign(block: CodeBlock) {
-            nativeBuilder.addStatement(block)
+    override val codes: CodeContainer = object : CodeContainer() {
+        override fun add(format: String, vararg args: Any) {
+            nativeBuilder.add(format, *args)
         }
 
-        override fun add(format: String, vararg args: Any) {
-            nativeBuilder.addStatement(format, *args)
+        override fun add(block: CodeBlock) {
+            nativeBuilder.add(block)
         }
     }
 
-    override val codes: CodeContainer = object : CodeContainer() {
-        override fun plusAssign(block: CodeBlock) {
-            nativeBuilder.add(block)
+    override val statements: CodeContainer = object : CodeContainer() {
+        override fun add(format: String, vararg args: Any) {
+            nativeBuilder.addStatement(format, *args)
         }
 
-        override fun add(format: String, vararg args: Any) {
-            nativeBuilder.add(format, *args)
+        override fun add(block: CodeBlock) {
+            nativeBuilder.addStatement(block)
         }
     }
 

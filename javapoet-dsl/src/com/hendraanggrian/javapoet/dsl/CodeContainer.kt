@@ -5,29 +5,31 @@ import com.hendraanggrian.javapoet.JavapoetDslMarker
 import com.hendraanggrian.javapoet.buildCodeBlock
 import com.squareup.javapoet.CodeBlock
 
-abstract class CodeContainer {
-
-    abstract operator fun plusAssign(block: CodeBlock)
-
-    abstract fun add(format: String, vararg args: Any)
+abstract class CodeContainer : CodeContainerDelegate {
 
     operator fun plusAssign(value: String) = add(value)
 
-    fun add(builder: CodeBlockBuilder.() -> Unit) =
-        plusAssign(buildCodeBlock(builder))
+    operator fun plusAssign(block: CodeBlock) = add(block)
 
-    operator fun invoke(configuration: CodeContainerScope.() -> Unit) =
+    inline operator fun invoke(configuration: CodeContainerScope.() -> Unit) =
         configuration(CodeContainerScope(this))
 }
 
 @JavapoetDslMarker
-class CodeContainerScope internal constructor(private val container: CodeContainer) {
+class CodeContainerScope @PublishedApi internal constructor(private val container: CodeContainer) :
+    CodeContainerDelegate {
 
-    fun add(format: String, vararg args: Any) {
-        container.add(format, *args)
-    }
+    override fun add(format: String, vararg args: Any) = container.add(format, *args)
 
-    fun add(builder: CodeBlockBuilder.() -> Unit) {
-        container += buildCodeBlock(builder)
-    }
+    override fun add(block: CodeBlock) = container.add(block)
+}
+
+internal interface CodeContainerDelegate {
+
+    fun add(format: String, vararg args: Any)
+
+    fun add(block: CodeBlock)
+
+    fun add(builder: CodeBlockBuilder.() -> Unit) =
+        add(buildCodeBlock(builder))
 }

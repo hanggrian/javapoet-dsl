@@ -39,7 +39,7 @@ class ParameterSpecBuilder @PublishedApi internal constructor(private val native
     ModifieredSpecBuilder {
 
     override val annotations: AnnotationContainer = object : AnnotationContainer() {
-        override fun plusAssign(spec: AnnotationSpec) {
+        override fun add(spec: AnnotationSpec) {
             nativeBuilder.addAnnotation(spec)
         }
     }
