@@ -5,35 +5,11 @@
 
 JavaPoet DSL
 ============
-Write Java files in Kotlin DSL.
+Lightweight library that provides Kotlin DSL functionality to JavaPort. It's time to replace those old-fashioned Java builders.
 
-Download
---------
-```gradle
-repositories {
-    jcenter()
-}
-
-dependencies {
-    implementation "com.hendraanggrian:javapoet-dsl:$version"
-}
-```
-
-Usage
------
-Here's a boring `HelloWorld` again:
-
-```java
-package com.example.helloworld;
-
-public final class HelloWorld {
-  public static void main(String[] args) {
-    System.out.println("Hello, JavaPoet!");
-  }
-}
-```
-
-Here's how to write it in Kotlin DSL:
+ * Full of convenient methods to achieve minimum code writing possible.
+ * Options to invoke DSL. For example, `methods.add("main") { ... }` is as good as `methods { "main" { ... } }`. Scroll down for more information.
+ * Smooth transition with backwards compatibility. JavaPoet native specs (`TypeSpec`, `FieldSpec`, etc.) are still supported.
 
 ```kotlin
 buildJavaFile("com.example.helloworld") {
@@ -51,11 +27,74 @@ buildJavaFile("com.example.helloworld") {
 }.writeTo(System.out)
 ```
 
+Download
+--------
+```gradle
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation "com.hendraanggrian:javapoet-dsl:$version"
+}
+```
+
+Usage
+-----
+Coming soon.
+
+#### Optional DSL
+
+Some elements (field, method, parameter, etc.) are wrapped in container class. These containers have ability to add components with/without invoking DSL.
+
+For example, 2 examples below will produce the same result.
+
+```kotlin
+classType("Car") {
+    annotations {
+        SuppressWarnings::class {
+            members {
+                "value" {
+                    add("deprecation")
+                }
+            }
+        }
+    }
+    fields {
+        "wheels"<Int> {
+            initializer = "4"
+        }
+    }
+    methods {
+        "getWheels" {
+            returns<Int>()
+            statements {
+                add("return wheels")
+            }
+        }
+    }
+}
+
+classType("Car") {
+    annotations.add<SuppressWarnings> {
+        members.add("value", "deprecation")
+    }
+    fields.add<Int>("wheels") {
+        initializer = "4"
+    }
+    methods.add("getWheels") {
+        returns<Int>()
+        statements.add("return wheels")
+    }
+}
+```
+
 License
 -------
     Copyright 2019 Hendra Anggrian
 
-    Licensed under the Apache License, Version 2.0 (the "License");
+    Licensed under the Apache License
+, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 
