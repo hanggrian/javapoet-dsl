@@ -1,8 +1,8 @@
-package com.hendraanggrian.javapoet.container
+package com.hendraanggrian.javapoet.dsl
 
 import com.hendraanggrian.javapoet.CodeBlockBuilder
+import com.hendraanggrian.javapoet.JavapoetDslMarker
 import com.hendraanggrian.javapoet.buildCodeBlock
-import com.hendraanggrian.javapoet.scope.CodeContainerScope
 import com.squareup.javapoet.CodeBlock
 
 abstract class CodeContainer {
@@ -18,4 +18,16 @@ abstract class CodeContainer {
 
     operator fun invoke(configuration: CodeContainerScope.() -> Unit) =
         configuration(CodeContainerScope(this))
+}
+
+@JavapoetDslMarker
+class CodeContainerScope internal constructor(private val container: CodeContainer) {
+
+    fun add(format: String, vararg args: Any) {
+        container.add(format, *args)
+    }
+
+    fun add(builder: CodeBlockBuilder.() -> Unit) {
+        container += buildCodeBlock(builder)
+    }
 }

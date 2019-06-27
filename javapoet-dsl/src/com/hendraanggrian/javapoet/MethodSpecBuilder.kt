@@ -2,9 +2,9 @@
 
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.container.AnnotationContainer
-import com.hendraanggrian.javapoet.container.CodeContainer
-import com.hendraanggrian.javapoet.container.ParameterContainer
+import com.hendraanggrian.javapoet.dsl.AnnotationContainer
+import com.hendraanggrian.javapoet.dsl.CodeContainer
+import com.hendraanggrian.javapoet.dsl.ParameterContainer
 import com.hendraanggrian.javapoet.internal.SpecBuilder
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.CodeBlock
@@ -12,8 +12,8 @@ import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.ParameterSpec
 import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeVariableName
-import java.lang.reflect.Type
 import javax.lang.model.element.Modifier
+import kotlin.reflect.KClass
 
 /** Returns a method with custom initialization block. */
 fun buildMethodSpec(name: String, builder: (MethodSpecBuilder.() -> Unit)? = null): MethodSpec =
@@ -73,11 +73,11 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
             nativeBuilder.returns(value)
         }
 
-    fun returns(type: Type) {
-        nativeBuilder.returns(type)
+    fun returns(type: KClass<*>) {
+        nativeBuilder.returns(type.java)
     }
 
-    inline fun <reified T> returns() = returns(T::class.java)
+    inline fun <reified T> returns() = returns(T::class)
 
     val parameters: ParameterContainer = object : ParameterContainer() {
         override fun plusAssign(spec: ParameterSpec) {
@@ -91,19 +91,19 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
             nativeBuilder.varargs(value)
         }
 
-    fun addExceptions(exceptions: Iterable<TypeName>) {
-        nativeBuilder.addExceptions(exceptions)
+    fun addExceptions(names: Iterable<TypeName>) {
+        nativeBuilder.addExceptions(names)
     }
 
-    fun addException(exception: TypeName) {
-        nativeBuilder.addException(exception)
+    fun addException(name: TypeName) {
+        nativeBuilder.addException(name)
     }
 
-    fun addException(exception: Type) {
-        nativeBuilder.addException(exception)
+    fun addException(type: KClass<*>) {
+        nativeBuilder.addException(type.java)
     }
 
-    inline fun <reified T> addException() = addException(T::class.java)
+    inline fun <reified T> addException() = addException(T::class)
 
     override val codes: CodeContainer = object : CodeContainer() {
         override fun plusAssign(block: CodeBlock) {

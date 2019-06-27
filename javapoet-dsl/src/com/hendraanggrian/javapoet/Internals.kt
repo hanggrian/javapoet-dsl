@@ -2,8 +2,8 @@
 
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.container.AnnotationContainer
-import com.hendraanggrian.javapoet.container.CodeContainer
+import com.hendraanggrian.javapoet.dsl.AnnotationContainer
+import com.hendraanggrian.javapoet.dsl.CodeContainer
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.TypeSpec

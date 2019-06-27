@@ -1,7 +1,7 @@
 package com.hendraanggrian.javapoet.fromJavapoetReadme
 
 import com.hendraanggrian.javapoet.buildJavaFile
-import com.hendraanggrian.javapoet.scope.MethodContainerScope
+import com.hendraanggrian.javapoet.dsl.MethodContainerScope
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

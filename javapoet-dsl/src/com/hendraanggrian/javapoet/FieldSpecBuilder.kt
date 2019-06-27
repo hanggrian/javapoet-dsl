@@ -1,14 +1,14 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.container.AnnotationContainer
-import com.hendraanggrian.javapoet.container.CodeContainer
+import com.hendraanggrian.javapoet.dsl.AnnotationContainer
+import com.hendraanggrian.javapoet.dsl.CodeContainer
 import com.hendraanggrian.javapoet.internal.SpecBuilder
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.TypeName
-import java.lang.reflect.Type
 import javax.lang.model.element.Modifier
+import kotlin.reflect.KClass
 
 /** Returns a field with custom initialization block. */
 fun buildFieldSpec(type: TypeName, name: String, builder: (FieldSpecBuilder.() -> Unit)? = null): FieldSpec =
@@ -17,8 +17,8 @@ fun buildFieldSpec(type: TypeName, name: String, builder: (FieldSpecBuilder.() -
         .build()
 
 /** Returns a field with custom initialization block. */
-fun buildFieldSpec(type: Type, name: String, builder: (FieldSpecBuilder.() -> Unit)? = null): FieldSpec =
-    FieldSpecBuilder(FieldSpec.builder(type, name))
+fun buildFieldSpec(type: KClass<*>, name: String, builder: (FieldSpecBuilder.() -> Unit)? = null): FieldSpec =
+    FieldSpecBuilder(FieldSpec.builder(type.java, name))
         .also { builder?.invoke(it) }
         .build()
 
@@ -26,7 +26,7 @@ fun buildFieldSpec(type: Type, name: String, builder: (FieldSpecBuilder.() -> Un
 inline fun <reified T> buildFieldSpec(
     name: String,
     noinline builder: (FieldSpecBuilder.() -> Unit)? = null
-): FieldSpec = buildFieldSpec(T::class.java, name, builder)
+): FieldSpec = buildFieldSpec(T::class, name, builder)
 
 @JavapoetDslMarker
 class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: FieldSpec.Builder) :

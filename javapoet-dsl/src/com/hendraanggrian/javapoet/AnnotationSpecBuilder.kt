@@ -1,10 +1,11 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.container.MemberContainer
+import com.hendraanggrian.javapoet.dsl.MemberContainer
 import com.hendraanggrian.javapoet.internal.SpecBuilder
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
+import kotlin.reflect.KClass
 
 /** Returns an annotation with custom initialization block. */
 fun buildAnnotationSpec(name: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
@@ -13,14 +14,14 @@ fun buildAnnotationSpec(name: ClassName, builder: (AnnotationSpecBuilder.() -> U
         .build()
 
 /** Returns an annotation with custom initialization block. */
-fun buildAnnotationSpec(type: Class<*>, builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
-    AnnotationSpecBuilder(AnnotationSpec.builder(type))
+fun buildAnnotationSpec(type: KClass<*>, builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
+    AnnotationSpecBuilder(AnnotationSpec.builder(type.java))
         .also { builder?.invoke(it) }
         .build()
 
 /** Returns an annotation with custom initialization block. */
 inline fun <reified T> buildAnnotationSpec(noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
-    buildAnnotationSpec(T::class.java, builder)
+    buildAnnotationSpec(T::class, builder)
 
 @JavapoetDslMarker
 class AnnotationSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: AnnotationSpec.Builder) :

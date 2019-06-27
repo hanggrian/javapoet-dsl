@@ -2,10 +2,10 @@
 
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.container.AnnotationContainer
-import com.hendraanggrian.javapoet.container.CodeContainer
-import com.hendraanggrian.javapoet.container.FieldContainer
-import com.hendraanggrian.javapoet.container.MethodContainer
+import com.hendraanggrian.javapoet.dsl.AnnotationContainer
+import com.hendraanggrian.javapoet.dsl.CodeContainer
+import com.hendraanggrian.javapoet.dsl.FieldContainer
+import com.hendraanggrian.javapoet.dsl.MethodContainer
 import com.hendraanggrian.javapoet.internal.SpecBuilder
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
@@ -15,9 +15,9 @@ import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeSpec
 import com.squareup.javapoet.TypeVariableName
-import java.lang.reflect.Type
 import javax.lang.model.element.Element
 import javax.lang.model.element.Modifier
+import kotlin.reflect.KClass
 
 /** Returns a class type builder with custom initialization block. */
 fun buildClassTypeSpec(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
@@ -124,23 +124,23 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
             nativeBuilder.superclass(value)
         }
 
-    fun superClass(type: Type) {
-        nativeBuilder.superclass(type)
+    fun superClass(type: KClass<*>) {
+        nativeBuilder.superclass(type.java)
     }
 
     inline fun <reified T> superClass() =
-        superClass(T::class.java)
+        superClass(T::class)
 
     fun addSuperInterface(name: TypeName) {
         nativeBuilder.addSuperinterface(name)
     }
 
-    fun addSuperInterface(type: Type) {
-        nativeBuilder.addSuperinterface(type)
+    fun addSuperInterface(type: KClass<*>) {
+        nativeBuilder.addSuperinterface(type.java)
     }
 
     inline fun <reified T> addSuperInterface() =
-        addSuperInterface(T::class.java)
+        addSuperInterface(T::class)
 
     fun addEnumConstant(name: String) {
         nativeBuilder.addEnumConstant(name)

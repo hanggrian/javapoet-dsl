@@ -3,6 +3,7 @@ package com.hendraanggrian.javapoet
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.TypeSpec
+import kotlin.reflect.KClass
 
 /** Returns a java file with custom initialization block. */
 inline fun buildJavaFile(packageName: String, builder: JavaFileBuilder.() -> Unit): JavaFile =
@@ -50,7 +51,7 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
     }
 
     /** Add static imports to this file. */
-    fun staticImports(type: Class<*>, vararg names: String) {
+    fun staticImports(type: KClass<*>, vararg names: String) {
         if (staticImports == null) {
             staticImports = mutableListOf()
         }
@@ -58,7 +59,7 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
     }
 
     /** Add static imports to this file. */
-    inline fun <reified T> staticImports(vararg names: String) = staticImports(T::class.java, *names)
+    inline fun <reified T> staticImports(vararg names: String) = staticImports(T::class, *names)
 
     var skipJavaLangImports: Boolean
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
@@ -77,7 +78,7 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
                 when (type) {
                     is Enum<*> -> addStaticImport(type)
                     is ClassName -> addStaticImport(type, *names)
-                    is Class<*> -> addStaticImport(type, *names)
+                    is KClass<*> -> addStaticImport(type.java, *names)
                 }
             }
             _skipJavaLangImports?.let { skipJavaLangImports(it) }
