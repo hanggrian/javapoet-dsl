@@ -9,7 +9,7 @@ import com.squareup.javapoet.ParameterSpec
 import com.squareup.javapoet.TypeName
 import kotlin.reflect.KClass
 
-abstract class ParameterContainer : ParameterContainerDelegate {
+abstract class ParameterContainer internal constructor() : ParameterContainerDelegate {
 
     inline operator fun plusAssign(spec: ParameterSpec) = add(spec)
 
@@ -30,13 +30,13 @@ class ParameterContainerScope @PublishedApi internal constructor(private val con
 
     override fun add(spec: ParameterSpec) = container.add(spec)
 
-    inline operator fun String.invoke(type: TypeName, noinline builder: (ParameterSpecBuilder.() -> Unit)? = null) =
+    inline operator fun String.invoke(type: TypeName, noinline builder: ParameterSpecBuilder.() -> Unit) =
         add(type, this, builder)
 
-    inline operator fun String.invoke(type: KClass<*>, noinline builder: (ParameterSpecBuilder.() -> Unit)? = null) =
+    inline operator fun String.invoke(type: KClass<*>, noinline builder: ParameterSpecBuilder.() -> Unit) =
         add(type, this, builder)
 
-    inline operator fun <reified T> String.invoke(noinline builder: (ParameterSpecBuilder.() -> Unit)? = null) =
+    inline operator fun <reified T> String.invoke(noinline builder: ParameterSpecBuilder.() -> Unit) =
         invoke(T::class, builder)
 }
 

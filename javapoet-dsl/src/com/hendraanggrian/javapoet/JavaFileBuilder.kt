@@ -1,5 +1,6 @@
 package com.hendraanggrian.javapoet
 
+import com.hendraanggrian.javapoet.dsl.TypeContainerDelegate
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.TypeSpec
@@ -12,7 +13,7 @@ inline fun buildJavaFile(packageName: String, builder: JavaFileBuilder.() -> Uni
         .build()
 
 @JavapoetDslMarker
-class JavaFileBuilder @PublishedApi internal constructor(private val packageName: String) : TypedSpecBuilder {
+class JavaFileBuilder @PublishedApi internal constructor(private val packageName: String) : TypeContainerDelegate {
     private var type: TypeSpec? = null
     private var comments: MutableMap<String, Array<Any>>? = null
     private var staticImports: MutableList<Pair<Any, Array<String>>>? = null
@@ -67,7 +68,8 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
             _skipJavaLangImports = value
         }
 
-    override fun addType(spec: TypeSpec) {
+    override fun add(spec: TypeSpec) {
+        check(type == null) { "Java file may only have 1 type" }
         type = spec
     }
 

@@ -7,7 +7,7 @@ import com.hendraanggrian.javapoet.JavapoetDslMarker
 import com.hendraanggrian.javapoet.buildCodeBlock
 import com.squareup.javapoet.CodeBlock
 
-abstract class MemberContainer : MemberContainerDelegate {
+abstract class MemberContainer internal constructor() : MemberContainerDelegate {
 
     inline operator fun set(name: String, format: String) = add(name, format)
 

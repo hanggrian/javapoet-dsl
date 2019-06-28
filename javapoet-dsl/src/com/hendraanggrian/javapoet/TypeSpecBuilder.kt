@@ -6,6 +6,7 @@ import com.hendraanggrian.javapoet.dsl.AnnotationContainer
 import com.hendraanggrian.javapoet.dsl.CodeContainer
 import com.hendraanggrian.javapoet.dsl.FieldContainer
 import com.hendraanggrian.javapoet.dsl.MethodContainer
+import com.hendraanggrian.javapoet.dsl.TypeContainer
 import com.hendraanggrian.javapoet.internal.SpecBuilder
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
@@ -81,14 +82,9 @@ fun buildAnnotationTypeSpec(type: ClassName, builder: (TypeSpecBuilder.() -> Uni
 
 @JavapoetDslMarker
 class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: TypeSpec.Builder) :
-    SpecBuilder<TypeSpec>(),
-    JavadocedSpecBuilder,
-    AnnotatedSpecBuilder,
-    ModifieredSpecBuilder,
-    TypeVariabledSpecBuilder,
-    TypedSpecBuilder {
+    SpecBuilder<TypeSpec>(), ModifieredSpecBuilder {
 
-    override val javadocs: CodeContainer = object : CodeContainer() {
+    val javadocs: CodeContainer = object : CodeContainer() {
         override fun add(format: String, vararg args: Any) {
             nativeBuilder.addJavadoc(format, *args)
         }
@@ -98,7 +94,7 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
         }
     }
 
-    override val annotations: AnnotationContainer = object : AnnotationContainer() {
+    val annotations: AnnotationContainer = object : AnnotationContainer() {
         override fun add(spec: AnnotationSpec) {
             nativeBuilder.addAnnotation(spec)
         }
@@ -110,11 +106,11 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
             nativeBuilder.addModifiers(*value.toTypedArray())
         }
 
-    override fun addTypeVariable(name: TypeVariableName) {
+    fun addTypeVariable(name: TypeVariableName) {
         nativeBuilder.addTypeVariable(name)
     }
 
-    override fun addTypeVariables(names: Iterable<TypeVariableName>) {
+    fun addTypeVariables(names: Iterable<TypeVariableName>) {
         nativeBuilder.addTypeVariables(names)
     }
 
@@ -151,9 +147,7 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
     }
 
     val fields: FieldContainer = object : FieldContainer() {
-        override fun add(spec: FieldSpec) {
-            nativeBuilder.addField(spec)
-        }
+        override fun add(spec: FieldSpec): FieldSpec = spec.also { nativeBuilder.addField(it) }
     }
 
     fun addStaticBlock(block: CodeBlock) {
@@ -176,8 +170,10 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
         }
     }
 
-    override fun addType(spec: TypeSpec) {
-        nativeBuilder.addType(spec)
+    val types: TypeContainer = object : TypeContainer() {
+        override fun add(spec: TypeSpec) {
+            nativeBuilder.addType(spec)
+        }
     }
 
     fun addOriginatingElement(originatingElement: Element) {

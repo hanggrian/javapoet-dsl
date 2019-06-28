@@ -30,14 +30,9 @@ fun buildConstructorMethodSpec(builder: (MethodSpecBuilder.() -> Unit)? = null):
 @JavapoetDslMarker
 class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: MethodSpec.Builder) :
     SpecBuilder<MethodSpec>(),
-    JavadocedSpecBuilder,
-    AnnotatedSpecBuilder,
-    ModifieredSpecBuilder,
-    TypeVariabledSpecBuilder,
-    ControlFlowedSpecBuilder,
-    CodedSpecBuilder {
+    ModifieredSpecBuilder {
 
-    override val javadocs: CodeContainer = object : CodeContainer() {
+    val javadocs: CodeContainer = object : CodeContainer() {
         override fun add(format: String, vararg args: Any) {
             nativeBuilder.addJavadoc(format, *args)
         }
@@ -47,7 +42,7 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
         }
     }
 
-    override val annotations: AnnotationContainer = object : AnnotationContainer() {
+    val annotations: AnnotationContainer = object : AnnotationContainer() {
         override fun add(spec: AnnotationSpec) {
             nativeBuilder.addAnnotation(spec)
         }
@@ -59,11 +54,11 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
             nativeBuilder.addModifiers(*value.toTypedArray())
         }
 
-    override fun addTypeVariable(name: TypeVariableName) {
+    fun addTypeVariable(name: TypeVariableName) {
         nativeBuilder.addTypeVariable(name)
     }
 
-    override fun addTypeVariables(names: Iterable<TypeVariableName>) {
+    fun addTypeVariables(names: Iterable<TypeVariableName>) {
         nativeBuilder.addTypeVariables(names)
     }
 
@@ -105,7 +100,7 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
 
     inline fun <reified T> addException() = addException(T::class)
 
-    override val codes: CodeContainer = object : CodeContainer() {
+    val codes: CodeContainer = object : CodeContainer() {
         override fun add(format: String, vararg args: Any) {
             nativeBuilder.addCode(format, *args)
         }
@@ -127,23 +122,23 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
         set(value) = defaultValue(value)
 
-    override fun beginControlFlow(format: String, vararg args: Any) {
+    fun beginControlFlow(format: String, vararg args: Any) {
         nativeBuilder.beginControlFlow(format, *args)
     }
 
-    override fun nextControlFlow(format: String, vararg args: Any) {
+    fun nextControlFlow(format: String, vararg args: Any) {
         nativeBuilder.nextControlFlow(format, *args)
     }
 
-    override fun endControlFlow() {
+    fun endControlFlow() {
         nativeBuilder.endControlFlow()
     }
 
-    override fun endControlFlow(format: String, vararg args: Any) {
+    fun endControlFlow(format: String, vararg args: Any) {
         nativeBuilder.endControlFlow(format, *args)
     }
 
-    override val statements: CodeContainer = object : CodeContainer() {
+    val statements: CodeContainer = object : CodeContainer() {
         override fun add(format: String, vararg args: Any) {
             nativeBuilder.addStatement(format, *args)
         }

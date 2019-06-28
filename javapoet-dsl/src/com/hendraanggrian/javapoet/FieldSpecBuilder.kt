@@ -31,11 +31,9 @@ inline fun <reified T> buildFieldSpec(
 @JavapoetDslMarker
 class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: FieldSpec.Builder) :
     SpecBuilder<FieldSpec>(),
-    JavadocedSpecBuilder,
-    AnnotatedSpecBuilder,
     ModifieredSpecBuilder {
 
-    override val javadocs: CodeContainer = object : CodeContainer() {
+    val javadocs: CodeContainer = object : CodeContainer() {
         override fun add(format: String, vararg args: Any) {
             nativeBuilder.addJavadoc(format, *args)
         }
@@ -45,7 +43,7 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
         }
     }
 
-    override val annotations: AnnotationContainer = object : AnnotationContainer() {
+    val annotations: AnnotationContainer = object : AnnotationContainer() {
         override fun add(spec: AnnotationSpec) {
             nativeBuilder.addAnnotation(spec)
         }

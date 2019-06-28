@@ -34,11 +34,9 @@ inline fun <reified T> buildParameterSpec(
 
 @JavapoetDslMarker
 class ParameterSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: ParameterSpec.Builder) :
-    SpecBuilder<ParameterSpec>(),
-    AnnotatedSpecBuilder,
-    ModifieredSpecBuilder {
+    SpecBuilder<ParameterSpec>(), ModifieredSpecBuilder {
 
-    override val annotations: AnnotationContainer = object : AnnotationContainer() {
+    val annotations: AnnotationContainer = object : AnnotationContainer() {
         override fun add(spec: AnnotationSpec) {
             nativeBuilder.addAnnotation(spec)
         }

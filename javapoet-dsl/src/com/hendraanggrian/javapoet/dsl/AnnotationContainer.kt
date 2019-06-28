@@ -9,7 +9,7 @@ import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
 import kotlin.reflect.KClass
 
-abstract class AnnotationContainer : AnnotationContainerDelegate {
+abstract class AnnotationContainer internal constructor() : AnnotationContainerDelegate {
 
     inline operator fun plusAssign(spec: AnnotationSpec) = add(spec)
 

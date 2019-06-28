@@ -41,7 +41,7 @@ dependencies {
 
 Usage
 -----
-Coming soon.
+Description coming soon.
 
 #### Optional DSL
 

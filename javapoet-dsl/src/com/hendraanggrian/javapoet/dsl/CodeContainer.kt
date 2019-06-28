@@ -7,14 +7,13 @@ import com.hendraanggrian.javapoet.JavapoetDslMarker
 import com.hendraanggrian.javapoet.buildCodeBlock
 import com.squareup.javapoet.CodeBlock
 
-abstract class CodeContainer : CodeContainerDelegate {
+abstract class CodeContainer internal constructor() : CodeContainerDelegate {
 
     inline operator fun plusAssign(value: String) = add(value)
 
     inline operator fun plusAssign(block: CodeBlock) = add(block)
 
-    inline operator fun invoke(configuration: CodeContainerScope.() -> Unit) =
-        configuration(CodeContainerScope(this))
+    inline operator fun invoke(configuration: CodeContainerScope.() -> Unit) = configuration(CodeContainerScope(this))
 }
 
 @JavapoetDslMarker

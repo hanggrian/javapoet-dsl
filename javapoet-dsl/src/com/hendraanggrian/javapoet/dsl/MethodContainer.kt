@@ -8,7 +8,7 @@ import com.hendraanggrian.javapoet.buildConstructorMethodSpec
 import com.hendraanggrian.javapoet.buildMethodSpec
 import com.squareup.javapoet.MethodSpec
 
-abstract class MethodContainer : MethodContainerDelegate {
+abstract class MethodContainer internal constructor() : MethodContainerDelegate {
 
     inline operator fun plusAssign(spec: MethodSpec) = add(spec)
 
@@ -24,16 +24,14 @@ class MethodContainerScope @PublishedApi internal constructor(private val contai
 
     override fun add(spec: MethodSpec) = container.add(spec)
 
-    inline operator fun String.invoke(noinline builder: (MethodSpecBuilder.() -> Unit)? = null) = add(this, builder)
+    inline operator fun String.invoke(noinline builder: MethodSpecBuilder.() -> Unit) = add(this, builder)
 }
 
 internal interface MethodContainerDelegate {
 
     fun add(spec: MethodSpec)
 
-    fun add(name: String, builder: (MethodSpecBuilder.() -> Unit)? = null) =
-        add(buildMethodSpec(name, builder))
+    fun add(name: String, builder: (MethodSpecBuilder.() -> Unit)? = null) = add(buildMethodSpec(name, builder))
 
-    fun addConstructor(builder: (MethodSpecBuilder.() -> Unit)? = null) =
-        add(buildConstructorMethodSpec(builder))
+    fun addConstructor(builder: (MethodSpecBuilder.() -> Unit)? = null) = add(buildConstructorMethodSpec(builder))
 }

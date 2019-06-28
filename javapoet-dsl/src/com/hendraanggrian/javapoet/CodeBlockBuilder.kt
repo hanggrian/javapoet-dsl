@@ -14,9 +14,7 @@ inline fun buildCodeBlock(builder: CodeBlockBuilder.() -> Unit): CodeBlock =
 
 @JavapoetDslMarker
 class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuilder: CodeBlock.Builder) :
-    SpecBuilder<CodeBlock>(),
-    ControlFlowedSpecBuilder,
-    CodedSpecBuilder {
+    SpecBuilder<CodeBlock>() {
 
     fun isEmpty(): Boolean = nativeBuilder.isEmpty
 
@@ -24,26 +22,25 @@ class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuil
         nativeBuilder.addNamed(format, arguments)
     }
 
-    inline fun addNamed(format: String, vararg arguments: Pair<String, *>) =
-        addNamed(format, mapOf(*arguments))
+    inline fun addNamed(format: String, vararg arguments: Pair<String, *>) = addNamed(format, mapOf(*arguments))
 
-    override fun beginControlFlow(format: String, vararg args: Any) {
+    fun beginControlFlow(format: String, vararg args: Any) {
         nativeBuilder.beginControlFlow(format, *args)
     }
 
-    override fun nextControlFlow(format: String, vararg args: Any) {
+    fun nextControlFlow(format: String, vararg args: Any) {
         nativeBuilder.nextControlFlow(format, *args)
     }
 
-    override fun endControlFlow() {
+    fun endControlFlow() {
         nativeBuilder.endControlFlow()
     }
 
-    override fun endControlFlow(format: String, vararg args: Any) {
+    fun endControlFlow(format: String, vararg args: Any) {
         nativeBuilder.endControlFlow(format, *args)
     }
 
-    override val codes: CodeContainer = object : CodeContainer() {
+    val codes: CodeContainer = object : CodeContainer() {
         override fun add(format: String, vararg args: Any) {
             nativeBuilder.add(format, *args)
         }
@@ -53,7 +50,7 @@ class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuil
         }
     }
 
-    override val statements: CodeContainer = object : CodeContainer() {
+    val statements: CodeContainer = object : CodeContainer() {
         override fun add(format: String, vararg args: Any) {
             nativeBuilder.addStatement(format, *args)
         }

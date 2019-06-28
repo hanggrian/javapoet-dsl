@@ -32,7 +32,7 @@ class `$SforStringsTest` {
 
             """.trimIndent(),
             buildJavaFile("com.example") {
-                classType("HelloWorld") {
+                addClassType("HelloWorld") {
                     modifiers = public + final
                     methods {
                         nameMethod("slimShady")
