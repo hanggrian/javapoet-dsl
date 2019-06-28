@@ -9,24 +9,25 @@ import com.squareup.javapoet.CodeBlock
 
 abstract class MemberContainer : MemberContainerDelegate {
 
-    operator fun invoke(configuration: MemberContainerScope.() -> Unit) =
+    inline operator fun set(name: String, format: String) = add(name, format)
+
+    inline operator fun set(name: String, block: CodeBlock) = add(name, block)
+
+    inline operator fun invoke(configuration: MemberContainerScope.() -> Unit) =
         configuration(MemberContainerScope(this))
 }
 
 @JavapoetDslMarker
-class MemberContainerScope internal constructor(private val container: MemberContainer) : MemberContainerDelegate {
+class MemberContainerScope @PublishedApi internal constructor(private val container: MemberContainer) :
+    MemberContainerDelegate {
 
-    override fun add(name: String, format: String, vararg args: Any) =
-        container.add(name, format, *args)
+    override fun add(name: String, format: String, vararg args: Any) = container.add(name, format, *args)
 
-    override fun add(name: String, block: CodeBlock) =
-        container.add(name, block)
+    override fun add(name: String, block: CodeBlock) = container.add(name, block)
 
-    inline operator fun String.invoke(format: String, vararg args: Any) =
-        add(this, format, *args)
+    inline operator fun String.invoke(format: String, vararg args: Any) = add(this, format, *args)
 
-    inline operator fun String.invoke(noinline builder: CodeBlockBuilder.() -> Unit) =
-        add(this, builder)
+    inline operator fun String.invoke(noinline builder: CodeBlockBuilder.() -> Unit) = add(this, builder)
 }
 
 internal interface MemberContainerDelegate {
@@ -35,6 +36,5 @@ internal interface MemberContainerDelegate {
 
     fun add(name: String, block: CodeBlock)
 
-    fun add(name: String, builder: CodeBlockBuilder.() -> Unit) =
-        add(name, buildCodeBlock(builder))
+    fun add(name: String, builder: CodeBlockBuilder.() -> Unit) = add(name, buildCodeBlock(builder))
 }

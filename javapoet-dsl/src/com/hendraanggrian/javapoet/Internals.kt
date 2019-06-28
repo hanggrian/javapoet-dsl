@@ -38,24 +38,24 @@ internal interface TypedSpecBuilder {
         addType(buildClassTypeSpec(name, builder))
 
     /** Add class type to this spec builder. */
-    fun classType(name: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null) =
-        addType(buildClassTypeSpec(name, builder))
+    fun classType(type: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null) =
+        addType(buildClassTypeSpec(type, builder))
 
     /** Add interface type to this spec builder. */
     fun interfaceType(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null) =
         addType(buildInterfaceTypeSpec(name, builder))
 
     /** Add interface type to this spec builder. */
-    fun interfaceType(name: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null) =
-        addType(buildInterfaceTypeSpec(name, builder))
+    fun interfaceType(type: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null) =
+        addType(buildInterfaceTypeSpec(type, builder))
 
     /** Add enum type to this spec builder. */
     fun enumType(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null) =
         addType(buildEnumTypeSpec(name, builder))
 
     /** Add enum type to this spec builder. */
-    fun enumType(name: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null) =
-        addType(buildEnumTypeSpec(name, builder))
+    fun enumType(type: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null) =
+        addType(buildEnumTypeSpec(type, builder))
 
     /** Add anonymous type to this spec builder. */
     fun anonymousType(format: String, vararg args: Any, builder: (TypeSpecBuilder.() -> Unit)? = null) =
@@ -70,8 +70,8 @@ internal interface TypedSpecBuilder {
         addType(buildAnnotationTypeSpec(name, builder))
 
     /** Add annotation type to this spec builder. */
-    fun annotationType(name: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null) =
-        addType(buildAnnotationTypeSpec(name, builder))
+    fun annotationType(type: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null) =
+        addType(buildAnnotationTypeSpec(type, builder))
 }
 
 internal interface JavadocedSpecBuilder {

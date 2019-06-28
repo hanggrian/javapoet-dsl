@@ -26,8 +26,8 @@ fun buildClassTypeSpec(name: String, builder: (TypeSpecBuilder.() -> Unit)? = nu
         .build()
 
 /** Returns a class type builder with custom initialization block. */
-fun buildClassTypeSpec(name: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
-    TypeSpecBuilder(TypeSpec.classBuilder(name))
+fun buildClassTypeSpec(type: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
+    TypeSpecBuilder(TypeSpec.classBuilder(type))
         .also { builder?.invoke(it) }
         .build()
 
@@ -38,8 +38,8 @@ fun buildInterfaceTypeSpec(name: String, builder: (TypeSpecBuilder.() -> Unit)? 
         .build()
 
 /** Returns an interface type builder with custom initialization block. */
-fun buildInterfaceTypeSpec(name: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
-    TypeSpecBuilder(TypeSpec.interfaceBuilder(name))
+fun buildInterfaceTypeSpec(type: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
+    TypeSpecBuilder(TypeSpec.interfaceBuilder(type))
         .also { builder?.invoke(it) }
         .build()
 
@@ -50,8 +50,8 @@ fun buildEnumTypeSpec(name: String, builder: (TypeSpecBuilder.() -> Unit)? = nul
         .build()
 
 /** Returns an enum type builder with custom initialization block. */
-fun buildEnumTypeSpec(name: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
-    TypeSpecBuilder(TypeSpec.enumBuilder(name))
+fun buildEnumTypeSpec(type: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
+    TypeSpecBuilder(TypeSpec.enumBuilder(type))
         .also { builder?.invoke(it) }
         .build()
 
@@ -74,8 +74,8 @@ fun buildAnnotationTypeSpec(name: String, builder: (TypeSpecBuilder.() -> Unit)?
         .build()
 
 /** Returns an annotation type builder with custom initialization block. */
-fun buildAnnotationTypeSpec(name: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
-    TypeSpecBuilder(TypeSpec.annotationBuilder(name))
+fun buildAnnotationTypeSpec(type: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
+    TypeSpecBuilder(TypeSpec.annotationBuilder(type))
         .also { builder?.invoke(it) }
         .build()
 
@@ -131,8 +131,8 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
     inline fun <reified T> superClass() =
         superClass(T::class)
 
-    fun addSuperInterface(name: TypeName) {
-        nativeBuilder.addSuperinterface(name)
+    fun addSuperInterface(type: TypeName) {
+        nativeBuilder.addSuperinterface(type)
     }
 
     fun addSuperInterface(type: KClass<*>) {

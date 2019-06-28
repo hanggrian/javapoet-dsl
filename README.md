@@ -72,6 +72,14 @@ classType("Car") {
                 add("return wheels")
             }
         }
+        "setWheels" {
+            parameters {
+                add(Int::class, "wheels")
+            }
+            statements {
+                add("this.wheels = wheels")
+            }
+        }
     }
 }
 
@@ -86,6 +94,10 @@ classType("Car") {
         returns<Int>()
         statements.add("return wheels")
     }
+    methods.add("setWheels") {
+        parameters["wheels"] = Int::class
+        statements.add("this.wheels = wheels")
+    }
 }
 ```
 
@@ -93,8 +105,7 @@ License
 -------
     Copyright 2019 Hendra Anggrian
 
-    Licensed under the Apache License
-, Version 2.0 (the "License");
+    Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
 

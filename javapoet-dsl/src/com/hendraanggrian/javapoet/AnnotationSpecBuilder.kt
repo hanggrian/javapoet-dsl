@@ -8,8 +8,8 @@ import com.squareup.javapoet.CodeBlock
 import kotlin.reflect.KClass
 
 /** Returns an annotation with custom initialization block. */
-fun buildAnnotationSpec(name: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
-    AnnotationSpecBuilder(AnnotationSpec.builder(name))
+fun buildAnnotationSpec(type: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
+    AnnotationSpecBuilder(AnnotationSpec.builder(type))
         .also { builder?.invoke(it) }
         .build()
 

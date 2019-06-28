@@ -91,12 +91,12 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
             nativeBuilder.varargs(value)
         }
 
-    fun addExceptions(names: Iterable<TypeName>) {
-        nativeBuilder.addExceptions(names)
+    fun addExceptions(types: Iterable<TypeName>) {
+        nativeBuilder.addExceptions(types)
     }
 
-    fun addException(name: TypeName) {
-        nativeBuilder.addException(name)
+    fun addException(type: TypeName) {
+        nativeBuilder.addException(type)
     }
 
     fun addException(type: KClass<*>) {

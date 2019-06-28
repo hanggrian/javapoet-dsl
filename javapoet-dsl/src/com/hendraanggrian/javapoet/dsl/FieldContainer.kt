@@ -11,7 +11,11 @@ import kotlin.reflect.KClass
 
 abstract class FieldContainer : FieldContainerDelegate {
 
-    operator fun plusAssign(spec: FieldSpec) = add(spec)
+    inline operator fun plusAssign(spec: FieldSpec) = add(spec)
+
+    inline operator fun set(name: String, type: TypeName) = add(type, name)
+
+    inline operator fun set(name: String, type: KClass<*>) = add(type, name)
 
     inline fun <reified T> add(name: String, noinline builder: (FieldSpecBuilder.() -> Unit)? = null) =
         add(T::class, name, builder)
