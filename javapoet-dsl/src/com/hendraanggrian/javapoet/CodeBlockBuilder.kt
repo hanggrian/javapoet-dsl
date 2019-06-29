@@ -45,9 +45,7 @@ class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuil
             nativeBuilder.add(format, *args)
         }
 
-        override fun add(block: CodeBlock) {
-            nativeBuilder.add(block)
-        }
+        override fun add(block: CodeBlock): CodeBlock = block.also { nativeBuilder.add(it) }
     }
 
     val statements: CodeContainer = object : CodeContainer() {
@@ -55,9 +53,7 @@ class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuil
             nativeBuilder.addStatement(format, *args)
         }
 
-        override fun add(block: CodeBlock) {
-            nativeBuilder.addStatement(block)
-        }
+        override fun add(block: CodeBlock): CodeBlock = block.also { nativeBuilder.addStatement(it) }
     }
 
     fun indent() {

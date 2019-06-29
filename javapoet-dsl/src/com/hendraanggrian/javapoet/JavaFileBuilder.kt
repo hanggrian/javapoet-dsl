@@ -68,9 +68,9 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
             _skipJavaLangImports = value
         }
 
-    override fun add(spec: TypeSpec) {
+    override fun add(spec: TypeSpec): TypeSpec = spec.also {
         check(type == null) { "Java file may only have 1 type" }
-        type = spec
+        type = it
     }
 
     fun build(): JavaFile = JavaFile.builder(packageName, checkNotNull(type) { "A main type must be initialized" })

@@ -15,7 +15,9 @@ import com.squareup.javapoet.TypeSpec
 
 abstract class TypeContainer internal constructor() : TypeContainerDelegate {
 
-    inline operator fun plusAssign(spec: TypeSpec) = add(spec)
+    inline operator fun plusAssign(spec: TypeSpec) {
+        add(spec)
+    }
 
     inline operator fun invoke(configuration: TypeContainerScope.() -> Unit) =
         configuration(TypeContainerScope(this))
@@ -25,51 +27,57 @@ abstract class TypeContainer internal constructor() : TypeContainerDelegate {
 class TypeContainerScope @PublishedApi internal constructor(private val container: TypeContainer) :
     TypeContainerDelegate {
 
-    override fun add(spec: TypeSpec) = container.add(spec)
+    override fun add(spec: TypeSpec): TypeSpec = container.add(spec)
+
+    inline operator fun String.invoke(noinline builder: TypeSpecBuilder.() -> Unit): TypeSpec =
+        addClass(this, builder)
+
+    inline operator fun ClassName.invoke(noinline builder: TypeSpecBuilder.() -> Unit): TypeSpec =
+        addClass(this, builder)
 }
 
 internal interface TypeContainerDelegate {
 
     /** Add type to this spec builder. */
-    fun add(spec: TypeSpec)
+    fun add(spec: TypeSpec): TypeSpec
 
     /** Add class type to this spec builder. */
-    fun addClassType(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null) =
+    fun addClass(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
         add(buildClassTypeSpec(name, builder))
 
     /** Add class type to this spec builder. */
-    fun addClassType(type: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null) =
+    fun addClass(type: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
         add(buildClassTypeSpec(type, builder))
 
     /** Add interface type to this spec builder. */
-    fun addInterfaceType(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null) =
+    fun addInterface(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
         add(buildInterfaceTypeSpec(name, builder))
 
     /** Add interface type to this spec builder. */
-    fun addInterfaceType(type: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null) =
+    fun addInterface(type: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
         add(buildInterfaceTypeSpec(type, builder))
 
     /** Add enum type to this spec builder. */
-    fun addEnumType(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null) =
+    fun addEnum(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
         add(buildEnumTypeSpec(name, builder))
 
     /** Add enum type to this spec builder. */
-    fun addEnumType(type: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null) =
+    fun addEnum(type: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
         add(buildEnumTypeSpec(type, builder))
 
     /** Add anonymous type to this spec builder. */
-    fun addAnonymousType(format: String, vararg args: Any, builder: (TypeSpecBuilder.() -> Unit)? = null) =
+    fun addAnonymous(format: String, vararg args: Any, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
         add(buildAnonymousTypeSpec(format, *args, builder = builder))
 
     /** Add anonymous type to this spec builder. */
-    fun addAnonymousType(block: CodeBlock, builder: (TypeSpecBuilder.() -> Unit)? = null) =
+    fun addAnonymous(block: CodeBlock, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
         add(buildAnonymousTypeSpec(block, builder))
 
     /** Add annotation type to this spec builder. */
-    fun addAnnotationType(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null) =
+    fun addAnnotation(name: String, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
         add(buildAnnotationTypeSpec(name, builder))
 
     /** Add annotation type to this spec builder. */
-    fun addAnnotationType(type: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null) =
+    fun addAnnotation(type: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
         add(buildAnnotationTypeSpec(type, builder))
 }

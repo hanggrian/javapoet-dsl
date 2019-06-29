@@ -29,7 +29,7 @@ class AnnotationSpecBuilderTest {
                 .build(),
             buildAnnotationSpec(ClassName.OBJECT) {
                 members {
-                    "string"("stringValue")
+                    add("string", "stringValue")
                     "code" {
                         codes.add("codeValue")
                     }

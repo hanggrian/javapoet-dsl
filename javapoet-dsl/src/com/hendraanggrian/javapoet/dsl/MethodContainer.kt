@@ -10,9 +10,13 @@ import com.squareup.javapoet.MethodSpec
 
 abstract class MethodContainer internal constructor() : MethodContainerDelegate {
 
-    inline operator fun plusAssign(spec: MethodSpec) = add(spec)
+    inline operator fun plusAssign(spec: MethodSpec) {
+        add(spec)
+    }
 
-    inline operator fun plusAssign(name: String) = add(name)
+    inline operator fun plusAssign(name: String) {
+        add(name)
+    }
 
     inline operator fun invoke(configuration: MethodContainerScope.() -> Unit) =
         configuration(MethodContainerScope(this))
@@ -22,16 +26,18 @@ abstract class MethodContainer internal constructor() : MethodContainerDelegate 
 class MethodContainerScope @PublishedApi internal constructor(private val container: MethodContainer) :
     MethodContainerDelegate {
 
-    override fun add(spec: MethodSpec) = container.add(spec)
+    override fun add(spec: MethodSpec): MethodSpec = container.add(spec)
 
-    inline operator fun String.invoke(noinline builder: MethodSpecBuilder.() -> Unit) = add(this, builder)
+    inline operator fun String.invoke(noinline builder: MethodSpecBuilder.() -> Unit): MethodSpec = add(this, builder)
 }
 
 internal interface MethodContainerDelegate {
 
-    fun add(spec: MethodSpec)
+    fun add(spec: MethodSpec): MethodSpec
 
-    fun add(name: String, builder: (MethodSpecBuilder.() -> Unit)? = null) = add(buildMethodSpec(name, builder))
+    fun add(name: String, builder: (MethodSpecBuilder.() -> Unit)? = null): MethodSpec =
+        add(buildMethodSpec(name, builder))
 
-    fun addConstructor(builder: (MethodSpecBuilder.() -> Unit)? = null) = add(buildConstructorMethodSpec(builder))
+    fun addConstructor(builder: (MethodSpecBuilder.() -> Unit)? = null): MethodSpec =
+        add(buildConstructorMethodSpec(builder))
 }

@@ -11,13 +11,20 @@ import kotlin.reflect.KClass
 
 abstract class AnnotationContainer internal constructor() : AnnotationContainerDelegate {
 
-    inline operator fun plusAssign(spec: AnnotationSpec) = add(spec)
+    inline operator fun plusAssign(spec: AnnotationSpec) {
+        add(spec)
+    }
 
-    inline operator fun plusAssign(type: ClassName) = add(type)
+    inline operator fun plusAssign(type: ClassName) {
+        add(type)
+    }
 
-    inline operator fun plusAssign(type: KClass<*>) = add(type)
+    inline operator fun plusAssign(type: KClass<*>) {
+        add(type)
+    }
 
-    inline fun <reified T> add(noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null) = add(T::class, builder)
+    inline fun <reified T> add(noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
+        add(T::class, builder)
 
     inline operator fun invoke(configuration: AnnotationContainerScope.() -> Unit) =
         configuration(AnnotationContainerScope(this))
@@ -27,22 +34,25 @@ abstract class AnnotationContainer internal constructor() : AnnotationContainerD
 class AnnotationContainerScope @PublishedApi internal constructor(private val container: AnnotationContainer) :
     AnnotationContainerDelegate {
 
-    override fun add(spec: AnnotationSpec) = container.add(spec)
+    override fun add(spec: AnnotationSpec): AnnotationSpec = container.add(spec)
 
-    inline operator fun ClassName.invoke(noinline builder: AnnotationSpecBuilder.() -> Unit) = add(this, builder)
+    inline operator fun ClassName.invoke(noinline builder: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+        add(this, builder)
 
-    inline operator fun KClass<*>.invoke(noinline builder: AnnotationSpecBuilder.() -> Unit) = add(this, builder)
+    inline operator fun KClass<*>.invoke(noinline builder: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+        add(this, builder)
 
-    inline fun <reified T> add(noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null) = add(T::class, builder)
+    inline fun <reified T> add(noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
+        add(T::class, builder)
 }
 
 internal interface AnnotationContainerDelegate {
 
-    fun add(spec: AnnotationSpec)
+    fun add(spec: AnnotationSpec): AnnotationSpec
 
-    fun add(type: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)? = null) =
+    fun add(type: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
         add(buildAnnotationSpec(type, builder))
 
-    fun add(type: KClass<*>, builder: (AnnotationSpecBuilder.() -> Unit)? = null) =
+    fun add(type: KClass<*>, builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
         add(buildAnnotationSpec(type, builder))
 }

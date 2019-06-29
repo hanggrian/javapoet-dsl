@@ -38,15 +38,11 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
             nativeBuilder.addJavadoc(format, *args)
         }
 
-        override fun add(block: CodeBlock) {
-            nativeBuilder.addJavadoc(block)
-        }
+        override fun add(block: CodeBlock): CodeBlock = block.also { nativeBuilder.addJavadoc(it) }
     }
 
     val annotations: AnnotationContainer = object : AnnotationContainer() {
-        override fun add(spec: AnnotationSpec) {
-            nativeBuilder.addAnnotation(spec)
-        }
+        override fun add(spec: AnnotationSpec): AnnotationSpec = spec.also { nativeBuilder.addAnnotation(it) }
     }
 
     override var modifiers: Collection<Modifier>

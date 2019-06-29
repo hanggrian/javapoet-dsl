@@ -89,15 +89,11 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
             nativeBuilder.addJavadoc(format, *args)
         }
 
-        override fun add(block: CodeBlock) {
-            nativeBuilder.addJavadoc(block)
-        }
+        override fun add(block: CodeBlock): CodeBlock = block.also { nativeBuilder.addJavadoc(it) }
     }
 
     val annotations: AnnotationContainer = object : AnnotationContainer() {
-        override fun add(spec: AnnotationSpec) {
-            nativeBuilder.addAnnotation(spec)
-        }
+        override fun add(spec: AnnotationSpec): AnnotationSpec = spec.also { nativeBuilder.addAnnotation(it) }
     }
 
     override var modifiers: Collection<Modifier>
@@ -165,15 +161,11 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
         addInitializerBlock(buildCodeBlock(builder))
 
     val methods: MethodContainer = object : MethodContainer() {
-        override fun add(spec: MethodSpec) {
-            nativeBuilder.addMethod(spec)
-        }
+        override fun add(spec: MethodSpec): MethodSpec = spec.also { nativeBuilder.addMethod(it) }
     }
 
     val types: TypeContainer = object : TypeContainer() {
-        override fun add(spec: TypeSpec) {
-            nativeBuilder.addType(spec)
-        }
+        override fun add(spec: TypeSpec): TypeSpec = spec.also { nativeBuilder.addType(it) }
     }
 
     fun addOriginatingElement(originatingElement: Element) {

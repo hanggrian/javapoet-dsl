@@ -37,15 +37,11 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
             nativeBuilder.addJavadoc(format, *args)
         }
 
-        override fun add(block: CodeBlock) {
-            nativeBuilder.addJavadoc(block)
-        }
+        override fun add(block: CodeBlock): CodeBlock = block.also { nativeBuilder.addJavadoc(it) }
     }
 
     val annotations: AnnotationContainer = object : AnnotationContainer() {
-        override fun add(spec: AnnotationSpec) {
-            nativeBuilder.addAnnotation(spec)
-        }
+        override fun add(spec: AnnotationSpec): AnnotationSpec = spec.also { nativeBuilder.addAnnotation(it) }
     }
 
     override var modifiers: Collection<Modifier>
@@ -75,9 +71,7 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
     inline fun <reified T> returns() = returns(T::class)
 
     val parameters: ParameterContainer = object : ParameterContainer() {
-        override fun add(spec: ParameterSpec) {
-            nativeBuilder.addParameter(spec)
-        }
+        override fun add(spec: ParameterSpec): ParameterSpec = spec.also { nativeBuilder.addParameter(it) }
     }
 
     var varargs: Boolean
@@ -105,9 +99,7 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
             nativeBuilder.addCode(format, *args)
         }
 
-        override fun add(block: CodeBlock) {
-            nativeBuilder.addCode(block)
-        }
+        override fun add(block: CodeBlock): CodeBlock = block.also { nativeBuilder.addCode(it) }
     }
 
     fun addComment(format: String, vararg args: Any) {
@@ -143,9 +135,7 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
             nativeBuilder.addStatement(format, *args)
         }
 
-        override fun add(block: CodeBlock) {
-            nativeBuilder.addStatement(block)
-        }
+        override fun add(block: CodeBlock): CodeBlock = block.also { nativeBuilder.addStatement(it) }
     }
 
     override fun build(): MethodSpec = nativeBuilder.build()

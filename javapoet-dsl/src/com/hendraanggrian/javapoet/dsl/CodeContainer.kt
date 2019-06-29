@@ -9,9 +9,13 @@ import com.squareup.javapoet.CodeBlock
 
 abstract class CodeContainer internal constructor() : CodeContainerDelegate {
 
-    inline operator fun plusAssign(value: String) = add(value)
+    inline operator fun plusAssign(value: String) {
+        add(value)
+    }
 
-    inline operator fun plusAssign(block: CodeBlock) = add(block)
+    inline operator fun plusAssign(block: CodeBlock) {
+        add(block)
+    }
 
     inline operator fun invoke(configuration: CodeContainerScope.() -> Unit) = configuration(CodeContainerScope(this))
 }
@@ -22,14 +26,14 @@ class CodeContainerScope @PublishedApi internal constructor(private val containe
 
     override fun add(format: String, vararg args: Any) = container.add(format, *args)
 
-    override fun add(block: CodeBlock) = container.add(block)
+    override fun add(block: CodeBlock): CodeBlock = container.add(block)
 }
 
 internal interface CodeContainerDelegate {
 
     fun add(format: String, vararg args: Any)
 
-    fun add(block: CodeBlock)
+    fun add(block: CodeBlock): CodeBlock
 
-    fun add(builder: CodeBlockBuilder.() -> Unit) = add(buildCodeBlock(builder))
+    fun add(builder: CodeBlockBuilder.() -> Unit): CodeBlock = add(buildCodeBlock(builder))
 }

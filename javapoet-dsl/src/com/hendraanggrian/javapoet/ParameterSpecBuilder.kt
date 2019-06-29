@@ -37,9 +37,7 @@ class ParameterSpecBuilder @PublishedApi internal constructor(private val native
     SpecBuilder<ParameterSpec>(), ModifieredSpecBuilder {
 
     val annotations: AnnotationContainer = object : AnnotationContainer() {
-        override fun add(spec: AnnotationSpec) {
-            nativeBuilder.addAnnotation(spec)
-        }
+        override fun add(spec: AnnotationSpec): AnnotationSpec = spec.also { nativeBuilder.addAnnotation(it) }
     }
 
     override var modifiers: Collection<Modifier>
