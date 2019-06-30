@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package com.hendraanggrian.javapoet.dsl
 
 import com.hendraanggrian.javapoet.CodeBlockBuilder
@@ -6,12 +8,12 @@ import com.squareup.javapoet.CodeBlock
 
 abstract class MemberContainer internal constructor() : MemberContainerDelegate() {
 
-    operator fun invoke(configuration: MemberContainerScope.() -> Unit) =
+    /** Open DSL to configure this container. */
+    inline operator fun invoke(configuration: MemberContainerScope.() -> Unit) =
         MemberContainerScope(this).configuration()
 }
 
 @JavapoetDslMarker
-@Suppress("NOTHING_TO_INLINE")
 class MemberContainerScope @PublishedApi internal constructor(private val container: MemberContainer) :
     MemberContainerDelegate() {
 
@@ -19,22 +21,24 @@ class MemberContainerScope @PublishedApi internal constructor(private val contai
 
     override fun add(name: String, block: CodeBlock): CodeBlock = container.add(name, block)
 
-    operator fun String.invoke(builder: CodeBlockBuilder.() -> Unit): CodeBlock = add(this, builder)
+    /** Convenient method to add member with receiver. */
+    inline operator fun String.invoke(noinline builder: CodeBlockBuilder.() -> Unit): CodeBlock = add(this, builder)
 }
 
 sealed class MemberContainerDelegate {
 
     abstract fun add(name: String, format: String, vararg args: Any)
 
+    /** Add spec to this container, returning the spec added. */
     abstract fun add(name: String, block: CodeBlock): CodeBlock
 
     fun add(name: String, builder: CodeBlockBuilder.() -> Unit): CodeBlock = add(name, CodeBlockBuilder.of(builder))
 
-    operator fun set(name: String, format: String) {
+    inline operator fun set(name: String, format: String) {
         add(name, format)
     }
 
-    operator fun set(name: String, block: CodeBlock) {
+    inline operator fun set(name: String, block: CodeBlock) {
         add(name, block)
     }
 }

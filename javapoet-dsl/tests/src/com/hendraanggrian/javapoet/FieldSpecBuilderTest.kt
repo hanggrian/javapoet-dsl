@@ -37,7 +37,7 @@ class FieldSpecBuilderTest {
                 javadocs {
                     add("firstJavadoc")
                     add {
-                        codes.add("secondJavadoc")
+                        add("secondJavadoc")
                     }
                 }
                 annotations.add<Deprecated>()

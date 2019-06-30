@@ -10,7 +10,7 @@ class CodeBlockBuilderTest {
     fun simple() {
         assertEquals(
             CodeBlock.of("Hello world"),
-            CodeBlockBuilder.of { codes.add("Hello world") }
+            CodeBlockBuilder.of { add("Hello world") }
         )
     }
 

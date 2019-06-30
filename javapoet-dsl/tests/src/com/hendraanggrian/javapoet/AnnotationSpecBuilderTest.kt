@@ -31,7 +31,7 @@ class AnnotationSpecBuilderTest {
                 members {
                     add("string", "stringValue")
                     "code" {
-                        codes.add("codeValue")
+                        add("codeValue")
                     }
                 }
             }

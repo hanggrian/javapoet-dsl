@@ -1,5 +1,3 @@
-@file:Suppress("NOTHING_TO_INLINE")
-
 package com.hendraanggrian.javapoet
 
 import com.hendraanggrian.javapoet.dsl.AnnotationContainer
@@ -21,12 +19,11 @@ import kotlin.reflect.KClass
 
 @JavapoetDslMarker
 class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: TypeSpec.Builder) :
-    ModifieredSpecBuilder<TypeSpec>() {
+    SpecBuilder<TypeSpec>, ModifieredSpecBuilder {
 
     @PublishedApi
     @Suppress("NOTHING_TO_INLINE")
     internal companion object {
-
         inline fun ofClass(type: String, noinline builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
             TypeSpecBuilder(TypeSpec.classBuilder(type))
                 .also { builder?.invoke(it) }
@@ -81,6 +78,7 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
                 .build()
     }
 
+    @Suppress("SpellCheckingInspection")
     val javadocs: CodeContainer = object : CodeContainer() {
         override fun add(format: String, vararg args: Any) {
             nativeBuilder.addJavadoc(format, *args)

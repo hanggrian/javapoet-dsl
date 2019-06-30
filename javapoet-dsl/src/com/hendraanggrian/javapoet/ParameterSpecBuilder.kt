@@ -9,12 +9,11 @@ import kotlin.reflect.KClass
 
 @JavapoetDslMarker
 class ParameterSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: ParameterSpec.Builder) :
-    ModifieredSpecBuilder<ParameterSpec>() {
+    SpecBuilder<ParameterSpec>, ModifieredSpecBuilder {
 
     @PublishedApi
     @Suppress("NOTHING_TO_INLINE")
     internal companion object {
-
         inline fun of(
             type: TypeName,
             name: String,

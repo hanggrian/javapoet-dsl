@@ -8,12 +8,11 @@ import kotlin.reflect.KClass
 
 @JavapoetDslMarker
 class AnnotationSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: AnnotationSpec.Builder) :
-    SpecBuilder<AnnotationSpec>() {
+    SpecBuilder<AnnotationSpec> {
 
     @PublishedApi
     @Suppress("NOTHING_TO_INLINE")
     internal companion object {
-
         inline fun of(type: ClassName, noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
             AnnotationSpecBuilder(AnnotationSpec.builder(type))
                 .also { builder?.invoke(it) }

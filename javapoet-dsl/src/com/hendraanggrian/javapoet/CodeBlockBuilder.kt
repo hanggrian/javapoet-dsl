@@ -1,18 +1,16 @@
-@file:Suppress("NOTHING_TO_INLINE")
-
 package com.hendraanggrian.javapoet
 
 import com.hendraanggrian.javapoet.dsl.CodeContainer
+import com.hendraanggrian.javapoet.dsl.CodeContainerDelegate
 import com.squareup.javapoet.CodeBlock
 
 @JavapoetDslMarker
 class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuilder: CodeBlock.Builder) :
-    SpecBuilder<CodeBlock>() {
+    CodeContainerDelegate(), SpecBuilder<CodeBlock> {
 
     @PublishedApi
     @Suppress("NOTHING_TO_INLINE")
     internal companion object {
-
         inline fun of(builder: CodeBlockBuilder.() -> Unit): CodeBlock =
             CodeBlockBuilder(CodeBlock.builder())
                 .apply(builder)
@@ -24,8 +22,6 @@ class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuil
     fun addNamed(format: String, arguments: Map<String, *>) {
         nativeBuilder.addNamed(format, arguments)
     }
-
-    inline fun addNamed(format: String, vararg arguments: Pair<String, *>) = addNamed(format, mapOf(*arguments))
 
     fun beginControlFlow(format: String, vararg args: Any) {
         nativeBuilder.beginControlFlow(format, *args)
@@ -43,13 +39,11 @@ class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuil
         nativeBuilder.endControlFlow(format, *args)
     }
 
-    val codes: CodeContainer = object : CodeContainer() {
-        override fun add(format: String, vararg args: Any) {
-            nativeBuilder.add(format, *args)
-        }
-
-        override fun add(block: CodeBlock): CodeBlock = block.also { nativeBuilder.add(it) }
+    override fun add(format: String, vararg args: Any) {
+        nativeBuilder.add(format, *args)
     }
+
+    override fun add(block: CodeBlock): CodeBlock = block.also { nativeBuilder.add(it) }
 
     val statements: CodeContainer = object : CodeContainer() {
         override fun add(format: String, vararg args: Any) {

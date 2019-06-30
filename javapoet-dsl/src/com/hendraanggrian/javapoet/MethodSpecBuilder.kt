@@ -1,5 +1,3 @@
-@file:Suppress("NOTHING_TO_INLINE")
-
 package com.hendraanggrian.javapoet
 
 import com.hendraanggrian.javapoet.dsl.AnnotationContainer
@@ -16,12 +14,11 @@ import kotlin.reflect.KClass
 
 @JavapoetDslMarker
 class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: MethodSpec.Builder) :
-    ModifieredSpecBuilder<MethodSpec>() {
+    SpecBuilder<MethodSpec>, TypedSpecBuilder, ModifieredSpecBuilder {
 
     @PublishedApi
     @Suppress("NOTHING_TO_INLINE")
     internal companion object {
-
         inline fun of(name: String, noinline builder: (MethodSpecBuilder.() -> Unit)? = null): MethodSpec =
             MethodSpecBuilder(MethodSpec.methodBuilder(name))
                 .also { builder?.invoke(it) }
@@ -33,6 +30,7 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
                 .build()
     }
 
+    @Suppress("SpellCheckingInspection")
     val javadocs: CodeContainer = object : CodeContainer() {
         override fun add(format: String, vararg args: Any) {
             nativeBuilder.addJavadoc(format, *args)

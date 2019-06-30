@@ -11,12 +11,11 @@ import kotlin.reflect.KClass
 
 @JavapoetDslMarker
 class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: FieldSpec.Builder) :
-    ModifieredSpecBuilder<FieldSpec>() {
+    SpecBuilder<FieldSpec>, ModifieredSpecBuilder {
 
     @PublishedApi
     @Suppress("NOTHING_TO_INLINE")
     internal companion object {
-
         inline fun of(
             type: TypeName,
             name: String,
@@ -34,6 +33,7 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
             .build()
     }
 
+    @Suppress("SpellCheckingInspection")
     val javadocs: CodeContainer = object : CodeContainer() {
         override fun add(format: String, vararg args: Any) {
             nativeBuilder.addJavadoc(format, *args)
