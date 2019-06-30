@@ -10,25 +10,25 @@ class TypeSpecBuilderTest {
     fun simple() {
         assertEquals(
             TypeSpec.classBuilder("myClass").build(),
-            buildClassTypeSpec("myClass")
+            TypeSpecBuilder.ofClass("myClass")
         )
         assertEquals(
             TypeSpec.interfaceBuilder("myInterface").build(),
-            buildInterfaceTypeSpec("myInterface")
+            TypeSpecBuilder.ofInterface("myInterface")
         )
         assertEquals(
             TypeSpec.enumBuilder("myEnum").addEnumConstant("A").build(),
-            buildEnumTypeSpec("myEnum") {
+            TypeSpecBuilder.ofEnum("myEnum") {
                 addEnumConstant("A")
             }
         )
         assertEquals(
             TypeSpec.anonymousClassBuilder("myAnonymous").build(),
-            buildAnonymousTypeSpec("myAnonymous")
+            TypeSpecBuilder.ofAnonymous("myAnonymous")
         )
         assertEquals(
             TypeSpec.annotationBuilder("myAnnotation").build(),
-            buildAnnotationTypeSpec("myAnnotation")
+            TypeSpecBuilder.ofAnnotation("myAnnotation")
         )
     }
 }

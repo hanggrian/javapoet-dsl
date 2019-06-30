@@ -12,7 +12,7 @@ class AnnotationSpecBuilderTest {
     fun simple() {
         assertEquals(
             AnnotationSpec.builder(Deprecated::class.java).build(),
-            buildAnnotationSpec<Deprecated>()
+            AnnotationSpecBuilder.of(Deprecated::class)
         )
     }
 
@@ -27,7 +27,7 @@ class AnnotationSpecBuilderTest {
                         .build()
                 )
                 .build(),
-            buildAnnotationSpec(ClassName.OBJECT) {
+            AnnotationSpecBuilder.of(ClassName.OBJECT) {
                 members {
                     add("string", "stringValue")
                     "code" {

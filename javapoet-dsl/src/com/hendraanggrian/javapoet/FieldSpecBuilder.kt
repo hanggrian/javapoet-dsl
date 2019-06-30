@@ -10,28 +10,31 @@ import com.squareup.javapoet.TypeName
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
-/** Returns a field with custom initialization block. */
-fun buildFieldSpec(type: TypeName, name: String, builder: (FieldSpecBuilder.() -> Unit)? = null): FieldSpec =
-    FieldSpecBuilder(FieldSpec.builder(type, name))
-        .also { builder?.invoke(it) }
-        .build()
-
-/** Returns a field with custom initialization block. */
-fun buildFieldSpec(type: KClass<*>, name: String, builder: (FieldSpecBuilder.() -> Unit)? = null): FieldSpec =
-    FieldSpecBuilder(FieldSpec.builder(type.java, name))
-        .also { builder?.invoke(it) }
-        .build()
-
-/** Returns a field with custom initialization block. */
-inline fun <reified T> buildFieldSpec(
-    name: String,
-    noinline builder: (FieldSpecBuilder.() -> Unit)? = null
-): FieldSpec = buildFieldSpec(T::class, name, builder)
-
 @JavapoetDslMarker
 class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: FieldSpec.Builder) :
     SpecBuilder<FieldSpec>(),
     ModifieredSpecBuilder {
+
+    @PublishedApi
+    @Suppress("NOTHING_TO_INLINE")
+    internal companion object {
+
+        inline fun of(
+            type: TypeName,
+            name: String,
+            noinline builder: (FieldSpecBuilder.() -> Unit)? = null
+        ): FieldSpec = FieldSpecBuilder(FieldSpec.builder(type, name))
+            .also { builder?.invoke(it) }
+            .build()
+
+        inline fun of(
+            type: KClass<*>,
+            name: String,
+            noinline builder: (FieldSpecBuilder.() -> Unit)? = null
+        ): FieldSpec = FieldSpecBuilder(FieldSpec.builder(type.java, name))
+            .also { builder?.invoke(it) }
+            .build()
+    }
 
     val javadocs: CodeContainer = object : CodeContainer() {
         override fun add(format: String, vararg args: Any) {
@@ -64,7 +67,7 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
     }
 
     inline fun initializer(builder: CodeBlockBuilder.() -> Unit) =
-        initializer(buildCodeBlock(builder))
+        initializer(CodeBlockBuilder.of(builder))
 
     override fun build(): FieldSpec = nativeBuilder.build()
 }

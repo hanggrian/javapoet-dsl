@@ -1,5 +1,6 @@
 package com.hendraanggrian.javapoet
 
+import com.hendraanggrian.javapoet.dsl.add
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.FieldSpec
@@ -13,7 +14,7 @@ class FieldSpecBuilderTest {
     fun simple() {
         assertEquals(
             FieldSpec.builder(String::class.java, "name", Modifier.PUBLIC, Modifier.FINAL).build(),
-            buildFieldSpec<String>("name") {
+            FieldSpecBuilder.of(String::class, "name") {
                 modifiers = public + final
             }
         )
@@ -33,7 +34,7 @@ class FieldSpecBuilderTest {
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 .initializer("value")
                 .build(),
-            buildFieldSpec<String>("name") {
+            FieldSpecBuilder.of(String::class, "name") {
                 javadocs {
                     add("firstJavadoc")
                     add {

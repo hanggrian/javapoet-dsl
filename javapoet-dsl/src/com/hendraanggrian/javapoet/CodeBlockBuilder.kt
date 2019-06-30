@@ -6,15 +6,19 @@ import com.hendraanggrian.javapoet.dsl.CodeContainer
 import com.hendraanggrian.javapoet.internal.SpecBuilder
 import com.squareup.javapoet.CodeBlock
 
-/** Returns block of code with custom initialization block. */
-inline fun buildCodeBlock(builder: CodeBlockBuilder.() -> Unit): CodeBlock =
-    CodeBlockBuilder(CodeBlock.builder())
-        .apply(builder)
-        .build()
-
 @JavapoetDslMarker
 class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuilder: CodeBlock.Builder) :
     SpecBuilder<CodeBlock>() {
+
+    @PublishedApi
+    @Suppress("NOTHING_TO_INLINE")
+    internal companion object {
+
+        inline fun of(builder: CodeBlockBuilder.() -> Unit): CodeBlock =
+            CodeBlockBuilder(CodeBlock.builder())
+                .apply(builder)
+                .build()
+    }
 
     fun isEmpty(): Boolean = nativeBuilder.isEmpty
 

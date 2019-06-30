@@ -10,7 +10,7 @@ class CodeBlockBuilderTest {
     fun simple() {
         assertEquals(
             CodeBlock.of("Hello world"),
-            buildCodeBlock { codes.add("Hello world") }
+            CodeBlockBuilder.of { codes.add("Hello world") }
         )
     }
 
@@ -23,7 +23,7 @@ class CodeBlockBuilderTest {
                 .addStatement("total += i")
                 .endControlFlow()
                 .build(),
-            buildCodeBlock {
+            CodeBlockBuilder.of {
                 statements.add("int total = 0")
                 beginControlFlow("for (int i = 0; i < 10; i++)")
                 statements.add("total += i")

@@ -1,5 +1,6 @@
 package com.hendraanggrian.javapoet
 
+import com.hendraanggrian.javapoet.dsl.add
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ParameterSpec
 import javax.lang.model.element.Modifier
@@ -12,7 +13,7 @@ class ParameterSpecBuilderTest {
     fun simple() {
         assertEquals(
             ParameterSpec.builder(String::class.java, "name", Modifier.PUBLIC, Modifier.FINAL).build(),
-            buildParameterSpec<String>("name") {
+            ParameterSpecBuilder.of(String::class, "name") {
                 modifiers = public + final
             }
         )
@@ -25,7 +26,7 @@ class ParameterSpecBuilderTest {
                 .addAnnotation(AnnotationSpec.builder(Deprecated::class.java).build())
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 .build(),
-            buildParameterSpec<String>("name") {
+            ParameterSpecBuilder.of(String::class, "name") {
                 annotations.add<Deprecated>()
                 modifiers = public + final
             }

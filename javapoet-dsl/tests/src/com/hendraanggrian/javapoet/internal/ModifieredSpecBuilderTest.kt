@@ -1,7 +1,7 @@
 package com.hendraanggrian.javapoet.internal
 
 import com.google.common.truth.Truth
-import com.hendraanggrian.javapoet.buildClassTypeSpec
+import com.hendraanggrian.javapoet.TypeSpecBuilder
 import javax.lang.model.element.Modifier
 import kotlin.test.Test
 
@@ -9,7 +9,7 @@ class ModifieredSpecBuilderTest {
 
     @Test
     fun test() {
-        buildClassTypeSpec("Strings") {
+        TypeSpecBuilder.ofClass("Strings") {
             fields {
                 val single = "single"<String> {
                     modifiers = public

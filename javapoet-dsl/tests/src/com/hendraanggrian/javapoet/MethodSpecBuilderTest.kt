@@ -1,5 +1,6 @@
 package com.hendraanggrian.javapoet
 
+import com.hendraanggrian.javapoet.dsl.add
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.MethodSpec
@@ -16,7 +17,7 @@ class MethodSpecBuilderTest {
     fun simple() {
         assertEquals(
             MethodSpec.constructorBuilder().build(),
-            buildConstructorMethodSpec()
+            MethodSpecBuilder.ofConstructor()
         )
     }
 
@@ -39,7 +40,7 @@ class MethodSpecBuilderTest {
                 .addComment("Some comment")
                 .addCode("doSomething()")
                 .build(),
-            buildMethodSpec("main") {
+            MethodSpecBuilder.of("main") {
                 javadocs {
                     add("firstJavadoc")
                     add {

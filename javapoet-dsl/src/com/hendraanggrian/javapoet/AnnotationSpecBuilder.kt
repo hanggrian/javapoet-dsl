@@ -7,25 +7,24 @@ import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import kotlin.reflect.KClass
 
-/** Returns an annotation with custom initialization block. */
-fun buildAnnotationSpec(type: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
-    AnnotationSpecBuilder(AnnotationSpec.builder(type))
-        .also { builder?.invoke(it) }
-        .build()
-
-/** Returns an annotation with custom initialization block. */
-fun buildAnnotationSpec(type: KClass<*>, builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
-    AnnotationSpecBuilder(AnnotationSpec.builder(type.java))
-        .also { builder?.invoke(it) }
-        .build()
-
-/** Returns an annotation with custom initialization block. */
-inline fun <reified T> buildAnnotationSpec(noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
-    buildAnnotationSpec(T::class, builder)
-
 @JavapoetDslMarker
 class AnnotationSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: AnnotationSpec.Builder) :
     SpecBuilder<AnnotationSpec>() {
+
+    @PublishedApi
+    @Suppress("NOTHING_TO_INLINE")
+    internal companion object {
+
+        inline fun of(type: ClassName, noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
+            AnnotationSpecBuilder(AnnotationSpec.builder(type))
+                .also { builder?.invoke(it) }
+                .build()
+
+        inline fun of(type: KClass<*>, noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
+            AnnotationSpecBuilder(AnnotationSpec.builder(type.java))
+                .also { builder?.invoke(it) }
+                .build()
+    }
 
     val members: MemberContainer = object : MemberContainer() {
         override fun add(name: String, format: String, vararg args: Any) {

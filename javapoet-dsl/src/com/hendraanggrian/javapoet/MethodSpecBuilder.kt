@@ -15,22 +15,25 @@ import com.squareup.javapoet.TypeVariableName
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
-/** Returns a method with custom initialization block. */
-fun buildMethodSpec(name: String, builder: (MethodSpecBuilder.() -> Unit)? = null): MethodSpec =
-    MethodSpecBuilder(MethodSpec.methodBuilder(name))
-        .also { builder?.invoke(it) }
-        .build()
-
-/** Returns a constructor method with custom initialization block. */
-fun buildConstructorMethodSpec(builder: (MethodSpecBuilder.() -> Unit)? = null): MethodSpec =
-    MethodSpecBuilder(MethodSpec.constructorBuilder())
-        .also { builder?.invoke(it) }
-        .build()
-
 @JavapoetDslMarker
 class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: MethodSpec.Builder) :
     SpecBuilder<MethodSpec>(),
     ModifieredSpecBuilder {
+
+    @PublishedApi
+    @Suppress("NOTHING_TO_INLINE")
+    internal companion object {
+
+        inline fun of(name: String, noinline builder: (MethodSpecBuilder.() -> Unit)? = null): MethodSpec =
+            MethodSpecBuilder(MethodSpec.methodBuilder(name))
+                .also { builder?.invoke(it) }
+                .build()
+
+        inline fun ofConstructor(noinline builder: (MethodSpecBuilder.() -> Unit)? = null): MethodSpec =
+            MethodSpecBuilder(MethodSpec.constructorBuilder())
+                .also { builder?.invoke(it) }
+                .build()
+    }
 
     val javadocs: CodeContainer = object : CodeContainer() {
         override fun add(format: String, vararg args: Any) {
