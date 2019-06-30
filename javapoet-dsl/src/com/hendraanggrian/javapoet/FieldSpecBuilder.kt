@@ -2,7 +2,6 @@ package com.hendraanggrian.javapoet
 
 import com.hendraanggrian.javapoet.dsl.AnnotationContainer
 import com.hendraanggrian.javapoet.dsl.CodeContainer
-import com.hendraanggrian.javapoet.internal.SpecBuilder
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.FieldSpec
@@ -12,8 +11,7 @@ import kotlin.reflect.KClass
 
 @JavapoetDslMarker
 class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: FieldSpec.Builder) :
-    SpecBuilder<FieldSpec>(),
-    ModifieredSpecBuilder {
+    ModifieredSpecBuilder<FieldSpec>() {
 
     @PublishedApi
     @Suppress("NOTHING_TO_INLINE")
@@ -66,8 +64,7 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
         nativeBuilder.initializer(block)
     }
 
-    inline fun initializer(builder: CodeBlockBuilder.() -> Unit) =
-        initializer(CodeBlockBuilder.of(builder))
+    inline fun initializer(builder: CodeBlockBuilder.() -> Unit) = initializer(CodeBlockBuilder.of(builder))
 
     override fun build(): FieldSpec = nativeBuilder.build()
 }

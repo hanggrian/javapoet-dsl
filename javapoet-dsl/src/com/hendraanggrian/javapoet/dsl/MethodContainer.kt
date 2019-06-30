@@ -4,23 +4,25 @@ import com.hendraanggrian.javapoet.JavapoetDslMarker
 import com.hendraanggrian.javapoet.MethodSpecBuilder
 import com.squareup.javapoet.MethodSpec
 
-abstract class MethodContainer internal constructor() : MethodContainerDelegate {
+abstract class MethodContainer internal constructor() : MethodContainerDelegate() {
 
-    inline operator fun invoke(configuration: MethodContainerScope.() -> Unit) =
-        configuration(MethodContainerScope(this))
+    operator fun invoke(configuration: MethodContainerScope.() -> Unit) =
+        MethodContainerScope(this).configuration()
 }
 
 @JavapoetDslMarker
 @Suppress("NOTHING_TO_INLINE")
 class MethodContainerScope @PublishedApi internal constructor(private val container: MethodContainer) :
-    MethodContainerDelegate by container {
+    MethodContainerDelegate() {
 
-    inline operator fun String.invoke(noinline builder: MethodSpecBuilder.() -> Unit): MethodSpec = add(this, builder)
+    override fun add(spec: MethodSpec): MethodSpec = container.add(spec)
+
+    operator fun String.invoke(builder: MethodSpecBuilder.() -> Unit): MethodSpec = add(this, builder)
 }
 
-interface MethodContainerDelegate {
+sealed class MethodContainerDelegate {
 
-    fun add(spec: MethodSpec): MethodSpec
+    abstract fun add(spec: MethodSpec): MethodSpec
 
     fun add(name: String, builder: (MethodSpecBuilder.() -> Unit)? = null): MethodSpec =
         add(MethodSpecBuilder.of(name, builder))

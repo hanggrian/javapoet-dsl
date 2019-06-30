@@ -13,12 +13,17 @@ inline fun buildJavaFile(packageName: String, builder: JavaFileBuilder.() -> Uni
         .build()
 
 @JavapoetDslMarker
-class JavaFileBuilder @PublishedApi internal constructor(private val packageName: String) : TypeContainerDelegate {
+class JavaFileBuilder @PublishedApi internal constructor(private val packageName: String) : TypeContainerDelegate() {
     private var type: TypeSpec? = null
     private var comments: MutableMap<String, Array<Any>>? = null
     private var staticImports: MutableList<Pair<Any, Array<String>>>? = null
     private var _skipJavaLangImports: Boolean? = null
     private var indent: Int? = null
+
+    override fun add(spec: TypeSpec): TypeSpec = spec.also {
+        check(type == null) { "Java file may only have 1 type" }
+        type = it
+    }
 
     /** Add a comment to this file. */
     fun comment(format: String, vararg args: Any) {
@@ -67,11 +72,6 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
         set(value) {
             _skipJavaLangImports = value
         }
-
-    override fun add(spec: TypeSpec): TypeSpec = spec.also {
-        check(type == null) { "Java file may only have 1 type" }
-        type = it
-    }
 
     fun build(): JavaFile = JavaFile.builder(packageName, checkNotNull(type) { "A main type must be initialized" })
         .apply {

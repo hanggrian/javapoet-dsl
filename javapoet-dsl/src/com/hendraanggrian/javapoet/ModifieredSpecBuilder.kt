@@ -1,27 +1,9 @@
-package com.hendraanggrian.javapoet.internal
+package com.hendraanggrian.javapoet
 
-import com.squareup.javapoet.ClassName
-import com.squareup.javapoet.TypeName
 import javax.lang.model.element.Modifier
 
-/**
- * Base type of all JavaPoet DSL spec builders.
- * Subclass of this type have access to many convenient inline functions to JavaPoet constant values.
- *
- * @see com.hendraanggrian.javapoet.ModifieredSpecBuilder.plus
- */
-abstract class SpecBuilder<T> internal constructor() {
-
-    inline val void: TypeName get() = TypeName.VOID
-    inline val boolean: TypeName get() = TypeName.BOOLEAN
-    inline val byte: TypeName get() = TypeName.BYTE
-    inline val short: TypeName get() = TypeName.SHORT
-    inline val int: TypeName get() = TypeName.INT
-    inline val long: TypeName get() = TypeName.LONG
-    inline val char: TypeName get() = TypeName.CHAR
-    inline val float: TypeName get() = TypeName.FLOAT
-    inline val double: TypeName get() = TypeName.DOUBLE
-    inline val `object`: ClassName get() = TypeName.OBJECT
+@Suppress("SpellCheckingInspection")
+abstract class ModifieredSpecBuilder<T> internal constructor() : SpecBuilder<T>() {
 
     inline val public: MutableCollection<Modifier> get() = mutableListOf(Modifier.PUBLIC)
     inline val protected: MutableCollection<Modifier> get() = mutableListOf(Modifier.PROTECTED)
@@ -36,6 +18,13 @@ abstract class SpecBuilder<T> internal constructor() {
     inline val native: MutableCollection<Modifier> get() = mutableListOf(Modifier.NATIVE)
     inline val strictfp: MutableCollection<Modifier> get() = mutableListOf(Modifier.STRICTFP)
 
-    /** Converts this DSL spec builder to native JavaPoet specs. */
-    abstract fun build(): T
+    /**
+     * Add single/multiple [Modifier] to this spec builder.
+     * A preferable way to achieve this is to use [plus] operator (e.g.: `modifiers = public + static`).
+     */
+    abstract var modifiers: Collection<Modifier>
+
+    /** Instead of recreating a collection every [Collection.plus], add the item to this collection. */
+    operator fun MutableCollection<Modifier>.plus(others: MutableCollection<Modifier>): MutableCollection<Modifier> =
+        also { it += others }
 }

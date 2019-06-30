@@ -5,7 +5,6 @@ package com.hendraanggrian.javapoet
 import com.hendraanggrian.javapoet.dsl.AnnotationContainer
 import com.hendraanggrian.javapoet.dsl.CodeContainer
 import com.hendraanggrian.javapoet.dsl.ParameterContainer
-import com.hendraanggrian.javapoet.internal.SpecBuilder
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.MethodSpec
@@ -17,8 +16,7 @@ import kotlin.reflect.KClass
 
 @JavapoetDslMarker
 class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: MethodSpec.Builder) :
-    SpecBuilder<MethodSpec>(),
-    ModifieredSpecBuilder {
+    ModifieredSpecBuilder<MethodSpec>() {
 
     @PublishedApi
     @Suppress("NOTHING_TO_INLINE")

@@ -3,7 +3,6 @@
 package com.hendraanggrian.javapoet
 
 import com.hendraanggrian.javapoet.dsl.CodeContainer
-import com.hendraanggrian.javapoet.internal.SpecBuilder
 import com.squareup.javapoet.CodeBlock
 
 @JavapoetDslMarker

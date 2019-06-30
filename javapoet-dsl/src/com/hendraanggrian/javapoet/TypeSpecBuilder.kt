@@ -7,7 +7,6 @@ import com.hendraanggrian.javapoet.dsl.CodeContainer
 import com.hendraanggrian.javapoet.dsl.FieldContainer
 import com.hendraanggrian.javapoet.dsl.MethodContainer
 import com.hendraanggrian.javapoet.dsl.TypeContainer
-import com.hendraanggrian.javapoet.internal.SpecBuilder
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
@@ -22,14 +21,14 @@ import kotlin.reflect.KClass
 
 @JavapoetDslMarker
 class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: TypeSpec.Builder) :
-    SpecBuilder<TypeSpec>(), ModifieredSpecBuilder {
+    ModifieredSpecBuilder<TypeSpec>() {
 
     @PublishedApi
     @Suppress("NOTHING_TO_INLINE")
     internal companion object {
 
-        inline fun ofClass(name: String, noinline builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
-            TypeSpecBuilder(TypeSpec.classBuilder(name))
+        inline fun ofClass(type: String, noinline builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
+            TypeSpecBuilder(TypeSpec.classBuilder(type))
                 .also { builder?.invoke(it) }
                 .build()
 
@@ -38,8 +37,8 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
                 .also { builder?.invoke(it) }
                 .build()
 
-        inline fun ofInterface(name: String, noinline builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
-            TypeSpecBuilder(TypeSpec.interfaceBuilder(name))
+        inline fun ofInterface(type: String, noinline builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
+            TypeSpecBuilder(TypeSpec.interfaceBuilder(type))
                 .also { builder?.invoke(it) }
                 .build()
 
@@ -48,8 +47,8 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
                 .also { builder?.invoke(it) }
                 .build()
 
-        inline fun ofEnum(name: String, noinline builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
-            TypeSpecBuilder(TypeSpec.enumBuilder(name))
+        inline fun ofEnum(type: String, noinline builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
+            TypeSpecBuilder(TypeSpec.enumBuilder(type))
                 .also { builder?.invoke(it) }
                 .build()
 
@@ -71,8 +70,8 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
                 .also { builder?.invoke(it) }
                 .build()
 
-        inline fun ofAnnotation(name: String, noinline builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
-            TypeSpecBuilder(TypeSpec.annotationBuilder(name))
+        inline fun ofAnnotation(type: String, noinline builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
+            TypeSpecBuilder(TypeSpec.annotationBuilder(type))
                 .also { builder?.invoke(it) }
                 .build()
 
@@ -118,8 +117,7 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
         nativeBuilder.superclass(type.java)
     }
 
-    inline fun <reified T> superClass() =
-        superClass(T::class)
+    inline fun <reified T> superClass() = superClass(T::class)
 
     fun addSuperInterface(type: TypeName) {
         nativeBuilder.addSuperinterface(type)
@@ -129,8 +127,7 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
         nativeBuilder.addSuperinterface(type.java)
     }
 
-    inline fun <reified T> addSuperInterface() =
-        addSuperInterface(T::class)
+    inline fun <reified T> addSuperInterface() = addSuperInterface(T::class)
 
     fun addEnumConstant(name: String) {
         nativeBuilder.addEnumConstant(name)
@@ -148,8 +145,7 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
         nativeBuilder.addStaticBlock(block)
     }
 
-    inline fun addStaticBlock(builder: CodeBlockBuilder.() -> Unit) =
-        addStaticBlock(CodeBlockBuilder.of(builder))
+    inline fun addStaticBlock(builder: CodeBlockBuilder.() -> Unit) = addStaticBlock(CodeBlockBuilder.of(builder))
 
     fun addInitializerBlock(block: CodeBlock) {
         nativeBuilder.addInitializerBlock(block)

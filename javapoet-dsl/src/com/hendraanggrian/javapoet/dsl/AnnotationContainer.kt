@@ -6,33 +6,38 @@ import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
 import kotlin.reflect.KClass
 
-abstract class AnnotationContainer : AnnotationContainerDelegate {
+abstract class AnnotationContainer internal constructor() : AnnotationContainerDelegate() {
 
-    inline operator fun invoke(configuration: AnnotationContainerScope.() -> Unit) =
-        configuration(AnnotationContainerScope(this))
+    operator fun invoke(configuration: AnnotationContainerScope.() -> Unit) =
+        AnnotationContainerScope(this).configuration()
 }
 
 @JavapoetDslMarker
 @Suppress("NOTHING_TO_INLINE")
 class AnnotationContainerScope @PublishedApi internal constructor(private val container: AnnotationContainer) :
-    AnnotationContainerDelegate by container {
+    AnnotationContainerDelegate() {
 
-    inline operator fun ClassName.invoke(noinline builder: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+    override fun add(spec: AnnotationSpec): AnnotationSpec = container.add(spec)
+
+    operator fun ClassName.invoke(builder: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
         add(this, builder)
 
-    inline operator fun KClass<*>.invoke(noinline builder: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+    operator fun KClass<*>.invoke(builder: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
         add(this, builder)
 }
 
-interface AnnotationContainerDelegate {
+sealed class AnnotationContainerDelegate {
 
-    fun add(spec: AnnotationSpec): AnnotationSpec
+    abstract fun add(spec: AnnotationSpec): AnnotationSpec
 
-    fun add(type: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
-        add(AnnotationSpecBuilder.of(type, builder))
+    fun add(name: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
+        add(AnnotationSpecBuilder.of(name, builder))
 
     fun add(type: KClass<*>, builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
         add(AnnotationSpecBuilder.of(type, builder))
+
+    inline fun <reified T> add(noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
+        add(T::class, builder)
 
     operator fun plusAssign(spec: AnnotationSpec) {
         add(spec)
@@ -46,7 +51,3 @@ interface AnnotationContainerDelegate {
         add(type)
     }
 }
-
-inline fun <reified T> AnnotationContainerDelegate.add(
-    noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null
-): AnnotationSpec = add(T::class, builder)

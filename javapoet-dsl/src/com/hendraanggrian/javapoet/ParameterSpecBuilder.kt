@@ -1,7 +1,6 @@
 package com.hendraanggrian.javapoet
 
 import com.hendraanggrian.javapoet.dsl.AnnotationContainer
-import com.hendraanggrian.javapoet.internal.SpecBuilder
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ParameterSpec
 import com.squareup.javapoet.TypeName
@@ -10,7 +9,7 @@ import kotlin.reflect.KClass
 
 @JavapoetDslMarker
 class ParameterSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: ParameterSpec.Builder) :
-    SpecBuilder<ParameterSpec>(), ModifieredSpecBuilder {
+    ModifieredSpecBuilder<ParameterSpec>() {
 
     @PublishedApi
     @Suppress("NOTHING_TO_INLINE")

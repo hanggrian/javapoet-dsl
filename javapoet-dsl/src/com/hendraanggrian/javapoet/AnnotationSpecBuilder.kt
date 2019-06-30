@@ -1,7 +1,6 @@
 package com.hendraanggrian.javapoet
 
 import com.hendraanggrian.javapoet.dsl.MemberContainer
-import com.hendraanggrian.javapoet.internal.SpecBuilder
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
