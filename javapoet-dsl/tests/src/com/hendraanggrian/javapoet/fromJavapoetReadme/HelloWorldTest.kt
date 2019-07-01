@@ -1,6 +1,8 @@
 package com.hendraanggrian.javapoet.fromJavapoetReadme
 
 import com.hendraanggrian.javapoet.buildJavaFile
+import com.hendraanggrian.javapoet.dsl.add
+import com.hendraanggrian.javapoet.dsl.invoke
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

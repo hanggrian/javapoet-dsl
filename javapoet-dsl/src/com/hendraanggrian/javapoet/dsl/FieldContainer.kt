@@ -8,18 +8,9 @@ import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.TypeName
 import kotlin.reflect.KClass
 
-abstract class FieldContainer internal constructor() : FieldContainerDelegate() {
-
-    /** Open DSL to configure this container. */
-    inline operator fun invoke(configuration: FieldContainerScope.() -> Unit) =
-        FieldContainerScope(this).configuration()
-}
-
 @JavapoetDslMarker
-class FieldContainerScope @PublishedApi internal constructor(private val container: FieldContainer) :
-    FieldContainerDelegate() {
-
-    override fun add(spec: FieldSpec): FieldSpec = container.add(spec)
+class FieldContainerScope @PublishedApi internal constructor(container: FieldContainer) :
+    FieldContainer by container {
 
     /** Convenient method to add field with receiver. */
     inline operator fun String.invoke(name: TypeName, noinline builder: FieldSpecBuilder.() -> Unit): FieldSpec =
@@ -34,29 +25,35 @@ class FieldContainerScope @PublishedApi internal constructor(private val contain
         invoke(T::class, builder)
 }
 
-sealed class FieldContainerDelegate {
+interface FieldContainer {
 
     /** Add spec to this container, returning the spec added. */
-    abstract fun add(spec: FieldSpec): FieldSpec
+    fun add(spec: FieldSpec): FieldSpec
 
     fun add(type: TypeName, name: String, builder: (FieldSpecBuilder.() -> Unit)? = null): FieldSpec =
         add(FieldSpecBuilder.of(type, name, builder))
 
     fun add(type: KClass<*>, name: String, builder: (FieldSpecBuilder.() -> Unit)? = null): FieldSpec =
         add(FieldSpecBuilder.of(type, name, builder))
+}
 
-    inline fun <reified T> add(name: String, noinline builder: (FieldSpecBuilder.() -> Unit)? = null): FieldSpec =
-        add(T::class, name, builder)
+/** Configures the fields of this container. */
+inline operator fun FieldContainer.invoke(configuration: FieldContainerScope.() -> Unit) =
+    FieldContainerScope(this).configuration()
 
-    inline operator fun plusAssign(spec: FieldSpec) {
-        add(spec)
-    }
+inline fun <reified T> FieldContainer.add(
+    name: String,
+    noinline builder: (FieldSpecBuilder.() -> Unit)? = null
+): FieldSpec = add(T::class, name, builder)
 
-    inline operator fun set(name: String, type: TypeName) {
-        add(type, name)
-    }
+inline operator fun FieldContainer.plusAssign(spec: FieldSpec) {
+    add(spec)
+}
 
-    inline operator fun set(name: String, type: KClass<*>) {
-        add(type, name)
-    }
+inline operator fun FieldContainer.set(name: String, type: TypeName) {
+    add(type, name)
+}
+
+inline operator fun FieldContainer.set(name: String, type: KClass<*>) {
+    add(type, name)
 }

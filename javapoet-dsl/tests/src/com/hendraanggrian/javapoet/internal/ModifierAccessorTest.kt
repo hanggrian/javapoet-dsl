@@ -2,10 +2,11 @@ package com.hendraanggrian.javapoet.internal
 
 import com.google.common.truth.Truth
 import com.hendraanggrian.javapoet.TypeSpecBuilder
+import com.hendraanggrian.javapoet.dsl.invoke
 import javax.lang.model.element.Modifier
 import kotlin.test.Test
 
-class ModifieredSpecBuilderTest {
+class ModifierAccessorTest {
 
     @Test
     fun test() {

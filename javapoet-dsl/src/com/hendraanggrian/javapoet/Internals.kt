@@ -10,15 +10,8 @@ internal const val NO_GETTER: String = "Property does not have a getter"
 @PublishedApi
 internal fun noGetter(): Nothing = throw UnsupportedOperationException(NO_GETTER)
 
-/** Base type of all JavaPoet DSL spec builders. */
-internal interface SpecBuilder<T> {
-
-    /** Converts this DSL spec builder to native JavaPoet specs. */
-    fun build(): T
-}
-
 /** Subclass of this type have access to many convenient inline functions to JavaPoet constant values. */
-internal interface TypedSpecBuilder {
+internal interface TypeAccessor {
 
     val void: TypeName get() = TypeName.VOID
     val boolean: TypeName get() = TypeName.BOOLEAN
@@ -32,8 +25,7 @@ internal interface TypedSpecBuilder {
     val `object`: ClassName get() = TypeName.OBJECT
 }
 
-@Suppress("SpellCheckingInspection")
-internal interface ModifieredSpecBuilder {
+internal interface ModifierAccessor {
 
     val public: MutableCollection<Modifier> get() = mutableListOf(Modifier.PUBLIC)
     val protected: MutableCollection<Modifier> get() = mutableListOf(Modifier.PROTECTED)

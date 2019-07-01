@@ -9,9 +9,8 @@ import kotlin.reflect.KClass
 
 @JavapoetDslMarker
 class ParameterSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: ParameterSpec.Builder) :
-    SpecBuilder<ParameterSpec>, ModifieredSpecBuilder {
+    ModifierAccessor {
 
-    @PublishedApi
     @Suppress("NOTHING_TO_INLINE")
     internal companion object {
         inline fun of(
@@ -31,7 +30,7 @@ class ParameterSpecBuilder @PublishedApi internal constructor(private val native
             .build()
     }
 
-    val annotations: AnnotationContainer = object : AnnotationContainer() {
+    val annotations: AnnotationContainer = object : AnnotationContainer {
         override fun add(spec: AnnotationSpec): AnnotationSpec = spec.also { nativeBuilder.addAnnotation(it) }
     }
 
@@ -41,5 +40,6 @@ class ParameterSpecBuilder @PublishedApi internal constructor(private val native
             nativeBuilder.addModifiers(*value.toTypedArray())
         }
 
-    override fun build(): ParameterSpec = nativeBuilder.build()
+    @PublishedApi
+    internal fun build(): ParameterSpec = nativeBuilder.build()
 }

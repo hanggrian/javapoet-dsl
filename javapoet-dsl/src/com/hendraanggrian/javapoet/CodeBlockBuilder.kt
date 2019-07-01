@@ -1,12 +1,11 @@
 package com.hendraanggrian.javapoet
 
 import com.hendraanggrian.javapoet.dsl.CodeContainer
-import com.hendraanggrian.javapoet.dsl.CodeContainerDelegate
 import com.squareup.javapoet.CodeBlock
 
 @JavapoetDslMarker
 class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuilder: CodeBlock.Builder) :
-    CodeContainerDelegate(), SpecBuilder<CodeBlock> {
+    CodeContainer {
 
     @PublishedApi
     @Suppress("NOTHING_TO_INLINE")
@@ -45,7 +44,7 @@ class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuil
 
     override fun add(block: CodeBlock): CodeBlock = block.also { nativeBuilder.add(it) }
 
-    val statements: CodeContainer = object : CodeContainer() {
+    val statements: CodeContainer = object : CodeContainer {
         override fun add(format: String, vararg args: Any) {
             nativeBuilder.addStatement(format, *args)
         }
@@ -61,5 +60,6 @@ class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuil
         nativeBuilder.unindent()
     }
 
-    override fun build(): CodeBlock = nativeBuilder.build()
+    @PublishedApi
+    internal fun build(): CodeBlock = nativeBuilder.build()
 }

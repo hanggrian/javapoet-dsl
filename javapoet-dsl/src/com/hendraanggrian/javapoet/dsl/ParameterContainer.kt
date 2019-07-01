@@ -8,18 +8,9 @@ import com.squareup.javapoet.ParameterSpec
 import com.squareup.javapoet.TypeName
 import kotlin.reflect.KClass
 
-abstract class ParameterContainer internal constructor() : ParameterContainerDelegate() {
-
-    /** Open DSL to configure this container. */
-    inline operator fun invoke(configuration: ParameterContainerScope.() -> Unit) =
-        ParameterContainerScope(this).configuration()
-}
-
 @JavapoetDslMarker
-class ParameterContainerScope @PublishedApi internal constructor(private val container: ParameterContainer) :
-    ParameterContainerDelegate() {
-
-    override fun add(spec: ParameterSpec): ParameterSpec = container.add(spec)
+class ParameterContainerScope @PublishedApi internal constructor(container: ParameterContainer) :
+    ParameterContainer by container {
 
     /** Convenient method to add parameter with receiver. */
     inline operator fun String.invoke(
@@ -38,31 +29,35 @@ class ParameterContainerScope @PublishedApi internal constructor(private val con
         invoke(T::class, builder)
 }
 
-sealed class ParameterContainerDelegate {
+interface ParameterContainer {
 
     /** Add spec to this container, returning the spec added. */
-    abstract fun add(spec: ParameterSpec): ParameterSpec
+    fun add(spec: ParameterSpec): ParameterSpec
 
     fun add(type: TypeName, name: String, builder: (ParameterSpecBuilder.() -> Unit)? = null): ParameterSpec =
         add(ParameterSpecBuilder.of(type, name, builder))
 
     fun add(type: KClass<*>, name: String, builder: (ParameterSpecBuilder.() -> Unit)? = null): ParameterSpec =
         add(ParameterSpecBuilder.of(type, name, builder))
+}
 
-    inline fun <reified T> add(
-        name: String,
-        noinline builder: (ParameterSpecBuilder.() -> Unit)? = null
-    ): ParameterSpec = add(T::class, name, builder)
+/** Configures the parameters of this container. */
+inline operator fun ParameterContainer.invoke(configuration: ParameterContainerScope.() -> Unit) =
+    ParameterContainerScope(this).configuration()
 
-    inline operator fun plusAssign(spec: ParameterSpec) {
-        add(spec)
-    }
+inline fun <reified T> ParameterContainer.add(
+    name: String,
+    noinline builder: (ParameterSpecBuilder.() -> Unit)? = null
+): ParameterSpec = add(T::class, name, builder)
 
-    inline operator fun set(name: String, type: TypeName) {
-        add(type, name)
-    }
+inline operator fun ParameterContainer.plusAssign(spec: ParameterSpec) {
+    add(spec)
+}
 
-    inline operator fun set(name: String, type: KClass<*>) {
-        add(type, name)
-    }
+inline operator fun ParameterContainer.set(name: String, type: TypeName) {
+    add(type, name)
+}
+
+inline operator fun ParameterContainer.set(name: String, type: KClass<*>) {
+    add(type, name)
 }

@@ -14,9 +14,8 @@ import kotlin.reflect.KClass
 
 @JavapoetDslMarker
 class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: MethodSpec.Builder) :
-    SpecBuilder<MethodSpec>, TypedSpecBuilder, ModifieredSpecBuilder {
+    TypeAccessor, ModifierAccessor {
 
-    @PublishedApi
     @Suppress("NOTHING_TO_INLINE")
     internal companion object {
         inline fun of(name: String, noinline builder: (MethodSpecBuilder.() -> Unit)? = null): MethodSpec =
@@ -30,8 +29,7 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
                 .build()
     }
 
-    @Suppress("SpellCheckingInspection")
-    val javadocs: CodeContainer = object : CodeContainer() {
+    val javadoc: CodeContainer = object : CodeContainer {
         override fun add(format: String, vararg args: Any) {
             nativeBuilder.addJavadoc(format, *args)
         }
@@ -39,7 +37,7 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
         override fun add(block: CodeBlock): CodeBlock = block.also { nativeBuilder.addJavadoc(it) }
     }
 
-    val annotations: AnnotationContainer = object : AnnotationContainer() {
+    val annotations: AnnotationContainer = object : AnnotationContainer {
         override fun add(spec: AnnotationSpec): AnnotationSpec = spec.also { nativeBuilder.addAnnotation(it) }
     }
 
@@ -69,7 +67,7 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
 
     inline fun <reified T> returns() = returns(T::class)
 
-    val parameters: ParameterContainer = object : ParameterContainer() {
+    val parameters: ParameterContainer = object : ParameterContainer {
         override fun add(spec: ParameterSpec): ParameterSpec = spec.also { nativeBuilder.addParameter(it) }
     }
 
@@ -93,7 +91,7 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
 
     inline fun <reified T> addException() = addException(T::class)
 
-    val codes: CodeContainer = object : CodeContainer() {
+    val codes: CodeContainer = object : CodeContainer {
         override fun add(format: String, vararg args: Any) {
             nativeBuilder.addCode(format, *args)
         }
@@ -129,7 +127,7 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
         nativeBuilder.endControlFlow(format, *args)
     }
 
-    val statements: CodeContainer = object : CodeContainer() {
+    val statements: CodeContainer = object : CodeContainer {
         override fun add(format: String, vararg args: Any) {
             nativeBuilder.addStatement(format, *args)
         }
@@ -137,5 +135,6 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
         override fun add(block: CodeBlock): CodeBlock = block.also { nativeBuilder.addStatement(it) }
     }
 
-    override fun build(): MethodSpec = nativeBuilder.build()
+    @PublishedApi
+    internal fun build(): MethodSpec = nativeBuilder.build()
 }

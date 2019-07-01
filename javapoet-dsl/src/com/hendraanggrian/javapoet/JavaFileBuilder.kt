@@ -1,6 +1,6 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.dsl.TypeContainerDelegate
+import com.hendraanggrian.javapoet.dsl.TypeContainer
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.TypeSpec
@@ -14,7 +14,7 @@ inline fun buildJavaFile(packageName: String, builder: JavaFileBuilder.() -> Uni
 
 @JavapoetDslMarker
 class JavaFileBuilder @PublishedApi internal constructor(private val packageName: String) :
-    TypeContainerDelegate(), TypedSpecBuilder {
+    TypeContainer, TypeAccessor {
 
     private var type: TypeSpec? = null
     private var comments: MutableMap<String, Array<Any>>? = null
@@ -75,18 +75,20 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
             _skipJavaLangImports = value
         }
 
-    fun build(): JavaFile = JavaFile.builder(packageName, checkNotNull(type) { "A main type must be initialized" })
-        .apply {
-            comments?.forEach { (format, args) -> addFileComment(format, *args) }
-            staticImports?.forEach { (type, names) ->
-                when (type) {
-                    is Enum<*> -> addStaticImport(type)
-                    is ClassName -> addStaticImport(type, *names)
-                    is KClass<*> -> addStaticImport(type.java, *names)
+    @PublishedApi
+    internal fun build(): JavaFile =
+        JavaFile.builder(packageName, checkNotNull(type) { "A main type must be initialized" })
+            .apply {
+                comments?.forEach { (format, args) -> addFileComment(format, *args) }
+                staticImports?.forEach { (type, names) ->
+                    when (type) {
+                        is Enum<*> -> addStaticImport(type)
+                        is ClassName -> addStaticImport(type, *names)
+                        is KClass<*> -> addStaticImport(type.java, *names)
+                    }
                 }
+                _skipJavaLangImports?.let { skipJavaLangImports(it) }
+                indent?.let { indent(buildString { repeat(it) { append(' ') } }) }
             }
-            _skipJavaLangImports?.let { skipJavaLangImports(it) }
-            indent?.let { indent(buildString { repeat(it) { append(' ') } }) }
-        }
-        .build()
+            .build()
 }

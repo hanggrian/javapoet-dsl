@@ -11,9 +11,8 @@ import kotlin.reflect.KClass
 
 @JavapoetDslMarker
 class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: FieldSpec.Builder) :
-    SpecBuilder<FieldSpec>, ModifieredSpecBuilder {
+    ModifierAccessor {
 
-    @PublishedApi
     @Suppress("NOTHING_TO_INLINE")
     internal companion object {
         inline fun of(
@@ -33,8 +32,8 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
             .build()
     }
 
-    @Suppress("SpellCheckingInspection")
-    val javadocs: CodeContainer = object : CodeContainer() {
+    /** Configures javadoc of this field. */
+    val javadoc: CodeContainer = object : CodeContainer {
         override fun add(format: String, vararg args: Any) {
             nativeBuilder.addJavadoc(format, *args)
         }
@@ -42,7 +41,7 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
         override fun add(block: CodeBlock): CodeBlock = block.also { nativeBuilder.addJavadoc(it) }
     }
 
-    val annotations: AnnotationContainer = object : AnnotationContainer() {
+    val annotations: AnnotationContainer = object : AnnotationContainer {
         override fun add(spec: AnnotationSpec): AnnotationSpec = spec.also { nativeBuilder.addAnnotation(it) }
     }
 
@@ -66,5 +65,6 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
 
     inline fun initializer(builder: CodeBlockBuilder.() -> Unit) = initializer(CodeBlockBuilder.of(builder))
 
-    override fun build(): FieldSpec = nativeBuilder.build()
+    @PublishedApi
+    internal fun build(): FieldSpec = nativeBuilder.build()
 }

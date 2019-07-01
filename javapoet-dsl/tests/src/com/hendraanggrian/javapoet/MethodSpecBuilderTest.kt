@@ -1,5 +1,7 @@
 package com.hendraanggrian.javapoet
 
+import com.hendraanggrian.javapoet.dsl.add
+import com.hendraanggrian.javapoet.dsl.invoke
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.MethodSpec
@@ -40,7 +42,7 @@ class MethodSpecBuilderTest {
                 .addCode("doSomething()")
                 .build(),
             MethodSpecBuilder.of("main") {
-                javadocs {
+                javadoc {
                     add("firstJavadoc")
                     add {
                         add("secondJavadoc")

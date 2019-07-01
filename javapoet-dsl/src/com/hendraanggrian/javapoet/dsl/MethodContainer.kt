@@ -6,39 +6,34 @@ import com.hendraanggrian.javapoet.JavapoetDslMarker
 import com.hendraanggrian.javapoet.MethodSpecBuilder
 import com.squareup.javapoet.MethodSpec
 
-abstract class MethodContainer internal constructor() : MethodContainerDelegate() {
-
-    /** Open DSL to configure this container. */
-    inline operator fun invoke(configuration: MethodContainerScope.() -> Unit) =
-        MethodContainerScope(this).configuration()
-}
-
 @JavapoetDslMarker
-class MethodContainerScope @PublishedApi internal constructor(private val container: MethodContainer) :
-    MethodContainerDelegate() {
-
-    override fun add(spec: MethodSpec): MethodSpec = container.add(spec)
+class MethodContainerScope @PublishedApi internal constructor(container: MethodContainer) :
+    MethodContainer by container {
 
     /** Convenient method to add method with receiver. */
     inline operator fun String.invoke(noinline builder: MethodSpecBuilder.() -> Unit): MethodSpec = add(this, builder)
 }
 
-sealed class MethodContainerDelegate {
+interface MethodContainer {
 
     /** Add spec to this container, returning the spec added. */
-    abstract fun add(spec: MethodSpec): MethodSpec
+    fun add(spec: MethodSpec): MethodSpec
 
     fun add(name: String, builder: (MethodSpecBuilder.() -> Unit)? = null): MethodSpec =
         add(MethodSpecBuilder.of(name, builder))
 
     fun addConstructor(builder: (MethodSpecBuilder.() -> Unit)? = null): MethodSpec =
         add(MethodSpecBuilder.ofConstructor(builder))
+}
 
-    inline operator fun plusAssign(spec: MethodSpec) {
-        add(spec)
-    }
+/** Configures the methods of this container. */
+inline operator fun MethodContainer.invoke(configuration: MethodContainerScope.() -> Unit) =
+    MethodContainerScope(this).configuration()
 
-    inline operator fun plusAssign(name: String) {
-        add(name)
-    }
+inline operator fun MethodContainer.plusAssign(spec: MethodSpec) {
+    add(spec)
+}
+
+inline operator fun MethodContainer.plusAssign(name: String) {
+    add(name)
 }

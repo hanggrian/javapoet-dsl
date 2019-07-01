@@ -1,5 +1,6 @@
 package com.hendraanggrian.javapoet
 
+import com.hendraanggrian.javapoet.dsl.invoke
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock

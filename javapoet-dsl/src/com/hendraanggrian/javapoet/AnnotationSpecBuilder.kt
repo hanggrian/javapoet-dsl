@@ -7,10 +7,8 @@ import com.squareup.javapoet.CodeBlock
 import kotlin.reflect.KClass
 
 @JavapoetDslMarker
-class AnnotationSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: AnnotationSpec.Builder) :
-    SpecBuilder<AnnotationSpec> {
+class AnnotationSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: AnnotationSpec.Builder) {
 
-    @PublishedApi
     @Suppress("NOTHING_TO_INLINE")
     internal companion object {
         inline fun of(type: ClassName, noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
@@ -24,7 +22,8 @@ class AnnotationSpecBuilder @PublishedApi internal constructor(private val nativ
                 .build()
     }
 
-    val members: MemberContainer = object : MemberContainer() {
+    /** Configures members of this annotation. */
+    val members: MemberContainer = object : MemberContainer {
         override fun add(name: String, format: String, vararg args: Any) {
             nativeBuilder.addMember(name, format, *args)
         }
@@ -32,5 +31,6 @@ class AnnotationSpecBuilder @PublishedApi internal constructor(private val nativ
         override fun add(name: String, block: CodeBlock): CodeBlock = block.also { nativeBuilder.addMember(name, it) }
     }
 
-    override fun build(): AnnotationSpec = nativeBuilder.build()
+    @PublishedApi
+    internal fun build(): AnnotationSpec = nativeBuilder.build()
 }
