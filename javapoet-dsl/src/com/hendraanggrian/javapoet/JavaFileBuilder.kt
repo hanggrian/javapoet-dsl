@@ -14,7 +14,7 @@ inline fun buildJavaFile(packageName: String, builder: JavaFileBuilder.() -> Uni
 
 @JavapoetDslMarker
 class JavaFileBuilder @PublishedApi internal constructor(private val packageName: String) :
-    TypeContainer, TypeAccessor {
+    TypeContainer(), TypeAccessor {
 
     private var type: TypeSpec? = null
     private var comments: MutableMap<String, Array<Any>>? = null

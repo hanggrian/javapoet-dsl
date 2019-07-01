@@ -5,7 +5,7 @@ import com.squareup.javapoet.CodeBlock
 
 @JavapoetDslMarker
 class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuilder: CodeBlock.Builder) :
-    CodeContainer {
+    CodeContainer() {
 
     @PublishedApi
     @Suppress("NOTHING_TO_INLINE")
@@ -44,7 +44,7 @@ class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuil
 
     override fun add(block: CodeBlock): CodeBlock = block.also { nativeBuilder.add(it) }
 
-    val statements: CodeContainer = object : CodeContainer {
+    val statements: CodeContainer = object : CodeContainer() {
         override fun add(format: String, vararg args: Any) {
             nativeBuilder.addStatement(format, *args)
         }

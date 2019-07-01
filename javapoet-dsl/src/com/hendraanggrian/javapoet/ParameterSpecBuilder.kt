@@ -11,6 +11,7 @@ import kotlin.reflect.KClass
 class ParameterSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: ParameterSpec.Builder) :
     ModifierAccessor {
 
+    @PublishedApi
     @Suppress("NOTHING_TO_INLINE")
     internal companion object {
         inline fun of(
@@ -30,7 +31,7 @@ class ParameterSpecBuilder @PublishedApi internal constructor(private val native
             .build()
     }
 
-    val annotations: AnnotationContainer = object : AnnotationContainer {
+    val annotations: AnnotationContainer = object : AnnotationContainer() {
         override fun add(spec: AnnotationSpec): AnnotationSpec = spec.also { nativeBuilder.addAnnotation(it) }
     }
 

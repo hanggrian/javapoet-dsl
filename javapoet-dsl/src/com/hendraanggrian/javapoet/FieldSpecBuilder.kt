@@ -13,6 +13,7 @@ import kotlin.reflect.KClass
 class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: FieldSpec.Builder) :
     ModifierAccessor {
 
+    @PublishedApi
     @Suppress("NOTHING_TO_INLINE")
     internal companion object {
         inline fun of(
@@ -32,8 +33,7 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
             .build()
     }
 
-    /** Configures javadoc of this field. */
-    val javadoc: CodeContainer = object : CodeContainer {
+    val javadoc: CodeContainer = object : CodeContainer() {
         override fun add(format: String, vararg args: Any) {
             nativeBuilder.addJavadoc(format, *args)
         }
@@ -41,7 +41,7 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
         override fun add(block: CodeBlock): CodeBlock = block.also { nativeBuilder.addJavadoc(it) }
     }
 
-    val annotations: AnnotationContainer = object : AnnotationContainer {
+    val annotations: AnnotationContainer = object : AnnotationContainer() {
         override fun add(spec: AnnotationSpec): AnnotationSpec = spec.also { nativeBuilder.addAnnotation(it) }
     }
 

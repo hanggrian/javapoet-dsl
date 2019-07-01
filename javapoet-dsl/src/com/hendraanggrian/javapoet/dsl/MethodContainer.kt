@@ -6,34 +6,37 @@ import com.hendraanggrian.javapoet.JavapoetDslMarker
 import com.hendraanggrian.javapoet.MethodSpecBuilder
 import com.squareup.javapoet.MethodSpec
 
-@JavapoetDslMarker
-class MethodContainerScope @PublishedApi internal constructor(container: MethodContainer) :
-    MethodContainer by container {
+/** An [MethodContainer] is responsible for managing a set of method instances. */
+abstract class MethodContainer internal constructor() {
 
-    /** Convenient method to add method with receiver. */
-    inline operator fun String.invoke(noinline builder: MethodSpecBuilder.() -> Unit): MethodSpec = add(this, builder)
-}
-
-interface MethodContainer {
-
-    /** Add spec to this container, returning the spec added. */
-    fun add(spec: MethodSpec): MethodSpec
+    abstract fun add(spec: MethodSpec): MethodSpec
 
     fun add(name: String, builder: (MethodSpecBuilder.() -> Unit)? = null): MethodSpec =
         add(MethodSpecBuilder.of(name, builder))
 
     fun addConstructor(builder: (MethodSpecBuilder.() -> Unit)? = null): MethodSpec =
         add(MethodSpecBuilder.ofConstructor(builder))
+
+    inline operator fun plusAssign(spec: MethodSpec) {
+        add(spec)
+    }
+
+    inline operator fun plusAssign(name: String) {
+        add(name)
+    }
+
+    inline operator fun invoke(configuration: MethodContainerScope.() -> Unit) =
+        MethodContainerScope(this).configuration()
 }
 
-/** Configures the methods of this container. */
-inline operator fun MethodContainer.invoke(configuration: MethodContainerScope.() -> Unit) =
-    MethodContainerScope(this).configuration()
+/**
+ * Receiver for the `methods` block providing an extended set of operators for the configuration.
+ */
+@JavapoetDslMarker
+class MethodContainerScope @PublishedApi internal constructor(private val container: MethodContainer) :
+    MethodContainer() {
 
-inline operator fun MethodContainer.plusAssign(spec: MethodSpec) {
-    add(spec)
-}
+    override fun add(spec: MethodSpec): MethodSpec = container.add(spec)
 
-inline operator fun MethodContainer.plusAssign(name: String) {
-    add(name)
+    inline operator fun String.invoke(noinline builder: MethodSpecBuilder.() -> Unit): MethodSpec = add(this, builder)
 }

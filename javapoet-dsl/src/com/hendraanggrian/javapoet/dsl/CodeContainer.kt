@@ -6,29 +6,36 @@ import com.hendraanggrian.javapoet.CodeBlockBuilder
 import com.hendraanggrian.javapoet.JavapoetDslMarker
 import com.squareup.javapoet.CodeBlock
 
-@JavapoetDslMarker
-class CodeContainerScope @PublishedApi internal constructor(container: CodeContainer) :
-    CodeContainer by container
+/** An [CodeContainer] is responsible for managing a set of code instances. */
+abstract class CodeContainer internal constructor() {
 
-/** This class is abstract instead of sealed because [com.hendraanggrian.javapoet.CodeBlockBuilder] inherited it. */
-interface CodeContainer {
+    abstract fun add(format: String, vararg args: Any)
 
-    fun add(format: String, vararg args: Any)
-
-    /** Add spec to this container, returning the spec added. */
-    fun add(block: CodeBlock): CodeBlock
+    abstract fun add(block: CodeBlock): CodeBlock
 
     fun add(builder: CodeBlockBuilder.() -> Unit): CodeBlock = add(CodeBlockBuilder.of(builder))
+
+    inline operator fun plusAssign(value: String) {
+        add(value)
+    }
+
+    inline operator fun plusAssign(block: CodeBlock) {
+        add(block)
+    }
+
+    inline operator fun invoke(configuration: CodeContainerScope.() -> Unit) =
+        CodeContainerScope(this).configuration()
 }
 
-/** Configures the code blocks of this container. */
-inline operator fun CodeContainer.invoke(configuration: CodeContainerScope.() -> Unit) =
-    CodeContainerScope(this).configuration()
+/**
+ * Receiver for the `codes`, `statements`, and `javadoc` block providing an extended set of operators for the
+ * configuration.
+ */
+@JavapoetDslMarker
+class CodeContainerScope @PublishedApi internal constructor(private val container: CodeContainer) :
+    CodeContainer() {
 
-inline operator fun CodeContainer.plusAssign(value: String) {
-    add(value)
-}
+    override fun add(format: String, vararg args: Any) = container.add(format, *args)
 
-inline operator fun CodeContainer.plusAssign(block: CodeBlock) {
-    add(block)
+    override fun add(block: CodeBlock): CodeBlock = container.add(block)
 }

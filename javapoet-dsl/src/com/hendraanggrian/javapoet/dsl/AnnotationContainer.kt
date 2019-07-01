@@ -8,52 +8,48 @@ import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
 import kotlin.reflect.KClass
 
-@JavapoetDslMarker
-class AnnotationContainerScope @PublishedApi internal constructor(container: AnnotationContainer) :
-    AnnotationContainer by container {
+/** An [AnnotationContainer] is responsible for managing a set of annotation instances. */
+abstract class AnnotationContainer internal constructor() {
 
-    /** Convenient method to add annotation with receiver. */
-    inline operator fun ClassName.invoke(noinline builder: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
-        add(this, builder)
+    abstract fun add(spec: AnnotationSpec): AnnotationSpec
 
-    /** Convenient method to add annotation with receiver. */
-    inline operator fun KClass<*>.invoke(noinline builder: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
-        add(this, builder)
-}
-
-interface AnnotationContainer {
-
-    /** Add spec to this container, returning the spec added. */
-    fun add(spec: AnnotationSpec): AnnotationSpec
-
-    /** Add annotation with [name] and [builder] configuration, returning the spec added. */
     fun add(name: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
         add(AnnotationSpecBuilder.of(name, builder))
 
-    /** Add annotation with [type] and [builder] configuration, returning the spec added. */
     fun add(type: KClass<*>, builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
         add(AnnotationSpecBuilder.of(type, builder))
+
+    inline fun <reified T> add(noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
+        add(T::class, builder)
+
+    inline operator fun plusAssign(spec: AnnotationSpec) {
+        add(spec)
+    }
+
+    inline operator fun plusAssign(type: ClassName) {
+        add(type)
+    }
+
+    inline operator fun plusAssign(type: KClass<*>) {
+        add(type)
+    }
+
+    inline operator fun invoke(configuration: AnnotationContainerScope.() -> Unit) =
+        AnnotationContainerScope(this).configuration()
 }
 
-/** Configures the annotations of this container. */
-inline operator fun AnnotationContainer.invoke(configuration: AnnotationContainerScope.() -> Unit) =
-    AnnotationContainerScope(this).configuration()
+/**
+ * Receiver for the `annotations` block providing an extended set of operators for the configuration.
+ */
+@JavapoetDslMarker
+class AnnotationContainerScope @PublishedApi internal constructor(private val container: AnnotationContainer) :
+    AnnotationContainer() {
 
-/** Convenient method to add annotation with reified type. */
-inline fun <reified T> AnnotationContainer.add(noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
-    add(T::class, builder)
+    override fun add(spec: AnnotationSpec): AnnotationSpec = container.add(spec)
 
-/** Convenient method to add annotation with plus operator. */
-inline operator fun AnnotationContainer.plusAssign(spec: AnnotationSpec) {
-    add(spec)
-}
+    inline operator fun ClassName.invoke(noinline builder: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+        add(this, builder)
 
-/** Convenient method to add annotation with plus operator. */
-inline operator fun AnnotationContainer.plusAssign(type: ClassName) {
-    add(type)
-}
-
-/** Convenient method to add annotation with plus operator. */
-inline operator fun AnnotationContainer.plusAssign(type: KClass<*>) {
-    add(type)
+    inline operator fun KClass<*>.invoke(noinline builder: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+        add(this, builder)
 }

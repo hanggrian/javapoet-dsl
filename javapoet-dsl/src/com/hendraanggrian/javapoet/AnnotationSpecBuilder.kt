@@ -9,6 +9,7 @@ import kotlin.reflect.KClass
 @JavapoetDslMarker
 class AnnotationSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: AnnotationSpec.Builder) {
 
+    @PublishedApi
     @Suppress("NOTHING_TO_INLINE")
     internal companion object {
         inline fun of(type: ClassName, noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
@@ -22,8 +23,7 @@ class AnnotationSpecBuilder @PublishedApi internal constructor(private val nativ
                 .build()
     }
 
-    /** Configures members of this annotation. */
-    val members: MemberContainer = object : MemberContainer {
+    val members: MemberContainer = object : MemberContainer() {
         override fun add(name: String, format: String, vararg args: Any) {
             nativeBuilder.addMember(name, format, *args)
         }

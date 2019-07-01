@@ -8,15 +8,10 @@ import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.TypeSpec
 
-@JavapoetDslMarker
-class TypeContainerScope @PublishedApi internal constructor(container: TypeContainer) :
-    TypeContainer by container
+/** An [TypeContainer] is responsible for managing a set of type instances. */
+abstract class TypeContainer internal constructor() {
 
-/** This class is abstract instead of sealed because [com.hendraanggrian.javapoet.JavaFileBuilder] inherited it. */
-interface TypeContainer {
-
-    /** Add spec to this container, returning the spec added. */
-    fun add(spec: TypeSpec): TypeSpec
+    abstract fun add(spec: TypeSpec): TypeSpec
 
     fun addClass(type: String, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
         add(TypeSpecBuilder.ofClass(type, builder))
@@ -47,8 +42,17 @@ interface TypeContainer {
 
     fun addAnnotation(type: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
         add(TypeSpecBuilder.ofAnnotation(type, builder))
+
+    inline operator fun TypeContainer.invoke(configuration: TypeContainerScope.() -> Unit) =
+        TypeContainerScope(this).configuration()
 }
 
-/** Configures the types of this container. */
-inline operator fun TypeContainer.invoke(configuration: TypeContainerScope.() -> Unit) =
-    TypeContainerScope(this).configuration()
+/**
+ * Receiver for the `types` block providing an extended set of operators for the configuration.
+ */
+@JavapoetDslMarker
+class TypeContainerScope @PublishedApi internal constructor(private val container: TypeContainer) :
+    TypeContainer() {
+
+    override fun add(spec: TypeSpec): TypeSpec = container.add(spec)
+}

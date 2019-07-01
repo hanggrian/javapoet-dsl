@@ -21,6 +21,7 @@ import kotlin.reflect.KClass
 class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: TypeSpec.Builder) :
     TypeAccessor, ModifierAccessor {
 
+    @PublishedApi
     @Suppress("NOTHING_TO_INLINE")
     internal companion object {
         inline fun ofClass(type: String, noinline builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
@@ -77,7 +78,7 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
                 .build()
     }
 
-    val javadoc: CodeContainer = object : CodeContainer {
+    val javadoc: CodeContainer = object : CodeContainer() {
         override fun add(format: String, vararg args: Any) {
             nativeBuilder.addJavadoc(format, *args)
         }
@@ -85,7 +86,7 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
         override fun add(block: CodeBlock): CodeBlock = block.also { nativeBuilder.addJavadoc(it) }
     }
 
-    val annotations: AnnotationContainer = object : AnnotationContainer {
+    val annotations: AnnotationContainer = object : AnnotationContainer() {
         override fun add(spec: AnnotationSpec): AnnotationSpec = spec.also { nativeBuilder.addAnnotation(it) }
     }
 
@@ -133,7 +134,7 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
         nativeBuilder.addEnumConstant(name, ofEnum(name2, builder))
     }
 
-    val fields: FieldContainer = object : FieldContainer {
+    val fields: FieldContainer = object : FieldContainer() {
         override fun add(spec: FieldSpec): FieldSpec = spec.also { nativeBuilder.addField(it) }
     }
 
@@ -150,11 +151,11 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
     inline fun addInitializerBlock(builder: CodeBlockBuilder.() -> Unit) =
         addInitializerBlock(CodeBlockBuilder.of(builder))
 
-    val methods: MethodContainer = object : MethodContainer {
+    val methods: MethodContainer = object : MethodContainer() {
         override fun add(spec: MethodSpec): MethodSpec = spec.also { nativeBuilder.addMethod(it) }
     }
 
-    val types: TypeContainer = object : TypeContainer {
+    val types: TypeContainer = object : TypeContainer() {
         override fun add(spec: TypeSpec): TypeSpec = spec.also { nativeBuilder.addType(it) }
     }
 
