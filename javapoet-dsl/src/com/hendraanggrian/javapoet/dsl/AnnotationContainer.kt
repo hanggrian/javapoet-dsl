@@ -3,7 +3,6 @@
 package com.hendraanggrian.javapoet.dsl
 
 import com.hendraanggrian.javapoet.AnnotationSpecBuilder
-import com.hendraanggrian.javapoet.JavapoetDslMarker
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
 import kotlin.reflect.KClass
@@ -41,7 +40,6 @@ abstract class AnnotationContainer internal constructor() {
 /**
  * Receiver for the `annotations` block providing an extended set of operators for the configuration.
  */
-@JavapoetDslMarker
 class AnnotationContainerScope @PublishedApi internal constructor(private val container: AnnotationContainer) :
     AnnotationContainer() {
 

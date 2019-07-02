@@ -2,7 +2,6 @@
 
 package com.hendraanggrian.javapoet.dsl
 
-import com.hendraanggrian.javapoet.JavapoetDslMarker
 import com.hendraanggrian.javapoet.TypeSpecBuilder
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
@@ -50,7 +49,6 @@ abstract class TypeContainer internal constructor() {
 /**
  * Receiver for the `types` block providing an extended set of operators for the configuration.
  */
-@JavapoetDslMarker
 class TypeContainerScope @PublishedApi internal constructor(private val container: TypeContainer) :
     TypeContainer() {
 

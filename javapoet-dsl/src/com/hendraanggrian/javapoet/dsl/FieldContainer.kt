@@ -3,7 +3,6 @@
 package com.hendraanggrian.javapoet.dsl
 
 import com.hendraanggrian.javapoet.FieldSpecBuilder
-import com.hendraanggrian.javapoet.JavapoetDslMarker
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.TypeName
 import kotlin.reflect.KClass
@@ -41,7 +40,6 @@ abstract class FieldContainer internal constructor() {
 /**
  * Receiver for the `fields` block providing an extended set of operators for the configuration.
  */
-@JavapoetDslMarker
 class FieldContainerScope @PublishedApi internal constructor(private val container: FieldContainer) :
     FieldContainer() {
 

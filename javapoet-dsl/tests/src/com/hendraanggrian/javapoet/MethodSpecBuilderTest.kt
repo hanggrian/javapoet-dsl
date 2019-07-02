@@ -12,49 +12,64 @@ import kotlin.test.assertEquals
 
 class MethodSpecBuilderTest {
 
+    private val expected = MethodSpec.methodBuilder("main")
+        .addJavadoc("firstJavadoc")
+        .addJavadoc(
+            CodeBlock.builder()
+                .add("secondJavadoc")
+                .build()
+        )
+        .addAnnotation(AnnotationSpec.builder(Deprecated::class.java).build())
+        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+        .returns(TypeName.VOID)
+        .addParameter(ParameterSpec.builder(Array<String>::class.java, "param").build())
+        .varargs(true)
+        .addException(IOException::class.java)
+        .addComment("Some comment")
+        .addCode("doSomething()")
+        .build()
+
     @Test
     fun simple() {
-        assertEquals(
-            MethodSpec.constructorBuilder().build(),
-            MethodSpecBuilder.ofConstructor()
-        )
+        assertEquals(expected, MethodSpecBuilder.of("main") {
+            javadoc.add("firstJavadoc")
+            javadoc.add {
+                add("secondJavadoc")
+            }
+            annotations.add<Deprecated>()
+            modifiers = public + static
+            returns = void
+            parameters.add<Array<String>>("param")
+            varargs = true
+            addException<IOException>()
+            addComment("Some comment")
+            codes.add("doSomething()")
+        })
     }
 
     @Test
-    fun advanced() {
-        assertEquals(
-            MethodSpec.methodBuilder("main")
-                .addJavadoc("firstJavadoc")
-                .addJavadoc(
-                    CodeBlock.builder()
-                        .add("secondJavadoc")
-                        .build()
-                )
-                .addAnnotation(AnnotationSpec.builder(Deprecated::class.java).build())
-                .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                .returns(TypeName.VOID)
-                .addParameter(ParameterSpec.builder(Array<String>::class.java, "param").build())
-                .varargs(true)
-                .addException(IOException::class.java)
-                .addComment("Some comment")
-                .addCode("doSomething()")
-                .build(),
-            MethodSpecBuilder.of("main") {
-                javadoc {
-                    add("firstJavadoc")
-                    add {
-                        add("secondJavadoc")
-                    }
+    fun invocation() {
+        assertEquals(expected, MethodSpecBuilder.of("main") {
+            javadoc {
+                add("firstJavadoc")
+                add {
+                    add("secondJavadoc")
                 }
-                annotations.add<Deprecated>()
-                modifiers = public + static
-                returns = void
-                parameters.add<Array<String>>("param")
-                varargs = true
-                addException<IOException>()
-                addComment("Some comment")
-                codes.add("doSomething()")
             }
-        )
+            annotations {
+                add<Deprecated>()
+            }
+            modifiers = public + static
+            returns = void
+            parameters {
+                add<Array<String>>("param")
+            }
+            varargs = true
+            addException<IOException>()
+            addComment("Some comment")
+            codes {
+                add("doSomething()")
+            }
+        })
     }
 }

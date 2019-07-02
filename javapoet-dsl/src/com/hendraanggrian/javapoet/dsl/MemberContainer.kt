@@ -3,7 +3,6 @@
 package com.hendraanggrian.javapoet.dsl
 
 import com.hendraanggrian.javapoet.CodeBlockBuilder
-import com.hendraanggrian.javapoet.JavapoetDslMarker
 import com.squareup.javapoet.CodeBlock
 
 /** An [MemberContainer] is responsible for managing a set of member instances. */
@@ -30,7 +29,6 @@ abstract class MemberContainer internal constructor() {
 /**
  * Receiver for the `members` block providing an extended set of operators for the configuration.
  */
-@JavapoetDslMarker
 class MemberContainerScope @PublishedApi internal constructor(private val container: MemberContainer) :
     MemberContainer() {
 

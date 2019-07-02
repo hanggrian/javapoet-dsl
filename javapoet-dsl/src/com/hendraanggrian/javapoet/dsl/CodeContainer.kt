@@ -3,7 +3,6 @@
 package com.hendraanggrian.javapoet.dsl
 
 import com.hendraanggrian.javapoet.CodeBlockBuilder
-import com.hendraanggrian.javapoet.JavapoetDslMarker
 import com.squareup.javapoet.CodeBlock
 
 /** An [CodeContainer] is responsible for managing a set of code instances. */
@@ -31,7 +30,6 @@ abstract class CodeContainer internal constructor() {
  * Receiver for the `codes`, `statements`, and `javadoc` block providing an extended set of operators for the
  * configuration.
  */
-@JavapoetDslMarker
 class CodeContainerScope @PublishedApi internal constructor(private val container: CodeContainer) :
     CodeContainer() {
 

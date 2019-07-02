@@ -1,40 +1,40 @@
 package com.hendraanggrian.javapoet
 
 import com.squareup.javapoet.AnnotationSpec
-import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class AnnotationSpecBuilderTest {
 
+    private val expected = AnnotationSpec.builder(Deprecated::class.java)
+        .addMember("message", "Old stuff")
+        .addMember(
+            "code", CodeBlock.builder()
+                .add("codeValue")
+                .build()
+        )
+        .build()
+
     @Test
     fun simple() {
-        assertEquals(
-            AnnotationSpec.builder(Deprecated::class.java).build(),
-            AnnotationSpecBuilder.of(Deprecated::class)
-        )
+        assertEquals(expected, AnnotationSpecBuilder.of(Deprecated::class) {
+            members.add("message", "Old stuff")
+            members.add("code") {
+                add("codeValue")
+            }
+        })
     }
 
     @Test
-    fun advanced() {
-        assertEquals(
-            AnnotationSpec.builder(ClassName.OBJECT)
-                .addMember("string", "stringValue")
-                .addMember(
-                    "code", CodeBlock.builder()
-                        .add("codeValue")
-                        .build()
-                )
-                .build(),
-            AnnotationSpecBuilder.of(ClassName.OBJECT) {
-                members {
-                    add("string", "stringValue")
-                    "code" {
-                        add("codeValue")
-                    }
+    fun invocation() {
+        assertEquals(expected, AnnotationSpecBuilder.of(Deprecated::class) {
+            members {
+                add("message", "Old stuff")
+                "code" {
+                    add("codeValue")
                 }
             }
-        )
+        })
     }
 }

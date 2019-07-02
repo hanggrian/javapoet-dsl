@@ -12,12 +12,11 @@ inline fun buildJavaFile(packageName: String, builder: JavaFileBuilder.() -> Uni
         .apply(builder)
         .build()
 
-@JavapoetDslMarker
 class JavaFileBuilder @PublishedApi internal constructor(private val packageName: String) :
     TypeContainer(), TypeAccessor {
 
     private var type: TypeSpec? = null
-    private var comments: MutableMap<String, Array<Any>>? = null
+    private var comments: Map<String, Array<Any>>? = null
     private var staticImports: MutableList<Pair<Any, Array<String>>>? = null
     private var _skipJavaLangImports: Boolean? = null
     private var indent: Int? = null
@@ -28,22 +27,22 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
     }
 
     /** Add a comment to this file. */
-    fun comment(format: String, vararg args: Any) {
-        if (comments == null) {
+    fun addComment(format: String, vararg args: Any) {
+        if (comments !is MutableMap) {
             comments = mutableMapOf()
         }
-        comments!! += format to arrayOf(*args)
+        comments as MutableMap += format to arrayOf(*args)
     }
 
     /** Set a comment to this file, cancelling all changes made with [comment]. */
     var comment: String
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
         set(value) {
-            comments = mutableMapOf(value to emptyArray())
+            comments = mapOf(value to emptyArray())
         }
 
     /** Add static imports to this file. */
-    fun staticImports(constant: Enum<*>) {
+    fun addStaticImports(constant: Enum<*>) {
         if (staticImports == null) {
             staticImports = mutableListOf()
         }
@@ -51,7 +50,7 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
     }
 
     /** Add static imports to this file. */
-    fun staticImports(type: ClassName, vararg names: String) {
+    fun addStaticImports(type: ClassName, vararg names: String) {
         if (staticImports == null) {
             staticImports = mutableListOf()
         }
@@ -59,7 +58,7 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
     }
 
     /** Add static imports to this file. */
-    fun staticImports(type: KClass<*>, vararg names: String) {
+    fun addStaticImports(type: KClass<*>, vararg names: String) {
         if (staticImports == null) {
             staticImports = mutableListOf()
         }
@@ -67,7 +66,7 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
     }
 
     /** Add static imports to this file. */
-    inline fun <reified T> staticImports(vararg names: String) = staticImports(T::class, *names)
+    inline fun <reified T> addStaticImports(vararg names: String) = addStaticImports(T::class, *names)
 
     var skipJavaLangImports: Boolean
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()

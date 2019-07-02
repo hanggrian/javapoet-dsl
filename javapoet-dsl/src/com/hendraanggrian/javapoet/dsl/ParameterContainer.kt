@@ -2,7 +2,6 @@
 
 package com.hendraanggrian.javapoet.dsl
 
-import com.hendraanggrian.javapoet.JavapoetDslMarker
 import com.hendraanggrian.javapoet.ParameterSpecBuilder
 import com.squareup.javapoet.ParameterSpec
 import com.squareup.javapoet.TypeName
@@ -43,7 +42,6 @@ abstract class ParameterContainer internal constructor() {
 /**
  * Receiver for the `parameters` block providing an extended set of operators for the configuration.
  */
-@JavapoetDslMarker
 class ParameterContainerScope @PublishedApi internal constructor(private val container: ParameterContainer) :
     ParameterContainer() {
 
