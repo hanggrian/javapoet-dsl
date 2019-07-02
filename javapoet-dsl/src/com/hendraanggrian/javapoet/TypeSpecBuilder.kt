@@ -17,8 +17,7 @@ import javax.lang.model.element.Element
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
-class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: TypeSpec.Builder) :
-    SpecBuilder<TypeSpec>(), ModifierAccessor {
+class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: TypeSpec.Builder) {
 
     @PublishedApi
     @Suppress("NOTHING_TO_INLINE")
@@ -89,11 +88,9 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
         override fun add(spec: AnnotationSpec): AnnotationSpec = spec.also { nativeBuilder.addAnnotation(it) }
     }
 
-    override var modifiers: Collection<Modifier>
-        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
-        set(value) {
-            nativeBuilder.addModifiers(*value.toTypedArray())
-        }
+    fun addModifiers(vararg modifiers: Modifier) {
+        nativeBuilder.addModifiers(*modifiers)
+    }
 
     fun addTypeVariable(name: TypeVariableName) {
         nativeBuilder.addTypeVariable(name)
@@ -162,5 +159,6 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
         nativeBuilder.addOriginatingElement(originatingElement)
     }
 
-    override fun build(): TypeSpec = nativeBuilder.build()
+    @PublishedApi
+    internal fun build(): TypeSpec = nativeBuilder.build()
 }

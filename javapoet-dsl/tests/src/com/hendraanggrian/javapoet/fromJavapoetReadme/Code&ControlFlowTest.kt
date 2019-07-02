@@ -1,6 +1,7 @@
 package com.hendraanggrian.javapoet.fromJavapoetReadme
 
 import com.hendraanggrian.javapoet.buildJavaFile
+import com.squareup.javapoet.TypeName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -46,7 +47,7 @@ class `Code&ControlFlowTest` {
                 addClass("HelloWorld") {
                     methods {
                         "flow" {
-                            returns = void
+                            returns = TypeName.VOID
                             codes.add(
                                 """
                                 int total = 0;
@@ -71,7 +72,7 @@ class `Code&ControlFlowTest` {
                 addClass("HelloWorld") {
                     methods {
                         "flow" {
-                            returns = void
+                            returns = TypeName.VOID
                             statements.add("int total = 0")
                             beginControlFlow("for (int i = 0; i < 10; i++)")
                             statements.add("total += i")
@@ -91,7 +92,7 @@ class `Code&ControlFlowTest` {
                 addClass("HelloWorld") {
                     methods {
                         "multiply10to20" {
-                            returns = int
+                            returns = TypeName.INT
                             statements.add("int result = 1")
                             beginControlFlow("for (int i = 10; i < 20; i++)")
                             statements.add("result = result * i")

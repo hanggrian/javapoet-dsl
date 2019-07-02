@@ -29,7 +29,7 @@ class FieldSpecBuilderTest {
                 add("secondJavadoc")
             }
             annotations.add<Deprecated>()
-            modifiers = public + final
+            addModifiers(Modifier.PUBLIC, Modifier.FINAL)
             initializer = "value"
         })
     }
@@ -46,7 +46,7 @@ class FieldSpecBuilderTest {
             annotations {
                 add<Deprecated>()
             }
-            modifiers = public + final
+            addModifiers(Modifier.PUBLIC, Modifier.FINAL)
             initializer = "value"
         })
     }

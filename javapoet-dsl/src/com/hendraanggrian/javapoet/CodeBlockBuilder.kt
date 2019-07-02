@@ -5,7 +5,7 @@ import com.hendraanggrian.javapoet.dsl.CodeContainer
 import com.squareup.javapoet.CodeBlock
 
 class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuilder: CodeBlock.Builder) :
-    SpecBuilder<CodeBlock>(), CodeCollection {
+    CodeCollection {
 
     @PublishedApi
     @Suppress("NOTHING_TO_INLINE")
@@ -60,5 +60,6 @@ class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuil
         nativeBuilder.unindent()
     }
 
-    override fun build(): CodeBlock = nativeBuilder.build()
+    @PublishedApi
+    internal fun build(): CodeBlock = nativeBuilder.build()
 }

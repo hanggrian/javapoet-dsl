@@ -37,8 +37,8 @@ class MethodSpecBuilderTest {
                 add("secondJavadoc")
             }
             annotations.add<Deprecated>()
-            modifiers = public + static
-            returns = void
+            addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+            returns = TypeName.VOID
             parameters.add<Array<String>>("param")
             varargs = true
             addException<IOException>()
@@ -59,8 +59,8 @@ class MethodSpecBuilderTest {
             annotations {
                 add<Deprecated>()
             }
-            modifiers = public + static
-            returns = void
+            addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+            returns = TypeName.VOID
             parameters {
                 add<Array<String>>("param")
             }

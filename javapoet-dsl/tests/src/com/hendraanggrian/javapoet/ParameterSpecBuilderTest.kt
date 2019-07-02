@@ -17,7 +17,7 @@ class ParameterSpecBuilderTest {
     fun simple() {
         assertEquals(expected, ParameterSpecBuilder.of(String::class, "name") {
             annotations.add<Deprecated>()
-            modifiers = public + final
+            addModifiers(Modifier.PUBLIC, Modifier.FINAL)
         })
     }
 
@@ -27,7 +27,7 @@ class ParameterSpecBuilderTest {
             annotations {
                 add<Deprecated>()
             }
-            modifiers = public + final
+            addModifiers(Modifier.PUBLIC, Modifier.FINAL)
         })
     }
 }

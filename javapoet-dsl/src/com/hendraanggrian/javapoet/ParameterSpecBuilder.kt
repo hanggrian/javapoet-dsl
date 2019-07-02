@@ -7,8 +7,7 @@ import com.squareup.javapoet.TypeName
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
-class ParameterSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: ParameterSpec.Builder) :
-    SpecBuilder<ParameterSpec>(), ModifierAccessor {
+class ParameterSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: ParameterSpec.Builder) {
 
     @PublishedApi
     @Suppress("NOTHING_TO_INLINE")
@@ -34,11 +33,10 @@ class ParameterSpecBuilder @PublishedApi internal constructor(private val native
         override fun add(spec: AnnotationSpec): AnnotationSpec = spec.also { nativeBuilder.addAnnotation(it) }
     }
 
-    override var modifiers: Collection<Modifier>
-        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
-        set(value) {
-            nativeBuilder.addModifiers(*value.toTypedArray())
-        }
+    fun addModifiers(vararg modifiers: Modifier) {
+        nativeBuilder.addModifiers(*modifiers)
+    }
 
-    override fun build(): ParameterSpec = nativeBuilder.build()
+    @PublishedApi
+    internal fun build(): ParameterSpec = nativeBuilder.build()
 }

@@ -9,8 +9,7 @@ import com.squareup.javapoet.TypeName
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
-class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: FieldSpec.Builder) :
-    SpecBuilder<FieldSpec>(), ModifierAccessor {
+class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: FieldSpec.Builder) {
 
     @PublishedApi
     @Suppress("NOTHING_TO_INLINE")
@@ -44,11 +43,9 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
         override fun add(spec: AnnotationSpec): AnnotationSpec = spec.also { nativeBuilder.addAnnotation(it) }
     }
 
-    override var modifiers: Collection<Modifier>
-        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
-        set(value) {
-            nativeBuilder.addModifiers(*value.toTypedArray())
-        }
+    fun addModifiers(vararg modifiers: Modifier) {
+        nativeBuilder.addModifiers(*modifiers)
+    }
 
     fun initializer(format: String, vararg args: Any) {
         nativeBuilder.initializer(format, *args)
@@ -64,5 +61,6 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
 
     inline fun initializer(builder: CodeBlockBuilder.() -> Unit) = initializer(CodeBlockBuilder.of(builder))
 
-    override fun build(): FieldSpec = nativeBuilder.build()
+    @PublishedApi
+    internal fun build(): FieldSpec = nativeBuilder.build()
 }

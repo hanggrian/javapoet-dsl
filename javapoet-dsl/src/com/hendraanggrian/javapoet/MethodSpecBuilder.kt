@@ -12,8 +12,7 @@ import com.squareup.javapoet.TypeVariableName
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
-class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: MethodSpec.Builder) :
-    SpecBuilder<MethodSpec>(), ModifierAccessor {
+class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: MethodSpec.Builder) {
 
     @PublishedApi
     @Suppress("NOTHING_TO_INLINE")
@@ -41,11 +40,9 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
         override fun add(spec: AnnotationSpec): AnnotationSpec = spec.also { nativeBuilder.addAnnotation(it) }
     }
 
-    override var modifiers: Collection<Modifier>
-        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
-        set(value) {
-            nativeBuilder.addModifiers(*value.toTypedArray())
-        }
+    fun addModifiers(vararg modifiers: Modifier) {
+        nativeBuilder.addModifiers(*modifiers)
+    }
 
     fun addTypeVariable(name: TypeVariableName) {
         nativeBuilder.addTypeVariable(name)
@@ -135,5 +132,6 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
         override fun add(block: CodeBlock): CodeBlock = block.also { nativeBuilder.addStatement(it) }
     }
 
-    override fun build(): MethodSpec = nativeBuilder.build()
+    @PublishedApi
+    internal fun build(): MethodSpec = nativeBuilder.build()
 }

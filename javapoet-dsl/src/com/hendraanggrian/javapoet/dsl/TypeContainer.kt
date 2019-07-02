@@ -10,10 +10,6 @@ import com.squareup.javapoet.TypeSpec
 internal interface TypeCollection {
 
     fun add(spec: TypeSpec): TypeSpec
-}
-
-/** A [TypeContainer] is responsible for managing a set of type instances. */
-abstract class TypeContainer internal constructor() : TypeCollection {
 
     fun addClass(type: String, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
         add(TypeSpecBuilder.ofClass(type, builder))
@@ -44,6 +40,10 @@ abstract class TypeContainer internal constructor() : TypeCollection {
 
     fun addAnnotation(type: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
         add(TypeSpecBuilder.ofAnnotation(type, builder))
+}
+
+/** A [TypeContainer] is responsible for managing a set of type instances. */
+abstract class TypeContainer internal constructor() : TypeCollection {
 
     inline operator fun TypeContainer.invoke(configuration: TypeContainerScope.() -> Unit) =
         TypeContainerScope(this).configuration()

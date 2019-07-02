@@ -1,6 +1,8 @@
 package com.hendraanggrian.javapoet.fromJavapoetReadme
 
 import com.hendraanggrian.javapoet.buildJavaFile
+import com.squareup.javapoet.TypeName
+import javax.lang.model.element.Modifier
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -26,11 +28,11 @@ class HelloWorldTest {
             buildJavaFile("com.example") {
                 comment = "A boring HelloWorld class"
                 addClass("HelloWorld") {
-                    modifiers = public + final
+                    addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                     methods {
                         "main" {
-                            modifiers = public + static
-                            returns = void
+                            addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                            returns = TypeName.VOID
                             parameters.add<Array<String>>("args")
                             statements.add("\$T.out.println(\$S)", System::class.java, "Hello, JavaPoet!")
                         }

@@ -2,6 +2,7 @@ package com.hendraanggrian.javapoet.fromJavapoetReadme
 
 import com.hendraanggrian.javapoet.buildJavaFile
 import com.hendraanggrian.javapoet.dsl.MethodContainerScope
+import javax.lang.model.element.Modifier
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -33,7 +34,7 @@ class `$SforStringsTest` {
             """.trimIndent(),
             buildJavaFile("com.example") {
                 addClass("HelloWorld") {
-                    modifiers = public + final
+                    addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                     methods {
                         nameMethod("slimShady")
                         nameMethod("eminem")
