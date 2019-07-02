@@ -1,10 +1,11 @@
 package com.hendraanggrian.javapoet
 
+import com.hendraanggrian.javapoet.dsl.CodeCollection
 import com.hendraanggrian.javapoet.dsl.CodeContainer
 import com.squareup.javapoet.CodeBlock
 
 class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuilder: CodeBlock.Builder) :
-    CodeContainer() {
+    SpecBuilder<CodeBlock>(), CodeCollection {
 
     @PublishedApi
     @Suppress("NOTHING_TO_INLINE")
@@ -59,6 +60,5 @@ class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuil
         nativeBuilder.unindent()
     }
 
-    @PublishedApi
-    internal fun build(): CodeBlock = nativeBuilder.build()
+    override fun build(): CodeBlock = nativeBuilder.build()
 }

@@ -8,7 +8,7 @@ import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
 class ParameterSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: ParameterSpec.Builder) :
-    ModifierAccessor {
+    SpecBuilder<ParameterSpec>(), ModifierAccessor {
 
     @PublishedApi
     @Suppress("NOTHING_TO_INLINE")
@@ -40,6 +40,5 @@ class ParameterSpecBuilder @PublishedApi internal constructor(private val native
             nativeBuilder.addModifiers(*value.toTypedArray())
         }
 
-    @PublishedApi
-    internal fun build(): ParameterSpec = nativeBuilder.build()
+    override fun build(): ParameterSpec = nativeBuilder.build()
 }

@@ -1,5 +1,7 @@
 package com.hendraanggrian.javapoet
 
+import com.hendraanggrian.javapoet.SpecBuilder.Companion.NO_GETTER
+import com.hendraanggrian.javapoet.SpecBuilder.Companion.noGetter
 import com.hendraanggrian.javapoet.dsl.TypeContainer
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.JavaFile
@@ -13,7 +15,7 @@ inline fun buildJavaFile(packageName: String, builder: JavaFileBuilder.() -> Uni
         .build()
 
 class JavaFileBuilder @PublishedApi internal constructor(private val packageName: String) :
-    TypeContainer(), TypeAccessor {
+    TypeContainer() {
 
     private var type: TypeSpec? = null
     private var comments: Map<String, Array<Any>>? = null

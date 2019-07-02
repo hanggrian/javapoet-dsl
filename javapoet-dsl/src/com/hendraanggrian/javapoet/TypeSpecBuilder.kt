@@ -18,7 +18,7 @@ import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
 class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: TypeSpec.Builder) :
-    TypeAccessor, ModifierAccessor {
+    SpecBuilder<TypeSpec>(), ModifierAccessor {
 
     @PublishedApi
     @Suppress("NOTHING_TO_INLINE")
@@ -162,6 +162,5 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
         nativeBuilder.addOriginatingElement(originatingElement)
     }
 
-    @PublishedApi
-    internal fun build(): TypeSpec = nativeBuilder.build()
+    override fun build(): TypeSpec = nativeBuilder.build()
 }

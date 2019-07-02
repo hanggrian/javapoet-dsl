@@ -7,16 +7,19 @@ import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
 import kotlin.reflect.KClass
 
-/** An [AnnotationContainer] is responsible for managing a set of annotation instances. */
-abstract class AnnotationContainer internal constructor() {
+internal interface AnnotationCollection {
 
-    abstract fun add(spec: AnnotationSpec): AnnotationSpec
+    fun add(spec: AnnotationSpec): AnnotationSpec
 
     fun add(name: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
         add(AnnotationSpecBuilder.of(name, builder))
 
     fun add(type: KClass<*>, builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
         add(AnnotationSpecBuilder.of(type, builder))
+}
+
+/** An [AnnotationContainer] is responsible for managing a set of annotation instances. */
+abstract class AnnotationContainer internal constructor() : AnnotationCollection {
 
     inline fun <reified T> add(noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
         add(T::class, builder)
@@ -40,10 +43,8 @@ abstract class AnnotationContainer internal constructor() {
 /**
  * Receiver for the `annotations` block providing an extended set of operators for the configuration.
  */
-class AnnotationContainerScope @PublishedApi internal constructor(private val container: AnnotationContainer) :
-    AnnotationContainer() {
-
-    override fun add(spec: AnnotationSpec): AnnotationSpec = container.add(spec)
+class AnnotationContainerScope @PublishedApi internal constructor(collection: AnnotationCollection) :
+    AnnotationContainer(), AnnotationCollection by collection {
 
     inline operator fun ClassName.invoke(noinline builder: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
         add(this, builder)

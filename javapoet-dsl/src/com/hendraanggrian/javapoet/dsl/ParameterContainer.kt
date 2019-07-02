@@ -7,16 +7,19 @@ import com.squareup.javapoet.ParameterSpec
 import com.squareup.javapoet.TypeName
 import kotlin.reflect.KClass
 
-/** An [ParameterContainer] is responsible for managing a set of parameter instances. */
-abstract class ParameterContainer internal constructor() {
+internal interface ParameterCollection {
 
-    abstract fun add(spec: ParameterSpec): ParameterSpec
+    fun add(spec: ParameterSpec): ParameterSpec
 
     fun add(type: TypeName, name: String, builder: (ParameterSpecBuilder.() -> Unit)? = null): ParameterSpec =
         add(ParameterSpecBuilder.of(type, name, builder))
 
     fun add(type: KClass<*>, name: String, builder: (ParameterSpecBuilder.() -> Unit)? = null): ParameterSpec =
         add(ParameterSpecBuilder.of(type, name, builder))
+}
+
+/** A [ParameterContainer] is responsible for managing a set of parameter instances. */
+abstract class ParameterContainer internal constructor() : ParameterCollection {
 
     inline fun <reified T> add(
         name: String,
@@ -42,10 +45,8 @@ abstract class ParameterContainer internal constructor() {
 /**
  * Receiver for the `parameters` block providing an extended set of operators for the configuration.
  */
-class ParameterContainerScope @PublishedApi internal constructor(private val container: ParameterContainer) :
-    ParameterContainer() {
-
-    override fun add(spec: ParameterSpec): ParameterSpec = container.add(spec)
+class ParameterContainerScope @PublishedApi internal constructor(collection: ParameterCollection) :
+    ParameterContainer(), ParameterCollection by collection {
 
     inline operator fun String.invoke(
         type: TypeName,

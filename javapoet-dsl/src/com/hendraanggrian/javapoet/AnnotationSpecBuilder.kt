@@ -6,7 +6,8 @@ import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import kotlin.reflect.KClass
 
-class AnnotationSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: AnnotationSpec.Builder) {
+class AnnotationSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: AnnotationSpec.Builder) :
+    SpecBuilder<AnnotationSpec>() {
 
     @PublishedApi
     @Suppress("NOTHING_TO_INLINE")
@@ -30,6 +31,5 @@ class AnnotationSpecBuilder @PublishedApi internal constructor(private val nativ
         override fun add(name: String, block: CodeBlock): CodeBlock = block.also { nativeBuilder.addMember(name, it) }
     }
 
-    @PublishedApi
-    internal fun build(): AnnotationSpec = nativeBuilder.build()
+    override fun build(): AnnotationSpec = nativeBuilder.build()
 }

@@ -13,7 +13,7 @@ import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
 class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: MethodSpec.Builder) :
-    TypeAccessor, ModifierAccessor {
+    SpecBuilder<MethodSpec>(), ModifierAccessor {
 
     @PublishedApi
     @Suppress("NOTHING_TO_INLINE")
@@ -135,6 +135,5 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
         override fun add(block: CodeBlock): CodeBlock = block.also { nativeBuilder.addStatement(it) }
     }
 
-    @PublishedApi
-    internal fun build(): MethodSpec = nativeBuilder.build()
+    override fun build(): MethodSpec = nativeBuilder.build()
 }

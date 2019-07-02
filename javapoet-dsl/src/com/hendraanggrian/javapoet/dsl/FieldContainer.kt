@@ -7,16 +7,19 @@ import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.TypeName
 import kotlin.reflect.KClass
 
-/** An [FieldContainer] is responsible for managing a set of field instances. */
-abstract class FieldContainer internal constructor() {
+internal interface FieldCollection {
 
-    abstract fun add(spec: FieldSpec): FieldSpec
+    fun add(spec: FieldSpec): FieldSpec
 
     fun add(type: TypeName, name: String, builder: (FieldSpecBuilder.() -> Unit)? = null): FieldSpec =
         add(FieldSpecBuilder.of(type, name, builder))
 
     fun add(type: KClass<*>, name: String, builder: (FieldSpecBuilder.() -> Unit)? = null): FieldSpec =
         add(FieldSpecBuilder.of(type, name, builder))
+}
+
+/** A [FieldContainer] is responsible for managing a set of field instances. */
+abstract class FieldContainer internal constructor() : FieldCollection {
 
     inline fun <reified T> add(name: String, noinline builder: (FieldSpecBuilder.() -> Unit)? = null): FieldSpec =
         add(T::class, name, builder)
@@ -40,10 +43,8 @@ abstract class FieldContainer internal constructor() {
 /**
  * Receiver for the `fields` block providing an extended set of operators for the configuration.
  */
-class FieldContainerScope @PublishedApi internal constructor(private val container: FieldContainer) :
-    FieldContainer() {
-
-    override fun add(spec: FieldSpec): FieldSpec = container.add(spec)
+class FieldContainerScope @PublishedApi internal constructor(collection: FieldCollection) :
+    FieldContainer(), FieldCollection by collection {
 
     inline operator fun String.invoke(name: TypeName, noinline builder: FieldSpecBuilder.() -> Unit): FieldSpec =
         add(name, this, builder)

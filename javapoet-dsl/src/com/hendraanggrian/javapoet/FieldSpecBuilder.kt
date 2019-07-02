@@ -10,7 +10,7 @@ import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
 class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: FieldSpec.Builder) :
-    ModifierAccessor {
+    SpecBuilder<FieldSpec>(), ModifierAccessor {
 
     @PublishedApi
     @Suppress("NOTHING_TO_INLINE")
@@ -64,6 +64,5 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
 
     inline fun initializer(builder: CodeBlockBuilder.() -> Unit) = initializer(CodeBlockBuilder.of(builder))
 
-    @PublishedApi
-    internal fun build(): FieldSpec = nativeBuilder.build()
+    override fun build(): FieldSpec = nativeBuilder.build()
 }

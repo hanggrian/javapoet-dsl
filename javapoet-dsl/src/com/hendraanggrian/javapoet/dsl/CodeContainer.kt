@@ -5,14 +5,17 @@ package com.hendraanggrian.javapoet.dsl
 import com.hendraanggrian.javapoet.CodeBlockBuilder
 import com.squareup.javapoet.CodeBlock
 
-/** An [CodeContainer] is responsible for managing a set of code instances. */
-abstract class CodeContainer internal constructor() {
+internal interface CodeCollection {
 
-    abstract fun add(format: String, vararg args: Any)
+    fun add(format: String, vararg args: Any)
 
-    abstract fun add(block: CodeBlock): CodeBlock
+    fun add(block: CodeBlock): CodeBlock
 
     fun add(builder: CodeBlockBuilder.() -> Unit): CodeBlock = add(CodeBlockBuilder.of(builder))
+}
+
+/** A [CodeContainer] is responsible for managing a set of code instances. */
+abstract class CodeContainer internal constructor() : CodeCollection {
 
     inline operator fun plusAssign(value: String) {
         add(value)
@@ -30,10 +33,5 @@ abstract class CodeContainer internal constructor() {
  * Receiver for the `codes`, `statements`, and `javadoc` block providing an extended set of operators for the
  * configuration.
  */
-class CodeContainerScope @PublishedApi internal constructor(private val container: CodeContainer) :
-    CodeContainer() {
-
-    override fun add(format: String, vararg args: Any) = container.add(format, *args)
-
-    override fun add(block: CodeBlock): CodeBlock = container.add(block)
-}
+class CodeContainerScope @PublishedApi internal constructor(collection: CodeCollection) :
+    CodeContainer(), CodeCollection by collection
