@@ -9,62 +9,63 @@ import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.TypeSpec
 import kotlin.reflect.KClass
 
-/** Returns a java file with custom initialization block. */
+/** Creates [JavaFile] with DSL. */
 inline fun buildJavaFile(packageName: String, builder: JavaFileBuilder.() -> Unit): JavaFile =
     JavaFileBuilder(packageName)
         .apply(builder)
         .build()
 
+/** Wrapper of [JavaFile.Builder], providing DSL support as a replacement to Java builder. */
 class JavaFileBuilder @PublishedApi internal constructor(private val packageName: String) : TypeContainer() {
 
-    private var type: TypeSpec? = null
-    private var comments: Map<String, Array<Any>>? = null
-    private var staticImports: MutableList<Pair<Any, Array<String>>>? = null
+    private var _spec: TypeSpec? = null
+    private var _comments: Map<String, Array<Any>>? = null
+    private var _staticImports: MutableList<Pair<Any, Array<String>>>? = null
     private var _skipJavaLangImports: Boolean? = null
-    private var indent: Int? = null
+    private var _indent: String? = null
 
     override fun add(spec: TypeSpec): TypeSpec = spec.also {
-        check(type == null) { "Java file may only have 1 type" }
-        type = it
+        check(_spec == null) { "Java file may only have 1 type" }
+        _spec = it
     }
 
     /** Add a comment to this file. */
     fun addComment(format: String, vararg args: Any) {
-        if (comments !is MutableMap) {
-            comments = mutableMapOf()
+        if (_comments !is MutableMap) {
+            _comments = mutableMapOf()
         }
-        comments as MutableMap += format to arrayOf(*args)
+        _comments as MutableMap += format to arrayOf(*args)
     }
 
-    /** Set a comment to this file, cancelling all changes made with [comment]. */
+    /** Set a comment to this file, cancelling all changes made with [addComment]. */
     var comment: String
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
         set(value) {
-            comments = mapOf(value to emptyArray())
+            _comments = mapOf(value to emptyArray())
         }
 
     /** Add static imports to this file. */
     fun addStaticImports(constant: Enum<*>) {
-        if (staticImports == null) {
-            staticImports = mutableListOf()
+        if (_staticImports == null) {
+            _staticImports = mutableListOf()
         }
-        staticImports!! += constant to emptyArray()
+        _staticImports!! += constant to emptyArray()
     }
 
     /** Add static imports to this file. */
     fun addStaticImports(type: ClassName, vararg names: String) {
-        if (staticImports == null) {
-            staticImports = mutableListOf()
+        if (_staticImports == null) {
+            _staticImports = mutableListOf()
         }
-        staticImports!! += type to arrayOf(*names)
+        _staticImports!! += type to arrayOf(*names)
     }
 
     /** Add static imports to this file. */
     fun addStaticImports(type: KClass<*>, vararg names: String) {
-        if (staticImports == null) {
-            staticImports = mutableListOf()
+        if (_staticImports == null) {
+            _staticImports = mutableListOf()
         }
-        staticImports!! += type to arrayOf(*names)
+        _staticImports!! += type to arrayOf(*names)
     }
 
     /** Add static imports to this file. */
@@ -76,10 +77,22 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
             _skipJavaLangImports = value
         }
 
-    fun build(): JavaFile = JavaFile.builder(packageName, checkNotNull(type) { "A main type must be initialized" })
+    var indent: String
+        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
+        set(value) {
+            _indent = value
+        }
+
+    inline var indentCount: Int
+        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
+        set(value) {
+            indent = buildString { repeat(value) { append(' ') } }
+        }
+
+    fun build(): JavaFile = JavaFile.builder(packageName, checkNotNull(_spec) { "A main type must be initialized" })
         .apply {
-            comments?.forEach { (format, args) -> addFileComment(format, *args) }
-            staticImports?.forEach { (type, names) ->
+            _comments?.forEach { (format, args) -> addFileComment(format, *args) }
+            _staticImports?.forEach { (type, names) ->
                 when (type) {
                     is Enum<*> -> addStaticImport(type)
                     is ClassName -> addStaticImport(type, *names)
@@ -87,7 +100,7 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
                 }
             }
             _skipJavaLangImports?.let { skipJavaLangImports(it) }
-            indent?.let { indent(buildString { repeat(it) { append(' ') } }) }
+            _indent?.let { indent(it) }
         }
         .build()
 }

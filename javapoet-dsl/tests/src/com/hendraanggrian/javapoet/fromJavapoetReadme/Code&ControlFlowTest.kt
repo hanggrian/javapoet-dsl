@@ -73,10 +73,12 @@ class `Code&ControlFlowTest` {
                     methods {
                         "flow" {
                             returns = TypeName.VOID
-                            statements.add("int total = 0")
-                            beginControlFlow("for (int i = 0; i < 10; i++)")
-                            statements.add("total += i")
-                            endControlFlow()
+                            codes {
+                                addStatement("int total = 0")
+                                beginControlFlow("for (int i = 0; i < 10; i++)")
+                                addStatement("total += i")
+                                endControlFlow()
+                            }
                         }
                     }
                 }
@@ -93,11 +95,13 @@ class `Code&ControlFlowTest` {
                     methods {
                         "multiply10to20" {
                             returns = TypeName.INT
-                            statements.add("int result = 1")
-                            beginControlFlow("for (int i = 10; i < 20; i++)")
-                            statements.add("result = result * i")
-                            endControlFlow()
-                            statements.add("return result")
+                            codes {
+                                addStatement("int result = 1")
+                                beginControlFlow("for (int i = 10; i < 20; i++)")
+                                addStatement("result = result * i")
+                                endControlFlow()
+                                addStatement("return result")
+                            }
                         }
                     }
                 }

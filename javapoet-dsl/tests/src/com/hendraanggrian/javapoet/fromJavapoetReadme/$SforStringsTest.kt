@@ -48,7 +48,7 @@ class `$SforStringsTest` {
     private fun MethodContainerScope.nameMethod(name: String) {
         name {
             returns<String>()
-            statements.add("return \$S", name)
+            codes.addStatement("return \$S", name)
         }
     }
 }

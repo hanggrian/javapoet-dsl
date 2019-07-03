@@ -16,22 +16,10 @@ class CodeBlockBuilderTest {
     @Test
     fun simple() {
         assertEquals(expected, (getBuilder()) {
-            statements.add("int total = 0")
+            addStatement("int total = 0")
             beginControlFlow("for (int i = 0; i < 10; i++)")
-            statements.add("total += i")
+            addStatement("total += i")
             endControlFlow()
-        })
-    }
-
-    @Test
-    fun invocation() {
-        assertEquals(expected, (getBuilder()) {
-            statements {
-                add("int total = 0")
-                beginControlFlow("for (int i = 0; i < 10; i++)")
-                add("total += i")
-                endControlFlow()
-            }
         })
     }
 }

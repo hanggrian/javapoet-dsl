@@ -34,7 +34,7 @@ class HelloWorldTest {
                             addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                             returns = TypeName.VOID
                             parameters.add<Array<String>>("args")
-                            statements.add("\$T.out.println(\$S)", System::class.java, "Hello, JavaPoet!")
+                            codes.addStatement("\$T.out.println(\$S)", System::class.java, "Hello, JavaPoet!")
                         }
                     }
                 }

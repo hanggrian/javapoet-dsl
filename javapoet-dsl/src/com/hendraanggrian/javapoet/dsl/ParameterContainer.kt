@@ -9,56 +9,68 @@ import kotlin.reflect.KClass
 /** A [ParameterContainer] is responsible for managing a set of parameter instances. */
 abstract class ParameterContainer internal constructor() {
 
+    /** Add parameter to this container, returning the parameter added. */
     abstract fun add(spec: ParameterSpec): ParameterSpec
 
+    /** Add parameter from [type] and [name], returning the parameter added. */
     fun add(type: TypeName, name: String): ParameterSpec =
         add(ParameterSpec.builder(type, name).build())
 
+    /** Add parameter from [type] and [name] with custom initialization [builder], returning the parameter added. */
     inline fun add(type: TypeName, name: String, builder: ParameterSpecBuilder.() -> Unit): ParameterSpec =
         add(ParameterSpec.builder(type, name)(builder))
 
+    /** Add parameter from [type] and [name], returning the parameter added. */
     fun add(type: KClass<*>, name: String): ParameterSpec =
         add(ParameterSpec.builder(type.java, name).build())
 
+    /** Add parameter from [type] and [name] with custom initialization [builder], returning the parameter added. */
     inline fun add(type: KClass<*>, name: String, builder: ParameterSpecBuilder.() -> Unit): ParameterSpec =
         add(ParameterSpec.builder(type.java, name)(builder))
 
+    /** Add parameter from reified [T] and [name], returning the parameter added. */
     inline fun <reified T> add(name: String): ParameterSpec =
         add(T::class, name)
 
+    /** Add parameter from reified [T] and [name] with custom initialization [builder], returning the parameter added. */
     inline fun <reified T> add(name: String, builder: ParameterSpecBuilder.() -> Unit): ParameterSpec =
         add(T::class, name, builder)
 
+    /** Convenient method to add parameter with operator function. */
     operator fun plusAssign(spec: ParameterSpec) {
         add(spec)
     }
 
+    /** Convenient method to add parameter with operator function. */
     operator fun set(name: String, type: TypeName) {
         add(type, name)
     }
 
+    /** Convenient method to add parameter with operator function. */
     operator fun set(name: String, type: KClass<*>) {
         add(type, name)
     }
 
+    /** Configure this container with DSL. */
     inline operator fun invoke(configuration: ParameterContainerScope.() -> Unit) =
         ParameterContainerScope(this).configuration()
 }
 
-/**
- * Receiver for the `parameters` block providing an extended set of operators for the configuration.
- */
+/** Receiver for the `parameters` block providing an extended set of operators for the configuration. */
 class ParameterContainerScope @PublishedApi internal constructor(private val container: ParameterContainer) :
     ParameterContainer() {
 
     override fun add(spec: ParameterSpec): ParameterSpec = container.add(spec)
 
+    /** Convenient method to add parameter with receiver type. */
     inline operator fun String.invoke(type: TypeName, builder: ParameterSpecBuilder.() -> Unit): ParameterSpec =
         add(type, this, builder)
 
+    /** Convenient method to add parameter with receiver type. */
     inline operator fun String.invoke(type: KClass<*>, builder: ParameterSpecBuilder.() -> Unit): ParameterSpec =
         add(type, this, builder)
 
+    /** Convenient method to add parameter with receiver type. */
     inline operator fun <reified T> String.invoke(builder: ParameterSpecBuilder.() -> Unit): ParameterSpec =
         add<T>(this, builder)
 }

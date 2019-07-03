@@ -4,8 +4,8 @@
 package com.hendraanggrian.javapoet
 
 import com.hendraanggrian.javapoet.dsl.AnnotationContainer
-import com.hendraanggrian.javapoet.dsl.CodeContainer
 import com.hendraanggrian.javapoet.dsl.FieldContainer
+import com.hendraanggrian.javapoet.dsl.JavadocContainer
 import com.hendraanggrian.javapoet.dsl.MethodContainer
 import com.hendraanggrian.javapoet.dsl.TypeContainer
 import com.squareup.javapoet.AnnotationSpec
@@ -19,20 +19,23 @@ import javax.lang.model.element.Element
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
+/** Configure [this] spec with DSL. */
 inline operator fun TypeSpec.invoke(builder: TypeSpecBuilder.() -> Unit): TypeSpec =
     toBuilder()(builder)
 
+/** Configure [this] builder with DSL. */
 inline operator fun TypeSpec.Builder.invoke(builder: TypeSpecBuilder.() -> Unit): TypeSpec =
     TypeSpecBuilder(this).apply(builder).build()
 
+/** Wrapper of [TypeSpec.Builder], providing DSL support as a replacement to Java builder. */
 class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: TypeSpec.Builder) {
 
-    val javadoc: CodeContainer = object : CodeContainer() {
+    val javadoc: JavadocContainer = object : JavadocContainer() {
         override fun add(format: String, vararg args: Any) {
             nativeBuilder.addJavadoc(format, *args)
         }
 
-        override fun add(codeBlock: CodeBlock): CodeBlock = codeBlock.also { nativeBuilder.addJavadoc(it) }
+        override fun add(block: CodeBlock): CodeBlock = block.also { nativeBuilder.addJavadoc(it) }
     }
 
     val annotations: AnnotationContainer = object : AnnotationContainer() {
@@ -43,12 +46,12 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
         nativeBuilder.addModifiers(*modifiers)
     }
 
-    fun addTypeVariable(name: TypeVariableName) {
-        nativeBuilder.addTypeVariable(name)
+    fun addTypeVariable(typeVariable: TypeVariableName) {
+        nativeBuilder.addTypeVariable(typeVariable)
     }
 
-    fun addTypeVariables(names: Iterable<TypeVariableName>) {
-        nativeBuilder.addTypeVariables(names)
+    fun addTypeVariables(typeVariables: Iterable<TypeVariableName>) {
+        nativeBuilder.addTypeVariables(typeVariables)
     }
 
     var superClass: TypeName
