@@ -1,4 +1,5 @@
-@file:Suppress("NOTHING_TO_INLINE")
+@file:JvmMultifileClass
+@file:JvmName("SpecBuildersKt")
 
 package com.hendraanggrian.javapoet
 
@@ -22,7 +23,7 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
             nativeBuilder.addJavadoc(format, *args)
         }
 
-        override fun add(block: CodeBlock): CodeBlock = block.also { nativeBuilder.addJavadoc(it) }
+        override fun add(codeBlock: CodeBlock): CodeBlock = codeBlock.also { nativeBuilder.addJavadoc(it) }
     }
 
     val annotations: AnnotationContainer = object : AnnotationContainer() {
@@ -41,8 +42,8 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
         set(value) = initializer(value)
 
-    fun initializer(block: CodeBlock) {
-        nativeBuilder.initializer(block)
+    fun initializer(codeBlock: CodeBlock) {
+        nativeBuilder.initializer(codeBlock)
     }
 
     inline fun initializer(builder: CodeBlockBuilder.() -> Unit) = initializer(CodeBlock.builder()(builder))

@@ -1,4 +1,5 @@
-@file:Suppress("NOTHING_TO_INLINE")
+@file:JvmMultifileClass
+@file:JvmName("SpecBuildersKt")
 
 package com.hendraanggrian.javapoet
 

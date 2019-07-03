@@ -1,6 +1,8 @@
+@file:JvmMultifileClass
+@file:JvmName("SpecBuildersKt")
+
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.dsl.CodeCollection
 import com.hendraanggrian.javapoet.dsl.CodeContainer
 import com.squareup.javapoet.CodeBlock
 
@@ -11,7 +13,7 @@ inline operator fun CodeBlock.Builder.invoke(builder: CodeBlockBuilder.() -> Uni
     CodeBlockBuilder(this).apply(builder).build()
 
 class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuilder: CodeBlock.Builder) :
-    CodeCollection {
+    CodeContainer() {
 
     fun isEmpty(): Boolean = nativeBuilder.isEmpty
 
@@ -19,35 +21,35 @@ class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuil
         nativeBuilder.addNamed(format, arguments)
     }
 
-    fun beginControlFlow(format: String, vararg args: Any) {
-        nativeBuilder.beginControlFlow(format, *args)
+    override fun add(format: String, vararg args: Any) {
+        nativeBuilder.add(format, *args)
     }
 
-    fun nextControlFlow(format: String, vararg args: Any) {
-        nativeBuilder.nextControlFlow(format, *args)
+    fun beginControlFlow(controlFlow: String, vararg args: Any) {
+        nativeBuilder.beginControlFlow(controlFlow, *args)
+    }
+
+    fun nextControlFlow(controlFlow: String, vararg args: Any) {
+        nativeBuilder.nextControlFlow(controlFlow, *args)
     }
 
     fun endControlFlow() {
         nativeBuilder.endControlFlow()
     }
 
-    fun endControlFlow(format: String, vararg args: Any) {
-        nativeBuilder.endControlFlow(format, *args)
+    fun endControlFlow(controlFlow: String, vararg args: Any) {
+        nativeBuilder.endControlFlow(controlFlow, *args)
     }
-
-    override fun add(format: String, vararg args: Any) {
-        nativeBuilder.add(format, *args)
-    }
-
-    override fun add(block: CodeBlock): CodeBlock = block.also { nativeBuilder.add(it) }
 
     val statements: CodeContainer = object : CodeContainer() {
         override fun add(format: String, vararg args: Any) {
             nativeBuilder.addStatement(format, *args)
         }
 
-        override fun add(block: CodeBlock): CodeBlock = block.also { nativeBuilder.addStatement(it) }
+        override fun add(codeBlock: CodeBlock): CodeBlock = codeBlock.also { nativeBuilder.addStatement(it) }
     }
+
+    override fun add(codeBlock: CodeBlock): CodeBlock = codeBlock.also { nativeBuilder.add(it) }
 
     fun indent() {
         nativeBuilder.indent()

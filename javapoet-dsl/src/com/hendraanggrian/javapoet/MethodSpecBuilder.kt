@@ -1,4 +1,5 @@
-@file:Suppress("NOTHING_TO_INLINE")
+@file:JvmMultifileClass
+@file:JvmName("SpecBuildersKt")
 
 package com.hendraanggrian.javapoet
 
@@ -27,7 +28,7 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
             nativeBuilder.addJavadoc(format, *args)
         }
 
-        override fun add(block: CodeBlock): CodeBlock = block.also { nativeBuilder.addJavadoc(it) }
+        override fun add(codeBlock: CodeBlock): CodeBlock = codeBlock.also { nativeBuilder.addJavadoc(it) }
     }
 
     val annotations: AnnotationContainer = object : AnnotationContainer() {
@@ -38,12 +39,16 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
         nativeBuilder.addModifiers(*modifiers)
     }
 
-    fun addTypeVariable(name: TypeVariableName) {
-        nativeBuilder.addTypeVariable(name)
+    fun addModifiers(modifiers: Iterable<Modifier>) {
+        nativeBuilder.addModifiers(modifiers)
     }
 
-    fun addTypeVariables(names: Iterable<TypeVariableName>) {
-        nativeBuilder.addTypeVariables(names)
+    fun addTypeVariables(typeVariables: Iterable<TypeVariableName>) {
+        nativeBuilder.addTypeVariables(typeVariables)
+    }
+
+    fun addTypeVariable(typeVariable: TypeVariableName) {
+        nativeBuilder.addTypeVariable(typeVariable)
     }
 
     var returns: TypeName
@@ -52,8 +57,8 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
             nativeBuilder.returns(value)
         }
 
-    fun returns(type: KClass<*>) {
-        nativeBuilder.returns(type.java)
+    fun returns(returnType: KClass<*>) {
+        nativeBuilder.returns(returnType.java)
     }
 
     inline fun <reified T> returns() = returns(T::class)
@@ -68,16 +73,16 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
             nativeBuilder.varargs(value)
         }
 
-    fun addExceptions(types: Iterable<TypeName>) {
-        nativeBuilder.addExceptions(types)
+    fun addExceptions(exceptions: Iterable<TypeName>) {
+        nativeBuilder.addExceptions(exceptions)
     }
 
-    fun addException(type: TypeName) {
-        nativeBuilder.addException(type)
+    fun addException(exception: TypeName) {
+        nativeBuilder.addException(exception)
     }
 
-    fun addException(type: KClass<*>) {
-        nativeBuilder.addException(type.java)
+    fun addException(exception: KClass<*>) {
+        nativeBuilder.addException(exception.java)
     }
 
     inline fun <reified T> addException() = addException(T::class)
@@ -87,7 +92,11 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
             nativeBuilder.addCode(format, *args)
         }
 
-        override fun add(block: CodeBlock): CodeBlock = block.also { nativeBuilder.addCode(it) }
+        override fun add(codeBlock: CodeBlock): CodeBlock = codeBlock.also { nativeBuilder.addCode(it) }
+    }
+
+    fun addNamedCode(format: String, args: Map<String, *>) {
+        nativeBuilder.addNamedCode(format, args)
     }
 
     fun addComment(format: String, vararg args: Any) {
@@ -101,6 +110,12 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
     inline var defaultValue: String
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
         set(value) = defaultValue(value)
+
+    fun defaultValue(codeBlock: CodeBlock) {
+        nativeBuilder.defaultValue(codeBlock)
+    }
+
+    inline fun defaultValue(builder: CodeBlockBuilder.() -> Unit) = defaultValue(CodeBlock.builder()(builder))
 
     fun beginControlFlow(format: String, vararg args: Any) {
         nativeBuilder.beginControlFlow(format, *args)
@@ -123,7 +138,7 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
             nativeBuilder.addStatement(format, *args)
         }
 
-        override fun add(block: CodeBlock): CodeBlock = block.also { nativeBuilder.addStatement(it) }
+        override fun add(codeBlock: CodeBlock): CodeBlock = codeBlock.also { nativeBuilder.addStatement(it) }
     }
 
     fun build(): MethodSpec = nativeBuilder.build()

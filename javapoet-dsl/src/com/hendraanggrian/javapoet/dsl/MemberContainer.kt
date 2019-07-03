@@ -1,29 +1,24 @@
-@file:Suppress("NOTHING_TO_INLINE")
-
 package com.hendraanggrian.javapoet.dsl
 
 import com.hendraanggrian.javapoet.CodeBlockBuilder
 import com.hendraanggrian.javapoet.invoke
 import com.squareup.javapoet.CodeBlock
 
-internal interface MemberCollection {
-
-    fun add(name: String, format: String, vararg args: Any)
-
-    fun add(name: String, block: CodeBlock): CodeBlock
-
-    fun add(name: String, builder: CodeBlockBuilder.() -> Unit): CodeBlock =
-        add(name, CodeBlock.builder()(builder))
-}
-
 /** A [MemberContainer] is responsible for managing a set of member instances. */
-abstract class MemberContainer internal constructor() : MemberCollection {
+abstract class MemberContainer internal constructor() {
 
-    inline operator fun set(name: String, format: String) {
+    abstract fun add(name: String, format: String, vararg args: Any)
+
+    abstract fun add(name: String, block: CodeBlock): CodeBlock
+
+    inline fun add(name: String, builder: CodeBlockBuilder.() -> Unit): CodeBlock =
+        add(name, CodeBlock.builder()(builder))
+
+    operator fun set(name: String, format: String) {
         add(name, format)
     }
 
-    inline operator fun set(name: String, block: CodeBlock) {
+    operator fun set(name: String, block: CodeBlock) {
         add(name, block)
     }
 
@@ -34,8 +29,13 @@ abstract class MemberContainer internal constructor() : MemberCollection {
 /**
  * Receiver for the `members` block providing an extended set of operators for the configuration.
  */
-class MemberContainerScope @PublishedApi internal constructor(collection: MemberCollection) :
-    MemberContainer(), MemberCollection by collection {
+class MemberContainerScope @PublishedApi internal constructor(private val container: MemberContainer) :
+    MemberContainer() {
 
-    inline operator fun String.invoke(noinline builder: CodeBlockBuilder.() -> Unit): CodeBlock = add(this, builder)
+    override fun add(name: String, format: String, vararg args: Any) = container.add(name, format, *args)
+
+    override fun add(name: String, block: CodeBlock): CodeBlock = container.add(name, block)
+
+    inline operator fun String.invoke(builder: CodeBlockBuilder.() -> Unit): CodeBlock =
+        add(this, builder)
 }

@@ -1,29 +1,24 @@
-@file:Suppress("NOTHING_TO_INLINE")
-
 package com.hendraanggrian.javapoet.dsl
 
 import com.hendraanggrian.javapoet.CodeBlockBuilder
 import com.hendraanggrian.javapoet.invoke
 import com.squareup.javapoet.CodeBlock
 
-internal interface CodeCollection {
-
-    fun add(format: String, vararg args: Any)
-
-    fun add(block: CodeBlock): CodeBlock
-
-    fun add(builder: CodeBlockBuilder.() -> Unit): CodeBlock =
-        add(CodeBlock.builder()(builder))
-}
-
 /** A [CodeContainer] is responsible for managing a set of code instances. */
-abstract class CodeContainer internal constructor() : CodeCollection {
+abstract class CodeContainer internal constructor() {
 
-    inline operator fun plusAssign(value: String) {
+    abstract fun add(format: String, vararg args: Any)
+
+    abstract fun add(codeBlock: CodeBlock): CodeBlock
+
+    inline fun add(builder: CodeBlockBuilder.() -> Unit): CodeBlock =
+        add(CodeBlock.builder()(builder))
+
+    operator fun plusAssign(value: String) {
         add(value)
     }
 
-    inline operator fun plusAssign(block: CodeBlock) {
+    operator fun plusAssign(block: CodeBlock) {
         add(block)
     }
 
@@ -35,5 +30,10 @@ abstract class CodeContainer internal constructor() : CodeCollection {
  * Receiver for the `codes`, `statements`, and `javadoc` block providing an extended set of operators for the
  * configuration.
  */
-class CodeContainerScope @PublishedApi internal constructor(collection: CodeCollection) :
-    CodeContainer(), CodeCollection by collection
+class CodeContainerScope @PublishedApi internal constructor(private val container: CodeContainer) :
+    CodeContainer() {
+
+    override fun add(format: String, vararg args: Any) = container.add(format, *args)
+
+    override fun add(codeBlock: CodeBlock): CodeBlock = container.add(codeBlock)
+}

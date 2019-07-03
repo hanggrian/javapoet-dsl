@@ -1,6 +1,9 @@
+@file:JvmMultifileClass
+@file:JvmName("SpecBuildersKt")
+
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.dsl.TypeCollection
+import com.hendraanggrian.javapoet.dsl.TypeContainer
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.TypeSpec
@@ -12,7 +15,7 @@ inline fun buildJavaFile(packageName: String, builder: JavaFileBuilder.() -> Uni
         .apply(builder)
         .build()
 
-class JavaFileBuilder @PublishedApi internal constructor(private val packageName: String) : TypeCollection {
+class JavaFileBuilder @PublishedApi internal constructor(private val packageName: String) : TypeContainer() {
 
     private var type: TypeSpec? = null
     private var comments: Map<String, Array<Any>>? = null

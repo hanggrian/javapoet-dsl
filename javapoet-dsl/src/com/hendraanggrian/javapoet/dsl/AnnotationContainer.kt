@@ -1,5 +1,3 @@
-@file:Suppress("NOTHING_TO_INLINE")
-
 package com.hendraanggrian.javapoet.dsl
 
 import com.hendraanggrian.javapoet.AnnotationSpecBuilder
@@ -8,41 +6,38 @@ import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
 import kotlin.reflect.KClass
 
-internal interface AnnotationCollection {
+/** An [AnnotationContainer] is responsible for managing a set of annotation instances. */
+abstract class AnnotationContainer internal constructor() {
 
-    fun add(spec: AnnotationSpec): AnnotationSpec
+    abstract fun add(spec: AnnotationSpec): AnnotationSpec
 
     fun add(name: ClassName): AnnotationSpec =
         add(AnnotationSpec.builder(name).build())
 
-    fun add(name: ClassName, builder: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+    inline fun add(name: ClassName, builder: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
         add(AnnotationSpec.builder(name)(builder))
 
     fun add(type: KClass<*>): AnnotationSpec =
         add(AnnotationSpec.builder(type.java).build())
 
-    fun add(type: KClass<*>, builder: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+    inline fun add(type: KClass<*>, builder: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
         add(AnnotationSpec.builder(type.java)(builder))
-}
-
-/** An [AnnotationContainer] is responsible for managing a set of annotation instances. */
-abstract class AnnotationContainer internal constructor() : AnnotationCollection {
 
     inline fun <reified T> add(): AnnotationSpec =
         add(T::class)
 
-    inline fun <reified T> add(noinline builder: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+    inline fun <reified T> add(builder: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
         add(T::class, builder)
 
-    inline operator fun plusAssign(spec: AnnotationSpec) {
+    operator fun plusAssign(spec: AnnotationSpec) {
         add(spec)
     }
 
-    inline operator fun plusAssign(type: ClassName) {
+    operator fun plusAssign(type: ClassName) {
         add(type)
     }
 
-    inline operator fun plusAssign(type: KClass<*>) {
+    operator fun plusAssign(type: KClass<*>) {
         add(type)
     }
 
@@ -53,12 +48,14 @@ abstract class AnnotationContainer internal constructor() : AnnotationCollection
 /**
  * Receiver for the `annotations` block providing an extended set of operators for the configuration.
  */
-class AnnotationContainerScope @PublishedApi internal constructor(collection: AnnotationCollection) :
-    AnnotationContainer(), AnnotationCollection by collection {
+class AnnotationContainerScope @PublishedApi internal constructor(private val container: AnnotationContainer) :
+    AnnotationContainer() {
 
-    inline operator fun ClassName.invoke(noinline builder: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+    override fun add(spec: AnnotationSpec): AnnotationSpec = container.add(spec)
+
+    inline operator fun ClassName.invoke(builder: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
         add(this, builder)
 
-    inline operator fun KClass<*>.invoke(noinline builder: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+    inline operator fun KClass<*>.invoke(builder: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
         add(this, builder)
 }
