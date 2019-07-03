@@ -1,5 +1,16 @@
 $dokka.format:html
 $dokka.linkExtension:html
-
+$dokka.location:com.hendraanggrian.javapoet$invoke(com.squareup.javapoet.AnnotationSpec, kotlin.Function1((com.hendraanggrian.javapoet.AnnotationSpecBuilder, kotlin.Unit)))com.hendraanggrian.javapoet/com.squareup.javapoet.-annotation-spec/invoke.html
+$dokka.location:com.hendraanggrian.javapoet$invoke(com.squareup.javapoet.AnnotationSpec.Builder, kotlin.Function1((com.hendraanggrian.javapoet.AnnotationSpecBuilder, kotlin.Unit)))com.hendraanggrian.javapoet/com.squareup.javapoet.-annotation-spec.-builder/invoke.html
+$dokka.location:com.hendraanggrian.javapoet$invoke(com.squareup.javapoet.CodeBlock, kotlin.Function1((com.hendraanggrian.javapoet.CodeBlockBuilder, kotlin.Unit)))com.hendraanggrian.javapoet/com.squareup.javapoet.-code-block/invoke.html
+$dokka.location:com.hendraanggrian.javapoet$invoke(com.squareup.javapoet.CodeBlock.Builder, kotlin.Function1((com.hendraanggrian.javapoet.CodeBlockBuilder, kotlin.Unit)))com.hendraanggrian.javapoet/com.squareup.javapoet.-code-block.-builder/invoke.html
+$dokka.location:com.hendraanggrian.javapoet$invoke(com.squareup.javapoet.FieldSpec, kotlin.Function1((com.hendraanggrian.javapoet.FieldSpecBuilder, kotlin.Unit)))com.hendraanggrian.javapoet/com.squareup.javapoet.-field-spec/invoke.html
+$dokka.location:com.hendraanggrian.javapoet$invoke(com.squareup.javapoet.FieldSpec.Builder, kotlin.Function1((com.hendraanggrian.javapoet.FieldSpecBuilder, kotlin.Unit)))com.hendraanggrian.javapoet/com.squareup.javapoet.-field-spec.-builder/invoke.html
+$dokka.location:com.hendraanggrian.javapoet$invoke(com.squareup.javapoet.MethodSpec, kotlin.Function1((com.hendraanggrian.javapoet.MethodSpecBuilder, kotlin.Unit)))com.hendraanggrian.javapoet/com.squareup.javapoet.-method-spec/invoke.html
+$dokka.location:com.hendraanggrian.javapoet$invoke(com.squareup.javapoet.MethodSpec.Builder, kotlin.Function1((com.hendraanggrian.javapoet.MethodSpecBuilder, kotlin.Unit)))com.hendraanggrian.javapoet/com.squareup.javapoet.-method-spec.-builder/invoke.html
+$dokka.location:com.hendraanggrian.javapoet$invoke(com.squareup.javapoet.ParameterSpec, kotlin.Function1((com.hendraanggrian.javapoet.ParameterSpecBuilder, kotlin.Unit)))com.hendraanggrian.javapoet/com.squareup.javapoet.-parameter-spec/invoke.html
+$dokka.location:com.hendraanggrian.javapoet$invoke(com.squareup.javapoet.ParameterSpec.Builder, kotlin.Function1((com.hendraanggrian.javapoet.ParameterSpecBuilder, kotlin.Unit)))com.hendraanggrian.javapoet/com.squareup.javapoet.-parameter-spec.-builder/invoke.html
+$dokka.location:com.hendraanggrian.javapoet$invoke(com.squareup.javapoet.TypeSpec, kotlin.Function1((com.hendraanggrian.javapoet.TypeSpecBuilder, kotlin.Unit)))com.hendraanggrian.javapoet/com.squareup.javapoet.-type-spec/invoke.html
+$dokka.location:com.hendraanggrian.javapoet$invoke(com.squareup.javapoet.TypeSpec.Builder, kotlin.Function1((com.hendraanggrian.javapoet.TypeSpecBuilder, kotlin.Unit)))com.hendraanggrian.javapoet/com.squareup.javapoet.-type-spec.-builder/invoke.html
 com.hendraanggrian.javapoet
 com.hendraanggrian.javapoet.dsl

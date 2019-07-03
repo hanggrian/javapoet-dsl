@@ -8,7 +8,8 @@
 <a href="../../index.html">javapoet-dsl</a>&nbsp;/&nbsp;<a href="../index.html">com.hendraanggrian.javapoet</a>&nbsp;/&nbsp;<a href="./index.html">ParameterSpecBuilder</a><br/>
 <br/>
 <h1>ParameterSpecBuilder</h1>
-<code><span class="keyword">class </span><span class="identifier">ParameterSpecBuilder</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">ModifierAccessor</span></code>
+<code><span class="keyword">class </span><span class="identifier">ParameterSpecBuilder</span></code>
+<p>Wrapper of <a href="#">ParameterSpec.Builder</a>, providing DSL support as a replacement to Java builder.</p>
 <h3>Properties</h3>
 <table>
 <tbody>
@@ -19,15 +20,24 @@
 <td>
 <code><span class="keyword">val </span><span class="identifier">annotations</span><span class="symbol">: </span><a href="../../com.hendraanggrian.javapoet.dsl/-annotation-container/index.html"><span class="identifier">AnnotationContainer</span></a></code></td>
 </tr>
+</tbody>
+</table>
+<h3>Functions</h3>
+<table>
+<tbody>
 <tr>
 <td>
-<p><a href="modifiers.html">modifiers</a></p>
+<p><a href="add-modifiers.html">addModifiers</a></p>
 </td>
 <td>
-<code><span class="keyword">var </span><span class="identifier">modifiers</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-collection/index.html"><span class="identifier">Collection</span></a><span class="symbol">&lt;</span><a href="https://docs.oracle.com/javase/6/docs/api/javax/lang/model/element/Modifier.html"><span class="identifier">Modifier</span></a><span class="symbol">&gt;</span></code>
-<p>Add single/multiple <a href="https://docs.oracle.com/javase/6/docs/api/javax/lang/model/element/Modifier.html">Modifier</a> to this spec builder.
-A preferable way to achieve this is to use <a href="#">plus</a> operator (e.g.: <code>modifiers = public + static</code>).</p>
+<code><span class="keyword">fun </span><span class="identifier">addModifiers</span><span class="symbol">(</span><span class="keyword">vararg</span> <span class="identifier" id="com.hendraanggrian.javapoet.ParameterSpecBuilder$addModifiers(kotlin.Array((javax.lang.model.element.Modifier)))/modifiers">modifiers</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/javax/lang/model/element/Modifier.html"><span class="identifier">Modifier</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<p><a href="build.html">build</a></p>
 </td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">build</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">ParameterSpec</span></code></td>
 </tr>
 </tbody>
 </table>
