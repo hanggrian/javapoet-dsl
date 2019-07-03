@@ -3,6 +3,7 @@
 package com.hendraanggrian.javapoet.dsl
 
 import com.hendraanggrian.javapoet.FieldSpecBuilder
+import com.hendraanggrian.javapoet.buildFieldSpec
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.TypeName
 import kotlin.reflect.KClass
@@ -12,17 +13,17 @@ internal interface FieldCollection {
     fun add(spec: FieldSpec): FieldSpec
 
     fun add(type: TypeName, name: String, builder: (FieldSpecBuilder.() -> Unit)? = null): FieldSpec =
-        add(FieldSpecBuilder.of(type, name, builder))
+        add(buildFieldSpec(type, name, builder))
 
     fun add(type: KClass<*>, name: String, builder: (FieldSpecBuilder.() -> Unit)? = null): FieldSpec =
-        add(FieldSpecBuilder.of(type, name, builder))
+        add(buildFieldSpec(type, name, builder))
 }
 
 /** A [FieldContainer] is responsible for managing a set of field instances. */
 abstract class FieldContainer internal constructor() : FieldCollection {
 
     inline fun <reified T> add(name: String, noinline builder: (FieldSpecBuilder.() -> Unit)? = null): FieldSpec =
-        add(T::class, name, builder)
+        add(buildFieldSpec<T>(name, builder))
 
     inline operator fun plusAssign(spec: FieldSpec) {
         add(spec)

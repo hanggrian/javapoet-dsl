@@ -50,10 +50,7 @@ Some elements (field, method, parameter, etc.) are wrapped in container class. T
 For example, 2 examples below will produce the same result.
 
 ```kotlin
-import com.hendraanggrian.javapoet.dsl.add
-import com.hendraanggrian.javapoet.dsl.invoke
-
-classType("Car") {
+addClass("Car") {
     annotations {
         SuppressWarnings::class {
             members {
@@ -86,7 +83,7 @@ classType("Car") {
     }
 }
 
-classType("Car") {
+addClass("Car") {
     annotations.add<SuppressWarnings> {
         members.add("value", "deprecation")
     }

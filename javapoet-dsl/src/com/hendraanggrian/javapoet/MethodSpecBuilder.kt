@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package com.hendraanggrian.javapoet
 
 import com.hendraanggrian.javapoet.dsl.AnnotationContainer
@@ -12,21 +14,17 @@ import com.squareup.javapoet.TypeVariableName
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
+inline fun buildMethodSpec(name: String, noinline builder: (MethodSpecBuilder.() -> Unit)? = null): MethodSpec =
+    MethodSpecBuilder(MethodSpec.methodBuilder(name))
+        .also { builder?.invoke(it) }
+        .build()
+
+inline fun buildConstructorMethodSpec(noinline builder: (MethodSpecBuilder.() -> Unit)? = null): MethodSpec =
+    MethodSpecBuilder(MethodSpec.constructorBuilder())
+        .also { builder?.invoke(it) }
+        .build()
+
 class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: MethodSpec.Builder) {
-
-    @PublishedApi
-    @Suppress("NOTHING_TO_INLINE")
-    internal companion object {
-        inline fun of(name: String, noinline builder: (MethodSpecBuilder.() -> Unit)? = null): MethodSpec =
-            MethodSpecBuilder(MethodSpec.methodBuilder(name))
-                .also { builder?.invoke(it) }
-                .build()
-
-        inline fun ofConstructor(noinline builder: (MethodSpecBuilder.() -> Unit)? = null): MethodSpec =
-            MethodSpecBuilder(MethodSpec.constructorBuilder())
-                .also { builder?.invoke(it) }
-                .build()
-    }
 
     val javadoc: CodeContainer = object : CodeContainer() {
         override fun add(format: String, vararg args: Any) {
@@ -132,6 +130,5 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
         override fun add(block: CodeBlock): CodeBlock = block.also { nativeBuilder.addStatement(it) }
     }
 
-    @PublishedApi
-    internal fun build(): MethodSpec = nativeBuilder.build()
+    fun build(): MethodSpec = nativeBuilder.build()
 }

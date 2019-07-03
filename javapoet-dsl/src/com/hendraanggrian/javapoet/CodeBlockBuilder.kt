@@ -4,17 +4,13 @@ import com.hendraanggrian.javapoet.dsl.CodeCollection
 import com.hendraanggrian.javapoet.dsl.CodeContainer
 import com.squareup.javapoet.CodeBlock
 
+inline fun buildCodeBlock(builder: CodeBlockBuilder.() -> Unit): CodeBlock =
+    CodeBlockBuilder(CodeBlock.builder())
+        .apply(builder)
+        .build()
+
 class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuilder: CodeBlock.Builder) :
     CodeCollection {
-
-    @PublishedApi
-    @Suppress("NOTHING_TO_INLINE")
-    internal companion object {
-        inline fun of(builder: CodeBlockBuilder.() -> Unit): CodeBlock =
-            CodeBlockBuilder(CodeBlock.builder())
-                .apply(builder)
-                .build()
-    }
 
     fun isEmpty(): Boolean = nativeBuilder.isEmpty
 
@@ -60,6 +56,5 @@ class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuil
         nativeBuilder.unindent()
     }
 
-    @PublishedApi
-    internal fun build(): CodeBlock = nativeBuilder.build()
+    fun build(): CodeBlock = nativeBuilder.build()
 }

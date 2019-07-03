@@ -3,6 +3,8 @@
 package com.hendraanggrian.javapoet.dsl
 
 import com.hendraanggrian.javapoet.MethodSpecBuilder
+import com.hendraanggrian.javapoet.buildConstructorMethodSpec
+import com.hendraanggrian.javapoet.buildMethodSpec
 import com.squareup.javapoet.MethodSpec
 
 internal interface MethodCollection {
@@ -10,10 +12,10 @@ internal interface MethodCollection {
     fun add(spec: MethodSpec): MethodSpec
 
     fun add(name: String, builder: (MethodSpecBuilder.() -> Unit)? = null): MethodSpec =
-        add(MethodSpecBuilder.of(name, builder))
+        add(buildMethodSpec(name, builder))
 
     fun addConstructor(builder: (MethodSpecBuilder.() -> Unit)? = null): MethodSpec =
-        add(MethodSpecBuilder.ofConstructor(builder))
+        add(buildConstructorMethodSpec(builder))
 }
 
 /** A [MethodContainer] is responsible for managing a set of method instances. */

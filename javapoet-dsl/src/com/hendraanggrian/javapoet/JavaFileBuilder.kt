@@ -73,20 +73,18 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
             _skipJavaLangImports = value
         }
 
-    @PublishedApi
-    internal fun build(): JavaFile =
-        JavaFile.builder(packageName, checkNotNull(type) { "A main type must be initialized" })
-            .apply {
-                comments?.forEach { (format, args) -> addFileComment(format, *args) }
-                staticImports?.forEach { (type, names) ->
-                    when (type) {
-                        is Enum<*> -> addStaticImport(type)
-                        is ClassName -> addStaticImport(type, *names)
-                        is KClass<*> -> addStaticImport(type.java, *names)
-                    }
+    fun build(): JavaFile = JavaFile.builder(packageName, checkNotNull(type) { "A main type must be initialized" })
+        .apply {
+            comments?.forEach { (format, args) -> addFileComment(format, *args) }
+            staticImports?.forEach { (type, names) ->
+                when (type) {
+                    is Enum<*> -> addStaticImport(type)
+                    is ClassName -> addStaticImport(type, *names)
+                    is KClass<*> -> addStaticImport(type.java, *names)
                 }
-                _skipJavaLangImports?.let { skipJavaLangImports(it) }
-                indent?.let { indent(buildString { repeat(it) { append(' ') } }) }
             }
-            .build()
+            _skipJavaLangImports?.let { skipJavaLangImports(it) }
+            indent?.let { indent(buildString { repeat(it) { append(' ') } }) }
+        }
+        .build()
 }

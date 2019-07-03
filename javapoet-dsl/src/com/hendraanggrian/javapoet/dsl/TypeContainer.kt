@@ -3,6 +3,11 @@
 package com.hendraanggrian.javapoet.dsl
 
 import com.hendraanggrian.javapoet.TypeSpecBuilder
+import com.hendraanggrian.javapoet.buildAnnotationTypeSpec
+import com.hendraanggrian.javapoet.buildAnonymousTypeSpec
+import com.hendraanggrian.javapoet.buildClassTypeSpec
+import com.hendraanggrian.javapoet.buildEnumTypeSpec
+import com.hendraanggrian.javapoet.buildInterfaceTypeSpec
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.TypeSpec
@@ -12,34 +17,34 @@ internal interface TypeCollection {
     fun add(spec: TypeSpec): TypeSpec
 
     fun addClass(type: String, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
-        add(TypeSpecBuilder.ofClass(type, builder))
+        add(buildClassTypeSpec(type, builder))
 
     fun addClass(type: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
-        add(TypeSpecBuilder.ofClass(type, builder))
+        add(buildClassTypeSpec(type, builder))
 
     fun addInterface(type: String, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
-        add(TypeSpecBuilder.ofInterface(type, builder))
+        add(buildInterfaceTypeSpec(type, builder))
 
     fun addInterface(type: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
-        add(TypeSpecBuilder.ofInterface(type, builder))
+        add(buildInterfaceTypeSpec(type, builder))
 
     fun addEnum(type: String, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
-        add(TypeSpecBuilder.ofEnum(type, builder))
+        add(buildEnumTypeSpec(type, builder))
 
     fun addEnum(type: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
-        add(TypeSpecBuilder.ofEnum(type, builder))
+        add(buildEnumTypeSpec(type, builder))
 
     fun addAnonymous(format: String, vararg args: Any, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
-        add(TypeSpecBuilder.ofAnonymous(format, *args, builder = builder))
+        add(buildAnonymousTypeSpec(format, *args, builder = builder))
 
     fun addAnonymous(block: CodeBlock, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
-        add(TypeSpecBuilder.ofAnonymous(block, builder))
+        add(buildAnonymousTypeSpec(block, builder))
 
     fun addAnnotation(type: String, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
-        add(TypeSpecBuilder.ofAnnotation(type, builder))
+        add(buildAnnotationTypeSpec(type, builder))
 
     fun addAnnotation(type: ClassName, builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
-        add(TypeSpecBuilder.ofAnnotation(type, builder))
+        add(buildAnnotationTypeSpec(type, builder))
 }
 
 /** A [TypeContainer] is responsible for managing a set of type instances. */

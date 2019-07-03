@@ -3,6 +3,7 @@
 package com.hendraanggrian.javapoet.dsl
 
 import com.hendraanggrian.javapoet.ParameterSpecBuilder
+import com.hendraanggrian.javapoet.buildParameterSpec
 import com.squareup.javapoet.ParameterSpec
 import com.squareup.javapoet.TypeName
 import kotlin.reflect.KClass
@@ -12,10 +13,10 @@ internal interface ParameterCollection {
     fun add(spec: ParameterSpec): ParameterSpec
 
     fun add(type: TypeName, name: String, builder: (ParameterSpecBuilder.() -> Unit)? = null): ParameterSpec =
-        add(ParameterSpecBuilder.of(type, name, builder))
+        add(buildParameterSpec(type, name, builder))
 
     fun add(type: KClass<*>, name: String, builder: (ParameterSpecBuilder.() -> Unit)? = null): ParameterSpec =
-        add(ParameterSpecBuilder.of(type, name, builder))
+        add(buildParameterSpec(type, name, builder))
 }
 
 /** A [ParameterContainer] is responsible for managing a set of parameter instances. */
@@ -24,7 +25,7 @@ abstract class ParameterContainer internal constructor() : ParameterCollection {
     inline fun <reified T> add(
         name: String,
         noinline builder: (ParameterSpecBuilder.() -> Unit)? = null
-    ): ParameterSpec = add(T::class, name, builder)
+    ): ParameterSpec = add(buildParameterSpec<T>(name, builder))
 
     inline operator fun plusAssign(spec: ParameterSpec) {
         add(spec)
