@@ -7,30 +7,13 @@ import com.hendraanggrian.javapoet.dsl.CodeContainer
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.FieldSpec
-import com.squareup.javapoet.TypeName
 import javax.lang.model.element.Modifier
-import kotlin.reflect.KClass
 
-inline fun buildFieldSpec(
-    type: TypeName,
-    name: String,
-    noinline builder: (FieldSpecBuilder.() -> Unit)? = null
-): FieldSpec = FieldSpecBuilder(FieldSpec.builder(type, name))
-    .also { builder?.invoke(it) }
-    .build()
+inline operator fun FieldSpec.invoke(builder: FieldSpecBuilder.() -> Unit): FieldSpec =
+    toBuilder()(builder)
 
-inline fun buildFieldSpec(
-    type: KClass<*>,
-    name: String,
-    noinline builder: (FieldSpecBuilder.() -> Unit)? = null
-): FieldSpec = FieldSpecBuilder(FieldSpec.builder(type.java, name))
-    .also { builder?.invoke(it) }
-    .build()
-
-inline fun <reified T> buildFieldSpec(
-    name: String,
-    noinline builder: (FieldSpecBuilder.() -> Unit)? = null
-): FieldSpec = buildFieldSpec(T::class, name, builder)
+inline operator fun FieldSpec.Builder.invoke(builder: FieldSpecBuilder.() -> Unit): FieldSpec =
+    FieldSpecBuilder(this).apply(builder).build()
 
 class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: FieldSpec.Builder) {
 
@@ -62,7 +45,7 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
         nativeBuilder.initializer(block)
     }
 
-    inline fun initializer(builder: CodeBlockBuilder.() -> Unit) = initializer(buildCodeBlock(builder))
+    inline fun initializer(builder: CodeBlockBuilder.() -> Unit) = initializer(CodeBlock.builder()(builder))
 
     fun build(): FieldSpec = nativeBuilder.build()
 }

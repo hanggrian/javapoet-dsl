@@ -3,7 +3,7 @@
 package com.hendraanggrian.javapoet.dsl
 
 import com.hendraanggrian.javapoet.AnnotationSpecBuilder
-import com.hendraanggrian.javapoet.buildAnnotationSpec
+import com.hendraanggrian.javapoet.invoke
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
 import kotlin.reflect.KClass
@@ -12,18 +12,27 @@ internal interface AnnotationCollection {
 
     fun add(spec: AnnotationSpec): AnnotationSpec
 
-    fun add(name: ClassName, builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
-        add(buildAnnotationSpec(name, builder))
+    fun add(name: ClassName): AnnotationSpec =
+        add(AnnotationSpec.builder(name).build())
 
-    fun add(type: KClass<*>, builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
-        add(buildAnnotationSpec(type, builder))
+    fun add(name: ClassName, builder: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+        add(AnnotationSpec.builder(name)(builder))
+
+    fun add(type: KClass<*>): AnnotationSpec =
+        add(AnnotationSpec.builder(type.java).build())
+
+    fun add(type: KClass<*>, builder: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+        add(AnnotationSpec.builder(type.java)(builder))
 }
 
 /** An [AnnotationContainer] is responsible for managing a set of annotation instances. */
 abstract class AnnotationContainer internal constructor() : AnnotationCollection {
 
-    inline fun <reified T> add(noinline builder: (AnnotationSpecBuilder.() -> Unit)? = null): AnnotationSpec =
-        add(buildAnnotationSpec<T>(builder))
+    inline fun <reified T> add(): AnnotationSpec =
+        add(T::class)
+
+    inline fun <reified T> add(noinline builder: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+        add(T::class, builder)
 
     inline operator fun plusAssign(spec: AnnotationSpec) {
         add(spec)

@@ -14,15 +14,11 @@ import com.squareup.javapoet.TypeVariableName
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
-inline fun buildMethodSpec(name: String, noinline builder: (MethodSpecBuilder.() -> Unit)? = null): MethodSpec =
-    MethodSpecBuilder(MethodSpec.methodBuilder(name))
-        .also { builder?.invoke(it) }
-        .build()
+inline operator fun MethodSpec.invoke(builder: MethodSpecBuilder.() -> Unit): MethodSpec =
+    toBuilder()(builder)
 
-inline fun buildConstructorMethodSpec(noinline builder: (MethodSpecBuilder.() -> Unit)? = null): MethodSpec =
-    MethodSpecBuilder(MethodSpec.constructorBuilder())
-        .also { builder?.invoke(it) }
-        .build()
+inline operator fun MethodSpec.Builder.invoke(builder: MethodSpecBuilder.() -> Unit): MethodSpec =
+    MethodSpecBuilder(this).apply(builder).build()
 
 class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: MethodSpec.Builder) {
 

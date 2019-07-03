@@ -5,8 +5,8 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class CodeBlockBuilderTest {
-
-    private val expected = CodeBlock.builder()
+    private val getBuilder = { CodeBlock.builder() }
+    private val expected = getBuilder()
         .addStatement("int total = 0")
         .beginControlFlow("for (int i = 0; i < 10; i++)")
         .addStatement("total += i")
@@ -15,7 +15,7 @@ class CodeBlockBuilderTest {
 
     @Test
     fun simple() {
-        assertEquals(expected, buildCodeBlock {
+        assertEquals(expected, (getBuilder()) {
             statements.add("int total = 0")
             beginControlFlow("for (int i = 0; i < 10; i++)")
             statements.add("total += i")
@@ -25,7 +25,7 @@ class CodeBlockBuilderTest {
 
     @Test
     fun invocation() {
-        assertEquals(expected, buildCodeBlock {
+        assertEquals(expected, (getBuilder()) {
             statements {
                 add("int total = 0")
                 beginControlFlow("for (int i = 0; i < 10; i++)")

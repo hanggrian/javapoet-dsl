@@ -7,15 +7,15 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ParameterSpecBuilderTest {
-
-    private val expected = ParameterSpec.builder(String::class.java, "name")
+    private val getBuilder = { ParameterSpec.builder(String::class.java, "name") }
+    private val expected = getBuilder()
         .addAnnotation(AnnotationSpec.builder(Deprecated::class.java).build())
         .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
         .build()
 
     @Test
     fun simple() {
-        assertEquals(expected, buildParameterSpec<String>("name") {
+        assertEquals(expected, (getBuilder()) {
             annotations.add<Deprecated>()
             addModifiers(Modifier.PUBLIC, Modifier.FINAL)
         })
@@ -23,7 +23,7 @@ class ParameterSpecBuilderTest {
 
     @Test
     fun invocation() {
-        assertEquals(expected, buildParameterSpec<String>("name") {
+        assertEquals(expected, (getBuilder()) {
             annotations {
                 add<Deprecated>()
             }

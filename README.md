@@ -9,7 +9,7 @@ Lightweight library that provides Kotlin DSL functionality to JavaPort. It's tim
 
  * Full of convenient methods to achieve minimum code writing possible.
  * Options to invoke DSL. For example, `methods.add("main") { ... }` is as good as `methods { "main" { ... } }`. Scroll down for more information.
- * Smooth transition with backwards compatibility. JavaPoet native specs (`TypeSpec`, `FieldSpec`, etc.) are still supported.
+ * Smooth transition, existing JavaPoet native specs can still be configured with DSL.
 
 ```kotlin
 buildJavaFile("com.example.helloworld") {

@@ -5,30 +5,13 @@ package com.hendraanggrian.javapoet
 import com.hendraanggrian.javapoet.dsl.AnnotationContainer
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ParameterSpec
-import com.squareup.javapoet.TypeName
 import javax.lang.model.element.Modifier
-import kotlin.reflect.KClass
 
-inline fun buildParameterSpec(
-    type: TypeName,
-    name: String,
-    noinline builder: (ParameterSpecBuilder.() -> Unit)? = null
-): ParameterSpec = ParameterSpecBuilder(ParameterSpec.builder(type, name))
-    .also { builder?.invoke(it) }
-    .build()
+inline operator fun ParameterSpec.invoke(builder: ParameterSpecBuilder.() -> Unit): ParameterSpec =
+    toBuilder()(builder)
 
-inline fun buildParameterSpec(
-    type: KClass<*>,
-    name: String,
-    noinline builder: (ParameterSpecBuilder.() -> Unit)? = null
-): ParameterSpec = ParameterSpecBuilder(ParameterSpec.builder(type.java, name))
-    .also { builder?.invoke(it) }
-    .build()
-
-inline fun <reified T> buildParameterSpec(
-    name: String,
-    noinline builder: (ParameterSpecBuilder.() -> Unit)? = null
-): ParameterSpec = buildParameterSpec(T::class, name, builder)
+inline operator fun ParameterSpec.Builder.invoke(builder: ParameterSpecBuilder.() -> Unit): ParameterSpec =
+    ParameterSpecBuilder(this).apply(builder).build()
 
 class ParameterSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: ParameterSpec.Builder) {
 

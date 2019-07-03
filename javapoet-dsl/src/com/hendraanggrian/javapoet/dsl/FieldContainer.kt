@@ -3,7 +3,7 @@
 package com.hendraanggrian.javapoet.dsl
 
 import com.hendraanggrian.javapoet.FieldSpecBuilder
-import com.hendraanggrian.javapoet.buildFieldSpec
+import com.hendraanggrian.javapoet.invoke
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.TypeName
 import kotlin.reflect.KClass
@@ -12,18 +12,26 @@ internal interface FieldCollection {
 
     fun add(spec: FieldSpec): FieldSpec
 
-    fun add(type: TypeName, name: String, builder: (FieldSpecBuilder.() -> Unit)? = null): FieldSpec =
-        add(buildFieldSpec(type, name, builder))
+    fun add(type: TypeName, name: String): FieldSpec =
+        add(FieldSpec.builder(type, name).build())
 
-    fun add(type: KClass<*>, name: String, builder: (FieldSpecBuilder.() -> Unit)? = null): FieldSpec =
-        add(buildFieldSpec(type, name, builder))
+    fun add(type: TypeName, name: String, builder: FieldSpecBuilder.() -> Unit): FieldSpec =
+        add(FieldSpec.builder(type, name)(builder))
+
+    fun add(type: KClass<*>, name: String): FieldSpec =
+        add(FieldSpec.builder(type.java, name).build())
+
+    fun add(type: KClass<*>, name: String, builder: FieldSpecBuilder.() -> Unit): FieldSpec =
+        add(FieldSpec.builder(type.java, name)(builder))
 }
 
 /** A [FieldContainer] is responsible for managing a set of field instances. */
 abstract class FieldContainer internal constructor() : FieldCollection {
 
-    inline fun <reified T> add(name: String, noinline builder: (FieldSpecBuilder.() -> Unit)? = null): FieldSpec =
-        add(buildFieldSpec<T>(name, builder))
+    inline fun <reified T> add(name: String): FieldSpec = add(T::class, name)
+
+    inline fun <reified T> add(name: String, noinline builder: FieldSpecBuilder.() -> Unit): FieldSpec =
+        add(T::class, name, builder)
 
     inline operator fun plusAssign(spec: FieldSpec) {
         add(spec)

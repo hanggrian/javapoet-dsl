@@ -3,7 +3,7 @@
 package com.hendraanggrian.javapoet.dsl
 
 import com.hendraanggrian.javapoet.CodeBlockBuilder
-import com.hendraanggrian.javapoet.buildCodeBlock
+import com.hendraanggrian.javapoet.invoke
 import com.squareup.javapoet.CodeBlock
 
 internal interface CodeCollection {
@@ -12,7 +12,8 @@ internal interface CodeCollection {
 
     fun add(block: CodeBlock): CodeBlock
 
-    fun add(builder: CodeBlockBuilder.() -> Unit): CodeBlock = add(buildCodeBlock(builder))
+    fun add(builder: CodeBlockBuilder.() -> Unit): CodeBlock =
+        add(CodeBlock.builder()(builder))
 }
 
 /** A [CodeContainer] is responsible for managing a set of code instances. */

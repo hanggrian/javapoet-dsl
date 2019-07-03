@@ -3,19 +3,24 @@
 package com.hendraanggrian.javapoet.dsl
 
 import com.hendraanggrian.javapoet.MethodSpecBuilder
-import com.hendraanggrian.javapoet.buildConstructorMethodSpec
-import com.hendraanggrian.javapoet.buildMethodSpec
+import com.hendraanggrian.javapoet.invoke
 import com.squareup.javapoet.MethodSpec
 
 internal interface MethodCollection {
 
     fun add(spec: MethodSpec): MethodSpec
 
-    fun add(name: String, builder: (MethodSpecBuilder.() -> Unit)? = null): MethodSpec =
-        add(buildMethodSpec(name, builder))
+    fun add(name: String): MethodSpec =
+        add(MethodSpec.methodBuilder(name).build())
 
-    fun addConstructor(builder: (MethodSpecBuilder.() -> Unit)? = null): MethodSpec =
-        add(buildConstructorMethodSpec(builder))
+    fun add(name: String, builder: MethodSpecBuilder.() -> Unit): MethodSpec =
+        add(MethodSpec.methodBuilder(name)(builder))
+
+    fun addConstructor(): MethodSpec =
+        add(MethodSpec.constructorBuilder().build())
+
+    fun addConstructor(builder: MethodSpecBuilder.() -> Unit): MethodSpec =
+        add(MethodSpec.constructorBuilder()(builder))
 }
 
 /** A [MethodContainer] is responsible for managing a set of method instances. */

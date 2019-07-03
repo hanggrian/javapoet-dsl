@@ -8,7 +8,6 @@ import com.hendraanggrian.javapoet.dsl.FieldContainer
 import com.hendraanggrian.javapoet.dsl.MethodContainer
 import com.hendraanggrian.javapoet.dsl.TypeContainer
 import com.squareup.javapoet.AnnotationSpec
-import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.MethodSpec
@@ -19,58 +18,11 @@ import javax.lang.model.element.Element
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
-inline fun buildClassTypeSpec(type: String, noinline builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
-    TypeSpecBuilder(TypeSpec.classBuilder(type))
-        .also { builder?.invoke(it) }
-        .build()
+inline operator fun TypeSpec.invoke(builder: TypeSpecBuilder.() -> Unit): TypeSpec =
+    toBuilder()(builder)
 
-inline fun buildClassTypeSpec(type: ClassName, noinline builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
-    TypeSpecBuilder(TypeSpec.classBuilder(type))
-        .also { builder?.invoke(it) }
-        .build()
-
-inline fun buildInterfaceTypeSpec(type: String, noinline builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
-    TypeSpecBuilder(TypeSpec.interfaceBuilder(type))
-        .also { builder?.invoke(it) }
-        .build()
-
-inline fun buildInterfaceTypeSpec(type: ClassName, noinline builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
-    TypeSpecBuilder(TypeSpec.interfaceBuilder(type))
-        .also { builder?.invoke(it) }
-        .build()
-
-inline fun buildEnumTypeSpec(type: String, noinline builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
-    TypeSpecBuilder(TypeSpec.enumBuilder(type))
-        .also { builder?.invoke(it) }
-        .build()
-
-inline fun buildEnumTypeSpec(type: ClassName, noinline builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
-    TypeSpecBuilder(TypeSpec.enumBuilder(type))
-        .also { builder?.invoke(it) }
-        .build()
-
-inline fun buildAnonymousTypeSpec(
-    format: String,
-    vararg args: Any,
-    noinline builder: (TypeSpecBuilder.() -> Unit)? = null
-): TypeSpec = TypeSpecBuilder(TypeSpec.anonymousClassBuilder(format, *args))
-    .also { builder?.invoke(it) }
-    .build()
-
-inline fun buildAnonymousTypeSpec(block: CodeBlock, noinline builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
-    TypeSpecBuilder(TypeSpec.anonymousClassBuilder(block))
-        .also { builder?.invoke(it) }
-        .build()
-
-inline fun buildAnnotationTypeSpec(type: String, noinline builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
-    TypeSpecBuilder(TypeSpec.annotationBuilder(type))
-        .also { builder?.invoke(it) }
-        .build()
-
-inline fun buildAnnotationTypeSpec(type: ClassName, noinline builder: (TypeSpecBuilder.() -> Unit)? = null): TypeSpec =
-    TypeSpecBuilder(TypeSpec.annotationBuilder(type))
-        .also { builder?.invoke(it) }
-        .build()
+inline operator fun TypeSpec.Builder.invoke(builder: TypeSpecBuilder.() -> Unit): TypeSpec =
+    TypeSpecBuilder(this).apply(builder).build()
 
 class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: TypeSpec.Builder) {
 
@@ -128,8 +80,8 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
         nativeBuilder.addEnumConstant(name, spec)
     }
 
-    inline fun addEnumConstant(name: String, specName: String, noinline builder: (TypeSpecBuilder.() -> Unit)? = null) =
-        addEnumConstant(name, buildEnumTypeSpec(specName, builder))
+    inline fun addEnumConstant(name: String, specName: String, builder: TypeSpecBuilder.() -> Unit) =
+        addEnumConstant(name, TypeSpec.enumBuilder(specName)(builder))
 
     val fields: FieldContainer = object : FieldContainer() {
         override fun add(spec: FieldSpec): FieldSpec = spec.also { nativeBuilder.addField(it) }
@@ -139,13 +91,15 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
         nativeBuilder.addStaticBlock(block)
     }
 
-    inline fun addStaticBlock(builder: CodeBlockBuilder.() -> Unit) = addStaticBlock(buildCodeBlock(builder))
+    inline fun addStaticBlock(builder: CodeBlockBuilder.() -> Unit) =
+        addStaticBlock(CodeBlock.builder()(builder))
 
     fun addInitializerBlock(block: CodeBlock) {
         nativeBuilder.addInitializerBlock(block)
     }
 
-    inline fun addInitializerBlock(builder: CodeBlockBuilder.() -> Unit) = addInitializerBlock(buildCodeBlock(builder))
+    inline fun addInitializerBlock(builder: CodeBlockBuilder.() -> Unit) =
+        addInitializerBlock(CodeBlock.builder()(builder))
 
     val methods: MethodContainer = object : MethodContainer() {
         override fun add(spec: MethodSpec): MethodSpec = spec.also { nativeBuilder.addMethod(it) }

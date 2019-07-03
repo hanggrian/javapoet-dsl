@@ -3,7 +3,7 @@
 package com.hendraanggrian.javapoet.dsl
 
 import com.hendraanggrian.javapoet.CodeBlockBuilder
-import com.hendraanggrian.javapoet.buildCodeBlock
+import com.hendraanggrian.javapoet.invoke
 import com.squareup.javapoet.CodeBlock
 
 internal interface MemberCollection {
@@ -12,7 +12,8 @@ internal interface MemberCollection {
 
     fun add(name: String, block: CodeBlock): CodeBlock
 
-    fun add(name: String, builder: CodeBlockBuilder.() -> Unit): CodeBlock = add(name, buildCodeBlock(builder))
+    fun add(name: String, builder: CodeBlockBuilder.() -> Unit): CodeBlock =
+        add(name, CodeBlock.builder()(builder))
 }
 
 /** A [MemberContainer] is responsible for managing a set of member instances. */

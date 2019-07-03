@@ -4,10 +4,11 @@ import com.hendraanggrian.javapoet.dsl.CodeCollection
 import com.hendraanggrian.javapoet.dsl.CodeContainer
 import com.squareup.javapoet.CodeBlock
 
-inline fun buildCodeBlock(builder: CodeBlockBuilder.() -> Unit): CodeBlock =
-    CodeBlockBuilder(CodeBlock.builder())
-        .apply(builder)
-        .build()
+inline operator fun CodeBlock.invoke(builder: CodeBlockBuilder.() -> Unit): CodeBlock =
+    toBuilder()(builder)
+
+inline operator fun CodeBlock.Builder.invoke(builder: CodeBlockBuilder.() -> Unit): CodeBlock =
+    CodeBlockBuilder(this).apply(builder).build()
 
 class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuilder: CodeBlock.Builder) :
     CodeCollection {
