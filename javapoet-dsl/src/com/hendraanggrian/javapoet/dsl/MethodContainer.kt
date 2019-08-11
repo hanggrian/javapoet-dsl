@@ -4,11 +4,14 @@ import com.hendraanggrian.javapoet.MethodSpecBuilder
 import com.hendraanggrian.javapoet.invoke
 import com.squareup.javapoet.MethodSpec
 
-/** A [MethodContainer] is responsible for managing a set of method instances. */
-abstract class MethodContainer internal constructor() {
+internal interface MethodCollection {
 
     /** Add method to this container, returning the method added. */
-    abstract fun add(spec: MethodSpec): MethodSpec
+    fun add(spec: MethodSpec): MethodSpec
+}
+
+/** A [MethodContainer] is responsible for managing a set of method instances. */
+abstract class MethodContainer internal constructor() : MethodCollection {
 
     /** Add method from [name], returning the method added. */
     fun add(name: String): MethodSpec =
@@ -42,10 +45,8 @@ abstract class MethodContainer internal constructor() {
 }
 
 /** Receiver for the `methods` block providing an extended set of operators for the configuration. */
-class MethodContainerScope @PublishedApi internal constructor(private val container: MethodContainer) :
-    MethodContainer() {
-
-    override fun add(spec: MethodSpec): MethodSpec = container.add(spec)
+class MethodContainerScope @PublishedApi internal constructor(collection: MethodCollection) :
+    MethodContainer(), MethodCollection by collection {
 
     /** Convenient method to add method with receiver type. */
     inline operator fun String.invoke(builder: MethodSpecBuilder.() -> Unit): MethodSpec =

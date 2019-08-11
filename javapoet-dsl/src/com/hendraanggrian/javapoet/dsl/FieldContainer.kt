@@ -6,11 +6,14 @@ import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.TypeName
 import kotlin.reflect.KClass
 
-/** A [FieldContainer] is responsible for managing a set of field instances. */
-abstract class FieldContainer internal constructor() {
+internal interface FieldCollection {
 
     /** Add field to this container, returning the field added. */
-    abstract fun add(spec: FieldSpec): FieldSpec
+    fun add(spec: FieldSpec): FieldSpec
+}
+
+/** A [FieldContainer] is responsible for managing a set of field instances. */
+abstract class FieldContainer internal constructor() : FieldCollection {
 
     /** Add field from [type] and [name], returning the field added. */
     fun add(type: TypeName, name: String): FieldSpec =
@@ -57,10 +60,8 @@ abstract class FieldContainer internal constructor() {
 }
 
 /** Receiver for the `fields` block providing an extended set of operators for the configuration. */
-class FieldContainerScope @PublishedApi internal constructor(private val container: FieldContainer) :
-    FieldContainer() {
-
-    override fun add(spec: FieldSpec): FieldSpec = container.add(spec)
+class FieldContainerScope @PublishedApi internal constructor(collection: FieldCollection) :
+    FieldContainer(), FieldCollection by collection {
 
     /** Convenient method to add field with receiver type. */
     inline operator fun String.invoke(name: TypeName, builder: FieldSpecBuilder.() -> Unit): FieldSpec =

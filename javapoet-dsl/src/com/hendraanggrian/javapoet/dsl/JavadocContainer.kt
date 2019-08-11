@@ -4,14 +4,17 @@ import com.hendraanggrian.javapoet.CodeBlockBuilder
 import com.hendraanggrian.javapoet.invoke
 import com.squareup.javapoet.CodeBlock
 
-/** A [JavadocContainer] is responsible for managing a set of code instances. */
-abstract class JavadocContainer internal constructor() {
+internal interface JavadocCollection {
 
     /** Add code block to this container. */
-    abstract fun add(format: String, vararg args: Any)
+    fun add(format: String, vararg args: Any)
 
     /** Add code block to this container, returning the block added. */
-    abstract fun add(block: CodeBlock): CodeBlock
+    fun add(block: CodeBlock): CodeBlock
+}
+
+/** A [JavadocContainer] is responsible for managing a set of code instances. */
+abstract class JavadocContainer internal constructor() : JavadocCollection {
 
     /** Add code block with custom initialization [builder], returning the block added. */
     inline fun add(builder: CodeBlockBuilder.() -> Unit): CodeBlock =
@@ -33,9 +36,5 @@ abstract class JavadocContainer internal constructor() {
 }
 
 /** Receiver for the `javadoc` block providing an extended set of operators for the configuration. */
-class JavadocContainerScope @PublishedApi internal constructor(private val container: JavadocContainer) :
-    JavadocContainer() {
-
-    override fun add(format: String, vararg args: Any) = container.add(format, *args)
-    override fun add(block: CodeBlock): CodeBlock = container.add(block)
-}
+class JavadocContainerScope @PublishedApi internal constructor(collection: JavadocCollection) :
+    JavadocContainer(), JavadocCollection by collection

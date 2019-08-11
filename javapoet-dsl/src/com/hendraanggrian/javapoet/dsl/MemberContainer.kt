@@ -4,14 +4,17 @@ import com.hendraanggrian.javapoet.CodeBlockBuilder
 import com.hendraanggrian.javapoet.invoke
 import com.squareup.javapoet.CodeBlock
 
-/** A [MemberContainer] is responsible for managing a set of member instances. */
-abstract class MemberContainer internal constructor() {
+internal interface MemberCollection {
 
     /** Add member from [name] and code block to this container. */
-    abstract fun add(name: String, format: String, vararg args: Any)
+    fun add(name: String, format: String, vararg args: Any)
 
     /** Add member from [name] and [block] to this container, returning the member added. */
-    abstract fun add(name: String, block: CodeBlock): CodeBlock
+    fun add(name: String, block: CodeBlock): CodeBlock
+}
+
+/** A [MemberContainer] is responsible for managing a set of member instances. */
+abstract class MemberContainer internal constructor() : MemberCollection {
 
     /** Add member with [name] and custom initialization [builder], returning the member added. */
     inline fun add(name: String, builder: CodeBlockBuilder.() -> Unit): CodeBlock =
@@ -33,11 +36,8 @@ abstract class MemberContainer internal constructor() {
 }
 
 /** Receiver for the `members` block providing an extended set of operators for the configuration. */
-class MemberContainerScope @PublishedApi internal constructor(private val container: MemberContainer) :
-    MemberContainer() {
-
-    override fun add(name: String, format: String, vararg args: Any) = container.add(name, format, *args)
-    override fun add(name: String, block: CodeBlock): CodeBlock = container.add(name, block)
+class MemberContainerScope @PublishedApi internal constructor(collection: MemberCollection) :
+    MemberContainer(), MemberCollection by collection {
 
     /** Convenient method to add member with receiver type. */
     inline operator fun String.invoke(builder: CodeBlockBuilder.() -> Unit): CodeBlock =

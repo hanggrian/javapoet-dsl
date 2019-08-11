@@ -1,7 +1,7 @@
 [![bintray](https://img.shields.io/badge/bintray-maven-brightgreen.svg)](https://bintray.com/hendraanggrian/maven)
 [![download](https://api.bintray.com/packages/hendraanggrian/maven/javapoet-dsl/images/download.svg)](https://bintray.com/hendraanggrian/maven/javapoet-dsl/_latestVersion)
 [![build](https://travis-ci.com/hendraanggrian/javapoet-dsl.svg)](https://travis-ci.com/hendraanggrian/javapoet-dsl)
-[![license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
+[![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
 
 JavaPoet DSL
 ============
