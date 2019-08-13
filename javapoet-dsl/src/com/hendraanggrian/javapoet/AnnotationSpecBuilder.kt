@@ -20,7 +20,7 @@ class AnnotationSpecBuilder @PublishedApi internal constructor(private val nativ
 
     val members: MemberContainer = object : MemberContainer() {
         override fun add(name: String, format: String, vararg args: Any) {
-            nativeBuilder.addMember(name, format, *args)
+            nativeBuilder.addMember(name, format, *args.mappedKClass)
         }
 
         override fun add(name: String, block: CodeBlock): CodeBlock = block.also { nativeBuilder.addMember(name, it) }

@@ -34,7 +34,7 @@ class MethodSpecBuilderTest {
         assertEquals(expected, (getBuilder()) {
             javadoc.add("firstJavadoc")
             javadoc.add {
-                add("secondJavadoc")
+                append("secondJavadoc")
             }
             annotations.add<Deprecated>()
             addModifiers(Modifier.PUBLIC, Modifier.STATIC)
@@ -43,7 +43,7 @@ class MethodSpecBuilderTest {
             varargs = true
             addException<IOException>()
             addComment("Some comment")
-            codes.add("doSomething()")
+            codes.append("doSomething()")
         })
     }
 
@@ -53,7 +53,7 @@ class MethodSpecBuilderTest {
             javadoc {
                 add("firstJavadoc")
                 add {
-                    add("secondJavadoc")
+                    append("secondJavadoc")
                 }
             }
             annotations {
@@ -68,7 +68,7 @@ class MethodSpecBuilderTest {
             addException<IOException>()
             addComment("Some comment")
             codes {
-                add("doSomething()")
+                append("doSomething()")
             }
         })
     }

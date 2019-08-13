@@ -35,13 +35,11 @@ class ReadmeTest {
             buildJavaFile("com.example.helloworld") {
                 addClass("HelloWorld") {
                     addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-                    methods {
-                        "main" {
-                            addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                            returns = TypeName.VOID
-                            parameters.add<Array<String>>("args")
-                            codes.addStatement("\$T.out.println(\$S)", System::class.java, "Hello, JavaPoet!")
-                        }
+                    methods.add("main") {
+                        addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        returns = TypeName.VOID
+                        parameters.add<Array<String>>("args")
+                        codes.appendln("\$T.out.println(\$S)", System::class, "Hello, JavaPoet!")
                     }
                 }
             }.toString()
@@ -50,7 +48,7 @@ class ReadmeTest {
 
     @Test
     fun `code&ControlFlow`() {
-        val expected1 =
+        val expected =
             """
                 void main() {
                   int total = 0;
@@ -60,22 +58,11 @@ class ReadmeTest {
                 }
             
             """.trimIndent()
-        val expected2 =
-            """
-                int multiply10to20() {
-                  int result = 1;
-                  for (int i = 10; i < 20; i++) {
-                    result = result * i;
-                  }
-                  return result;
-                }
-
-            """.trimIndent()
         assertEquals(
-            expected1,
+            expected,
             (MethodSpec.methodBuilder("main")) {
                 returns = TypeName.VOID
-                codes.add(
+                codes.append(
                     """
                         int total = 0;
                         for (int i = 0; i < 10; i++) {
@@ -87,27 +74,84 @@ class ReadmeTest {
             }.toString()
         )
         assertEquals(
-            expected1,
+            expected,
             (MethodSpec.methodBuilder("main")) {
                 returns = TypeName.VOID
                 codes {
-                    addStatement("int total = 0")
+                    appendln("int total = 0")
                     beginControlFlow("for (int i = 0; i < 10; i++)")
-                    addStatement("total += i")
+                    appendln("total += i")
                     endControlFlow()
                 }
             }.toString()
         )
         assertEquals(
-            expected2,
+            """
+                int multiply10to20() {
+                  int result = 1;
+                  for (int i = 10; i < 20; i++) {
+                    result = result * i;
+                  }
+                  return result;
+                }
+
+            """.trimIndent(),
             (MethodSpec.methodBuilder("multiply10to20")) {
                 returns = TypeName.INT
                 codes {
-                    addStatement("int result = 1")
+                    appendln("int result = 1")
                     beginControlFlow("for (int i = 10; i < 20; i++)")
-                    addStatement("result = result * i")
+                    appendln("result = result * i")
                     endControlFlow()
-                    addStatement("return result")
+                    appendln("return result")
+                }
+            }.toString()
+        )
+        assertEquals(
+            """
+                void main() {
+                  long now = java.lang.System.currentTimeMillis();
+                  if (java.lang.System.currentTimeMillis() < now) {
+                    java.lang.System.out.println("Time travelling, woo hoo!");
+                  } else if (java.lang.System.currentTimeMillis() == now) {
+                    java.lang.System.out.println("Time stood still!");
+                  } else {
+                    java.lang.System.out.println("Ok, time still moving forward");
+                  }
+                }
+
+            """.trimIndent(),
+            (MethodSpec.methodBuilder("main")) {
+                codes {
+                    appendln("long now = \$T.currentTimeMillis()", System::class)
+                    beginControlFlow("if (\$T.currentTimeMillis() < now)", System::class)
+                    appendln("\$T.out.println(\$S)", System::class, "Time travelling, woo hoo!")
+                    nextControlFlow("else if (\$T.currentTimeMillis() == now)", System::class)
+                    appendln("\$T.out.println(\$S)", System::class, "Time stood still!")
+                    nextControlFlow("else")
+                    appendln("\$T.out.println(\$S)", System::class, "Ok, time still moving forward")
+                    endControlFlow()
+                }
+            }.toString()
+        )
+        assertEquals(
+            """
+                void main() {
+                  try {
+                    throw new Exception("Failed");
+                  } catch (java.lang.Exception e) {
+                    throw new java.lang.RuntimeException(e);
+                  }
+                }
+                
+            """.trimIndent(),
+            (MethodSpec.methodBuilder("main")) {
+                codes {
+                    beginControlFlow("try")
+                    appendln("throw new Exception(\$S)", "Failed")
+                    nextControlFlow("catch (\$T e)", Exception::class)
+                    appendln("throw new \$T(e)", RuntimeException::class)
+                    endControlFlow()
                 }
             }.toString()
         )
@@ -117,33 +161,27 @@ class ReadmeTest {
     fun `$SForStrings`() {
         assertEquals(
             """
-                package com.example.helloworld;
-
-                import java.lang.String;
-
                 public final class HelloWorld {
-                  String slimShady() {
+                  java.lang.String slimShady() {
                     return "slimShady";
                   }
 
-                  String eminem() {
+                  java.lang.String eminem() {
                     return "eminem";
                   }
 
-                  String marshallMathers() {
+                  java.lang.String marshallMathers() {
                     return "marshallMathers";
                   }
                 }
 
             """.trimIndent(),
-            buildJavaFile("com.example.helloworld") {
-                addClass("HelloWorld") {
-                    addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-                    methods {
-                        nameMethod("slimShady")
-                        nameMethod("eminem")
-                        nameMethod("marshallMathers")
-                    }
+            (TypeSpec.classBuilder("HelloWorld")) {
+                addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                methods {
+                    nameMethod("slimShady")
+                    nameMethod("eminem")
+                    nameMethod("marshallMathers")
                 }
             }.toString()
         )
@@ -153,91 +191,71 @@ class ReadmeTest {
     fun `$TForTypes`() {
         assertEquals(
             """
-                package com.example.helloworld;
-
-                import java.util.Date;
-
                 public final class HelloWorld {
-                  Date today() {
-                    return new Date();
+                  java.util.Date today() {
+                    return new java.util.Date();
                   }
                 }
 
             """.trimIndent(),
-            buildJavaFile("com.example.helloworld") {
-                addClass("HelloWorld") {
-                    addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-                    methods {
-                        "today" {
-                            returns<Date>()
-                            codes.addStatement("return new \$T()", Date::class.java)
-                        }
+            (TypeSpec.classBuilder("HelloWorld")) {
+                addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                methods {
+                    "today" {
+                        returns<Date>()
+                        codes.appendln("return new \$T()", Date::class)
                     }
                 }
             }.toString()
         )
         assertEquals(
             """
-                package com.example.helloworld;
-
-                import com.mattel.Hoverboard;
-
                 public final class HelloWorld {
-                  Hoverboard tomorrow() {
-                    return new Hoverboard();
+                  com.mattel.Hoverboard tomorrow() {
+                    return new com.mattel.Hoverboard();
                   }
                 }
 
             """.trimIndent(),
-            buildJavaFile("com.example.helloworld") {
-                addClass("HelloWorld") {
-                    addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-                    methods {
-                        "tomorrow" {
-                            val hoverboard = ClassName.get("com.mattel", "Hoverboard")
-                            returns = hoverboard
-                            codes.addStatement("return new \$T()", hoverboard)
-                        }
+            (TypeSpec.classBuilder("HelloWorld")) {
+                addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                methods {
+                    "tomorrow" {
+                        val hoverboard = ClassName.get("com.mattel", "Hoverboard")
+                        returns = hoverboard
+                        codes.appendln("return new \$T()", hoverboard)
                     }
                 }
             }.toString()
         )
         assertEquals(
             """
-                package com.example.helloworld;
-
-                import com.mattel.Hoverboard;
-                import java.util.ArrayList;
-                import java.util.List;
-
                 public final class HelloWorld {
-                  List<Hoverboard> beyond() {
-                    List<Hoverboard> result = new ArrayList<>();
-                    result.add(new Hoverboard());
-                    result.add(new Hoverboard());
-                    result.add(new Hoverboard());
+                  java.util.List<com.mattel.Hoverboard> beyond() {
+                    java.util.List<com.mattel.Hoverboard> result = new java.util.ArrayList<>();
+                    result.add(new com.mattel.Hoverboard());
+                    result.add(new com.mattel.Hoverboard());
+                    result.add(new com.mattel.Hoverboard());
                     return result;
                   }
                 }
 
             """.trimIndent(),
-            buildJavaFile("com.example.helloworld") {
-                addClass("HelloWorld") {
-                    addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-                    methods {
-                        "beyond" {
-                            val hoverboard = ClassName.get("com.mattel", "Hoverboard")
-                            val list = ClassName.get("java.util", "List");
-                            val arrayList = ClassName.get("java.util", "ArrayList")
-                            val listOfHoverboards = ParameterizedTypeName.get(list, hoverboard)
-                            returns = listOfHoverboards
-                            codes {
-                                addStatement("\$T result = new \$T<>()", listOfHoverboards, arrayList)
-                                addStatement("result.add(new \$T())", hoverboard)
-                                addStatement("result.add(new \$T())", hoverboard)
-                                addStatement("result.add(new \$T())", hoverboard)
-                                addStatement("return result")
-                            }
+            (TypeSpec.classBuilder("HelloWorld")) {
+                addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                methods {
+                    "beyond" {
+                        val hoverboard = ClassName.get("com.mattel", "Hoverboard")
+                        val list = ClassName.get("java.util", "List");
+                        val arrayList = ClassName.get("java.util", "ArrayList")
+                        val listOfHoverboards = ParameterizedTypeName.get(list, hoverboard)
+                        returns = listOfHoverboards
+                        codes {
+                            appendln("\$T result = new \$T<>()", listOfHoverboards, arrayList)
+                            appendln("result.add(new \$T())", hoverboard)
+                            appendln("result.add(new \$T())", hoverboard)
+                            appendln("result.add(new \$T())", hoverboard)
+                            appendln("return result")
                         }
                     }
                 }
@@ -282,13 +300,13 @@ class ReadmeTest {
                             val listOfHoverboards = ParameterizedTypeName.get(list, hoverboard)
                             returns = listOfHoverboards
                             codes {
-                                addStatement("\$T result = new \$T<>()", listOfHoverboards, arrayList)
-                                addStatement("result.add(\$T.createNimbus(2000))", hoverboard)
-                                addStatement("result.add(\$T.createNimbus(\"2001\"))", hoverboard)
-                                addStatement("result.add(\$T.createNimbus(\$T.THUNDERBOLT))", hoverboard, namedBoards)
-                                addStatement("\$T.sort(result)", Collections::class.java)
-                                addStatement(
-                                    "return result.isEmpty() ? \$T.emptyList() : result", Collections::class.java
+                                appendln("\$T result = new \$T<>()", listOfHoverboards, arrayList)
+                                appendln("result.add(\$T.createNimbus(2000))", hoverboard)
+                                appendln("result.add(\$T.createNimbus(\"2001\"))", hoverboard)
+                                appendln("result.add(\$T.createNimbus(\$T.THUNDERBOLT))", hoverboard, namedBoards)
+                                appendln("\$T.sort(result)", Collections::class)
+                                appendln(
+                                    "return result.isEmpty() ? \$T.emptyList() : result", Collections::class
                                 )
                             }
                         }
@@ -300,59 +318,47 @@ class ReadmeTest {
 
     @Test
     fun `$NForNames`() {
+        val hexDigit = (MethodSpec.methodBuilder("hexDigit")) {
+            addModifiers(Modifier.PUBLIC)
+            parameters.add(ClassName.INT, "i")
+            returns = ClassName.CHAR
+            codes.appendln("return (char) (i < 10 ? i + '0' : i - 10 + 'a')")
+        }
+        val byteToHex = (MethodSpec.methodBuilder("byteToHex")) {
+            addModifiers(Modifier.PUBLIC)
+            parameters.add(ClassName.INT, "b")
+            returns<String>()
+            codes {
+                appendln("char[] result = new char[2]")
+                appendln("result[0] = \$N((b >>> 4) & 0xf)", hexDigit)
+                appendln("result[1] = \$N(b & 0xf)", hexDigit)
+                appendln("return new String(result)")
+            }
+        }
         assertEquals(
             """
-                package com.example.helloworld;
+                public java.lang.String byteToHex(int b) {
+                  char[] result = new char[2];
+                  result[0] = hexDigit((b >>> 4) & 0xf);
+                  result[1] = hexDigit(b & 0xf);
+                  return new String(result);
+                }
 
-                import java.lang.String;
-
-                public final class HelloWorld {
-                  public char hexDigit(int i) {
-                    return (char) (i < 10 ? i + '0' : i - 10 + 'a');
-                  }
-
-                  public String byteToHex(int b) {
-                    char[] result = new char[2];
-                    result[0] = hexDigit((b >>> 4) & 0xf);
-                    result[1] = hexDigit(b & 0xf);
-                    return new String(result);
-                  }
+                public char hexDigit(int i) {
+                  return (char) (i < 10 ? i + '0' : i - 10 + 'a');
                 }
 
             """.trimIndent(),
-            buildJavaFile("com.example.helloworld") {
-                addClass("HelloWorld") {
-                    addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-                    methods {
-                        val hexDigit = "hexDigit" {
-                            addModifiers(Modifier.PUBLIC)
-                            parameters.add(ClassName.INT, "i")
-                            returns = ClassName.CHAR
-                            codes.addStatement("return (char) (i < 10 ? i + '0' : i - 10 + 'a')")
-                        }
-                        "byteToHex" {
-                            addModifiers(Modifier.PUBLIC)
-                            parameters.add(ClassName.INT, "b")
-                            returns<String>()
-                            codes {
-                                addStatement("char[] result = new char[2]")
-                                addStatement("result[0] = \$N((b >>> 4) & 0xf)", hexDigit)
-                                addStatement("result[1] = \$N(b & 0xf)", hexDigit)
-                                addStatement("return new String(result)")
-                            }
-                        }
-                    }
-                }
-            }.toString()
+            "$byteToHex\n$hexDigit"
         )
     }
 
     @Test
     fun codeBlockFormatStrings() {
         assertEquals(CodeBlock.builder().add("I ate \$L \$L", 3, "tacos").build(),
-            (CodeBlock.builder()) { add("I ate \$L \$L", 3, "tacos") })
+            (CodeBlock.builder()) { append("I ate \$L \$L", 3, "tacos") })
         assertEquals(CodeBlock.builder().add("I ate \$2L \$1L", "tacos", 3).build(),
-            (CodeBlock.builder()) { add("I ate \$2L \$1L", "tacos", 3) })
+            (CodeBlock.builder()) { append("I ate \$2L \$1L", "tacos", 3) })
     }
 
     @Test
@@ -373,10 +379,49 @@ class ReadmeTest {
         )
     }
 
+    @Test
+    fun constructors() {
+        assertEquals(
+            """
+                public class HelloWorld {
+                  private final java.lang.String greeting;
+
+                  public HelloWorld(java.lang.String greeting) {
+                    this.greeting = greeting;
+                  }
+                }
+                
+            """.trimIndent(),
+            (TypeSpec.classBuilder("HelloWorld")) {
+                addModifiers(Modifier.PUBLIC)
+                fields.add<String>("greeting") {
+                    addModifiers(Modifier.PRIVATE, Modifier.FINAL)
+                }
+                methods.addConstructor {
+                    addModifiers(Modifier.PUBLIC)
+                    parameters.add<String>("greeting")
+                    codes.appendln("this.\$N = \$N", "greeting", "greeting")
+                }
+            }.toString()
+        )
+    }
+
+    @Test
+    fun parameters() {
+        /*assertEquals(
+            """
+                void welcomeOverlords(final String android, final String robot) {
+                }
+
+            """.trimIndent(),
+            (ParameterSpec.builder())
+        )*/
+    }
+
     private fun MethodContainerScope.nameMethod(name: String) {
         name {
             returns<String>()
-            codes.addStatement("return \$S", name)
+            codes.appendln("return \$S", name)
         }
     }
 }

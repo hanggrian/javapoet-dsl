@@ -16,9 +16,9 @@ class CodeBlockBuilderTest {
     @Test
     fun simple() {
         assertEquals(expected, (getBuilder()) {
-            addStatement("int total = 0")
+            appendln("int total = 0")
             beginControlFlow("for (int i = 0; i < 10; i++)")
-            addStatement("total += i")
+            appendln("total += i")
             endControlFlow()
         })
     }

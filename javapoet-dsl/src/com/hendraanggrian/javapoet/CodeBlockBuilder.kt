@@ -24,16 +24,16 @@ class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuil
         nativeBuilder.addNamed(format, arguments)
     }
 
-    override fun add(format: String, vararg args: Any) {
-        nativeBuilder.add(format, *args)
+    override fun append(format: String, vararg args: Any) {
+        nativeBuilder.add(format, *args.mappedKClass)
     }
 
     override fun beginControlFlow(flow: String, vararg args: Any) {
-        nativeBuilder.beginControlFlow(flow, *args)
+        nativeBuilder.beginControlFlow(flow, *args.mappedKClass)
     }
 
     override fun nextControlFlow(flow: String, vararg args: Any) {
-        nativeBuilder.nextControlFlow(flow, *args)
+        nativeBuilder.nextControlFlow(flow, *args.mappedKClass)
     }
 
     override fun endControlFlow() {
@@ -41,17 +41,17 @@ class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuil
     }
 
     override fun endControlFlow(flow: String, vararg args: Any) {
-        nativeBuilder.endControlFlow(flow, *args)
+        nativeBuilder.endControlFlow(flow, *args.mappedKClass)
     }
 
-    override fun addStatement(format: String, vararg args: Any) {
-        nativeBuilder.addStatement(format, *args)
+    override fun appendln(format: String, vararg args: Any) {
+        nativeBuilder.addStatement(format, *args.mappedKClass)
     }
 
-    override fun addStatement(block: CodeBlock): CodeBlock =
+    override fun appendln(block: CodeBlock): CodeBlock =
         block.also { nativeBuilder.addStatement(block) }
 
-    override fun add(block: CodeBlock): CodeBlock =
+    override fun append(block: CodeBlock): CodeBlock =
         block.also { nativeBuilder.add(it) }
 
     fun indent() {

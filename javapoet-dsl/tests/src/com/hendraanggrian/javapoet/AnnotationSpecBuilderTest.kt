@@ -21,7 +21,7 @@ class AnnotationSpecBuilderTest {
         assertEquals(expected, (getBuilder()) {
             members.add("message", "Old stuff")
             members.add("code") {
-                add("codeValue")
+                append("codeValue")
             }
         })
     }
@@ -32,7 +32,7 @@ class AnnotationSpecBuilderTest {
             members {
                 add("message", "Old stuff")
                 "code" {
-                    add("codeValue")
+                    append("codeValue")
                 }
             }
         })

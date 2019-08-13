@@ -7,10 +7,10 @@ import com.squareup.javapoet.CodeBlock
 internal interface CodeCollection {
 
     /** Add code block to this container. */
-    fun add(format: String, vararg args: Any)
+    fun append(format: String, vararg args: Any)
 
     /** Add code block to this container, returning the block added. */
-    fun add(block: CodeBlock): CodeBlock
+    fun append(block: CodeBlock): CodeBlock
 
     /** Starts the control flow. */
     fun beginControlFlow(flow: String, vararg args: Any)
@@ -25,10 +25,10 @@ internal interface CodeCollection {
     fun endControlFlow(flow: String, vararg args: Any)
 
     /** Add code block with a new line to this container. */
-    fun addStatement(format: String, vararg args: Any)
+    fun appendln(format: String, vararg args: Any)
 
     /** Add code block with a new line to this container, returning the block added. */
-    fun addStatement(block: CodeBlock): CodeBlock
+    fun appendln(block: CodeBlock): CodeBlock
 }
 
 /** A [CodeContainer] is responsible for managing a set of code block instances. */
@@ -36,20 +36,20 @@ abstract class CodeContainer internal constructor() : CodeCollection {
 
     /** Add code block with custom initialization [builder], returning the block added. */
     inline fun add(builder: CodeBlockBuilder.() -> Unit): CodeBlock =
-        add(CodeBlock.builder()(builder))
+        append(CodeBlock.builder()(builder))
 
     /** Convenient method to add code block with operator function. */
     operator fun plusAssign(value: String) {
-        add(value)
+        append(value)
     }
 
     /** Convenient method to add code block with operator function. */
     operator fun plusAssign(block: CodeBlock) {
-        add(block)
+        append(block)
     }
 
     /** Add code block with custom initialization [builder] and a new line to this container, returning the block added. */
-    inline fun addStatement(builder: CodeBlockBuilder.() -> Unit) = addStatement(CodeBlock.builder()(builder))
+    inline fun addStatement(builder: CodeBlockBuilder.() -> Unit) = appendln(CodeBlock.builder()(builder))
 
     /** Configure this container with DSL. */
     inline operator fun invoke(configuration: CodeContainerScope.() -> Unit) =

@@ -29,7 +29,7 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
 
     val javadoc: JavadocContainer = object : JavadocContainer() {
         override fun add(format: String, vararg args: Any) {
-            nativeBuilder.addJavadoc(format, *args)
+            nativeBuilder.addJavadoc(format, *args.mappedKClass)
         }
 
         override fun add(block: CodeBlock): CodeBlock = block.also { nativeBuilder.addJavadoc(it) }
@@ -92,18 +92,18 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
     inline fun <reified T> addException() = addException(T::class)
 
     val codes: CodeContainer = object : CodeContainer() {
-        override fun add(format: String, vararg args: Any) {
-            nativeBuilder.addCode(format, *args)
+        override fun append(format: String, vararg args: Any) {
+            nativeBuilder.addCode(format, *args.mappedKClass)
         }
 
-        override fun add(block: CodeBlock): CodeBlock = block.also { nativeBuilder.addCode(it) }
+        override fun append(block: CodeBlock): CodeBlock = block.also { nativeBuilder.addCode(it) }
 
         override fun beginControlFlow(flow: String, vararg args: Any) {
-            nativeBuilder.beginControlFlow(flow, *args)
+            nativeBuilder.beginControlFlow(flow, *args.mappedKClass)
         }
 
         override fun nextControlFlow(flow: String, vararg args: Any) {
-            nativeBuilder.nextControlFlow(flow, *args)
+            nativeBuilder.nextControlFlow(flow, *args.mappedKClass)
         }
 
         override fun endControlFlow() {
@@ -111,14 +111,14 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
         }
 
         override fun endControlFlow(flow: String, vararg args: Any) {
-            nativeBuilder.endControlFlow(flow, *args)
+            nativeBuilder.endControlFlow(flow, *args.mappedKClass)
         }
 
-        override fun addStatement(format: String, vararg args: Any) {
-            nativeBuilder.addStatement(format, *args)
+        override fun appendln(format: String, vararg args: Any) {
+            nativeBuilder.addStatement(format, *args.mappedKClass)
         }
 
-        override fun addStatement(block: CodeBlock): CodeBlock = block.also { nativeBuilder.addStatement(it) }
+        override fun appendln(block: CodeBlock): CodeBlock = block.also { nativeBuilder.addStatement(it) }
     }
 
     fun addNamedCode(format: String, args: Map<String, *>) {
@@ -126,11 +126,11 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
     }
 
     fun addComment(format: String, vararg args: Any) {
-        nativeBuilder.addComment(format, *args)
+        nativeBuilder.addComment(format, *args.mappedKClass)
     }
 
     fun defaultValue(format: String, vararg args: Any) {
-        nativeBuilder.defaultValue(format, *args)
+        nativeBuilder.defaultValue(format, *args.mappedKClass)
     }
 
     inline var defaultValue: String

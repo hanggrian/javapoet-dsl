@@ -32,7 +32,7 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
 
     val javadoc: JavadocContainer = object : JavadocContainer() {
         override fun add(format: String, vararg args: Any) {
-            nativeBuilder.addJavadoc(format, *args)
+            nativeBuilder.addJavadoc(format, *args.mappedKClass)
         }
 
         override fun add(block: CodeBlock): CodeBlock = block.also { nativeBuilder.addJavadoc(it) }

@@ -26,7 +26,7 @@ class FieldSpecBuilderTest {
         assertEquals(expected, (getBuilder()) {
             javadoc.add("firstJavadoc")
             javadoc.add {
-                add("secondJavadoc")
+                append("secondJavadoc")
             }
             annotations.add<Deprecated>()
             addModifiers(Modifier.PUBLIC, Modifier.FINAL)
@@ -40,7 +40,7 @@ class FieldSpecBuilderTest {
             javadoc {
                 add("firstJavadoc")
                 add {
-                    add("secondJavadoc")
+                    append("secondJavadoc")
                 }
             }
             annotations {

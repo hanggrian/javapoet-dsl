@@ -23,7 +23,7 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
 
     val javadoc: JavadocContainer = object : JavadocContainer() {
         override fun add(format: String, vararg args: Any) {
-            nativeBuilder.addJavadoc(format, *args)
+            nativeBuilder.addJavadoc(format, *args.mappedKClass)
         }
 
         override fun add(block: CodeBlock): CodeBlock = block.also { nativeBuilder.addJavadoc(it) }
@@ -38,7 +38,7 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
     }
 
     fun initializer(format: String, vararg args: Any) {
-        nativeBuilder.initializer(format, *args)
+        nativeBuilder.initializer(format, *args.mappedKClass)
     }
 
     inline var initializer: String
