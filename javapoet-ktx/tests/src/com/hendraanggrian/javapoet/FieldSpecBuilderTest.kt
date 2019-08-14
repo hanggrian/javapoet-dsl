@@ -23,8 +23,8 @@ class FieldSpecBuilderTest {
     @Test
     fun simple() {
         assertEquals(expected, FieldSpecs.of<String>("name") {
-            javadoc.add("firstJavadoc")
-            javadoc.add {
+            javadoc.append("firstJavadoc")
+            javadoc.append {
                 append("secondJavadoc")
             }
             annotations.add<Deprecated>()
@@ -37,8 +37,8 @@ class FieldSpecBuilderTest {
     fun invocation() {
         assertEquals(expected, FieldSpecs.of<String>("name") {
             javadoc {
-                add("firstJavadoc")
-                add {
+                append("firstJavadoc")
+                append {
                     append("secondJavadoc")
                 }
             }

@@ -31,8 +31,8 @@ class MethodSpecBuilderTest {
     @Test
     fun simple() {
         assertEquals(expected, MethodSpecs.of("main") {
-            javadoc.add("firstJavadoc")
-            javadoc.add {
+            javadoc.append("firstJavadoc")
+            javadoc.append {
                 append("secondJavadoc")
             }
             annotations.add<Deprecated>()
@@ -50,8 +50,8 @@ class MethodSpecBuilderTest {
     fun invocation() {
         assertEquals(expected, MethodSpecs.of("main") {
             javadoc {
-                add("firstJavadoc")
-                add {
+                append("firstJavadoc")
+                append {
                     append("secondJavadoc")
                 }
             }

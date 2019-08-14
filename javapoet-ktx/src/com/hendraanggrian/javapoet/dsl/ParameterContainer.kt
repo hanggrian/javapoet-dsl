@@ -3,6 +3,7 @@ package com.hendraanggrian.javapoet.dsl
 import com.hendraanggrian.javapoet.ParameterSpecs
 import com.squareup.javapoet.ParameterSpec
 import com.squareup.javapoet.TypeName
+import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
 internal interface ParameterCollection {
@@ -15,28 +16,42 @@ internal interface ParameterCollection {
 abstract class ParameterContainer internal constructor() : ParameterCollection {
 
     /** Add parameter from [type] and [name], returning the parameter added. */
-    fun add(type: TypeName, name: String): ParameterSpec =
-        add(ParameterSpecs.of(type, name))
+    fun add(type: TypeName, name: String, vararg modifiers: Modifier): ParameterSpec =
+        add(ParameterSpecs.of(type, name, *modifiers))
 
     /** Add parameter from [type] and [name] with custom initialization [builder], returning the parameter added. */
-    inline fun add(type: TypeName, name: String, builderAction: ParameterSpecs.Builder.() -> Unit): ParameterSpec =
-        add(ParameterSpecs.of(type, name, builderAction))
+    inline fun add(
+        type: TypeName,
+        name: String,
+        vararg modifiers: Modifier,
+        builderAction: ParameterSpecs.Builder.() -> Unit
+    ): ParameterSpec =
+        add(ParameterSpecs.of(type, name, *modifiers, builderAction = builderAction))
 
     /** Add parameter from [type] and [name], returning the parameter added. */
-    fun add(type: KClass<*>, name: String): ParameterSpec =
-        add(ParameterSpecs.of(type, name))
+    fun add(type: KClass<*>, name: String, vararg modifiers: Modifier): ParameterSpec =
+        add(ParameterSpecs.of(type, name, *modifiers))
 
     /** Add parameter from [type] and [name] with custom initialization [builder], returning the parameter added. */
-    inline fun add(type: KClass<*>, name: String, builderAction: ParameterSpecs.Builder.() -> Unit): ParameterSpec =
-        add(ParameterSpecs.of(type, name, builderAction))
+    inline fun add(
+        type: KClass<*>,
+        name: String,
+        vararg modifiers: Modifier,
+        builderAction: ParameterSpecs.Builder.() -> Unit
+    ): ParameterSpec =
+        add(ParameterSpecs.of(type, name, *modifiers, builderAction = builderAction))
 
     /** Add parameter from reified [T] and [name], returning the parameter added. */
-    inline fun <reified T> add(name: String): ParameterSpec =
-        add(ParameterSpecs.of<T>(name))
+    inline fun <reified T> add(name: String, vararg modifiers: Modifier): ParameterSpec =
+        add(ParameterSpecs.of<T>(name, *modifiers))
 
     /** Add parameter from reified [T] and [name] with custom initialization [builder], returning the parameter added. */
-    inline fun <reified T> add(name: String, builderAction: ParameterSpecs.Builder.() -> Unit): ParameterSpec =
-        add(ParameterSpecs.of<T>(name, builderAction))
+    inline fun <reified T> add(
+        name: String,
+        vararg modifiers: Modifier,
+        builderAction: ParameterSpecs.Builder.() -> Unit
+    ): ParameterSpec =
+        add(ParameterSpecs.of<T>(name, *modifiers, builderAction = builderAction))
 
     /** Convenient method to add parameter with operator function. */
     operator fun plusAssign(spec: ParameterSpec) {
@@ -63,17 +78,25 @@ class ParameterContainerScope @PublishedApi internal constructor(collection: Par
     ParameterContainer(), ParameterCollection by collection {
 
     /** Convenient method to add parameter with receiver type. */
-    inline operator fun String.invoke(type: TypeName, builderAction: ParameterSpecs.Builder.() -> Unit): ParameterSpec =
-        add(type, this, builderAction)
+    inline operator fun String.invoke(
+        type: TypeName,
+        vararg modifiers: Modifier,
+        builderAction: ParameterSpecs.Builder.() -> Unit
+    ): ParameterSpec =
+        add(type, this, *modifiers, builderAction = builderAction)
 
     /** Convenient method to add parameter with receiver type. */
     inline operator fun String.invoke(
         type: KClass<*>,
+        vararg modifiers: Modifier,
         builderAction: ParameterSpecs.Builder.() -> Unit
     ): ParameterSpec =
-        add(type, this, builderAction)
+        add(type, this, *modifiers, builderAction = builderAction)
 
     /** Convenient method to add parameter with receiver type. */
-    inline operator fun <reified T> String.invoke(builderAction: ParameterSpecs.Builder.() -> Unit): ParameterSpec =
-        add<T>(this, builderAction)
+    inline operator fun <reified T> String.invoke(
+        vararg modifiers: Modifier,
+        builderAction: ParameterSpecs.Builder.() -> Unit
+    ): ParameterSpec =
+        add<T>(this, *modifiers, builderAction = builderAction)
 }

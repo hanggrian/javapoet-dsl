@@ -18,25 +18,25 @@ abstract class AnnotationContainer internal constructor() : AnnotationCollection
     fun add(type: ClassName): AnnotationSpec =
         add(AnnotationSpecs.of(type))
 
-    /** Add annotation from [type] with custom initialization [builder], returning the annotation added. */
-    inline fun add(type: ClassName, builder: AnnotationSpecs.Builder.() -> Unit): AnnotationSpec =
-        add(AnnotationSpecs.of(type, builder))
+    /** Add annotation from [type] with custom initialization [builderAction], returning the annotation added. */
+    inline fun add(type: ClassName, builderAction: AnnotationSpecs.Builder.() -> Unit): AnnotationSpec =
+        add(AnnotationSpecs.of(type, builderAction))
 
     /** Add annotation from [type], returning the annotation added. */
     fun add(type: KClass<*>): AnnotationSpec =
         add(AnnotationSpecs.of(type))
 
-    /** Add annotation from [type] with custom initialization [builder], returning the annotation added. */
-    inline fun add(type: KClass<*>, builder: AnnotationSpecs.Builder.() -> Unit): AnnotationSpec =
-        add(AnnotationSpecs.of(type, builder))
+    /** Add annotation from [type] with custom initialization [builderAction], returning the annotation added. */
+    inline fun add(type: KClass<*>, builderAction: AnnotationSpecs.Builder.() -> Unit): AnnotationSpec =
+        add(AnnotationSpecs.of(type, builderAction))
 
     /** Add annotation from reified [T], returning the annotation added. */
     inline fun <reified T> add(): AnnotationSpec =
         add(AnnotationSpecs.of<T>())
 
-    /** Add annotation from reified [T] with custom initialization [builder], returning the annotation added. */
-    inline fun <reified T> add(builder: AnnotationSpecs.Builder.() -> Unit): AnnotationSpec =
-        add(AnnotationSpecs.of<T>(builder))
+    /** Add annotation from reified [T] with custom initialization [builderAction], returning the annotation added. */
+    inline fun <reified T> add(builderAction: AnnotationSpecs.Builder.() -> Unit): AnnotationSpec =
+        add(AnnotationSpecs.of<T>(builderAction))
 
     /** Convenient method to add annotation with operator function. */
     operator fun plusAssign(spec: AnnotationSpec) {
@@ -63,10 +63,10 @@ class AnnotationContainerScope @PublishedApi internal constructor(collection: An
     AnnotationContainer(), AnnotationCollection by collection {
 
     /** Convenient method to add annotation with receiver type. */
-    inline operator fun ClassName.invoke(builder: AnnotationSpecs.Builder.() -> Unit): AnnotationSpec =
-        add(this, builder)
+    inline operator fun ClassName.invoke(builderAction: AnnotationSpecs.Builder.() -> Unit): AnnotationSpec =
+        add(this, builderAction)
 
     /** Convenient method to add annotation with receiver type. */
-    inline operator fun KClass<*>.invoke(builder: AnnotationSpecs.Builder.() -> Unit): AnnotationSpec =
-        add(this, builder)
+    inline operator fun KClass<*>.invoke(builderAction: AnnotationSpecs.Builder.() -> Unit): AnnotationSpec =
+        add(this, builderAction)
 }

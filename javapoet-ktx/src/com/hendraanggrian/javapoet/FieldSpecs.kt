@@ -40,16 +40,17 @@ object FieldSpecs {
         of(T::class, name, *modifiers, builderAction = builderAction)
 
     /** Wrapper of [FieldSpec.Builder], providing DSL support as a replacement to Java builder. */
+    @JavapoetDslMarker
     class Builder @PublishedApi internal constructor(private val nativeBuilder: FieldSpec.Builder) {
 
         val javadoc: JavadocContainer = object : JavadocContainer() {
-            override fun add(format: String, vararg args: Any) {
+            override fun append(format: String, vararg args: Any) {
                 format(format, args) { s, array ->
                     nativeBuilder.addJavadoc(s, *array)
                 }
             }
 
-            override fun add(block: CodeBlock): CodeBlock = block.also { nativeBuilder.addJavadoc(it) }
+            override fun append(block: CodeBlock): CodeBlock = block.also { nativeBuilder.addJavadoc(it) }
         }
 
         val annotations: AnnotationContainer = object : AnnotationContainer() {

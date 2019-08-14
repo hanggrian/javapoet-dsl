@@ -13,25 +13,36 @@ object ParameterSpecs {
     operator fun get(element: VariableElement): ParameterSpec =
         ParameterSpec.get(element)
 
-    fun of(type: TypeName, name: String): ParameterSpec =
-        ParameterSpec.builder(type, name).build()
+    fun of(type: TypeName, name: String, vararg modifiers: Modifier): ParameterSpec =
+        ParameterSpec.builder(type, name, *modifiers).build()
 
-    inline fun of(type: TypeName, name: String, builderAction: Builder.() -> Unit): ParameterSpec =
-        Builder(ParameterSpec.builder(type, name)).apply(builderAction).build()
+    inline fun of(
+        type: TypeName,
+        name: String,
+        vararg modifiers: Modifier,
+        builderAction: Builder.() -> Unit
+    ): ParameterSpec =
+        Builder(ParameterSpec.builder(type, name, *modifiers)).apply(builderAction).build()
 
-    fun of(type: KClass<*>, name: String): ParameterSpec =
-        ParameterSpec.builder(type.java, name).build()
+    fun of(type: KClass<*>, name: String, vararg modifiers: Modifier): ParameterSpec =
+        ParameterSpec.builder(type.java, name, *modifiers).build()
 
-    inline fun of(type: KClass<*>, name: String, builderAction: Builder.() -> Unit): ParameterSpec =
-        Builder(ParameterSpec.builder(type.java, name)).apply(builderAction).build()
+    inline fun of(
+        type: KClass<*>,
+        name: String,
+        vararg modifiers: Modifier,
+        builderAction: Builder.() -> Unit
+    ): ParameterSpec =
+        Builder(ParameterSpec.builder(type.java, name, *modifiers)).apply(builderAction).build()
 
-    inline fun <reified T> of(name: String) =
-        of(T::class, name)
+    inline fun <reified T> of(name: String, vararg modifiers: Modifier) =
+        of(T::class, name, *modifiers)
 
-    inline fun <reified T> of(name: String, builderAction: Builder.() -> Unit) =
-        of(T::class, name, builderAction = builderAction)
+    inline fun <reified T> of(name: String, vararg modifiers: Modifier, builderAction: Builder.() -> Unit) =
+        of(T::class, name, *modifiers, builderAction = builderAction)
 
     /** Wrapper of [ParameterSpec.Builder], providing DSL support as a replacement to Java builder. */
+    @JavapoetDslMarker
     class Builder @PublishedApi internal constructor(private val nativeBuilder: ParameterSpec.Builder) {
 
         val annotations: AnnotationContainer = object : AnnotationContainer() {

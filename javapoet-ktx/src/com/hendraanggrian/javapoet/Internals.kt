@@ -24,3 +24,5 @@ internal inline fun <T> format(format: String, args: Map<String, *>, action: (St
     format(format, args.values.toTypedArray()) { s: String, array: Array<*> ->
         action(s, args.keys.zip(array).toMap())
     }
+
+internal fun Array<out KClass<*>>.mapJava(): Array<Class<*>> = map { it.java }.toTypedArray()

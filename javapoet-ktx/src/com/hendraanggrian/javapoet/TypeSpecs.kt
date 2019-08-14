@@ -87,16 +87,17 @@ object TypeSpecs {
         Builder(TypeSpec.annotationBuilder(type)).apply(builderAction).build()
 
     /** Wrapper of [TypeSpec.Builder], providing DSL support as a replacement to Java builder. */
+    @JavapoetDslMarker
     class Builder @PublishedApi internal constructor(private val nativeBuilder: TypeSpec.Builder) {
 
         val javadoc: JavadocContainer = object : JavadocContainer() {
-            override fun add(format: String, vararg args: Any) {
+            override fun append(format: String, vararg args: Any) {
                 format(format, args) { s, array ->
                     nativeBuilder.addJavadoc(s, *array)
                 }
             }
 
-            override fun add(block: CodeBlock): CodeBlock = block.also { nativeBuilder.addJavadoc(it) }
+            override fun append(block: CodeBlock): CodeBlock = block.also { nativeBuilder.addJavadoc(it) }
         }
 
         val annotations: AnnotationContainer = object : AnnotationContainer() {
@@ -144,9 +145,6 @@ object TypeSpecs {
         fun addEnumConstant(name: String, spec: TypeSpec) {
             nativeBuilder.addEnumConstant(name, spec)
         }
-
-        inline fun addEnumConstant(name: String, specName: String, builderAction: Builder.() -> Unit) =
-            addEnumConstant(name, enumOf(specName, builderAction))
 
         val fields: FieldContainer = object : FieldContainer() {
             override fun add(spec: FieldSpec): FieldSpec = spec.also { nativeBuilder.addField(it) }

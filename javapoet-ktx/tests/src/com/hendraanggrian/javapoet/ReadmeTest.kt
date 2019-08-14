@@ -3,7 +3,7 @@ package com.hendraanggrian.javapoet
 import com.hendraanggrian.javapoet.dsl.MethodContainerScope
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
-import com.squareup.javapoet.ParameterizedTypeName
+import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeName
 import java.util.Collections
 import java.util.Date
@@ -219,7 +219,7 @@ class ReadmeTest {
                 addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 methods {
                     "tomorrow" {
-                        val hoverboard = ClassName.get("com.mattel", "Hoverboard")
+                        val hoverboard = TypeNames.classOf("com.mattel", "Hoverboard")
                         returns = hoverboard
                         codes.appendln("return new %T()", hoverboard)
                     }
@@ -243,10 +243,10 @@ class ReadmeTest {
                 addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 methods {
                     "beyond" {
-                        val hoverboard = ClassName.get("com.mattel", "Hoverboard")
-                        val list = ClassName.get("java.util", "List");
-                        val arrayList = ClassName.get("java.util", "ArrayList")
-                        val listOfHoverboards = ParameterizedTypeName.get(list, hoverboard)
+                        val hoverboard = TypeNames.classOf("com.mattel", "Hoverboard")
+                        val list = TypeNames.classOf("java.util", "List");
+                        val arrayList = TypeNames.classOf("java.util", "ArrayList")
+                        val listOfHoverboards = TypeNames.parameterizedOf(list, hoverboard)
                         returns = listOfHoverboards
                         codes {
                             appendln("%T result = new %T<>()", listOfHoverboards, arrayList)
@@ -284,8 +284,8 @@ class ReadmeTest {
 
             """.trimIndent(),
             JavaFiles.of("com.example.helloworld") {
-                val hoverboard = ClassName.get("com.mattel", "Hoverboard")
-                val namedBoards = ClassName.get("com.mattel", "Hoverboard", "Boards")
+                val hoverboard = TypeNames.classOf("com.mattel", "Hoverboard")
+                val namedBoards = TypeNames.classOf("com.mattel", "Hoverboard", "Boards")
                 addStaticImports(hoverboard, "createNimbus")
                 addStaticImports(namedBoards, "*")
                 addStaticImports(Collections::class, "*")
@@ -293,9 +293,9 @@ class ReadmeTest {
                     addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                     methods {
                         "beyond" {
-                            val list = ClassName.get("java.util", "List");
-                            val arrayList = ClassName.get("java.util", "ArrayList")
-                            val listOfHoverboards = ParameterizedTypeName.get(list, hoverboard)
+                            val list = TypeNames.classOf("java.util", "List");
+                            val arrayList = TypeNames.classOf("java.util", "ArrayList")
+                            val listOfHoverboards = TypeNames.parameterizedOf(list, hoverboard)
                             returns = listOfHoverboards
                             codes {
                                 appendln("%T result = new %T<>()", listOfHoverboards, arrayList)
@@ -303,9 +303,7 @@ class ReadmeTest {
                                 appendln("result.add(%T.createNimbus(\"2001\"))", hoverboard)
                                 appendln("result.add(%T.createNimbus(%T.THUNDERBOLT))", hoverboard, namedBoards)
                                 appendln("%T.sort(result)", Collections::class)
-                                appendln(
-                                    "return result.isEmpty() ? %T.emptyList() : result", Collections::class
-                                )
+                                appendln("return result.isEmpty() ? %T.emptyList() : result", Collections::class)
                             }
                         }
                     }
@@ -354,11 +352,11 @@ class ReadmeTest {
     @Test
     fun codeBlockFormatStrings() {
         assertEquals(
-            CodeBlock.builder().add("I ate \$L \$L", 3, "tacos").build(),
+            CodeBlock.of("I ate \$L \$L", 3, "tacos"),
             CodeBlocks["I ate %L %L", 3, "tacos"]
         )
         assertEquals(
-            CodeBlock.builder().add("I ate \$2L \$1L", "tacos", 3).build(),
+            CodeBlock.of("I ate \$2L \$1L", "tacos", 3),
             CodeBlocks["I ate %2L %1L", "tacos", 3]
         )
     }
@@ -396,9 +394,7 @@ class ReadmeTest {
             """.trimIndent(),
             TypeSpecs.classOf("HelloWorld") {
                 addModifiers(Modifier.PUBLIC)
-                fields.add<String>("greeting") {
-                    addModifiers(Modifier.PRIVATE, Modifier.FINAL)
-                }
+                fields.add<String>("greeting", Modifier.PRIVATE, Modifier.FINAL)
                 methods.addConstructor {
                     addModifiers(Modifier.PUBLIC)
                     parameters.add<String>("greeting")
@@ -410,14 +406,267 @@ class ReadmeTest {
 
     @Test
     fun parameters() {
-        /*assertEquals(
+        assertEquals(
             """
-                void welcomeOverlords(final String android, final String robot) {
+                void welcomeOverlords(final java.lang.String android, final java.lang.String robot) {
                 }
 
             """.trimIndent(),
-            (ParameterSpec.builder())
-        )*/
+            MethodSpecs.of("welcomeOverlords") {
+                parameters {
+                    add<String>("android", Modifier.FINAL)
+                    add<String>("robot", Modifier.FINAL)
+                }
+            }.toString()
+        )
+    }
+
+    @Test
+    fun fields() {
+        assertEquals(
+            """
+                public class HelloWorld {
+                  private final java.lang.String android;
+
+                  private final java.lang.String robot;
+                }
+                
+            """.trimIndent(),
+            TypeSpecs.classOf("HelloWorld") {
+                addModifiers(Modifier.PUBLIC)
+                fields {
+                    add<String>("android", Modifier.PRIVATE, Modifier.FINAL)
+                    add<String>("robot", Modifier.PRIVATE, Modifier.FINAL)
+                }
+            }.toString()
+        )
+        assertEquals(
+            "private final java.lang.String android = \"Lollipop v.\" + 5.0;\n",
+            FieldSpecs.of<String>("android", Modifier.PRIVATE, Modifier.FINAL) {
+                initializer = "\"Lollipop v.\" + 5.0"
+            }.toString()
+        )
+    }
+
+    @Test
+    fun interfaces() {
+        assertEquals(
+            """
+                public interface HelloWorld {
+                  java.lang.String ONLY_THING_THAT_IS_CONSTANT = "change";
+
+                  void beep();
+                }
+                
+            """.trimIndent(),
+            TypeSpecs.interfaceOf("HelloWorld") {
+                addModifiers(Modifier.PUBLIC)
+                fields.add<String>("ONLY_THING_THAT_IS_CONSTANT", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL) {
+                    initializer("%S", "change")
+                }
+                methods.add("beep") {
+                    addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
+                }
+            }.toString()
+        )
+    }
+
+    @Test
+    fun enums() {
+        assertEquals(
+            """
+                public enum Roshambo {
+                  ROCK,
+
+                  SCISSORS,
+
+                  PAPER
+                }
+                
+            """.trimIndent(),
+            TypeSpecs.enumOf("Roshambo") {
+                addModifiers(Modifier.PUBLIC)
+                addEnumConstant("ROCK")
+                addEnumConstant("SCISSORS")
+                addEnumConstant("PAPER")
+            }.toString()
+        )
+        assertEquals(
+            """
+                public enum Roshambo {
+                  ROCK("fist") {
+                    @java.lang.Override
+                    public java.lang.String toString() {
+                      return "avalanche!";
+                    }
+                  },
+
+                  SCISSORS("peace"),
+
+                  PAPER("flat");
+
+                  private final java.lang.String handsign;
+
+                  Roshambo(java.lang.String handsign) {
+                    this.handsign = handsign;
+                  }
+                }
+                
+            """.trimIndent(),
+            TypeSpecs.enumOf("Roshambo") {
+                addModifiers(Modifier.PUBLIC)
+                addEnumConstant("ROCK", TypeSpecs.anonymousOf("%S", "fist") {
+                    methods.add("toString") {
+                        annotations.add<Override>()
+                        addModifiers(Modifier.PUBLIC)
+                        codes.appendln("return %S", "avalanche!")
+                        returns<String>()
+                    }
+                })
+                addEnumConstant("SCISSORS", TypeSpecs.anonymousOf("%S", "peace"))
+                addEnumConstant("PAPER", TypeSpecs.anonymousOf("%S", "flat"))
+                fields.add<String>("handsign", Modifier.PRIVATE, Modifier.FINAL)
+                methods.addConstructor {
+                    parameters.add<String>("handsign")
+                    codes.appendln("this.%N = %N", "handsign", "handsign")
+                }
+            }.toString()
+        )
+    }
+
+    @Test
+    fun anonymousInnerClasses() {
+        lateinit var sortByLength: MethodSpec
+        TypeSpecs.classOf("HelloWorld") {
+            sortByLength = methods.add("sortByLength") {
+                parameters.add(TypeNames.parameterizedOf(List::class, String::class), "strings")
+                codes.appendln("%T.sort(%N, %L)", Collections::class, "strings", TypeSpecs.anonymousOf("") {
+                    addSuperInterface(TypeNames.parameterizedOf(Comparator::class, String::class))
+                    methods.add("compare") {
+                        annotations.add<Override>()
+                        addModifiers(Modifier.PUBLIC)
+                        parameters {
+                            add<String>("a")
+                            add<String>("b")
+                        }
+                        returns = TypeName.INT
+                        codes.appendln("return %N.length() - %N.length()", "a", "b")
+                    }
+                })
+            }
+        }
+        assertEquals(
+            """
+                void sortByLength(java.util.List<java.lang.String> strings) {
+                  java.util.Collections.sort(strings, new java.util.Comparator<java.lang.String>() {
+                    @java.lang.Override
+                    public int compare(java.lang.String a, java.lang.String b) {
+                      return a.length() - b.length();
+                    }
+                  });
+                }
+                
+            """.trimIndent(),
+            sortByLength.toString()
+        )
+    }
+
+    @Test
+    fun annotations() {
+        assertEquals(
+            """
+                @java.lang.Override
+                public java.lang.String toString() {
+                  return "Hoverboard";
+                }
+                
+            """.trimIndent(),
+            MethodSpecs.of("toString") {
+                annotations.add<Override>()
+                returns<String>()
+                addModifiers(Modifier.PUBLIC)
+                codes.appendln("return %S", "Hoverboard")
+            }.toString()
+        )
+        assertEquals(
+            """
+                @com.hendraanggrian.javapoet.ReadmeTest.Headers(
+                    accept = "application/json; charset=utf-8",
+                    userAgent = "Square Cash"
+                )
+                public abstract com.hendraanggrian.javapoet.ReadmeTest.LogReceipt recordEvent(
+                    com.hendraanggrian.javapoet.ReadmeTest.LogRecord logRecord);
+                
+            """.trimIndent(),
+            MethodSpecs.of("recordEvent") {
+                addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
+                annotations.add<Headers> {
+                    addMember("accept", "%S", "application/json; charset=utf-8")
+                    addMember("userAgent", "%S", "Square Cash")
+                }
+                parameters.add<LogRecord>("logRecord")
+                returns<LogReceipt>()
+            }.toString()
+        )
+        assertEquals(
+            """
+                @com.hendraanggrian.javapoet.ReadmeTest.HeaderList({
+                    @com.hendraanggrian.javapoet.ReadmeTest.Header(name = "Accept", value = "application/json; charset=utf-8"),
+                    @com.hendraanggrian.javapoet.ReadmeTest.Header(name = "User-Agent", value = "Square Cash")
+                })
+                public abstract com.hendraanggrian.javapoet.ReadmeTest.LogReceipt recordEvent(
+                    com.hendraanggrian.javapoet.ReadmeTest.LogRecord logRecord);
+                
+            """.trimIndent(),
+            MethodSpecs.of("recordEvent") {
+                addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
+                annotations.add<HeaderList> {
+                    addMember("value", "%L", AnnotationSpecs.of<Header> {
+                        addMember("name", "%S", "Accept")
+                        addMember("value", "%S", "application/json; charset=utf-8")
+                    })
+                    addMember("value", "%L", AnnotationSpecs.of<Header> {
+                        addMember("name", "%S", "User-Agent")
+                        addMember("value", "%S", "Square Cash")
+                    })
+                }
+                parameters.add<LogRecord>("logRecord")
+                returns<LogReceipt>()
+            }.toString()
+        )
+    }
+
+    @Test
+    fun javadoc() {
+        assertEquals(
+            """
+                /**
+                 * Hides {@code message} from the caller's history. Other
+                 * participants in the conversation will continue to see the
+                 * message in their own history unless they also delete it.
+                 *
+                 * <p>Use {@link #delete(com.hendraanggrian.javapoet.ReadmeTest.Conversation)} to delete the entire
+                 * conversation for all participants.
+                 */
+                public abstract void dismiss(com.hendraanggrian.javapoet.ReadmeTest.Message message);
+
+            """.trimIndent(),
+            MethodSpecs.of("dismiss") {
+                javadoc {
+                    appendln(
+                        "Hides {@code message} from the caller's history. Other\n"
+                            + "participants in the conversation will continue to see the\n"
+                            + "message in their own history unless they also delete it.\n"
+                    )
+                    append(
+                        "<p>Use {@link #delete(%T)} to delete the entire\n"
+                            + "conversation for all participants.\n", Conversation::class
+                    )
+                }
+                addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
+                parameters.add<Message>("message")
+            }.toString()
+        )
     }
 
     private fun MethodContainerScope.nameMethod(name: String) {
@@ -426,4 +675,13 @@ class ReadmeTest {
             codes.appendln("return %S", name)
         }
     }
+
+    private class Headers
+    private class Header
+    private class HeaderList
+    private class LogRecord
+    private class LogReceipt
+
+    private class Message
+    private class Conversation
 }

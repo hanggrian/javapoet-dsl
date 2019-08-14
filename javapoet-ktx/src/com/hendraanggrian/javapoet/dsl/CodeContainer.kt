@@ -33,9 +33,9 @@ internal interface CodeCollection {
 /** A [CodeContainer] is responsible for managing a set of code block instances. */
 abstract class CodeContainer internal constructor() : CodeCollection {
 
-    /** Add code block with custom initialization [builder], returning the block added. */
-    inline fun add(builder: CodeBlocks.Builder.() -> Unit): CodeBlock =
-        append(CodeBlocks.of(builder))
+    /** Add code block with custom initialization [builderAction], returning the block added. */
+    inline fun append(builderAction: CodeBlocks.Builder.() -> Unit): CodeBlock =
+        append(CodeBlocks.of(builderAction))
 
     /** Convenient method to add code block with operator function. */
     operator fun plusAssign(value: String) {
@@ -47,9 +47,9 @@ abstract class CodeContainer internal constructor() : CodeCollection {
         append(block)
     }
 
-    /** Add code block with custom initialization [builder] and a new line to this container, returning the block added. */
-    inline fun addStatement(builder: CodeBlocks.Builder.() -> Unit) =
-        appendln(CodeBlocks.of(builder))
+    /** Add code block with custom initialization [builderAction] and a new line to this container, returning the block added. */
+    inline fun addStatement(builderAction: CodeBlocks.Builder.() -> Unit) =
+        appendln(CodeBlocks.of(builderAction))
 
     /** Configure this container with DSL. */
     inline operator fun invoke(configuration: CodeContainerScope.() -> Unit) =

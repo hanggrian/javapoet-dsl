@@ -12,6 +12,7 @@ object CodeBlocks {
         Builder(CodeBlock.builder()).apply(builderAction).build()
 
     /** Wrapper of [CodeBlock.Builder], providing DSL support as a replacement to Java builder. */
+    @JavapoetDslMarker
     class Builder @PublishedApi internal constructor(private val nativeBuilder: CodeBlock.Builder) : CodeContainer() {
 
         fun isEmpty(): Boolean = nativeBuilder.isEmpty

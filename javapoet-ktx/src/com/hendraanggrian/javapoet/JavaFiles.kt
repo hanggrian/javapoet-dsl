@@ -9,10 +9,11 @@ import kotlin.reflect.KClass
 object JavaFiles {
 
     /** Creates [JavaFile] with DSL. */
-    inline fun of(packageName: String, builder: Builder.() -> Unit): JavaFile =
-        Builder(packageName).apply(builder).build()
+    inline fun of(packageName: String, builderAction: Builder.() -> Unit): JavaFile =
+        Builder(packageName).apply(builderAction).build()
 
     /** Wrapper of [JavaFile.Builder], providing DSL support as a replacement to Java builder. */
+    @JavapoetDslMarker
     class Builder @PublishedApi internal constructor(private val packageName: String) : TypeContainer() {
 
         private var _spec: TypeSpec? = null
