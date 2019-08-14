@@ -6,8 +6,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class AnnotationSpecBuilderTest {
-    private val getBuilder = { AnnotationSpec.builder(Deprecated::class.java) }
-    private val expected = getBuilder()
+    private val expected = AnnotationSpec.builder(Deprecated::class.java)
         .addMember("message", "Old stuff")
         .addMember(
             "code", CodeBlock.builder()
@@ -18,7 +17,7 @@ class AnnotationSpecBuilderTest {
 
     @Test
     fun simple() {
-        assertEquals(expected, (getBuilder()) {
+        assertEquals(expected, AnnotationSpecs.of<Deprecated> {
             members.add("message", "Old stuff")
             members.add("code") {
                 append("codeValue")
@@ -28,7 +27,7 @@ class AnnotationSpecBuilderTest {
 
     @Test
     fun invocation() {
-        assertEquals(expected, (getBuilder()) {
+        assertEquals(expected, AnnotationSpecs.of<Deprecated> {
             members {
                 add("message", "Old stuff")
                 "code" {

@@ -1,11 +1,11 @@
 [![bintray](https://img.shields.io/badge/bintray-maven-brightgreen.svg)](https://bintray.com/hendraanggrian/maven)
-[![download](https://api.bintray.com/packages/hendraanggrian/maven/javapoet-dsl/images/download.svg)](https://bintray.com/hendraanggrian/maven/javapoet-dsl/_latestVersion)
-[![build](https://travis-ci.com/hendraanggrian/javapoet-dsl.svg)](https://travis-ci.com/hendraanggrian/javapoet-dsl)
+[![download](https://api.bintray.com/packages/hendraanggrian/maven/javapoet-ktx/images/download.svg)](https://bintray.com/hendraanggrian/maven/javapoet-ktx/_latestVersion)
+[![build](https://travis-ci.com/hendraanggrian/javapoet-ktx.svg)](https://travis-ci.com/hendraanggrian/javapoet-ktx)
 [![ktlint](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
 
-JavaPoet DSL
+JavaPoet KTX
 ============
-Lightweight library that provides Kotlin DSL functionality to JavaPort. It's time to replace those old-fashioned Java builders.
+Lightweight library that provides Kotlin DSL functionality to [JavaPoet](https://github.com/square/javapoet). It's time to replace those old-fashioned Java builders.
 
  * Full of convenient methods to achieve minimum code writing possible.
  * Options to invoke DSL. For example, `methods.add("main") { ... }` is as good as `methods { "main" { ... } }`. Scroll down for more information.
@@ -35,7 +35,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.hendraanggrian:javapoet-dsl:$version"
+    implementation "com.hendraanggrian:javapoet-ktx:$version"
 }
 ```
 
