@@ -1,7 +1,6 @@
 package com.hendraanggrian.javapoet.dsl
 
-import com.hendraanggrian.javapoet.MethodSpecBuilder
-import com.hendraanggrian.javapoet.invoke
+import com.hendraanggrian.javapoet.MethodSpecs
 import com.squareup.javapoet.MethodSpec
 
 internal interface MethodCollection {
@@ -15,19 +14,19 @@ abstract class MethodContainer internal constructor() : MethodCollection {
 
     /** Add method from [name], returning the method added. */
     fun add(name: String): MethodSpec =
-        add(MethodSpec.methodBuilder(name).build())
+        add(MethodSpecs.of(name))
 
     /** Add method from [name] with custom initialization [builder], returning the method added. */
-    inline fun add(name: String, builder: MethodSpecBuilder.() -> Unit): MethodSpec =
-        add(MethodSpec.methodBuilder(name)(builder))
+    inline fun add(name: String, builderAction: MethodSpecs.Builder.() -> Unit): MethodSpec =
+        add(MethodSpecs.of(name, builderAction))
 
     /** Add constructor method, returning the method added. */
     fun addConstructor(): MethodSpec =
-        add(MethodSpec.constructorBuilder().build())
+        add(MethodSpecs.constructor())
 
     /** Add constructor method with custom initialization [builder], returning the method added. */
-    inline fun addConstructor(builder: MethodSpecBuilder.() -> Unit): MethodSpec =
-        add(MethodSpec.constructorBuilder()(builder))
+    inline fun addConstructor(builderAction: MethodSpecs.Builder.() -> Unit): MethodSpec =
+        add(MethodSpecs.constructor(builderAction))
 
     /** Convenient method to add method with operator function. */
     operator fun plusAssign(spec: MethodSpec) {
@@ -49,6 +48,6 @@ class MethodContainerScope @PublishedApi internal constructor(collection: Method
     MethodContainer(), MethodCollection by collection {
 
     /** Convenient method to add method with receiver type. */
-    inline operator fun String.invoke(builder: MethodSpecBuilder.() -> Unit): MethodSpec =
-        add(this, builder)
+    inline operator fun String.invoke(builderAction: MethodSpecs.Builder.() -> Unit): MethodSpec =
+        add(this, builderAction)
 }

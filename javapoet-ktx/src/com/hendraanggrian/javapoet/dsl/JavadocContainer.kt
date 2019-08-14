@@ -1,7 +1,6 @@
 package com.hendraanggrian.javapoet.dsl
 
-import com.hendraanggrian.javapoet.CodeBlockBuilder
-import com.hendraanggrian.javapoet.invoke
+import com.hendraanggrian.javapoet.CodeBlocks
 import com.squareup.javapoet.CodeBlock
 
 internal interface JavadocCollection {
@@ -16,9 +15,9 @@ internal interface JavadocCollection {
 /** A [JavadocContainer] is responsible for managing a set of code instances. */
 abstract class JavadocContainer internal constructor() : JavadocCollection {
 
-    /** Add code block with custom initialization [builder], returning the block added. */
-    inline fun add(builder: CodeBlockBuilder.() -> Unit): CodeBlock =
-        add(CodeBlock.builder()(builder))
+    /** Add code block with custom initialization [builderAction], returning the block added. */
+    inline fun add(builderAction: CodeBlocks.Builder.() -> Unit): CodeBlock =
+        add(CodeBlocks.of(builderAction))
 
     /** Convenient method to add code block with operator function. */
     operator fun plusAssign(value: String) {

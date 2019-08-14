@@ -1,7 +1,6 @@
 package com.hendraanggrian.javapoet.dsl
 
-import com.hendraanggrian.javapoet.CodeBlockBuilder
-import com.hendraanggrian.javapoet.invoke
+import com.hendraanggrian.javapoet.CodeBlocks
 import com.squareup.javapoet.CodeBlock
 
 internal interface CodeCollection {
@@ -35,8 +34,8 @@ internal interface CodeCollection {
 abstract class CodeContainer internal constructor() : CodeCollection {
 
     /** Add code block with custom initialization [builder], returning the block added. */
-    inline fun add(builder: CodeBlockBuilder.() -> Unit): CodeBlock =
-        append(CodeBlock.builder()(builder))
+    inline fun add(builder: CodeBlocks.Builder.() -> Unit): CodeBlock =
+        append(CodeBlocks.of(builder))
 
     /** Convenient method to add code block with operator function. */
     operator fun plusAssign(value: String) {
@@ -49,7 +48,8 @@ abstract class CodeContainer internal constructor() : CodeCollection {
     }
 
     /** Add code block with custom initialization [builder] and a new line to this container, returning the block added. */
-    inline fun addStatement(builder: CodeBlockBuilder.() -> Unit) = appendln(CodeBlock.builder()(builder))
+    inline fun addStatement(builder: CodeBlocks.Builder.() -> Unit) =
+        appendln(CodeBlocks.of(builder))
 
     /** Configure this container with DSL. */
     inline operator fun invoke(configuration: CodeContainerScope.() -> Unit) =

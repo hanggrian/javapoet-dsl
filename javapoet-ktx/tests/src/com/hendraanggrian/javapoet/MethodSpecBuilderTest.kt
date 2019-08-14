@@ -11,8 +11,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class MethodSpecBuilderTest {
-    private val getBuilder = { MethodSpec.methodBuilder("main") }
-    private val expected = getBuilder()
+    private val expected = MethodSpec.methodBuilder("main")
         .addJavadoc("firstJavadoc")
         .addJavadoc(
             CodeBlock.builder()
@@ -31,7 +30,7 @@ class MethodSpecBuilderTest {
 
     @Test
     fun simple() {
-        assertEquals(expected, (getBuilder()) {
+        assertEquals(expected, MethodSpecs.of("main") {
             javadoc.add("firstJavadoc")
             javadoc.add {
                 append("secondJavadoc")
@@ -49,7 +48,7 @@ class MethodSpecBuilderTest {
 
     @Test
     fun invocation() {
-        assertEquals(expected, (getBuilder()) {
+        assertEquals(expected, MethodSpecs.of("main") {
             javadoc {
                 add("firstJavadoc")
                 add {

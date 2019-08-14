@@ -8,8 +8,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class FieldSpecBuilderTest {
-    private val getBuilder = { FieldSpec.builder(String::class.java, "name") }
-    private val expected = getBuilder()
+    private val expected = FieldSpec.builder(String::class.java, "name")
         .addJavadoc("firstJavadoc")
         .addJavadoc(
             CodeBlock.builder()
@@ -23,7 +22,7 @@ class FieldSpecBuilderTest {
 
     @Test
     fun simple() {
-        assertEquals(expected, (getBuilder()) {
+        assertEquals(expected, FieldSpecs.of<String>("name") {
             javadoc.add("firstJavadoc")
             javadoc.add {
                 append("secondJavadoc")
@@ -36,7 +35,7 @@ class FieldSpecBuilderTest {
 
     @Test
     fun invocation() {
-        assertEquals(expected, (getBuilder()) {
+        assertEquals(expected, FieldSpecs.of<String>("name") {
             javadoc {
                 add("firstJavadoc")
                 add {

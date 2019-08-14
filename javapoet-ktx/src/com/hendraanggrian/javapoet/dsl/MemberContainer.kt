@@ -1,7 +1,6 @@
 package com.hendraanggrian.javapoet.dsl
 
-import com.hendraanggrian.javapoet.CodeBlockBuilder
-import com.hendraanggrian.javapoet.invoke
+import com.hendraanggrian.javapoet.CodeBlocks
 import com.squareup.javapoet.CodeBlock
 
 internal interface MemberCollection {
@@ -17,8 +16,8 @@ internal interface MemberCollection {
 abstract class MemberContainer internal constructor() : MemberCollection {
 
     /** Add member with [name] and custom initialization [builder], returning the member added. */
-    inline fun add(name: String, builder: CodeBlockBuilder.() -> Unit): CodeBlock =
-        add(name, CodeBlock.builder()(builder))
+    inline fun add(name: String, builderAction: CodeBlocks.Builder.() -> Unit): CodeBlock =
+        add(name, CodeBlocks.of(builderAction))
 
     /** Convenient method to add member with operator function. */
     operator fun set(name: String, format: String) {
@@ -40,6 +39,6 @@ class MemberContainerScope @PublishedApi internal constructor(collection: Member
     MemberContainer(), MemberCollection by collection {
 
     /** Convenient method to add member with receiver type. */
-    inline operator fun String.invoke(builder: CodeBlockBuilder.() -> Unit): CodeBlock =
+    inline operator fun String.invoke(builder: CodeBlocks.Builder.() -> Unit): CodeBlock =
         add(this, builder)
 }

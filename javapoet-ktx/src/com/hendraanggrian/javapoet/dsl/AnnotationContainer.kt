@@ -32,11 +32,11 @@ abstract class AnnotationContainer internal constructor() : AnnotationCollection
 
     /** Add annotation from reified [T], returning the annotation added. */
     inline fun <reified T> add(): AnnotationSpec =
-        add(T::class)
+        add(AnnotationSpecs.of<T>())
 
     /** Add annotation from reified [T] with custom initialization [builder], returning the annotation added. */
     inline fun <reified T> add(builder: AnnotationSpecs.Builder.() -> Unit): AnnotationSpec =
-        add(T::class, builder)
+        add(AnnotationSpecs.of<T>(builder))
 
     /** Convenient method to add annotation with operator function. */
     operator fun plusAssign(spec: AnnotationSpec) {

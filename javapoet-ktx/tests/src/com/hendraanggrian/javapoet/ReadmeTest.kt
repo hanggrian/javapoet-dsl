@@ -3,10 +3,8 @@ package com.hendraanggrian.javapoet
 import com.hendraanggrian.javapoet.dsl.MethodContainerScope
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
-import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.ParameterizedTypeName
 import com.squareup.javapoet.TypeName
-import com.squareup.javapoet.TypeSpec
 import java.util.Collections
 import java.util.Date
 import javax.lang.model.element.Modifier
@@ -32,14 +30,14 @@ class ReadmeTest {
                 }
 
             """.trimIndent(),
-            buildJavaFile("com.example.helloworld") {
+            JavaFiles.of("com.example.helloworld") {
                 addClass("HelloWorld") {
                     addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                     methods.add("main") {
                         addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         returns = TypeName.VOID
                         parameters.add<Array<String>>("args")
-                        codes.appendln("\$T.out.println(\$S)", System::class, "Hello, JavaPoet!")
+                        codes.appendln("%T.out.println(%S)", System::class, "Hello, JavaPoet!")
                     }
                 }
             }.toString()
@@ -60,7 +58,7 @@ class ReadmeTest {
             """.trimIndent()
         assertEquals(
             expected,
-            (MethodSpec.methodBuilder("main")) {
+            MethodSpecs.of("main") {
                 returns = TypeName.VOID
                 codes.append(
                     """
@@ -75,7 +73,7 @@ class ReadmeTest {
         )
         assertEquals(
             expected,
-            (MethodSpec.methodBuilder("main")) {
+            MethodSpecs.of("main") {
                 returns = TypeName.VOID
                 codes {
                     appendln("int total = 0")
@@ -96,7 +94,7 @@ class ReadmeTest {
                 }
 
             """.trimIndent(),
-            (MethodSpec.methodBuilder("multiply10to20")) {
+            MethodSpecs.of("multiply10to20") {
                 returns = TypeName.INT
                 codes {
                     appendln("int result = 1")
@@ -121,15 +119,15 @@ class ReadmeTest {
                 }
 
             """.trimIndent(),
-            (MethodSpec.methodBuilder("main")) {
+            MethodSpecs.of("main") {
                 codes {
-                    appendln("long now = \$T.currentTimeMillis()", System::class)
-                    beginControlFlow("if (\$T.currentTimeMillis() < now)", System::class)
-                    appendln("\$T.out.println(\$S)", System::class, "Time travelling, woo hoo!")
-                    nextControlFlow("else if (\$T.currentTimeMillis() == now)", System::class)
-                    appendln("\$T.out.println(\$S)", System::class, "Time stood still!")
+                    appendln("long now = %T.currentTimeMillis()", System::class)
+                    beginControlFlow("if (%T.currentTimeMillis() < now)", System::class)
+                    appendln("%T.out.println(%S)", System::class, "Time travelling, woo hoo!")
+                    nextControlFlow("else if (%T.currentTimeMillis() == now)", System::class)
+                    appendln("%T.out.println(%S)", System::class, "Time stood still!")
                     nextControlFlow("else")
-                    appendln("\$T.out.println(\$S)", System::class, "Ok, time still moving forward")
+                    appendln("%T.out.println(%S)", System::class, "Ok, time still moving forward")
                     endControlFlow()
                 }
             }.toString()
@@ -145,12 +143,12 @@ class ReadmeTest {
                 }
                 
             """.trimIndent(),
-            (MethodSpec.methodBuilder("main")) {
+            MethodSpecs.of("main") {
                 codes {
                     beginControlFlow("try")
-                    appendln("throw new Exception(\$S)", "Failed")
-                    nextControlFlow("catch (\$T e)", Exception::class)
-                    appendln("throw new \$T(e)", RuntimeException::class)
+                    appendln("throw new Exception(%S)", "Failed")
+                    nextControlFlow("catch (%T e)", Exception::class)
+                    appendln("throw new %T(e)", RuntimeException::class)
                     endControlFlow()
                 }
             }.toString()
@@ -176,7 +174,7 @@ class ReadmeTest {
                 }
 
             """.trimIndent(),
-            (TypeSpec.classBuilder("HelloWorld")) {
+            TypeSpecs.classOf("HelloWorld") {
                 addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 methods {
                     nameMethod("slimShady")
@@ -198,12 +196,12 @@ class ReadmeTest {
                 }
 
             """.trimIndent(),
-            (TypeSpec.classBuilder("HelloWorld")) {
+            TypeSpecs.classOf("HelloWorld") {
                 addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 methods {
                     "today" {
                         returns<Date>()
-                        codes.appendln("return new \$T()", Date::class)
+                        codes.appendln("return new %T()", Date::class)
                     }
                 }
             }.toString()
@@ -217,13 +215,13 @@ class ReadmeTest {
                 }
 
             """.trimIndent(),
-            (TypeSpec.classBuilder("HelloWorld")) {
+            TypeSpecs.classOf("HelloWorld") {
                 addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 methods {
                     "tomorrow" {
                         val hoverboard = ClassName.get("com.mattel", "Hoverboard")
                         returns = hoverboard
-                        codes.appendln("return new \$T()", hoverboard)
+                        codes.appendln("return new %T()", hoverboard)
                     }
                 }
             }.toString()
@@ -241,7 +239,7 @@ class ReadmeTest {
                 }
 
             """.trimIndent(),
-            (TypeSpec.classBuilder("HelloWorld")) {
+            TypeSpecs.classOf("HelloWorld") {
                 addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 methods {
                     "beyond" {
@@ -251,10 +249,10 @@ class ReadmeTest {
                         val listOfHoverboards = ParameterizedTypeName.get(list, hoverboard)
                         returns = listOfHoverboards
                         codes {
-                            appendln("\$T result = new \$T<>()", listOfHoverboards, arrayList)
-                            appendln("result.add(new \$T())", hoverboard)
-                            appendln("result.add(new \$T())", hoverboard)
-                            appendln("result.add(new \$T())", hoverboard)
+                            appendln("%T result = new %T<>()", listOfHoverboards, arrayList)
+                            appendln("result.add(new %T())", hoverboard)
+                            appendln("result.add(new %T())", hoverboard)
+                            appendln("result.add(new %T())", hoverboard)
                             appendln("return result")
                         }
                     }
@@ -285,7 +283,7 @@ class ReadmeTest {
                 }
 
             """.trimIndent(),
-            buildJavaFile("com.example.helloworld") {
+            JavaFiles.of("com.example.helloworld") {
                 val hoverboard = ClassName.get("com.mattel", "Hoverboard")
                 val namedBoards = ClassName.get("com.mattel", "Hoverboard", "Boards")
                 addStaticImports(hoverboard, "createNimbus")
@@ -300,13 +298,13 @@ class ReadmeTest {
                             val listOfHoverboards = ParameterizedTypeName.get(list, hoverboard)
                             returns = listOfHoverboards
                             codes {
-                                appendln("\$T result = new \$T<>()", listOfHoverboards, arrayList)
-                                appendln("result.add(\$T.createNimbus(2000))", hoverboard)
-                                appendln("result.add(\$T.createNimbus(\"2001\"))", hoverboard)
-                                appendln("result.add(\$T.createNimbus(\$T.THUNDERBOLT))", hoverboard, namedBoards)
-                                appendln("\$T.sort(result)", Collections::class)
+                                appendln("%T result = new %T<>()", listOfHoverboards, arrayList)
+                                appendln("result.add(%T.createNimbus(2000))", hoverboard)
+                                appendln("result.add(%T.createNimbus(\"2001\"))", hoverboard)
+                                appendln("result.add(%T.createNimbus(%T.THUNDERBOLT))", hoverboard, namedBoards)
+                                appendln("%T.sort(result)", Collections::class)
                                 appendln(
-                                    "return result.isEmpty() ? \$T.emptyList() : result", Collections::class
+                                    "return result.isEmpty() ? %T.emptyList() : result", Collections::class
                                 )
                             }
                         }
@@ -318,20 +316,20 @@ class ReadmeTest {
 
     @Test
     fun `$NForNames`() {
-        val hexDigit = (MethodSpec.methodBuilder("hexDigit")) {
+        val hexDigit = MethodSpecs.of("hexDigit") {
             addModifiers(Modifier.PUBLIC)
             parameters.add(ClassName.INT, "i")
             returns = ClassName.CHAR
             codes.appendln("return (char) (i < 10 ? i + '0' : i - 10 + 'a')")
         }
-        val byteToHex = (MethodSpec.methodBuilder("byteToHex")) {
+        val byteToHex = MethodSpecs.of("byteToHex") {
             addModifiers(Modifier.PUBLIC)
             parameters.add(ClassName.INT, "b")
             returns<String>()
             codes {
                 appendln("char[] result = new char[2]")
-                appendln("result[0] = \$N((b >>> 4) & 0xf)", hexDigit)
-                appendln("result[1] = \$N(b & 0xf)", hexDigit)
+                appendln("result[0] = %N((b >>> 4) & 0xf)", hexDigit)
+                appendln("result[1] = %N(b & 0xf)", hexDigit)
                 appendln("return new String(result)")
             }
         }
@@ -355,10 +353,14 @@ class ReadmeTest {
 
     @Test
     fun codeBlockFormatStrings() {
-        assertEquals(CodeBlock.builder().add("I ate \$L \$L", 3, "tacos").build(),
-            (CodeBlock.builder()) { append("I ate \$L \$L", 3, "tacos") })
-        assertEquals(CodeBlock.builder().add("I ate \$2L \$1L", "tacos", 3).build(),
-            (CodeBlock.builder()) { append("I ate \$2L \$1L", "tacos", 3) })
+        assertEquals(
+            CodeBlock.builder().add("I ate \$L \$L", 3, "tacos").build(),
+            CodeBlocks["I ate %L %L", 3, "tacos"]
+        )
+        assertEquals(
+            CodeBlock.builder().add("I ate \$2L \$1L", "tacos", 3).build(),
+            CodeBlocks["I ate %2L %1L", "tacos", 3]
+        )
     }
 
     @Test
@@ -370,7 +372,7 @@ class ReadmeTest {
                 }
                 
             """.trimIndent(),
-            (TypeSpec.classBuilder("HelloWorld")) {
+            TypeSpecs.classOf("HelloWorld") {
                 addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
                 methods.add("flux") {
                     addModifiers(Modifier.PROTECTED, Modifier.ABSTRACT)
@@ -392,7 +394,7 @@ class ReadmeTest {
                 }
                 
             """.trimIndent(),
-            (TypeSpec.classBuilder("HelloWorld")) {
+            TypeSpecs.classOf("HelloWorld") {
                 addModifiers(Modifier.PUBLIC)
                 fields.add<String>("greeting") {
                     addModifiers(Modifier.PRIVATE, Modifier.FINAL)
@@ -400,7 +402,7 @@ class ReadmeTest {
                 methods.addConstructor {
                     addModifiers(Modifier.PUBLIC)
                     parameters.add<String>("greeting")
-                    codes.appendln("this.\$N = \$N", "greeting", "greeting")
+                    codes.appendln("this.%N = %N", "greeting", "greeting")
                 }
             }.toString()
         )
@@ -421,7 +423,7 @@ class ReadmeTest {
     private fun MethodContainerScope.nameMethod(name: String) {
         name {
             returns<String>()
-            codes.appendln("return \$S", name)
+            codes.appendln("return %S", name)
         }
     }
 }

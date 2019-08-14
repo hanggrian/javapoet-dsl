@@ -1,9 +1,9 @@
 package com.hendraanggrian.javapoet.dsl
 
-import com.hendraanggrian.javapoet.FieldSpecBuilder
-import com.hendraanggrian.javapoet.invoke
+import com.hendraanggrian.javapoet.FieldSpecs
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.TypeName
+import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
 internal interface FieldCollection {
@@ -16,28 +16,42 @@ internal interface FieldCollection {
 abstract class FieldContainer internal constructor() : FieldCollection {
 
     /** Add field from [type] and [name], returning the field added. */
-    fun add(type: TypeName, name: String): FieldSpec =
-        add(FieldSpec.builder(type, name).build())
+    fun add(type: TypeName, name: String, vararg modifiers: Modifier): FieldSpec =
+        add(FieldSpecs.of(type, name, *modifiers))
 
-    /** Add field from [type] and [name] with custom initialization [builder], returning the field added. */
-    inline fun add(type: TypeName, name: String, builder: FieldSpecBuilder.() -> Unit): FieldSpec =
-        add(FieldSpec.builder(type, name)(builder))
+    /** Add field from [type] and [name] with custom initialization [builderAction], returning the field added. */
+    inline fun add(
+        type: TypeName,
+        name: String,
+        vararg modifiers: Modifier,
+        builderAction: FieldSpecs.Builder.() -> Unit
+    ): FieldSpec =
+        add(FieldSpecs.of(type, name, *modifiers, builderAction = builderAction))
 
     /** Add field from [type] and [name], returning the field added. */
-    fun add(type: KClass<*>, name: String): FieldSpec =
-        add(FieldSpec.builder(type.java, name).build())
+    fun add(type: KClass<*>, name: String, vararg modifiers: Modifier): FieldSpec =
+        add(FieldSpecs.of(type, name, *modifiers))
 
     /** Add field from [type] and [name] with custom initialization [builder], returning the field added. */
-    inline fun add(type: KClass<*>, name: String, builder: FieldSpecBuilder.() -> Unit): FieldSpec =
-        add(FieldSpec.builder(type.java, name)(builder))
+    inline fun add(
+        type: KClass<*>,
+        name: String,
+        vararg modifiers: Modifier,
+        builderAction: FieldSpecs.Builder.() -> Unit
+    ): FieldSpec =
+        add(FieldSpecs.of(type, name, *modifiers, builderAction = builderAction))
 
     /** Add field from reified [T] and [name], returning the field added. */
-    inline fun <reified T> add(name: String): FieldSpec =
-        add(T::class, name)
+    inline fun <reified T> add(name: String, vararg modifiers: Modifier): FieldSpec =
+        add(FieldSpecs.of<T>(name, *modifiers))
 
     /** Add field from reified [T] and [name] with custom initialization [builder], returning the field added. */
-    inline fun <reified T> add(name: String, builder: FieldSpecBuilder.() -> Unit): FieldSpec =
-        add(T::class, name, builder)
+    inline fun <reified T> add(
+        name: String,
+        vararg modifiers: Modifier,
+        builderAction: FieldSpecs.Builder.() -> Unit
+    ): FieldSpec =
+        add(FieldSpecs.of<T>(name, *modifiers, builderAction = builderAction))
 
     /** Convenient method to add field with operator function. */
     operator fun plusAssign(spec: FieldSpec) {
@@ -64,14 +78,25 @@ class FieldContainerScope @PublishedApi internal constructor(collection: FieldCo
     FieldContainer(), FieldCollection by collection {
 
     /** Convenient method to add field with receiver type. */
-    inline operator fun String.invoke(name: TypeName, builder: FieldSpecBuilder.() -> Unit): FieldSpec =
-        add(name, this, builder)
+    inline operator fun String.invoke(
+        type: TypeName,
+        vararg modifiers: Modifier,
+        builderAction: FieldSpecs.Builder.() -> Unit
+    ): FieldSpec =
+        add(type, this, *modifiers, builderAction = builderAction)
 
     /** Convenient method to add field with receiver type. */
-    inline operator fun String.invoke(type: KClass<*>, builder: FieldSpecBuilder.() -> Unit): FieldSpec =
-        add(type, this, builder)
+    inline operator fun String.invoke(
+        type: KClass<*>,
+        vararg modifiers: Modifier,
+        builderAction: FieldSpecs.Builder.() -> Unit
+    ): FieldSpec =
+        add(type, this, *modifiers, builderAction = builderAction)
 
     /** Convenient method to add field with receiver type. */
-    inline operator fun <reified T> String.invoke(builder: FieldSpecBuilder.() -> Unit): FieldSpec =
-        add<T>(this, builder)
+    inline operator fun <reified T> String.invoke(
+        vararg modifiers: Modifier,
+        builderAction: FieldSpecs.Builder.() -> Unit
+    ): FieldSpec =
+        add<T>(this, *modifiers, builderAction = builderAction)
 }
