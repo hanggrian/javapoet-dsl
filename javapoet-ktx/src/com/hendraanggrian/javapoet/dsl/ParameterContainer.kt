@@ -1,6 +1,8 @@
 package com.hendraanggrian.javapoet.dsl
 
-import com.hendraanggrian.javapoet.ParameterSpecs
+import com.hendraanggrian.javapoet.ParameterSpecBuilder
+import com.hendraanggrian.javapoet.buildParameterSpec
+import com.hendraanggrian.javapoet.toParameterSpec
 import com.squareup.javapoet.ParameterSpec
 import com.squareup.javapoet.TypeName
 import javax.lang.model.element.Modifier
@@ -17,41 +19,41 @@ abstract class ParameterContainer internal constructor() : ParameterCollection {
 
     /** Add parameter from [type] and [name], returning the parameter added. */
     fun add(type: TypeName, name: String, vararg modifiers: Modifier): ParameterSpec =
-        add(ParameterSpecs.of(type, name, *modifiers))
+        add(type.toParameterSpec(name, *modifiers))
 
     /** Add parameter from [type] and [name] with custom initialization [builder], returning the parameter added. */
     inline fun add(
         type: TypeName,
         name: String,
         vararg modifiers: Modifier,
-        builderAction: ParameterSpecs.Builder.() -> Unit
+        builderAction: ParameterSpecBuilder.() -> Unit
     ): ParameterSpec =
-        add(ParameterSpecs.of(type, name, *modifiers, builderAction = builderAction))
+        add(buildParameterSpec(type, name, *modifiers, builderAction = builderAction))
 
     /** Add parameter from [type] and [name], returning the parameter added. */
     fun add(type: KClass<*>, name: String, vararg modifiers: Modifier): ParameterSpec =
-        add(ParameterSpecs.of(type, name, *modifiers))
+        add(type.toParameterSpec(name, *modifiers))
 
     /** Add parameter from [type] and [name] with custom initialization [builder], returning the parameter added. */
     inline fun add(
         type: KClass<*>,
         name: String,
         vararg modifiers: Modifier,
-        builderAction: ParameterSpecs.Builder.() -> Unit
+        builderAction: ParameterSpecBuilder.() -> Unit
     ): ParameterSpec =
-        add(ParameterSpecs.of(type, name, *modifiers, builderAction = builderAction))
+        add(buildParameterSpec(type, name, *modifiers, builderAction = builderAction))
 
     /** Add parameter from reified [T] and [name], returning the parameter added. */
     inline fun <reified T> add(name: String, vararg modifiers: Modifier): ParameterSpec =
-        add(ParameterSpecs.of<T>(name, *modifiers))
+        add(T::class, name, *modifiers)
 
     /** Add parameter from reified [T] and [name] with custom initialization [builder], returning the parameter added. */
     inline fun <reified T> add(
         name: String,
         vararg modifiers: Modifier,
-        builderAction: ParameterSpecs.Builder.() -> Unit
+        builderAction: ParameterSpecBuilder.() -> Unit
     ): ParameterSpec =
-        add(ParameterSpecs.of<T>(name, *modifiers, builderAction = builderAction))
+        add(T::class, name, *modifiers, builderAction = builderAction)
 
     /** Convenient method to add parameter with operator function. */
     operator fun plusAssign(spec: ParameterSpec) {
@@ -81,7 +83,7 @@ class ParameterContainerScope @PublishedApi internal constructor(collection: Par
     inline operator fun String.invoke(
         type: TypeName,
         vararg modifiers: Modifier,
-        builderAction: ParameterSpecs.Builder.() -> Unit
+        builderAction: ParameterSpecBuilder.() -> Unit
     ): ParameterSpec =
         add(type, this, *modifiers, builderAction = builderAction)
 
@@ -89,14 +91,14 @@ class ParameterContainerScope @PublishedApi internal constructor(collection: Par
     inline operator fun String.invoke(
         type: KClass<*>,
         vararg modifiers: Modifier,
-        builderAction: ParameterSpecs.Builder.() -> Unit
+        builderAction: ParameterSpecBuilder.() -> Unit
     ): ParameterSpec =
         add(type, this, *modifiers, builderAction = builderAction)
 
     /** Convenient method to add parameter with receiver type. */
     inline operator fun <reified T> String.invoke(
         vararg modifiers: Modifier,
-        builderAction: ParameterSpecs.Builder.() -> Unit
+        builderAction: ParameterSpecBuilder.() -> Unit
     ): ParameterSpec =
         add<T>(this, *modifiers, builderAction = builderAction)
 }
