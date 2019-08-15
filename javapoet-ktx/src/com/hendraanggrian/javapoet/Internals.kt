@@ -11,16 +11,11 @@ internal fun noGetter(): Nothing = throw UnsupportedOperationException(NO_GETTER
 @PublishedApi
 internal inline fun <T> format(format: String, args: Array<*>, action: (String, Array<*>) -> T): T = action(
     format.replace('%', '\$'),
-    args.map {
-        when (it) {
-            is KClass<*> -> it.java
-            else -> it
-        }
-    }.toTypedArray()
+    args.map { (it as? KClass<*>)?.java ?: it }.toTypedArray()
 )
 
 @PublishedApi
-internal inline fun <T> format(format: String, args: Map<String, *>, action: (String, Map<String, *>) -> T): T =
+internal inline fun format(format: String, args: Map<String, *>, action: (String, Map<String, *>) -> Unit): Unit =
     format(format, args.values.toTypedArray()) { s: String, array: Array<*> ->
         action(s, args.keys.zip(array).toMap())
     }

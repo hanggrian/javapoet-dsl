@@ -32,9 +32,7 @@ inline fun <reified T> buildAnnotationSpec(builderAction: AnnotationSpecBuilder.
 class AnnotationSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: AnnotationSpec.Builder) {
 
     fun addMember(name: String, format: String, vararg args: Any) {
-        format(format, args) { s, array ->
-            nativeBuilder.addMember(name, s, *array)
-        }
+        format(format, args) { s, array -> nativeBuilder.addMember(name, s, *array) }
     }
 
     fun addMember(name: String, block: CodeBlock): CodeBlock =

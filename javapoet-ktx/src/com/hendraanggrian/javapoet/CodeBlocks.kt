@@ -15,28 +15,19 @@ class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuil
 
     fun isEmpty(): Boolean = nativeBuilder.isEmpty
 
-    fun addNamed(format: String, arguments: Map<String, *>) {
-        format(format, arguments) { s, map ->
-            nativeBuilder.addNamed(s, map)
-        }
-    }
+    fun addNamed(format: String, arguments: Map<String, *>) =
+        format(format, arguments) { s, map -> nativeBuilder.addNamed(s, map) }
 
     override fun append(format: String, vararg args: Any) {
-        format(format, args) { s, array ->
-            nativeBuilder.add(s, *array)
-        }
+        format(format, args) { s, array -> nativeBuilder.add(s, *array) }
     }
 
     override fun beginControlFlow(flow: String, vararg args: Any) {
-        format(flow, args) { s, array ->
-            nativeBuilder.beginControlFlow(s, *array)
-        }
+        format(flow, args) { s, array -> nativeBuilder.beginControlFlow(s, *array) }
     }
 
     override fun nextControlFlow(flow: String, vararg args: Any) {
-        format(flow, args) { s, array ->
-            nativeBuilder.nextControlFlow(s, *array)
-        }
+        format(flow, args) { s, array -> nativeBuilder.nextControlFlow(s, *array) }
     }
 
     override fun endControlFlow() {
@@ -44,15 +35,11 @@ class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuil
     }
 
     override fun endControlFlow(flow: String, vararg args: Any) {
-        format(flow, args) { s, array ->
-            nativeBuilder.endControlFlow(s, *array)
-        }
+        format(flow, args) { s, array -> nativeBuilder.endControlFlow(s, *array) }
     }
 
     override fun appendln(format: String, vararg args: Any) {
-        format(format, args) { s, array ->
-            nativeBuilder.addStatement(s, *array)
-        }
+        format(format, args) { s, array -> nativeBuilder.addStatement(s, *array) }
     }
 
     override fun appendln(block: CodeBlock): CodeBlock =

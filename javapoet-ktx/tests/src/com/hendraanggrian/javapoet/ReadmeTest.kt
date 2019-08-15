@@ -280,9 +280,9 @@ class ReadmeTest {
             buildJavaFile("com.example.helloworld") {
                 val hoverboard = "com.mattel".toClassName("Hoverboard")
                 val namedBoards = "com.mattel".toClassName("Hoverboard", "Boards")
-                addStaticImports(hoverboard, "createNimbus")
-                addStaticImports(namedBoards, "*")
-                addStaticImports(Collections::class, "*")
+                addStaticImport(hoverboard, "createNimbus")
+                addStaticImport(namedBoards, "*")
+                addStaticImport(Collections::class, "*")
                 addClass("HelloWorld") {
                     addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                     methods.add("beyond") {

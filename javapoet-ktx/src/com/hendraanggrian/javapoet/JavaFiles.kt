@@ -41,7 +41,7 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
         }
 
     /** Add static imports to this file. */
-    fun addStaticImports(constant: Enum<*>) {
+    fun addStaticImport(constant: Enum<*>) {
         if (_staticImports == null) {
             _staticImports = mutableListOf()
         }
@@ -49,7 +49,7 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
     }
 
     /** Add static imports to this file. */
-    fun addStaticImports(type: ClassName, vararg names: String) {
+    fun addStaticImport(type: ClassName, vararg names: String) {
         if (_staticImports == null) {
             _staticImports = mutableListOf()
         }
@@ -57,7 +57,7 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
     }
 
     /** Add static imports to this file. */
-    fun addStaticImports(type: KClass<*>, vararg names: String) {
+    fun addStaticImport(type: KClass<*>, vararg names: String) {
         if (_staticImports == null) {
             _staticImports = mutableListOf()
         }
@@ -65,7 +65,7 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
     }
 
     /** Add static imports to this file. */
-    inline fun <reified T> addStaticImports(vararg names: String) = addStaticImports(T::class, *names)
+    inline fun <reified T> addStaticImport(vararg names: String) = addStaticImport(T::class, *names)
 
     var skipJavaLangImports: Boolean
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()

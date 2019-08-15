@@ -44,16 +44,16 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
 
     val javadoc: JavadocContainer = object : JavadocContainer() {
         override fun append(format: String, vararg args: Any) {
-            format(format, args) { s, array ->
-                nativeBuilder.addJavadoc(s, *array)
-            }
+            format(format, args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
         }
 
-        override fun append(block: CodeBlock): CodeBlock = block.also { nativeBuilder.addJavadoc(it) }
+        override fun append(block: CodeBlock): CodeBlock =
+            block.also { nativeBuilder.addJavadoc(it) }
     }
 
     val annotations: AnnotationContainer = object : AnnotationContainer() {
-        override fun add(spec: AnnotationSpec): AnnotationSpec = spec.also { nativeBuilder.addAnnotation(it) }
+        override fun add(spec: AnnotationSpec): AnnotationSpec =
+            spec.also { nativeBuilder.addAnnotation(it) }
     }
 
     fun addModifiers(vararg modifiers: Modifier) {
@@ -61,20 +61,17 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
     }
 
     fun initializer(format: String, vararg args: Any) {
-        format(format, args) { s, array ->
-            nativeBuilder.initializer(s, *array)
-        }
+        format(format, args) { s, array -> nativeBuilder.initializer(s, *array) }
     }
 
     inline var initializer: String
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
         set(value) = initializer(value)
 
-    fun initializer(block: CodeBlock) {
-        nativeBuilder.initializer(block)
-    }
+    fun initializer(block: CodeBlock): CodeBlock =
+        block.also { nativeBuilder.initializer(it) }
 
-    inline fun initializer(builderAction: CodeBlockBuilder.() -> Unit) =
+    inline fun initializer(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
         initializer(buildCodeBlock(builderAction))
 
     fun build(): FieldSpec =

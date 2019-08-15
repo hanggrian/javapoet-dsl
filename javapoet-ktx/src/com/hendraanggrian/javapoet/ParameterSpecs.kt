@@ -45,12 +45,14 @@ inline fun <reified T> buildParameterSpec(
 class ParameterSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: ParameterSpec.Builder) {
 
     val annotations: AnnotationContainer = object : AnnotationContainer() {
-        override fun add(spec: AnnotationSpec): AnnotationSpec = spec.also { nativeBuilder.addAnnotation(it) }
+        override fun add(spec: AnnotationSpec): AnnotationSpec =
+            spec.also { nativeBuilder.addAnnotation(it) }
     }
 
     fun addModifiers(vararg modifiers: Modifier) {
         nativeBuilder.addModifiers(*modifiers)
     }
 
-    fun build(): ParameterSpec = nativeBuilder.build()
+    fun build(): ParameterSpec =
+        nativeBuilder.build()
 }
