@@ -76,9 +76,9 @@ class ReadmeTest {
             buildMethod("main") {
                 returns = TypeName.VOID
                 appendln("int total = 0")
-                beginControlFlow("for (int i = 0; i < 10; i++)")
+                beginFlow("for (int i = 0; i < 10; i++)")
                 appendln("total += i")
-                endControlFlow()
+                endFlow()
             }.toString()
         )
         assertEquals(
@@ -95,9 +95,9 @@ class ReadmeTest {
             buildMethod("multiply10to20") {
                 returns = TypeName.INT
                 appendln("int result = 1")
-                beginControlFlow("for (int i = 10; i < 20; i++)")
+                beginFlow("for (int i = 10; i < 20; i++)")
                 appendln("result = result * i")
-                endControlFlow()
+                endFlow()
                 appendln("return result")
             }.toString()
         )
@@ -117,13 +117,13 @@ class ReadmeTest {
             """.trimIndent(),
             buildMethod("main") {
                 appendln("long now = %T.currentTimeMillis()", System::class)
-                beginControlFlow("if (%T.currentTimeMillis() < now)", System::class)
+                beginFlow("if (%T.currentTimeMillis() < now)", System::class)
                 appendln("%T.out.println(%S)", System::class, "Time travelling, woo hoo!")
-                nextControlFlow("else if (%T.currentTimeMillis() == now)", System::class)
+                nextFlow("else if (%T.currentTimeMillis() == now)", System::class)
                 appendln("%T.out.println(%S)", System::class, "Time stood still!")
-                nextControlFlow("else")
+                nextFlow("else")
                 appendln("%T.out.println(%S)", System::class, "Ok, time still moving forward")
-                endControlFlow()
+                endFlow()
             }.toString()
         )
         assertEquals(
@@ -138,11 +138,11 @@ class ReadmeTest {
                 
             """.trimIndent(),
             buildMethod("main") {
-                beginControlFlow("try")
+                beginFlow("try")
                 appendln("throw new Exception(%S)", "Failed")
-                nextControlFlow("catch (%T e)", Exception::class)
+                nextFlow("catch (%T e)", Exception::class)
                 appendln("throw new %T(e)", RuntimeException::class)
-                endControlFlow()
+                endFlow()
             }.toString()
         )
     }
@@ -631,11 +631,10 @@ class ReadmeTest {
             """.trimIndent(),
             buildMethod("dismiss") {
                 javadoc {
-                    appendln(
-                        "Hides {@code message} from the caller's history. Other\n"
-                            + "participants in the conversation will continue to see the\n"
-                            + "message in their own history unless they also delete it.\n"
-                    )
+                    appendln("Hides {@code message} from the caller's history. Other")
+                    appendln("participants in the conversation will continue to see the")
+                    appendln("message in their own history unless they also delete it.")
+                    appendln()
                     append(
                         "<p>Use {@link #delete(%T)} to delete the entire\n"
                             + "conversation for all participants.\n", Conversation::class

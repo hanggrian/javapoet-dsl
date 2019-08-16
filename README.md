@@ -20,7 +20,7 @@ buildJavaFile("com.example.helloworld") {
                 modifiers = public + static
                 returns = void
                 parameters.add<Array<String>>("args")
-                statements.add("\$T.out.println(\$S)", System::class.java, "Hello, JavaPoet!")
+                appendln("\$T.out.println(\$S)", System::class.java, "Hello, JavaPoet!")
             }
         }
     }

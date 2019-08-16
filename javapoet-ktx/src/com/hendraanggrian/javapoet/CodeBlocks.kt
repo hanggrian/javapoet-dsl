@@ -22,19 +22,19 @@ class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuil
         format(format, args) { s, array -> nativeBuilder.add(s, *array) }
     }
 
-    override fun beginControlFlow(flow: String, vararg args: Any) {
+    override fun beginFlow(flow: String, vararg args: Any) {
         format(flow, args) { s, array -> nativeBuilder.beginControlFlow(s, *array) }
     }
 
-    override fun nextControlFlow(flow: String, vararg args: Any) {
+    override fun nextFlow(flow: String, vararg args: Any) {
         format(flow, args) { s, array -> nativeBuilder.nextControlFlow(s, *array) }
     }
 
-    override fun endControlFlow() {
+    override fun endFlow() {
         nativeBuilder.endControlFlow()
     }
 
-    override fun endControlFlow(flow: String, vararg args: Any) {
+    override fun endFlow(flow: String, vararg args: Any) {
         format(flow, args) { s, array -> nativeBuilder.endControlFlow(s, *array) }
     }
 
