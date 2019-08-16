@@ -15,14 +15,13 @@ import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.TypeSpec
 
-internal interface TypeCollection {
+private interface TypeAddable {
 
     /** Add type to this container, returning the type added. */
     fun add(spec: TypeSpec): TypeSpec
 }
 
-/** A [TypeContainer] is responsible for managing a set of type instances. */
-abstract class TypeContainer internal constructor() : TypeCollection {
+abstract class TypeCollection internal constructor() : TypeAddable {
 
     /** Add class type from [type], returning the type added. */
     fun addClass(type: String): TypeSpec =
@@ -103,12 +102,16 @@ abstract class TypeContainer internal constructor() : TypeCollection {
     /** Add annotation type from [type] with custom initialization [builderAction], returning the type added. */
     inline fun addAnnotation(type: ClassName, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
         add(buildAnnotationType(type, builderAction))
+}
+
+/** A [TypeContainer] is responsible for managing a set of type instances. */
+abstract class TypeContainer internal constructor() : TypeCollection() {
 
     /** Configure this container with DSL. */
-    inline operator fun TypeContainer.invoke(configuration: TypeContainerScope.() -> Unit) =
+    inline operator fun invoke(configuration: TypeContainerScope.() -> Unit) =
         TypeContainerScope(this).configuration()
 }
 
 /** Receiver for the `types` block providing an extended set of operators for the configuration. */
-class TypeContainerScope @PublishedApi internal constructor(collection: TypeCollection) :
-    TypeContainer(), TypeCollection by collection
+class TypeContainerScope @PublishedApi internal constructor(container: TypeContainer) :
+    TypeContainer(), TypeAddable by container

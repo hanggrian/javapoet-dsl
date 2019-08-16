@@ -3,21 +3,20 @@ package com.hendraanggrian.javapoet.dsl
 import com.hendraanggrian.javapoet.MethodSpecBuilder
 import com.hendraanggrian.javapoet.buildConstructorMethod
 import com.hendraanggrian.javapoet.buildMethod
-import com.hendraanggrian.javapoet.toMethodSpec
 import com.squareup.javapoet.MethodSpec
 
-internal interface MethodCollection {
+private interface MethodAddable {
 
     /** Add method to this container, returning the method added. */
     fun add(spec: MethodSpec): MethodSpec
 }
 
 /** A [MethodContainer] is responsible for managing a set of method instances. */
-abstract class MethodContainer internal constructor() : MethodCollection {
+abstract class MethodContainer internal constructor() : MethodAddable {
 
     /** Add method from [name], returning the method added. */
     fun add(name: String): MethodSpec =
-        add(name.toMethodSpec())
+        add(MethodSpec.methodBuilder(name).build())
 
     /** Add method from [name] with custom initialization [builder], returning the method added. */
     inline fun add(name: String, builderAction: MethodSpecBuilder.() -> Unit): MethodSpec =
@@ -47,8 +46,8 @@ abstract class MethodContainer internal constructor() : MethodCollection {
 }
 
 /** Receiver for the `methods` block providing an extended set of operators for the configuration. */
-class MethodContainerScope @PublishedApi internal constructor(collection: MethodCollection) :
-    MethodContainer(), MethodCollection by collection {
+class MethodContainerScope @PublishedApi internal constructor(container: MethodContainer) :
+    MethodContainer(), MethodAddable by container {
 
     /** Convenient method to add method with receiver type. */
     inline operator fun String.invoke(builderAction: MethodSpecBuilder.() -> Unit): MethodSpec =

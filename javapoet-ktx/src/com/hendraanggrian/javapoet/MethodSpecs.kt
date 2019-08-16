@@ -1,7 +1,7 @@
 package com.hendraanggrian.javapoet
 
 import com.hendraanggrian.javapoet.dsl.AnnotationContainer
-import com.hendraanggrian.javapoet.dsl.CodeContainer
+import com.hendraanggrian.javapoet.dsl.CodeCollection
 import com.hendraanggrian.javapoet.dsl.JavadocContainer
 import com.hendraanggrian.javapoet.dsl.ParameterContainer
 import com.squareup.javapoet.AnnotationSpec
@@ -21,7 +21,8 @@ inline fun buildConstructorMethod(builderAction: MethodSpecBuilder.() -> Unit): 
 
 /** Wrapper of [MethodSpec.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetDslMarker
-class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: MethodSpec.Builder) {
+class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: MethodSpec.Builder) :
+    CodeCollection() {
 
     val javadoc: JavadocContainer = object : JavadocContainer() {
         override fun append(format: String, vararg args: Any) {
@@ -92,37 +93,35 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
     inline fun <reified T> addException() =
         addException(T::class)
 
-    val codes: CodeContainer = object : CodeContainer() {
-        override fun append(format: String, vararg args: Any) {
-            format(format, args) { s, array -> nativeBuilder.addCode(s, *array) }
-        }
-
-        override fun append(block: CodeBlock): CodeBlock =
-            block.also { nativeBuilder.addCode(it) }
-
-        override fun beginControlFlow(flow: String, vararg args: Any) {
-            format(flow, args) { s, array -> nativeBuilder.beginControlFlow(s, *array) }
-        }
-
-        override fun nextControlFlow(flow: String, vararg args: Any) {
-            format(flow, args) { s, array -> nativeBuilder.nextControlFlow(s, *array) }
-        }
-
-        override fun endControlFlow() {
-            nativeBuilder.endControlFlow()
-        }
-
-        override fun endControlFlow(flow: String, vararg args: Any) {
-            format(flow, args) { s, array -> nativeBuilder.endControlFlow(s, *array) }
-        }
-
-        override fun appendln(format: String, vararg args: Any) {
-            format(format, args) { s, array -> nativeBuilder.addStatement(s, *array) }
-        }
-
-        override fun appendln(block: CodeBlock): CodeBlock =
-            block.also { nativeBuilder.addStatement(it) }
+    override fun append(format: String, vararg args: Any) {
+        format(format, args) { s, array -> nativeBuilder.addCode(s, *array) }
     }
+
+    override fun append(block: CodeBlock): CodeBlock =
+        block.also { nativeBuilder.addCode(it) }
+
+    override fun beginControlFlow(flow: String, vararg args: Any) {
+        format(flow, args) { s, array -> nativeBuilder.beginControlFlow(s, *array) }
+    }
+
+    override fun nextControlFlow(flow: String, vararg args: Any) {
+        format(flow, args) { s, array -> nativeBuilder.nextControlFlow(s, *array) }
+    }
+
+    override fun endControlFlow() {
+        nativeBuilder.endControlFlow()
+    }
+
+    override fun endControlFlow(flow: String, vararg args: Any) {
+        format(flow, args) { s, array -> nativeBuilder.endControlFlow(s, *array) }
+    }
+
+    override fun appendln(format: String, vararg args: Any) {
+        format(format, args) { s, array -> nativeBuilder.addStatement(s, *array) }
+    }
+
+    override fun appendln(block: CodeBlock): CodeBlock =
+        block.also { nativeBuilder.addStatement(it) }
 
     fun addNamedCode(format: String, args: Map<String, *>) =
         format(format, args) { s, map -> nativeBuilder.addNamedCode(s, map) }

@@ -42,7 +42,7 @@ class MethodSpecBuilderTest {
             varargs = true
             addException<IOException>()
             addComment("Some comment")
-            codes.append("doSomething()")
+            append("doSomething()")
         })
     }
 
@@ -66,9 +66,7 @@ class MethodSpecBuilderTest {
             varargs = true
             addException<IOException>()
             addComment("Some comment")
-            codes {
-                append("doSomething()")
-            }
+            append("doSomething()")
         })
     }
 }

@@ -7,14 +7,14 @@ import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
 import kotlin.reflect.KClass
 
-internal interface AnnotationCollection {
+private interface AnnotationAddable {
 
     /** Add annotation to this container, returning the annotation added. */
     fun add(spec: AnnotationSpec): AnnotationSpec
 }
 
 /** An [AnnotationContainer] is responsible for managing a set of annotation instances. */
-abstract class AnnotationContainer internal constructor() : AnnotationCollection {
+abstract class AnnotationContainer internal constructor() : AnnotationAddable {
 
     /** Add annotation from [type], returning the annotation added. */
     fun add(type: ClassName): AnnotationSpec =
@@ -61,8 +61,8 @@ abstract class AnnotationContainer internal constructor() : AnnotationCollection
 }
 
 /** Receiver for the `annotations` block providing an extended set of operators for the configuration. */
-class AnnotationContainerScope @PublishedApi internal constructor(collection: AnnotationCollection) :
-    AnnotationContainer(), AnnotationCollection by collection {
+class AnnotationContainerScope @PublishedApi internal constructor(container: AnnotationContainer) :
+    AnnotationContainer(), AnnotationAddable by container {
 
     /** Convenient method to add annotation with receiver type. */
     inline operator fun ClassName.invoke(builderAction: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =

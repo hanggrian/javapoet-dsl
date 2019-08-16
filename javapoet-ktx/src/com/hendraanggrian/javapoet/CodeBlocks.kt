@@ -1,6 +1,6 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.dsl.CodeContainer
+import com.hendraanggrian.javapoet.dsl.CodeCollection
 import com.squareup.javapoet.CodeBlock
 
 fun String.toCode(vararg args: Any): CodeBlock = format(this, args) { s, array -> CodeBlock.of(s, *array) }
@@ -11,7 +11,7 @@ inline fun buildCode(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
 /** Wrapper of [CodeBlock.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetDslMarker
 class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuilder: CodeBlock.Builder) :
-    CodeContainer() {
+    CodeCollection() {
 
     fun isEmpty(): Boolean = nativeBuilder.isEmpty
 

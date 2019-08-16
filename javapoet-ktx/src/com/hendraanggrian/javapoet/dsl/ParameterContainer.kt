@@ -8,20 +8,20 @@ import com.squareup.javapoet.TypeName
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
-internal interface ParameterCollection {
+private interface ParameterAddable {
 
     /** Add parameter to this container, returning the parameter added. */
     fun add(spec: ParameterSpec): ParameterSpec
 }
 
 /** A [ParameterContainer] is responsible for managing a set of parameter instances. */
-abstract class ParameterContainer internal constructor() : ParameterCollection {
+abstract class ParameterContainer internal constructor() : ParameterAddable {
 
     /** Add parameter from [type] and [name], returning the parameter added. */
     fun add(type: TypeName, name: String, vararg modifiers: Modifier): ParameterSpec =
         add(type.toParameter(name, *modifiers))
 
-    /** Add parameter from [type] and [name] with custom initialization [builder], returning the parameter added. */
+    /** Add parameter from [type] and [name] with custom initialization [builderAction], returning the parameter added. */
     inline fun add(
         type: TypeName,
         name: String,
@@ -34,7 +34,7 @@ abstract class ParameterContainer internal constructor() : ParameterCollection {
     fun add(type: KClass<*>, name: String, vararg modifiers: Modifier): ParameterSpec =
         add(type.toParameter(name, *modifiers))
 
-    /** Add parameter from [type] and [name] with custom initialization [builder], returning the parameter added. */
+    /** Add parameter from [type] and [name] with custom initialization [builderAction], returning the parameter added. */
     inline fun add(
         type: KClass<*>,
         name: String,
@@ -47,7 +47,7 @@ abstract class ParameterContainer internal constructor() : ParameterCollection {
     inline fun <reified T> add(name: String, vararg modifiers: Modifier): ParameterSpec =
         add(T::class, name, *modifiers)
 
-    /** Add parameter from reified [T] and [name] with custom initialization [builder], returning the parameter added. */
+    /** Add parameter from reified [T] and [name] with custom initialization [builderAction], returning the parameter added. */
     inline fun <reified T> add(
         name: String,
         vararg modifiers: Modifier,
@@ -76,8 +76,8 @@ abstract class ParameterContainer internal constructor() : ParameterCollection {
 }
 
 /** Receiver for the `parameters` block providing an extended set of operators for the configuration. */
-class ParameterContainerScope @PublishedApi internal constructor(collection: ParameterCollection) :
-    ParameterContainer(), ParameterCollection by collection {
+class ParameterContainerScope @PublishedApi internal constructor(container: ParameterContainer) :
+    ParameterContainer(), ParameterAddable by container {
 
     /** Convenient method to add parameter with receiver type. */
     inline operator fun String.invoke(
