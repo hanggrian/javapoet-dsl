@@ -6,26 +6,26 @@ import com.squareup.javapoet.CodeBlock
 import javax.lang.model.element.AnnotationMirror
 import kotlin.reflect.KClass
 
-fun Annotation.toAnnotationSpec(includeDefaultValues: Boolean = false): AnnotationSpec =
+fun Annotation.toAnnotation(includeDefaultValues: Boolean = false): AnnotationSpec =
     AnnotationSpec.get(this, includeDefaultValues)
 
-fun AnnotationMirror.toAnnotationSpec(): AnnotationSpec =
+fun AnnotationMirror.toAnnotation(): AnnotationSpec =
     AnnotationSpec.get(this)
 
-fun ClassName.toAnnotationSpec(): AnnotationSpec =
+fun ClassName.toAnnotation(): AnnotationSpec =
     AnnotationSpec.builder(this).build()
 
-inline fun buildAnnotationSpec(type: ClassName, builderAction: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+inline fun buildAnnotation(type: ClassName, builderAction: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
     AnnotationSpecBuilder(AnnotationSpec.builder(type)).apply(builderAction).build()
 
-fun KClass<*>.toAnnotationSpec(): AnnotationSpec =
+fun KClass<*>.toAnnotation(): AnnotationSpec =
     AnnotationSpec.builder(java).build()
 
-inline fun buildAnnotationSpec(type: KClass<*>, builderAction: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+inline fun buildAnnotation(type: KClass<*>, builderAction: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
     AnnotationSpecBuilder(AnnotationSpec.builder(type.java)).apply(builderAction).build()
 
-inline fun <reified T> buildAnnotationSpec(builderAction: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
-    buildAnnotationSpec(T::class, builderAction)
+inline fun <reified T> buildAnnotation(builderAction: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+    buildAnnotation(T::class, builderAction)
 
 /** Wrapper of [AnnotationSpec.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetDslMarker
@@ -39,7 +39,7 @@ class AnnotationSpecBuilder @PublishedApi internal constructor(private val nativ
         block.also { nativeBuilder.addMember(name, it) }
 
     inline fun addMember(name: String, builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
-        addMember(name, buildCodeBlock(builderAction))
+        addMember(name, buildCode(builderAction))
 
     operator fun String.invoke(format: String, vararg args: Any) =
         addMember(this, format, *args)

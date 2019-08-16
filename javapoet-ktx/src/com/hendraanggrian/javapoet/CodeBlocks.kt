@@ -3,9 +3,9 @@ package com.hendraanggrian.javapoet
 import com.hendraanggrian.javapoet.dsl.CodeContainer
 import com.squareup.javapoet.CodeBlock
 
-fun String.toCodeBlock(vararg args: Any): CodeBlock = format(this, args) { s, array -> CodeBlock.of(s, *array) }
+fun String.toCode(vararg args: Any): CodeBlock = format(this, args) { s, array -> CodeBlock.of(s, *array) }
 
-inline fun buildCodeBlock(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
+inline fun buildCode(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
     CodeBlockBuilder(CodeBlock.builder()).apply(builderAction).build()
 
 /** Wrapper of [CodeBlock.Builder], providing DSL support as a replacement to Java builder. */

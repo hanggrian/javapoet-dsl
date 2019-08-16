@@ -13,13 +13,10 @@ import com.squareup.javapoet.TypeVariableName
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
-fun String.toMethodSpec(): MethodSpec =
-    MethodSpec.methodBuilder(this).build()
-
-inline fun buildMethodSpec(name: String, builderAction: MethodSpecBuilder.() -> Unit): MethodSpec =
+inline fun buildMethod(name: String, builderAction: MethodSpecBuilder.() -> Unit): MethodSpec =
     MethodSpecBuilder(MethodSpec.methodBuilder(name)).apply(builderAction).build()
 
-inline fun buildConstructorMethodSpec(builderAction: MethodSpecBuilder.() -> Unit): MethodSpec =
+inline fun buildConstructorMethod(builderAction: MethodSpecBuilder.() -> Unit): MethodSpec =
     MethodSpecBuilder(MethodSpec.constructorBuilder()).apply(builderAction).build()
 
 /** Wrapper of [MethodSpec.Builder], providing DSL support as a replacement to Java builder. */
@@ -146,7 +143,7 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
         block.also { nativeBuilder.defaultValue(it) }
 
     inline fun defaultValue(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
-        defaultValue(buildCodeBlock(builderAction))
+        defaultValue(buildCode(builderAction))
 
     fun build(): MethodSpec =
         nativeBuilder.build()

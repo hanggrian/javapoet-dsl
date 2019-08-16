@@ -9,10 +9,10 @@ import com.squareup.javapoet.TypeName
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
-fun TypeName.toFieldSpec(name: String, vararg modifiers: Modifier): FieldSpec =
+fun TypeName.toField(name: String, vararg modifiers: Modifier): FieldSpec =
     FieldSpec.builder(this, name, *modifiers).build()
 
-inline fun buildFieldSpec(
+inline fun buildField(
     type: TypeName,
     name: String,
     vararg modifiers: Modifier,
@@ -20,10 +20,10 @@ inline fun buildFieldSpec(
 ): FieldSpec =
     FieldSpecBuilder(FieldSpec.builder(type, name, *modifiers)).apply(builderAction).build()
 
-fun KClass<*>.toFieldSpec(name: String, vararg modifiers: Modifier): FieldSpec =
+fun KClass<*>.toField(name: String, vararg modifiers: Modifier): FieldSpec =
     FieldSpec.builder(java, name, *modifiers).build()
 
-inline fun buildFieldSpec(
+inline fun buildField(
     type: KClass<*>,
     name: String,
     vararg modifiers: Modifier,
@@ -31,12 +31,12 @@ inline fun buildFieldSpec(
 ): FieldSpec =
     FieldSpecBuilder(FieldSpec.builder(type.java, name, *modifiers)).apply(builderAction).build()
 
-inline fun <reified T> buildFieldSpec(
+inline fun <reified T> buildField(
     name: String,
     vararg modifiers: Modifier,
     builderAction: FieldSpecBuilder.() -> Unit
 ): FieldSpec =
-    buildFieldSpec(T::class, name, *modifiers, builderAction = builderAction)
+    buildField(T::class, name, *modifiers, builderAction = builderAction)
 
 /** Wrapper of [FieldSpec.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetDslMarker
@@ -72,7 +72,7 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
         block.also { nativeBuilder.initializer(it) }
 
     inline fun initializer(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
-        initializer(buildCodeBlock(builderAction))
+        initializer(buildCode(builderAction))
 
     fun build(): FieldSpec =
         nativeBuilder.build()

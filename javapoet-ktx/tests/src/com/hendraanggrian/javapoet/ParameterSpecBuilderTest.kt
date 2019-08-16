@@ -14,7 +14,7 @@ class ParameterSpecBuilderTest {
 
     @Test
     fun simple() {
-        assertEquals(expected, buildParameterSpec<String>("name") {
+        assertEquals(expected, buildParameter<String>("name") {
             annotations.add<Deprecated>()
             addModifiers(Modifier.PUBLIC, Modifier.FINAL)
         })
@@ -22,7 +22,7 @@ class ParameterSpecBuilderTest {
 
     @Test
     fun invocation() {
-        assertEquals(expected, buildParameterSpec<String>("name") {
+        assertEquals(expected, buildParameter<String>("name") {
             annotations {
                 add<Deprecated>()
             }

@@ -1,8 +1,8 @@
 package com.hendraanggrian.javapoet.dsl
 
 import com.hendraanggrian.javapoet.FieldSpecBuilder
-import com.hendraanggrian.javapoet.buildFieldSpec
-import com.hendraanggrian.javapoet.toFieldSpec
+import com.hendraanggrian.javapoet.buildField
+import com.hendraanggrian.javapoet.toField
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.TypeName
 import javax.lang.model.element.Modifier
@@ -19,7 +19,7 @@ abstract class FieldContainer internal constructor() : FieldCollection {
 
     /** Add field from [type] and [name], returning the field added. */
     fun add(type: TypeName, name: String, vararg modifiers: Modifier): FieldSpec =
-        add(type.toFieldSpec(name, *modifiers))
+        add(type.toField(name, *modifiers))
 
     /** Add field from [type] and [name] with custom initialization [builderAction], returning the field added. */
     inline fun add(
@@ -28,11 +28,11 @@ abstract class FieldContainer internal constructor() : FieldCollection {
         vararg modifiers: Modifier,
         builderAction: FieldSpecBuilder.() -> Unit
     ): FieldSpec =
-        add(buildFieldSpec(type, name, *modifiers, builderAction = builderAction))
+        add(buildField(type, name, *modifiers, builderAction = builderAction))
 
     /** Add field from [type] and [name], returning the field added. */
     fun add(type: KClass<*>, name: String, vararg modifiers: Modifier): FieldSpec =
-        add(type.toFieldSpec(name, *modifiers))
+        add(type.toField(name, *modifiers))
 
     /** Add field from [type] and [name] with custom initialization [builder], returning the field added. */
     inline fun add(
@@ -41,7 +41,7 @@ abstract class FieldContainer internal constructor() : FieldCollection {
         vararg modifiers: Modifier,
         builderAction: FieldSpecBuilder.() -> Unit
     ): FieldSpec =
-        add(buildFieldSpec(type, name, *modifiers, builderAction = builderAction))
+        add(buildField(type, name, *modifiers, builderAction = builderAction))
 
     /** Add field from reified [T] and [name], returning the field added. */
     inline fun <reified T> add(name: String, vararg modifiers: Modifier): FieldSpec =

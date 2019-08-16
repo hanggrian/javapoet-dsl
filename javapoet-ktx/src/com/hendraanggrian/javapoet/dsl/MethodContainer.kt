@@ -1,8 +1,8 @@
 package com.hendraanggrian.javapoet.dsl
 
 import com.hendraanggrian.javapoet.MethodSpecBuilder
-import com.hendraanggrian.javapoet.buildConstructorMethodSpec
-import com.hendraanggrian.javapoet.buildMethodSpec
+import com.hendraanggrian.javapoet.buildConstructorMethod
+import com.hendraanggrian.javapoet.buildMethod
 import com.hendraanggrian.javapoet.toMethodSpec
 import com.squareup.javapoet.MethodSpec
 
@@ -21,7 +21,7 @@ abstract class MethodContainer internal constructor() : MethodCollection {
 
     /** Add method from [name] with custom initialization [builder], returning the method added. */
     inline fun add(name: String, builderAction: MethodSpecBuilder.() -> Unit): MethodSpec =
-        add(buildMethodSpec(name, builderAction))
+        add(buildMethod(name, builderAction))
 
     /** Add constructor method, returning the method added. */
     fun addConstructor(): MethodSpec =
@@ -29,7 +29,7 @@ abstract class MethodContainer internal constructor() : MethodCollection {
 
     /** Add constructor method with custom initialization [builder], returning the method added. */
     inline fun addConstructor(builderAction: MethodSpecBuilder.() -> Unit): MethodSpec =
-        add(buildConstructorMethodSpec(builderAction))
+        add(buildConstructorMethod(builderAction))
 
     /** Convenient method to add method with operator function. */
     operator fun plusAssign(spec: MethodSpec) {

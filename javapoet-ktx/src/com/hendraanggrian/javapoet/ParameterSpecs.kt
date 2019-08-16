@@ -8,13 +8,13 @@ import javax.lang.model.element.Modifier
 import javax.lang.model.element.VariableElement
 import kotlin.reflect.KClass
 
-fun VariableElement.toParameterSpec(): ParameterSpec =
+fun VariableElement.toParameter(): ParameterSpec =
     ParameterSpec.get(this)
 
-fun TypeName.toParameterSpec(name: String, vararg modifiers: Modifier): ParameterSpec =
+fun TypeName.toParameter(name: String, vararg modifiers: Modifier): ParameterSpec =
     ParameterSpec.builder(this, name, *modifiers).build()
 
-inline fun buildParameterSpec(
+inline fun buildParameter(
     type: TypeName,
     name: String,
     vararg modifiers: Modifier,
@@ -22,10 +22,10 @@ inline fun buildParameterSpec(
 ): ParameterSpec =
     ParameterSpecBuilder(ParameterSpec.builder(type, name, *modifiers)).apply(builderAction).build()
 
-fun KClass<*>.toParameterSpec(name: String, vararg modifiers: Modifier): ParameterSpec =
+fun KClass<*>.toParameter(name: String, vararg modifiers: Modifier): ParameterSpec =
     ParameterSpec.builder(java, name, *modifiers).build()
 
-inline fun buildParameterSpec(
+inline fun buildParameter(
     type: KClass<*>,
     name: String,
     vararg modifiers: Modifier,
@@ -33,12 +33,12 @@ inline fun buildParameterSpec(
 ): ParameterSpec =
     ParameterSpecBuilder(ParameterSpec.builder(type.java, name, *modifiers)).apply(builderAction).build()
 
-inline fun <reified T> buildParameterSpec(
+inline fun <reified T> buildParameter(
     name: String,
     vararg modifiers: Modifier,
     builderAction: ParameterSpecBuilder.() -> Unit
 ): ParameterSpec =
-    buildParameterSpec(T::class, name, *modifiers, builderAction = builderAction)
+    buildParameter(T::class, name, *modifiers, builderAction = builderAction)
 
 /** Wrapper of [ParameterSpec.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetDslMarker

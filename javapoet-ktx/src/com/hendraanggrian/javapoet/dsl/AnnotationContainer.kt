@@ -1,8 +1,8 @@
 package com.hendraanggrian.javapoet.dsl
 
 import com.hendraanggrian.javapoet.AnnotationSpecBuilder
-import com.hendraanggrian.javapoet.buildAnnotationSpec
-import com.hendraanggrian.javapoet.toAnnotationSpec
+import com.hendraanggrian.javapoet.buildAnnotation
+import com.hendraanggrian.javapoet.toAnnotation
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
 import kotlin.reflect.KClass
@@ -18,19 +18,19 @@ abstract class AnnotationContainer internal constructor() : AnnotationCollection
 
     /** Add annotation from [type], returning the annotation added. */
     fun add(type: ClassName): AnnotationSpec =
-        add(type.toAnnotationSpec())
+        add(type.toAnnotation())
 
     /** Add annotation from [type] with custom initialization [builderAction], returning the annotation added. */
     inline fun add(type: ClassName, builderAction: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
-        add(buildAnnotationSpec(type, builderAction))
+        add(buildAnnotation(type, builderAction))
 
     /** Add annotation from [type], returning the annotation added. */
     fun add(type: KClass<*>): AnnotationSpec =
-        add(type.toAnnotationSpec())
+        add(type.toAnnotation())
 
     /** Add annotation from [type] with custom initialization [builderAction], returning the annotation added. */
     inline fun add(type: KClass<*>, builderAction: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
-        add(buildAnnotationSpec(type, builderAction))
+        add(buildAnnotation(type, builderAction))
 
     /** Add annotation from reified [T], returning the annotation added. */
     inline fun <reified T> add(): AnnotationSpec =

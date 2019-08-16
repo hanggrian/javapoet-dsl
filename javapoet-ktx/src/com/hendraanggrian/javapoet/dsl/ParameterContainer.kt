@@ -1,8 +1,8 @@
 package com.hendraanggrian.javapoet.dsl
 
 import com.hendraanggrian.javapoet.ParameterSpecBuilder
-import com.hendraanggrian.javapoet.buildParameterSpec
-import com.hendraanggrian.javapoet.toParameterSpec
+import com.hendraanggrian.javapoet.buildParameter
+import com.hendraanggrian.javapoet.toParameter
 import com.squareup.javapoet.ParameterSpec
 import com.squareup.javapoet.TypeName
 import javax.lang.model.element.Modifier
@@ -19,7 +19,7 @@ abstract class ParameterContainer internal constructor() : ParameterCollection {
 
     /** Add parameter from [type] and [name], returning the parameter added. */
     fun add(type: TypeName, name: String, vararg modifiers: Modifier): ParameterSpec =
-        add(type.toParameterSpec(name, *modifiers))
+        add(type.toParameter(name, *modifiers))
 
     /** Add parameter from [type] and [name] with custom initialization [builder], returning the parameter added. */
     inline fun add(
@@ -28,11 +28,11 @@ abstract class ParameterContainer internal constructor() : ParameterCollection {
         vararg modifiers: Modifier,
         builderAction: ParameterSpecBuilder.() -> Unit
     ): ParameterSpec =
-        add(buildParameterSpec(type, name, *modifiers, builderAction = builderAction))
+        add(buildParameter(type, name, *modifiers, builderAction = builderAction))
 
     /** Add parameter from [type] and [name], returning the parameter added. */
     fun add(type: KClass<*>, name: String, vararg modifiers: Modifier): ParameterSpec =
-        add(type.toParameterSpec(name, *modifiers))
+        add(type.toParameter(name, *modifiers))
 
     /** Add parameter from [type] and [name] with custom initialization [builder], returning the parameter added. */
     inline fun add(
@@ -41,7 +41,7 @@ abstract class ParameterContainer internal constructor() : ParameterCollection {
         vararg modifiers: Modifier,
         builderAction: ParameterSpecBuilder.() -> Unit
     ): ParameterSpec =
-        add(buildParameterSpec(type, name, *modifiers, builderAction = builderAction))
+        add(buildParameter(type, name, *modifiers, builderAction = builderAction))
 
     /** Add parameter from reified [T] and [name], returning the parameter added. */
     inline fun <reified T> add(name: String, vararg modifiers: Modifier): ParameterSpec =
