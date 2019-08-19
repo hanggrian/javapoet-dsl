@@ -3,10 +3,20 @@ package com.hendraanggrian.javapoet
 import com.hendraanggrian.javapoet.dsl.CodeCollection
 import com.squareup.javapoet.CodeBlock
 
-fun String.toCode(vararg args: Any): CodeBlock = format(this, args) { s, array -> CodeBlock.of(s, *array) }
+/** Converts string to [CodeBlock] using formatted [args]. */
+fun String.toCode(vararg args: Any): CodeBlock =
+    convert(this, args) { s, array -> CodeBlock.of(s, *array) }
 
+/**
+ * Builds new [CodeBlock] by populating newly created [CodeBlockBuilder] using provided [builderAction]
+ * and then building it.
+ */
 inline fun buildCode(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
     CodeBlockBuilder(CodeBlock.builder()).apply(builderAction).build()
+
+/** Joins code blocks into a single [CodeBlock], each separated by [separator]. */
+fun Iterable<CodeBlock>.join(separator: String): CodeBlock =
+    CodeBlock.join(this, separator)
 
 /** Wrapper of [CodeBlock.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetDslMarker
@@ -16,18 +26,18 @@ class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuil
     fun isEmpty(): Boolean = nativeBuilder.isEmpty
 
     fun addNamed(format: String, arguments: Map<String, *>) =
-        format(format, arguments) { s, map -> nativeBuilder.addNamed(s, map) }
+        convert(format, arguments) { s, map -> nativeBuilder.addNamed(s, map) }
 
     override fun append(format: String, vararg args: Any) {
-        format(format, args) { s, array -> nativeBuilder.add(s, *array) }
+        convert(format, args) { s, array -> nativeBuilder.add(s, *array) }
     }
 
     override fun beginFlow(flow: String, vararg args: Any) {
-        format(flow, args) { s, array -> nativeBuilder.beginControlFlow(s, *array) }
+        convert(flow, args) { s, array -> nativeBuilder.beginControlFlow(s, *array) }
     }
 
     override fun nextFlow(flow: String, vararg args: Any) {
-        format(flow, args) { s, array -> nativeBuilder.nextControlFlow(s, *array) }
+        convert(flow, args) { s, array -> nativeBuilder.nextControlFlow(s, *array) }
     }
 
     override fun endFlow() {
@@ -35,11 +45,11 @@ class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuil
     }
 
     override fun endFlow(flow: String, vararg args: Any) {
-        format(flow, args) { s, array -> nativeBuilder.endControlFlow(s, *array) }
+        convert(flow, args) { s, array -> nativeBuilder.endControlFlow(s, *array) }
     }
 
     override fun appendln(format: String, vararg args: Any) {
-        format(format, args) { s, array -> nativeBuilder.addStatement(s, *array) }
+        convert(format, args) { s, array -> nativeBuilder.addStatement(s, *array) }
     }
 
     override fun appendln(block: CodeBlock): CodeBlock =

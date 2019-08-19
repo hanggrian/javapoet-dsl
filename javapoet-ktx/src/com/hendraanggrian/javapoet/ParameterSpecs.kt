@@ -8,12 +8,18 @@ import javax.lang.model.element.Modifier
 import javax.lang.model.element.VariableElement
 import kotlin.reflect.KClass
 
+/** Converts element to [AnnotationSpec]. */
 fun VariableElement.toParameter(): ParameterSpec =
     ParameterSpec.get(this)
 
+/** Converts type name to [AnnotationSpec]. */
 fun TypeName.toParameter(name: String, vararg modifiers: Modifier): ParameterSpec =
     ParameterSpec.builder(this, name, *modifiers).build()
 
+/**
+ * Builds new [ParameterSpec] by populating newly created [ParameterSpecBuilder] using provided [builderAction]
+ * and then building it.
+ */
 inline fun buildParameter(
     type: TypeName,
     name: String,
@@ -22,9 +28,14 @@ inline fun buildParameter(
 ): ParameterSpec =
     ParameterSpecBuilder(ParameterSpec.builder(type, name, *modifiers)).apply(builderAction).build()
 
+/** Converts class to [AnnotationSpec]. */
 fun KClass<*>.toParameter(name: String, vararg modifiers: Modifier): ParameterSpec =
     ParameterSpec.builder(java, name, *modifiers).build()
 
+/**
+ * Builds new [ParameterSpec] by populating newly created [ParameterSpecBuilder] using provided [builderAction]
+ * and then building it.
+ */
 inline fun buildParameter(
     type: KClass<*>,
     name: String,
@@ -33,6 +44,10 @@ inline fun buildParameter(
 ): ParameterSpec =
     ParameterSpecBuilder(ParameterSpec.builder(type.java, name, *modifiers)).apply(builderAction).build()
 
+/**
+ * Builds new [ParameterSpec] by populating newly created [ParameterSpecBuilder] using provided [builderAction]
+ * and then building it.
+ */
 inline fun <reified T> buildParameter(
     name: String,
     vararg modifiers: Modifier,

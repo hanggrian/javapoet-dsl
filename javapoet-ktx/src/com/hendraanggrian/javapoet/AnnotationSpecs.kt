@@ -6,24 +6,40 @@ import com.squareup.javapoet.CodeBlock
 import javax.lang.model.element.AnnotationMirror
 import kotlin.reflect.KClass
 
+/** Converts annotation to [AnnotationSpec]. */
 fun Annotation.toAnnotation(includeDefaultValues: Boolean = false): AnnotationSpec =
     AnnotationSpec.get(this, includeDefaultValues)
 
+/** Converts mirror to [AnnotationSpec]. */
 fun AnnotationMirror.toAnnotation(): AnnotationSpec =
     AnnotationSpec.get(this)
 
+/** Converts class name to [AnnotationSpec]. */
 fun ClassName.toAnnotation(): AnnotationSpec =
     AnnotationSpec.builder(this).build()
 
+/**
+ * Builds new [AnnotationSpec] by populating newly created [AnnotationSpecBuilder] using provided [builderAction]
+ * and then building it.
+ */
 inline fun buildAnnotation(type: ClassName, builderAction: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
     AnnotationSpecBuilder(AnnotationSpec.builder(type)).apply(builderAction).build()
 
+/** Converts class to [AnnotationSpec]. */
 fun KClass<*>.toAnnotation(): AnnotationSpec =
     AnnotationSpec.builder(java).build()
 
+/**
+ * Builds new [AnnotationSpec] by populating newly created [AnnotationSpecBuilder] using provided [builderAction]
+ * and then building it.
+ */
 inline fun buildAnnotation(type: KClass<*>, builderAction: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
     AnnotationSpecBuilder(AnnotationSpec.builder(type.java)).apply(builderAction).build()
 
+/**
+ * Builds new [AnnotationSpec] by populating newly created [AnnotationSpecBuilder] using provided [builderAction]
+ * and then building it.
+ */
 inline fun <reified T> buildAnnotation(builderAction: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
     buildAnnotation(T::class, builderAction)
 
@@ -32,7 +48,7 @@ inline fun <reified T> buildAnnotation(builderAction: AnnotationSpecBuilder.() -
 class AnnotationSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: AnnotationSpec.Builder) {
 
     fun addMember(name: String, format: String, vararg args: Any) {
-        format(format, args) { s, array -> nativeBuilder.addMember(name, s, *array) }
+        convert(format, args) { s, array -> nativeBuilder.addMember(name, s, *array) }
     }
 
     fun addMember(name: String, block: CodeBlock): CodeBlock =

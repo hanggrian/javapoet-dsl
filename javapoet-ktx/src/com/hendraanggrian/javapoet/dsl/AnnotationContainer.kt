@@ -1,6 +1,7 @@
 package com.hendraanggrian.javapoet.dsl
 
 import com.hendraanggrian.javapoet.AnnotationSpecBuilder
+import com.hendraanggrian.javapoet.JavapoetDslMarker
 import com.hendraanggrian.javapoet.buildAnnotation
 import com.hendraanggrian.javapoet.toAnnotation
 import com.squareup.javapoet.AnnotationSpec
@@ -61,6 +62,7 @@ abstract class AnnotationContainer internal constructor() : AnnotationAddable {
 }
 
 /** Receiver for the `annotations` block providing an extended set of operators for the configuration. */
+@JavapoetDslMarker
 class AnnotationContainerScope @PublishedApi internal constructor(container: AnnotationContainer) :
     AnnotationContainer(), AnnotationAddable by container {
 

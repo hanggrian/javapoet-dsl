@@ -1,5 +1,6 @@
 package com.hendraanggrian.javapoet.dsl
 
+import com.hendraanggrian.javapoet.JavapoetDslMarker
 import com.hendraanggrian.javapoet.ParameterSpecBuilder
 import com.hendraanggrian.javapoet.buildParameter
 import com.hendraanggrian.javapoet.toParameter
@@ -76,6 +77,7 @@ abstract class ParameterContainer internal constructor() : ParameterAddable {
 }
 
 /** Receiver for the `parameters` block providing an extended set of operators for the configuration. */
+@JavapoetDslMarker
 class ParameterContainerScope @PublishedApi internal constructor(container: ParameterContainer) :
     ParameterContainer(), ParameterAddable by container {
 

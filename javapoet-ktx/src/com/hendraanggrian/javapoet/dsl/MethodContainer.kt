@@ -1,5 +1,6 @@
 package com.hendraanggrian.javapoet.dsl
 
+import com.hendraanggrian.javapoet.JavapoetDslMarker
 import com.hendraanggrian.javapoet.MethodSpecBuilder
 import com.hendraanggrian.javapoet.buildConstructorMethod
 import com.hendraanggrian.javapoet.buildMethod
@@ -46,6 +47,7 @@ abstract class MethodContainer internal constructor() : MethodAddable {
 }
 
 /** Receiver for the `methods` block providing an extended set of operators for the configuration. */
+@JavapoetDslMarker
 class MethodContainerScope @PublishedApi internal constructor(container: MethodContainer) :
     MethodContainer(), MethodAddable by container {
 

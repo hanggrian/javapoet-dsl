@@ -1,5 +1,6 @@
 package com.hendraanggrian.javapoet.dsl
 
+import com.hendraanggrian.javapoet.JavapoetDslMarker
 import com.hendraanggrian.javapoet.TypeSpecBuilder
 import com.hendraanggrian.javapoet.buildAnnotationType
 import com.hendraanggrian.javapoet.buildAnonymousType
@@ -113,5 +114,6 @@ abstract class TypeContainer internal constructor() : TypeCollection() {
 }
 
 /** Receiver for the `types` block providing an extended set of operators for the configuration. */
+@JavapoetDslMarker
 class TypeContainerScope @PublishedApi internal constructor(container: TypeContainer) :
     TypeContainer(), TypeAddable by container

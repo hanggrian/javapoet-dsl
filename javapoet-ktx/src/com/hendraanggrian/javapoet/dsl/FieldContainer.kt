@@ -1,6 +1,7 @@
 package com.hendraanggrian.javapoet.dsl
 
 import com.hendraanggrian.javapoet.FieldSpecBuilder
+import com.hendraanggrian.javapoet.JavapoetDslMarker
 import com.hendraanggrian.javapoet.buildField
 import com.hendraanggrian.javapoet.toField
 import com.squareup.javapoet.FieldSpec
@@ -76,6 +77,7 @@ abstract class FieldContainer internal constructor() : FieldAddable {
 }
 
 /** Receiver for the `fields` block providing an extended set of operators for the configuration. */
+@JavapoetDslMarker
 class FieldContainerScope @PublishedApi internal constructor(container: FieldContainer) :
     FieldContainer(), FieldAddable by container {
 

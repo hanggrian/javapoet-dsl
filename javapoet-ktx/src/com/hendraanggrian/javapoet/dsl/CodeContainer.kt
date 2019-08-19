@@ -1,6 +1,7 @@
 package com.hendraanggrian.javapoet.dsl
 
 import com.hendraanggrian.javapoet.CodeBlockBuilder
+import com.hendraanggrian.javapoet.JavapoetDslMarker
 import com.hendraanggrian.javapoet.buildCode
 import com.squareup.javapoet.CodeBlock
 
@@ -86,6 +87,7 @@ abstract class JavadocContainer internal constructor() : CodeAppendable {
 }
 
 /** Receiver for the `javadoc` block providing an extended set of operators for the configuration. */
+@JavapoetDslMarker
 class JavadocContainerScope @PublishedApi internal constructor(private val container: JavadocContainer) :
     JavadocContainer(), CodeAppendable by container {
 

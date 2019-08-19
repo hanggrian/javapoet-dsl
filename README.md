@@ -133,6 +133,15 @@ addClass("Car") {
 }
 ```
 
+#### Type names extensions
+Top-level creators of `TypeName` and all its subclasses.
+
+```kotlin
+val hoverboard = classNameOf("com.mattel", "Hoverboard")
+val list = classNameOf("java.util", "List")
+val listOfHoverboards = parameterizedTypeNameOf(list, hoverboard)
+```
+
 License
 -------
     Copyright 2019 Hendra Anggrian

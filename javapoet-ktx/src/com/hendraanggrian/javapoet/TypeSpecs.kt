@@ -17,69 +17,119 @@ import javax.lang.model.element.Element
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
+/** Converts string to class [TypeSpec]. */
 fun String.toClassType(): TypeSpec =
     TypeSpec.classBuilder(this).build()
 
+/**
+ * Builds new [TypeSpec] by populating newly created [TypeSpecBuilder] using provided [builderAction]
+ * and then building it.
+ */
 inline fun buildClassType(type: String, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
     TypeSpecBuilder(TypeSpec.classBuilder(type)).apply(builderAction).build()
 
+/** Converts class name to class [TypeSpec]. */
 fun ClassName.toClassType(): TypeSpec =
     TypeSpec.classBuilder(this).build()
 
+/**
+ * Builds new [TypeSpec] by populating newly created [TypeSpecBuilder] using provided [builderAction]
+ * and then building it.
+ */
 inline fun buildClassType(type: ClassName, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
     TypeSpecBuilder(TypeSpec.classBuilder(type)).apply(builderAction).build()
 
+/** Converts string to interface [TypeSpec]. */
 fun String.toInterfaceType(): TypeSpec =
     TypeSpec.interfaceBuilder(this).build()
 
+/**
+ * Builds new [TypeSpec] by populating newly created [TypeSpecBuilder] using provided [builderAction]
+ * and then building it.
+ */
 inline fun buildInterfaceType(type: String, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
     TypeSpecBuilder(TypeSpec.interfaceBuilder(type)).apply(builderAction).build()
 
+/** Converts class name to interface [TypeSpec]. */
 fun ClassName.toInterfaceType(): TypeSpec =
     TypeSpec.interfaceBuilder(this).build()
 
+/**
+ * Builds new [TypeSpec] by populating newly created [TypeSpecBuilder] using provided [builderAction]
+ * and then building it.
+ */
 inline fun buildInterfaceType(type: ClassName, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
     TypeSpecBuilder(TypeSpec.interfaceBuilder(type)).apply(builderAction).build()
 
+/** Converts string to enum [TypeSpec]. */
 fun String.toEnumType(): TypeSpec =
     TypeSpec.enumBuilder(this).build()
 
+/**
+ * Builds new [TypeSpec] by populating newly created [TypeSpecBuilder] using provided [builderAction]
+ * and then building it.
+ */
 inline fun buildEnumType(type: String, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
     TypeSpecBuilder(TypeSpec.enumBuilder(type)).apply(builderAction).build()
 
+/** Converts class name to enum [TypeSpec]. */
 fun ClassName.toEnumType(): TypeSpec =
     TypeSpec.enumBuilder(this).build()
 
+/**
+ * Builds new [TypeSpec] by populating newly created [TypeSpecBuilder] using provided [builderAction]
+ * and then building it.
+ */
 inline fun buildEnumType(type: ClassName, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
     TypeSpecBuilder(TypeSpec.enumBuilder(type)).apply(builderAction).build()
 
+/** Converts string to anonymous [TypeSpec] using formatted [args]. */
 fun String.toAnonymousType(vararg args: Any): TypeSpec =
-    format(this, args) { s, array -> TypeSpec.anonymousClassBuilder(s, *array).build() }
+    convert(this, args) { s, array -> TypeSpec.anonymousClassBuilder(s, *array).build() }
 
+/**
+ * Builds new [TypeSpec] by populating newly created [TypeSpecBuilder] using provided [builderAction]
+ * and then building it.
+ */
 inline fun buildAnonymousType(
     format: String,
     vararg args: Any,
     builderAction: TypeSpecBuilder.() -> Unit
 ): TypeSpec =
-    format(format, args) { s, array ->
+    convert(format, args) { s, array ->
         TypeSpecBuilder(TypeSpec.anonymousClassBuilder(s, *array)).apply(builderAction).build()
     }
 
+/** Converts code to anonymous [TypeSpec]. */
 fun CodeBlock.toAnonymousType(): TypeSpec =
     TypeSpec.anonymousClassBuilder(this).build()
 
+/**
+ * Builds new [TypeSpec] by populating newly created [TypeSpecBuilder] using provided [builderAction]
+ * and then building it.
+ */
 inline fun buildAnonymousType(block: CodeBlock, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
     TypeSpecBuilder(TypeSpec.anonymousClassBuilder(block)).apply(builderAction).build()
 
+/** Converts string to annotation [TypeSpec]. */
 fun String.toAnnotationType(): TypeSpec =
     TypeSpec.annotationBuilder(this).build()
 
+/**
+ * Builds new [TypeSpec] by populating newly created [TypeSpecBuilder] using provided [builderAction]
+ * and then building it.
+ */
 inline fun buildAnnotationType(type: String, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
     TypeSpecBuilder(TypeSpec.annotationBuilder(type)).apply(builderAction).build()
 
+/** Converts class name to annotation [TypeSpec]. */
 fun ClassName.toAnnotationType(): TypeSpec =
     TypeSpec.annotationBuilder(this).build()
 
+/**
+ * Builds new [TypeSpec] by populating newly created [TypeSpecBuilder] using provided [builderAction]
+ * and then building it.
+ */
 inline fun buildAnnotationType(type: ClassName, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
     TypeSpecBuilder(TypeSpec.annotationBuilder(type)).apply(builderAction).build()
 
@@ -89,7 +139,7 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
 
     val javadoc: JavadocContainer = object : JavadocContainer() {
         override fun append(format: String, vararg args: Any) {
-            format(format, args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
+            convert(format, args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
         }
 
         override fun append(block: CodeBlock): CodeBlock =

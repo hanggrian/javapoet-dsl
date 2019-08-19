@@ -9,9 +9,14 @@ import com.squareup.javapoet.TypeName
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
+/** Converts type name to [FieldSpec] supplying its [name] and [modifiers]. */
 fun TypeName.toField(name: String, vararg modifiers: Modifier): FieldSpec =
     FieldSpec.builder(this, name, *modifiers).build()
 
+/**
+ * Builds new [FieldSpec] by populating newly created [FieldSpecBuilder] using provided [builderAction]
+ * and then building it.
+ */
 inline fun buildField(
     type: TypeName,
     name: String,
@@ -20,9 +25,14 @@ inline fun buildField(
 ): FieldSpec =
     FieldSpecBuilder(FieldSpec.builder(type, name, *modifiers)).apply(builderAction).build()
 
+/** Converts class to [FieldSpec] supplying its [name] and [modifiers]. */
 fun KClass<*>.toField(name: String, vararg modifiers: Modifier): FieldSpec =
     FieldSpec.builder(java, name, *modifiers).build()
 
+/**
+ * Builds new [FieldSpec] by populating newly created [FieldSpecBuilder] using provided [builderAction]
+ * and then building it.
+ */
 inline fun buildField(
     type: KClass<*>,
     name: String,
@@ -31,6 +41,10 @@ inline fun buildField(
 ): FieldSpec =
     FieldSpecBuilder(FieldSpec.builder(type.java, name, *modifiers)).apply(builderAction).build()
 
+/**
+ * Builds new [FieldSpec] by populating newly created [FieldSpecBuilder] using provided [builderAction]
+ * and then building it.
+ */
 inline fun <reified T> buildField(
     name: String,
     vararg modifiers: Modifier,
@@ -44,7 +58,7 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
 
     val javadoc: JavadocContainer = object : JavadocContainer() {
         override fun append(format: String, vararg args: Any) {
-            format(format, args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
+            convert(format, args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
         }
 
         override fun append(block: CodeBlock): CodeBlock =
@@ -61,7 +75,7 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
     }
 
     fun initializer(format: String, vararg args: Any) {
-        format(format, args) { s, array -> nativeBuilder.initializer(s, *array) }
+        convert(format, args) { s, array -> nativeBuilder.initializer(s, *array) }
     }
 
     inline var initializer: String
