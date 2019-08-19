@@ -208,7 +208,7 @@ class ReadmeTest {
             buildClassType("HelloWorld") {
                 addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 methods.add("tomorrow") {
-                    val hoverboard = "com.mattel".toClassName("Hoverboard")
+                    val hoverboard = classNameOf("com.mattel", "Hoverboard")
                     returns = hoverboard
                     appendln("return new %T()", hoverboard)
                 }
@@ -230,10 +230,9 @@ class ReadmeTest {
             buildClassType("HelloWorld") {
                 addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 methods.add("beyond") {
-                    val hoverboard = "com.mattel".toClassName("Hoverboard")
-                    val list = "java.util".toClassName("List")
-                    val arrayList = "java.util".toClassName("ArrayList")
-                    val listOfHoverboards = list.toParameterizedTypeName(hoverboard)
+                    val hoverboard = classNameOf("com.mattel", "Hoverboard")
+                    val arrayList = classNameOf("java.util", "ArrayList")
+                    val listOfHoverboards = parameterizedTypeNameOf(classNameOf("java.util", "List"), hoverboard)
                     returns = listOfHoverboards
                     appendln("%T result = new %T<>()", listOfHoverboards, arrayList)
                     appendln("result.add(new %T())", hoverboard)
@@ -268,17 +267,16 @@ class ReadmeTest {
 
             """.trimIndent(),
             buildJavaFile("com.example.helloworld") {
-                val hoverboard = "com.mattel".toClassName("Hoverboard")
-                val namedBoards = "com.mattel".toClassName("Hoverboard", "Boards")
+                val hoverboard = classNameOf("com.mattel", "Hoverboard")
+                val namedBoards = classNameOf("com.mattel", "Hoverboard", "Boards")
                 addStaticImport(hoverboard, "createNimbus")
                 addStaticImport(namedBoards, "*")
                 addStaticImport(Collections::class, "*")
                 addClass("HelloWorld") {
                     addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                     methods.add("beyond") {
-                        val list = "java.util".toClassName("List")
-                        val arrayList = "java.util".toClassName("ArrayList")
-                        val listOfHoverboards = list.toParameterizedTypeName(hoverboard)
+                        val arrayList = classNameOf("java.util", "ArrayList")
+                        val listOfHoverboards = parameterizedTypeNameOf(classNameOf("java.util", "List"), hoverboard)
                         returns = listOfHoverboards
                         appendln("%T result = new %T<>()", listOfHoverboards, arrayList)
                         appendln("result.add(%T.createNimbus(2000))", hoverboard)
@@ -517,9 +515,9 @@ class ReadmeTest {
         lateinit var sortByLength: MethodSpec
         buildClassType("HelloWorld") {
             sortByLength = methods.add("sortByLength") {
-                parameters.add(List::class.toParameterizedTypeName(String::class), "strings")
+                parameters.add(parameterizedTypeNameOf<List<*>>(String::class), "strings")
                 appendln("%T.sort(%N, %L)", Collections::class, "strings", buildAnonymousType("") {
-                    addSuperInterface(Comparator::class.toParameterizedTypeName(String::class))
+                    addSuperInterface(parameterizedTypeNameOf<Comparator<*>>(String::class))
                     methods.add("compare") {
                         annotations.add<Override>()
                         addModifiers(Modifier.PUBLIC)

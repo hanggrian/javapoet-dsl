@@ -16,77 +16,95 @@ import javax.lang.model.type.TypeVariable
 import javax.lang.model.type.WildcardType
 import kotlin.reflect.KClass
 
-fun TypeMirror.toTypeName(): TypeName =
-    TypeName.get(this)
+fun typeNameOf(mirror: TypeMirror): TypeName =
+    TypeName.get(mirror)
 
-fun KClass<*>.toTypeName(): TypeName =
-    TypeName.get(java)
+fun typeNameOf(type: KClass<*>): TypeName =
+    TypeName.get(type.java)
 
-fun TypeName.toArrayTypeName(): ArrayTypeName =
-    ArrayTypeName.of(this)
+inline fun <reified T> typeNameOf(): TypeName =
+    typeNameOf(T::class)
 
-fun KClass<*>.toArrayTypeName(): ArrayTypeName =
-    ArrayTypeName.of(java)
+fun arrayTypeNameOf(componentType: TypeName): ArrayTypeName =
+    ArrayTypeName.of(componentType)
 
-fun ArrayType.toArrayTypeName(): ArrayTypeName =
-    ArrayTypeName.get(this)
+fun arrayTypeNameOf(componentType: KClass<*>): ArrayTypeName =
+    ArrayTypeName.of(componentType.java)
 
-fun GenericArrayType.toArrayTypeName(): ArrayTypeName =
-    ArrayTypeName.get(this)
+inline fun <reified T> arrayTypeNameOf(): ArrayTypeName =
+    ArrayTypeName.of(T::class.java)
 
-fun KClass<*>.toClassName(): ClassName =
-    ClassName.get(java)
+fun arrayTypeNameOf(mirror: ArrayType): ArrayTypeName =
+    ArrayTypeName.get(mirror)
 
-fun String.toClassName(): ClassName =
-    ClassName.bestGuess(this)
+fun arrayTypeNameOf(type: GenericArrayType): ArrayTypeName =
+    ArrayTypeName.get(type)
 
-fun String.toClassName(simpleName: String, vararg simpleNames: String): ClassName =
-    ClassName.get(this, simpleName, *simpleNames)
+fun classNameOf(type: KClass<*>): ClassName =
+    ClassName.get(type.java)
 
-fun TypeElement.toClassName(): ClassName =
-    ClassName.get(this)
+inline fun <reified T> classNameOf(): ClassName =
+    classNameOf(T::class)
 
-fun ClassName.toParameterizedTypeName(vararg typeArguments: TypeName): ParameterizedTypeName =
-    ParameterizedTypeName.get(this, *typeArguments)
+fun classNameOf(name: String): ClassName =
+    ClassName.bestGuess(name)
 
-fun KClass<*>.toParameterizedTypeName(vararg typeArguments: KClass<*>): ParameterizedTypeName =
-    ParameterizedTypeName.get(java, *typeArguments.mapJava())
+fun classNameOf(packageName: String, simpleName: String, vararg simpleNames: String): ClassName =
+    ClassName.get(packageName, simpleName, *simpleNames)
 
-fun ParameterizedType.toParameterizedTypeName(): ParameterizedTypeName =
-    ParameterizedTypeName.get(this)
+fun classNameOf(element: TypeElement): ClassName =
+    ClassName.get(element)
 
-fun String.toTypeVariableName(): TypeVariableName =
-    TypeVariableName.get(this)
+fun parameterizedTypeNameOf(rawType: ClassName, vararg typeArguments: TypeName): ParameterizedTypeName =
+    ParameterizedTypeName.get(rawType, *typeArguments)
 
-fun String.toTypeVariableName(vararg bounds: TypeName): TypeVariableName =
-    TypeVariableName.get(this, *bounds)
+fun parameterizedTypeNameOf(rawType: KClass<*>, vararg typeArguments: KClass<*>): ParameterizedTypeName =
+    ParameterizedTypeName.get(rawType.java, *typeArguments.mapJava())
 
-fun String.toTypeVariableName(vararg bounds: KClass<*>): TypeVariableName =
-    TypeVariableName.get(this, *bounds.mapJava())
+inline fun <reified T> parameterizedTypeNameOf(vararg typeArguments: KClass<*>): ParameterizedTypeName =
+    parameterizedTypeNameOf(T::class, *typeArguments)
 
-fun TypeVariable.toTypeVariableName(): TypeVariableName =
-    TypeVariableName.get(this)
+fun parameterizedTypeNameOf(type: ParameterizedType): ParameterizedTypeName =
+    ParameterizedTypeName.get(type)
 
-fun TypeParameterElement.toTypeVariableName(): TypeVariableName =
-    TypeVariableName.get(this)
+fun typeVariableNameOf(name: String): TypeVariableName =
+    TypeVariableName.get(name)
 
-fun java.lang.reflect.TypeVariable<*>.toTypeVariableName(): TypeVariableName =
-    TypeVariableName.get(this)
+fun typeVariableNameOf(name: String, vararg bounds: TypeName): TypeVariableName =
+    TypeVariableName.get(name, *bounds)
 
-fun TypeName.toSubtypeWildcardTypeName(): WildcardTypeName =
-    WildcardTypeName.subtypeOf(this)
+fun typeVariableNameOf(name: String, vararg bounds: KClass<*>): TypeVariableName =
+    TypeVariableName.get(name, *bounds.mapJava())
 
-fun KClass<*>.toSubtypeWildcardTypeName(): WildcardTypeName =
-    WildcardTypeName.subtypeOf(java)
+fun typeVariableNameOf(mirror: TypeVariable): TypeVariableName =
+    TypeVariableName.get(mirror)
 
-fun TypeName.toSupertypeWildcardTypeName(): WildcardTypeName =
-    WildcardTypeName.supertypeOf(this)
+fun typeVariableNameOf(element: TypeParameterElement): TypeVariableName =
+    TypeVariableName.get(element)
 
-fun KClass<*>.toSupertypeWildcardTypeName(): WildcardTypeName =
-    WildcardTypeName.supertypeOf(java)
+fun typeVariableNameOf(type: java.lang.reflect.TypeVariable<*>): TypeVariableName =
+    TypeVariableName.get(type)
 
-fun WildcardType.toWildcardTypeName(): TypeName =
-    WildcardTypeName.get(this)
+fun subtypeWildcardTypeNameOf(upperBound: TypeName): WildcardTypeName =
+    WildcardTypeName.subtypeOf(upperBound)
 
-fun java.lang.reflect.WildcardType.toWildcardTypeName(): TypeName =
-    WildcardTypeName.get(this)
+fun subtypeWildcardTypeNameOf(upperBound: KClass<*>): WildcardTypeName =
+    WildcardTypeName.subtypeOf(upperBound.java)
+
+inline fun <reified T> subtypeWildcardTypeNameOf(): WildcardTypeName =
+    subtypeWildcardTypeNameOf(T::class)
+
+fun supertypeWildcardTypeNameOf(lowerBound: TypeName): WildcardTypeName =
+    WildcardTypeName.supertypeOf(lowerBound)
+
+fun supertypeWildcardTypeNameOf(lowerBound: KClass<*>): WildcardTypeName =
+    WildcardTypeName.supertypeOf(lowerBound.java)
+
+inline fun <reified T> supertypeWildcardTypeNameOf(): WildcardTypeName =
+    supertypeWildcardTypeNameOf(T::class)
+
+fun wildcardTypeNameOf(mirror: WildcardType): TypeName =
+    WildcardTypeName.get(mirror)
+
+fun wildcardTypeNameOf(wildcardName: java.lang.reflect.WildcardType): TypeName =
+    WildcardTypeName.get(wildcardName)

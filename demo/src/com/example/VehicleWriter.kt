@@ -1,7 +1,7 @@
 package com.example
 
 import com.hendraanggrian.javapoet.buildJavaFile
-import com.hendraanggrian.javapoet.toClassName
+import com.hendraanggrian.javapoet.classNameOf
 import com.squareup.javapoet.TypeName
 import java.nio.file.Paths
 import javax.lang.model.element.Modifier
@@ -10,7 +10,7 @@ class VehicleWriter {
 
     companion object {
         private const val PACKAGE_NAME = "com.example.output"
-        private val VEHICLE_NAME = PACKAGE_NAME.toClassName("Vehicle")
+        private val VEHICLE_NAME = classNameOf(PACKAGE_NAME, "Vehicle")
 
         @JvmStatic
         fun main(args: Array<String>) {
