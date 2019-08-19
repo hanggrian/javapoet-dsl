@@ -14,69 +14,70 @@ inline fun buildJavaFile(packageName: String, builderAction: JavaFileBuilder.() 
 @JavapoetDslMarker
 class JavaFileBuilder @PublishedApi internal constructor(private val packageName: String) : TypeCollection() {
 
-    private var _spec: TypeSpec? = null
-    private var _comments: Map<String, Array<Any>>? = null
-    private var _staticImports: MutableList<Pair<Any, Array<String>>>? = null
-    private var _skipJavaLangImports: Boolean? = null
-    private var _indent: String? = null
+    private var typeSpec: TypeSpec? = null
+    private var comments: MutableMap<String, Array<Any>>? = null
+    private var staticImports: MutableMap<Any, Array<String>>? = null
+    private var isSkipJavaLangImports: Boolean? = null
+    private var indentString: String? = null
 
     override fun add(spec: TypeSpec): TypeSpec = spec.also {
-        check(_spec == null) { "Java file may only have 1 type" }
-        _spec = it
+        check(typeSpec == null) { "Java file may only have 1 type" }
+        typeSpec = it
     }
 
     /** Add a comment to this file. */
     fun addComment(format: String, vararg args: Any) {
-        if (_comments !is MutableMap) {
-            _comments = mutableMapOf()
+        if (comments == null) {
+            comments = mutableMapOf()
         }
-        _comments as MutableMap += format to arrayOf(*args)
+        comments!![format] = arrayOf(*args)
     }
 
     /** Set a comment to this file, cancelling all changes made with [addComment]. */
     var comment: String
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
         set(value) {
-            _comments = mapOf(value to emptyArray())
+            comments = mutableMapOf(value to emptyArray())
         }
 
     /** Add static imports to this file. */
     fun addStaticImport(constant: Enum<*>) {
-        if (_staticImports == null) {
-            _staticImports = mutableListOf()
+        if (staticImports == null) {
+            staticImports = mutableMapOf()
         }
-        _staticImports!! += constant to emptyArray()
+        staticImports!![constant] = emptyArray()
     }
 
     /** Add static imports to this file. */
     fun addStaticImport(type: ClassName, vararg names: String) {
-        if (_staticImports == null) {
-            _staticImports = mutableListOf()
+        if (staticImports == null) {
+            staticImports = mutableMapOf()
         }
-        _staticImports!! += type to arrayOf(*names)
+        staticImports!![type] = arrayOf(*names)
     }
 
     /** Add static imports to this file. */
     fun addStaticImport(type: KClass<*>, vararg names: String) {
-        if (_staticImports == null) {
-            _staticImports = mutableListOf()
+        if (staticImports == null) {
+            staticImports = mutableMapOf()
         }
-        _staticImports!! += type to arrayOf(*names)
+        staticImports!![type] = arrayOf(*names)
     }
 
     /** Add static imports to this file. */
-    inline fun <reified T> addStaticImport(vararg names: String) = addStaticImport(T::class, *names)
+    inline fun <reified T> addStaticImport(vararg names: String) =
+        addStaticImport(T::class, *names)
 
     var skipJavaLangImports: Boolean
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
         set(value) {
-            _skipJavaLangImports = value
+            isSkipJavaLangImports = value
         }
 
     var indent: String
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
         set(value) {
-            _indent = value
+            indentString = value
         }
 
     inline var indentCount: Int
@@ -86,18 +87,18 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
         }
 
     fun build(): JavaFile =
-        JavaFile.builder(packageName, checkNotNull(_spec) { "A main type must be initialized" })
+        JavaFile.builder(packageName, checkNotNull(typeSpec) { "A main type must be initialized" })
             .apply {
-                _comments?.forEach { (format, args) -> addFileComment(format, *args) }
-                _staticImports?.forEach { (type, names) ->
+                comments?.forEach { (format, args) -> addFileComment(format, *args) }
+                staticImports?.forEach { (type, names) ->
                     when (type) {
                         is Enum<*> -> addStaticImport(type)
                         is ClassName -> addStaticImport(type, *names)
                         is KClass<*> -> addStaticImport(type.java, *names)
                     }
                 }
-                _skipJavaLangImports?.let { skipJavaLangImports(it) }
-                _indent?.let { indent(it) }
+                isSkipJavaLangImports?.let { skipJavaLangImports(it) }
+                indentString?.let { indent(it) }
             }
             .build()
 }

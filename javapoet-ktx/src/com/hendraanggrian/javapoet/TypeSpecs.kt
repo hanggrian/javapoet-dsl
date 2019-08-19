@@ -1,6 +1,3 @@
-@file:JvmMultifileClass
-@file:JvmName("SpecBuildersKt")
-
 package com.hendraanggrian.javapoet
 
 import com.hendraanggrian.javapoet.dsl.AnnotationContainer

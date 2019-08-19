@@ -23,4 +23,4 @@ internal inline fun format(format: String, args: Map<String, *>, action: (String
     }
 
 /** Converts array of Kotlin classes to Java classes. */
-internal fun Array<out KClass<*>>.mapJava(): Array<Class<*>> = map { it.java }.toTypedArray()
+internal fun Array<out KClass<*>>.mapJavaClass(): Array<Class<*>> = map { it.java }.toTypedArray()

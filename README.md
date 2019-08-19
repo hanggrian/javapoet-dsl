@@ -5,7 +5,7 @@
 
 JavaPoet KTX
 ============
-Lightweight library that provides Kotlin DSL functionality to [JavaPoet](https://github.com/square/javapoet). It's time to replace those old-fashioned Java builders.
+Lightweight Kotlin extension of [JavaPoet], providing Kotlin DSL functionality and other convenient solutions. 
 
  * Full of convenient methods to achieve minimum code writing possible.
  * Options to invoke DSL. For example, `methods.add("main") { ... }` is as good as `methods { "main" { ... } }`. Scroll down for more information.
@@ -20,7 +20,7 @@ buildJavaFile("com.example.helloworld") {
                 modifiers = public + static
                 returns = void
                 parameters.add<Array<String>>("args")
-                appendln("\$T.out.println(\$S)", System::class.java, "Hello, JavaPoet!")
+                appendln("%T.out.println(%S)", System::class, "Hello, JavaPoet!")
             }
         }
     }
@@ -41,10 +41,42 @@ dependencies {
 
 Usage
 -----
-Description coming soon.
+
+#### `%` replaces `$`
+Following convention of [KotlinPoet], formatter accepts `%` to emit literals (`%L`), strings (`%S`), types (`%T`), an names (`%N`).
+
+```kotlin
+buildMethod("getName") {
+    returns = TypeName.STRING
+    appendln("%S", name)
+}
+
+buildCodeBlock {
+    appendln("int result = 0")
+    beginFlow("for (int i = %L; i < %L; i++)", 0, 10)
+    appendln("result = result %L i", "+=")
+    endFlow()
+    appendln("return result")
+}
+```
+
+#### `KClass<*>` replaces `Class<?>`
+`KClass<*>` can now be used as format arguments. There is also inline reified type function whenever possible.
+
+```kotlin
+buildMethod("sortList") {
+    returns = TypeName.INT
+    parameters.add(parameterizedTypeNameOf(classNameOf("java.util", "List"), hoverboard), "list")
+    appendln("%T.sort(list)", Collections::class)
+    appendln("return list")
+}
+
+buildField<Int>("count") {
+    initializer("%L", 0)
+}
+```
 
 #### Optional DSL
-
 Some elements (field, method, parameter, etc.) are wrapped in container class. These containers have ability to add components with/without invoking DSL.
 
 For example, 2 examples below will produce the same result.
@@ -116,3 +148,6 @@ License
     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
     See the License for the specific language governing permissions and
     limitations under the License.
+
+[JavaPoet]: https://github.com/square/javapoet
+[KotlinPoet]: https://github.com/square/kotlinpoet

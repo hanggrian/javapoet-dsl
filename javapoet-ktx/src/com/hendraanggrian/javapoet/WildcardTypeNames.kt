@@ -1,0 +1,36 @@
+package com.hendraanggrian.javapoet
+
+import com.squareup.javapoet.TypeName
+import com.squareup.javapoet.WildcardTypeName
+import javax.lang.model.type.WildcardType
+import kotlin.reflect.KClass
+
+/** Returns a type that represents an unknown type that extends [upperBound]. */
+fun subtypeWildcardTypeNameOf(upperBound: TypeName): WildcardTypeName =
+    WildcardTypeName.subtypeOf(upperBound)
+
+/** Returns a type that represents an unknown type that extends [upperBound]. */
+fun subtypeWildcardTypeNameOf(upperBound: KClass<*>): WildcardTypeName =
+    WildcardTypeName.subtypeOf(upperBound.java)
+
+/** Returns a type that represents an unknown type that extends [T]. */
+inline fun <reified T> subtypeWildcardTypeNameOf(): WildcardTypeName =
+    subtypeWildcardTypeNameOf(T::class)
+
+/** Returns a type that represents an unknown supertype of [lowerBound]. */
+fun supertypeWildcardTypeNameOf(lowerBound: TypeName): WildcardTypeName =
+    WildcardTypeName.supertypeOf(lowerBound)
+
+/** Returns a type that represents an unknown supertype of [lowerBound]. */
+fun supertypeWildcardTypeNameOf(lowerBound: KClass<*>): WildcardTypeName =
+    WildcardTypeName.supertypeOf(lowerBound.java)
+
+/** Returns a type that represents an unknown supertype of [T]. */
+inline fun <reified T> supertypeWildcardTypeNameOf(): WildcardTypeName =
+    supertypeWildcardTypeNameOf(T::class)
+
+fun wildcardTypeNameOf(mirror: WildcardType): TypeName =
+    WildcardTypeName.get(mirror)
+
+fun wildcardTypeNameOf(wildcardName: java.lang.reflect.WildcardType): TypeName =
+    WildcardTypeName.get(wildcardName)

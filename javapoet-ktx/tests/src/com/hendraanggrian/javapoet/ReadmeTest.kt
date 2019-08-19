@@ -11,7 +11,7 @@ import javax.lang.model.element.Modifier
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-/** From the original javapoet readme. */
+/** From `https://github.com/square/javapoet`. */
 class ReadmeTest {
 
     @Test
@@ -148,6 +148,30 @@ class ReadmeTest {
     }
 
     @Test
+    fun `$LForLiterals`() {
+        assertEquals(
+            """
+                int computeRange() {
+                  int result = 0;
+                  for (int i = 0; i < 10; i++) {
+                    result = result += i;
+                  }
+                  return result;
+                }
+
+            """.trimIndent(),
+            buildMethod("computeRange") {
+                returns = TypeName.INT
+                appendln("int result = 0")
+                beginFlow("for (int i = %L; i < %L; i++)", 0, 10)
+                appendln("result = result %L i", "+=")
+                endFlow()
+                appendln("return result")
+            }.toString()
+        )
+    }
+
+    @Test
     fun `$SForStrings`() {
         assertEquals(
             """
@@ -169,9 +193,9 @@ class ReadmeTest {
             buildClassType("HelloWorld") {
                 addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 methods {
-                    nameMethod("slimShady")
-                    nameMethod("eminem")
-                    nameMethod("marshallMathers")
+                    whatsMyName("slimShady")
+                    whatsMyName("eminem")
+                    whatsMyName("marshallMathers")
                 }
             }.toString()
         )
@@ -271,7 +295,7 @@ class ReadmeTest {
                 val namedBoards = classNameOf("com.mattel", "Hoverboard", "Boards")
                 addStaticImport(hoverboard, "createNimbus")
                 addStaticImport(namedBoards, "*")
-                addStaticImport(Collections::class, "*")
+                addStaticImport<Collections>("*")
                 addClass("HelloWorld") {
                     addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                     methods.add("beyond") {
@@ -515,9 +539,9 @@ class ReadmeTest {
         lateinit var sortByLength: MethodSpec
         buildClassType("HelloWorld") {
             sortByLength = methods.add("sortByLength") {
-                parameters.add(parameterizedTypeNameOf<List<*>>(String::class), "strings")
+                parameters.add(parameterizedTypeNameOf(List::class, String::class), "strings")
                 appendln("%T.sort(%N, %L)", Collections::class, "strings", buildAnonymousType("") {
-                    addSuperInterface(parameterizedTypeNameOf<Comparator<*>>(String::class))
+                    addSuperInterface(parameterizedTypeNameOf(Comparator::class, String::class))
                     methods.add("compare") {
                         annotations.add<Override>()
                         addModifiers(Modifier.PUBLIC)
@@ -644,7 +668,7 @@ class ReadmeTest {
         )
     }
 
-    private fun MethodContainerScope.nameMethod(name: String) {
+    private fun MethodContainerScope.whatsMyName(name: String) {
         name {
             returns<String>()
             appendln("return %S", name)
