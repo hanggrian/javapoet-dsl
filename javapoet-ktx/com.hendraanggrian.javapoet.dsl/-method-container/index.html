@@ -1,0 +1,74 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>MethodContainer - javapoet-ktx</title>
+<link rel="stylesheet" href="../../../style.css">
+</HEAD>
+<BODY>
+<a href="../../index.html">javapoet-ktx</a>&nbsp;/&nbsp;<a href="../index.html">com.hendraanggrian.javapoet.dsl</a>&nbsp;/&nbsp;<a href="./index.html">MethodContainer</a><br/>
+<br/>
+<h1>MethodContainer</h1>
+<code><span class="keyword">abstract</span> <span class="keyword">class </span><span class="identifier">MethodContainer</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">MethodAddable</span></code>
+<p>A <a href="./index.html">MethodContainer</a> is responsible for managing a set of method instances.</p>
+<h3>Functions</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="add.html">add</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">add</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.dsl.MethodContainer$add(kotlin.String)/name">name</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">MethodSpec</span></code>
+<p>Add method from <a href="add.html#com.hendraanggrian.javapoet.dsl.MethodContainer$add(kotlin.String)/name">name</a>, returning the method added.</p>
+<code><span class="keyword">fun </span><span class="identifier">add</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.dsl.MethodContainer$add(kotlin.String, kotlin.Function1((com.hendraanggrian.javapoet.MethodSpecBuilder, kotlin.Unit)))/name">name</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="identifier" id="com.hendraanggrian.javapoet.dsl.MethodContainer$add(kotlin.String, kotlin.Function1((com.hendraanggrian.javapoet.MethodSpecBuilder, kotlin.Unit)))/builderAction">builderAction</span><span class="symbol">:</span>&nbsp;<a href="../../com.hendraanggrian.javapoet/-method-spec-builder/index.html"><span class="identifier">MethodSpecBuilder</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">MethodSpec</span></code>
+<p>Add method from <a href="add.html#com.hendraanggrian.javapoet.dsl.MethodContainer$add(kotlin.String, kotlin.Function1((com.hendraanggrian.javapoet.MethodSpecBuilder, kotlin.Unit)))/name">name</a> with custom initialization <a href="#">builder</a>, returning the method added.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="add-constructor.html">addConstructor</a></p>
+</td>
+<td>
+<code><span class="keyword">fun </span><span class="identifier">addConstructor</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">MethodSpec</span></code>
+<p>Add constructor method, returning the method added.</p>
+<code><span class="keyword">fun </span><span class="identifier">addConstructor</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.dsl.MethodContainer$addConstructor(kotlin.Function1((com.hendraanggrian.javapoet.MethodSpecBuilder, kotlin.Unit)))/builderAction">builderAction</span><span class="symbol">:</span>&nbsp;<a href="../../com.hendraanggrian.javapoet/-method-spec-builder/index.html"><span class="identifier">MethodSpecBuilder</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">MethodSpec</span></code>
+<p>Add constructor method with custom initialization <a href="#">builder</a>, returning the method added.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="invoke.html">invoke</a></p>
+</td>
+<td>
+<code><span class="keyword">operator</span> <span class="keyword">fun </span><span class="identifier">invoke</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.dsl.MethodContainer$invoke(kotlin.Function1((com.hendraanggrian.javapoet.dsl.MethodContainerScope, kotlin.Unit)))/configuration">configuration</span><span class="symbol">:</span>&nbsp;<a href="../-method-container-scope/index.html"><span class="identifier">MethodContainerScope</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Configure this container with DSL.</p>
+</td>
+</tr>
+<tr>
+<td>
+<p><a href="plus-assign.html">plusAssign</a></p>
+</td>
+<td>
+<code><span class="keyword">operator</span> <span class="keyword">fun </span><span class="identifier">plusAssign</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.dsl.MethodContainer$plusAssign(com.squareup.javapoet.MethodSpec)/spec">spec</span><span class="symbol">:</span>&nbsp;<span class="identifier">MethodSpec</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code><br/>
+<code><span class="keyword">operator</span> <span class="keyword">fun </span><span class="identifier">plusAssign</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.dsl.MethodContainer$plusAssign(kotlin.String)/name">name</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Convenient method to add method with operator function.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Inheritors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<p><a href="../-method-container-scope/index.html">MethodContainerScope</a></p>
+</td>
+<td>
+<code><span class="keyword">class </span><span class="identifier">MethodContainerScope</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="./index.html"><span class="identifier">MethodContainer</span></a><span class="symbol">, </span><span class="identifier">MethodAddable</span></code>
+<p>Receiver for the <code>methods</code> block providing an extended set of operators for the configuration.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>

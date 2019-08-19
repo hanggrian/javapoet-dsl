@@ -1,0 +1,25 @@
+$dokka.format:html
+$dokka.linkExtension:html
+$dokka.location:com.hendraanggrian.javapoet$join(kotlin.collections.Iterable((com.squareup.javapoet.CodeBlock)), kotlin.String)com.hendraanggrian.javapoet/kotlin.collections.-iterable/join.html
+$dokka.location:com.hendraanggrian.javapoet$toAnnotation(com.squareup.javapoet.ClassName)com.hendraanggrian.javapoet/com.squareup.javapoet.-class-name/to-annotation.html
+$dokka.location:com.hendraanggrian.javapoet$toAnnotation(javax.lang.model.element.AnnotationMirror)com.hendraanggrian.javapoet/javax.lang.model.element.-annotation-mirror/to-annotation.html
+$dokka.location:com.hendraanggrian.javapoet$toAnnotation(kotlin.Annotation, kotlin.Boolean)com.hendraanggrian.javapoet/kotlin.-annotation/to-annotation.html
+$dokka.location:com.hendraanggrian.javapoet$toAnnotation(kotlin.reflect.KClass((kotlin.Any)))com.hendraanggrian.javapoet/kotlin.reflect.-k-class/to-annotation.html
+$dokka.location:com.hendraanggrian.javapoet$toAnnotationType(com.squareup.javapoet.ClassName)com.hendraanggrian.javapoet/com.squareup.javapoet.-class-name/to-annotation-type.html
+$dokka.location:com.hendraanggrian.javapoet$toAnnotationType(kotlin.String)com.hendraanggrian.javapoet/kotlin.-string/to-annotation-type.html
+$dokka.location:com.hendraanggrian.javapoet$toAnonymousType(com.squareup.javapoet.CodeBlock)com.hendraanggrian.javapoet/com.squareup.javapoet.-code-block/to-anonymous-type.html
+$dokka.location:com.hendraanggrian.javapoet$toAnonymousType(kotlin.String, kotlin.Array((kotlin.Any)))com.hendraanggrian.javapoet/kotlin.-string/to-anonymous-type.html
+$dokka.location:com.hendraanggrian.javapoet$toClassType(com.squareup.javapoet.ClassName)com.hendraanggrian.javapoet/com.squareup.javapoet.-class-name/to-class-type.html
+$dokka.location:com.hendraanggrian.javapoet$toClassType(kotlin.String)com.hendraanggrian.javapoet/kotlin.-string/to-class-type.html
+$dokka.location:com.hendraanggrian.javapoet$toCode(kotlin.String, kotlin.Array((kotlin.Any)))com.hendraanggrian.javapoet/kotlin.-string/to-code.html
+$dokka.location:com.hendraanggrian.javapoet$toEnumType(com.squareup.javapoet.ClassName)com.hendraanggrian.javapoet/com.squareup.javapoet.-class-name/to-enum-type.html
+$dokka.location:com.hendraanggrian.javapoet$toEnumType(kotlin.String)com.hendraanggrian.javapoet/kotlin.-string/to-enum-type.html
+$dokka.location:com.hendraanggrian.javapoet$toField(com.squareup.javapoet.TypeName, kotlin.String, kotlin.Array((javax.lang.model.element.Modifier)))com.hendraanggrian.javapoet/com.squareup.javapoet.-type-name/to-field.html
+$dokka.location:com.hendraanggrian.javapoet$toField(kotlin.reflect.KClass((kotlin.Any)), kotlin.String, kotlin.Array((javax.lang.model.element.Modifier)))com.hendraanggrian.javapoet/kotlin.reflect.-k-class/to-field.html
+$dokka.location:com.hendraanggrian.javapoet$toInterfaceType(com.squareup.javapoet.ClassName)com.hendraanggrian.javapoet/com.squareup.javapoet.-class-name/to-interface-type.html
+$dokka.location:com.hendraanggrian.javapoet$toInterfaceType(kotlin.String)com.hendraanggrian.javapoet/kotlin.-string/to-interface-type.html
+$dokka.location:com.hendraanggrian.javapoet$toParameter(com.squareup.javapoet.TypeName, kotlin.String, kotlin.Array((javax.lang.model.element.Modifier)))com.hendraanggrian.javapoet/com.squareup.javapoet.-type-name/to-parameter.html
+$dokka.location:com.hendraanggrian.javapoet$toParameter(javax.lang.model.element.VariableElement)com.hendraanggrian.javapoet/javax.lang.model.element.-variable-element/to-parameter.html
+$dokka.location:com.hendraanggrian.javapoet$toParameter(kotlin.reflect.KClass((kotlin.Any)), kotlin.String, kotlin.Array((javax.lang.model.element.Modifier)))com.hendraanggrian.javapoet/kotlin.reflect.-k-class/to-parameter.html
+com.hendraanggrian.javapoet
+com.hendraanggrian.javapoet.dsl
