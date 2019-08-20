@@ -47,9 +47,8 @@ inline fun <reified T> buildAnnotation(builderAction: AnnotationSpecBuilder.() -
 @JavapoetDslMarker
 class AnnotationSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: AnnotationSpec.Builder) {
 
-    fun addMember(name: String, format: String, vararg args: Any) {
-        convert(format, args) { s, array -> nativeBuilder.addMember(name, s, *array) }
-    }
+    fun addMember(name: String, format: String, vararg args: Any): Unit =
+        format.formatWith(args) { s, array -> nativeBuilder.addMember(name, s, *array) }
 
     fun addMember(name: String, block: CodeBlock): CodeBlock =
         block.also { nativeBuilder.addMember(name, it) }

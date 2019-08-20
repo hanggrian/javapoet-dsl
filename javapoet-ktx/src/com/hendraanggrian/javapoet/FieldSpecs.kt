@@ -57,9 +57,8 @@ inline fun <reified T> buildField(
 class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: FieldSpec.Builder) {
 
     val javadoc: JavadocContainer = object : JavadocContainer() {
-        override fun append(format: String, vararg args: Any) {
-            convert(format, args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
-        }
+        override fun append(format: String, vararg args: Any): Unit =
+            format.formatWith(args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
 
         override fun append(block: CodeBlock): CodeBlock =
             block.also { nativeBuilder.addJavadoc(it) }
@@ -74,9 +73,8 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
         nativeBuilder.addModifiers(*modifiers)
     }
 
-    fun initializer(format: String, vararg args: Any) {
-        convert(format, args) { s, array -> nativeBuilder.initializer(s, *array) }
-    }
+    fun initializer(format: String, vararg args: Any): Unit =
+        format.formatWith(args) { s, array -> nativeBuilder.initializer(s, *array) }
 
     inline var initializer: String
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()

@@ -16,7 +16,7 @@ fun typeVariableNameOf(name: String, vararg bounds: TypeName): TypeVariableName 
 
 /** Returns type variable named [name] with [bounds]. */
 fun typeVariableNameOf(name: String, vararg bounds: KClass<*>): TypeVariableName =
-    TypeVariableName.get(name, *bounds.mapJavaClass())
+    TypeVariableName.get(name, *bounds.toJavaClasses())
 
 /** Returns type variable equivalent to [mirror]. */
 fun typeVariableNameOf(mirror: TypeVariable): TypeVariableName =

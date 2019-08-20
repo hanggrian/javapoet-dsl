@@ -42,8 +42,9 @@ dependencies {
 Usage
 -----
 
-#### `%` replaces `$`
-Following convention of [KotlinPoet], formatter accepts `%` to emit literals (`%L`), strings (`%S`), types (`%T`), an names (`%N`).
+#### Use `%` in string formatter
+[JavaPoet] uses char prefix `$` when formatting literals (`$L`), strings (`$S`), types (`$T`), an names (`$N`) within strings.
+However in Kotlin, `$` in strings is reserved for variable referral. Avoid using `\$` and instead use `%` as the prefix, this is also the approach taken by [KotlinPoet].
 
 ```kotlin
 buildMethod("getName") {
@@ -60,7 +61,7 @@ buildCodeBlock {
 }
 ```
 
-#### `KClass<*>` replaces `Class<?>`
+#### Use `T::class` as parameters
 `KClass<*>` can now be used as format arguments. There is also inline reified type function whenever possible.
 
 ```kotlin

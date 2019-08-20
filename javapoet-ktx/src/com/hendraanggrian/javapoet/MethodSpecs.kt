@@ -33,9 +33,8 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
     CodeCollection() {
 
     val javadoc: JavadocContainer = object : JavadocContainer() {
-        override fun append(format: String, vararg args: Any) {
-            convert(format, args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
-        }
+        override fun append(format: String, vararg args: Any): Unit =
+            format.formatWith(args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
 
         override fun append(block: CodeBlock): CodeBlock =
             block.also { nativeBuilder.addJavadoc(it) }
@@ -101,46 +100,39 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
     inline fun <reified T> addException() =
         addException(T::class)
 
-    override fun append(format: String, vararg args: Any) {
-        convert(format, args) { s, array -> nativeBuilder.addCode(s, *array) }
-    }
+    override fun append(format: String, vararg args: Any): Unit =
+        format.formatWith(args) { s, array -> nativeBuilder.addCode(s, *array) }
 
     override fun append(block: CodeBlock): CodeBlock =
         block.also { nativeBuilder.addCode(it) }
 
-    override fun beginFlow(flow: String, vararg args: Any) {
-        convert(flow, args) { s, array -> nativeBuilder.beginControlFlow(s, *array) }
-    }
+    override fun beginFlow(flow: String, vararg args: Any): Unit =
+        flow.formatWith(args) { s, array -> nativeBuilder.beginControlFlow(s, *array) }
 
-    override fun nextFlow(flow: String, vararg args: Any) {
-        convert(flow, args) { s, array -> nativeBuilder.nextControlFlow(s, *array) }
-    }
+    override fun nextFlow(flow: String, vararg args: Any): Unit =
+        flow.formatWith(args) { s, array -> nativeBuilder.nextControlFlow(s, *array) }
 
     override fun endFlow() {
         nativeBuilder.endControlFlow()
     }
 
-    override fun endFlow(flow: String, vararg args: Any) {
-        convert(flow, args) { s, array -> nativeBuilder.endControlFlow(s, *array) }
-    }
+    override fun endFlow(flow: String, vararg args: Any): Unit =
+        flow.formatWith(args) { s, array -> nativeBuilder.endControlFlow(s, *array) }
 
-    override fun appendln(format: String, vararg args: Any) {
-        convert(format, args) { s, array -> nativeBuilder.addStatement(s, *array) }
-    }
+    override fun appendln(format: String, vararg args: Any): Unit =
+        format.formatWith(args) { s, array -> nativeBuilder.addStatement(s, *array) }
 
     override fun appendln(block: CodeBlock): CodeBlock =
         block.also { nativeBuilder.addStatement(it) }
 
-    fun addNamedCode(format: String, args: Map<String, *>) =
-        convert(format, args) { s, map -> nativeBuilder.addNamedCode(s, map) }
+    fun addNamedCode(format: String, args: Map<String, *>): Unit =
+        format.formatWith(args) { s, map -> nativeBuilder.addNamedCode(s, map) }
 
-    fun addComment(format: String, vararg args: Any) {
-        convert(format, args) { s, array -> nativeBuilder.addComment(s, *array) }
-    }
+    fun addComment(format: String, vararg args: Any): Unit =
+        format.formatWith(args) { s, array -> nativeBuilder.addComment(s, *array) }
 
-    fun defaultValue(format: String, vararg args: Any) {
-        convert(format, args) { s, array -> nativeBuilder.defaultValue(s, *array) }
-    }
+    fun defaultValue(format: String, vararg args: Any): Unit =
+        format.formatWith(args) { s, array -> nativeBuilder.defaultValue(s, *array) }
 
     inline var defaultValue: String
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()

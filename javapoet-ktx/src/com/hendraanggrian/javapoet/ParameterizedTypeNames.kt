@@ -12,7 +12,7 @@ fun parameterizedTypeNameOf(rawType: ClassName, vararg typeArguments: TypeName):
 
 /** Returns a parameterized type, applying [typeArguments] to [rawType]. */
 fun parameterizedTypeNameOf(rawType: KClass<*>, vararg typeArguments: KClass<*>): ParameterizedTypeName =
-    ParameterizedTypeName.get(rawType.java, *typeArguments.mapJavaClass())
+    ParameterizedTypeName.get(rawType.java, *typeArguments.toJavaClasses())
 
 /** Returns a parameterized type equivalent to [type]. */
 fun parameterizedTypeNameOf(type: ParameterizedType): ParameterizedTypeName =

@@ -85,7 +85,7 @@ inline fun buildEnumType(type: ClassName, builderAction: TypeSpecBuilder.() -> U
 
 /** Converts string to anonymous [TypeSpec] using formatted [args]. */
 fun String.toAnonymousType(vararg args: Any): TypeSpec =
-    convert(this, args) { s, array -> TypeSpec.anonymousClassBuilder(s, *array).build() }
+    formatWith(args) { s, array -> TypeSpec.anonymousClassBuilder(s, *array).build() }
 
 /**
  * Builds new [TypeSpec] by populating newly created [TypeSpecBuilder] using provided [builderAction]
@@ -96,7 +96,7 @@ inline fun buildAnonymousType(
     vararg args: Any,
     builderAction: TypeSpecBuilder.() -> Unit
 ): TypeSpec =
-    convert(format, args) { s, array ->
+    format.formatWith(args) { s, array ->
         TypeSpecBuilder(TypeSpec.anonymousClassBuilder(s, *array)).apply(builderAction).build()
     }
 
@@ -138,9 +138,8 @@ inline fun buildAnnotationType(type: ClassName, builderAction: TypeSpecBuilder.(
 class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: TypeSpec.Builder) {
 
     val javadoc: JavadocContainer = object : JavadocContainer() {
-        override fun append(format: String, vararg args: Any) {
-            convert(format, args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
-        }
+        override fun append(format: String, vararg args: Any): Unit =
+            format.formatWith(args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
 
         override fun append(block: CodeBlock): CodeBlock =
             block.also { nativeBuilder.addJavadoc(it) }
