@@ -19,7 +19,7 @@
 </td>
 <td>
 <code><span class="keyword">var </span><span class="identifier">comment</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code>
-<p>Set a comment to this file, cancelling all changes made with <a href="add-comment.html">addComment</a>.</p>
+<p>Set comment with simple string, cancelling all changes made with <a href="add-comment.html">addComment</a>.</p>
 </td>
 </tr>
 <tr>
@@ -27,21 +27,27 @@
 <p><a href="indent.html">indent</a></p>
 </td>
 <td>
-<code><span class="keyword">var </span><span class="identifier">indent</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code></td>
+<code><span class="keyword">var </span><span class="identifier">indent</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a></code>
+<p>Set indent text.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="indent-count.html">indentCount</a></p>
 </td>
 <td>
-<code><span class="keyword">var </span><span class="identifier">indentCount</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code></td>
+<code><span class="keyword">var </span><span class="identifier">indentCount</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a></code>
+<p>Set indent space count.</p>
+</td>
 </tr>
 <tr>
 <td>
 <p><a href="skip-java-lang-imports.html">skipJavaLangImports</a></p>
 </td>
 <td>
-<code><span class="keyword">var </span><span class="identifier">skipJavaLangImports</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code></td>
+<code><span class="keyword">var </span><span class="identifier">skipJavaLangImports</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code>
+<p>Set to true to skip java imports.</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -63,7 +69,7 @@
 </td>
 <td>
 <code><span class="keyword">fun </span><span class="identifier">addComment</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.JavaFileBuilder$addComment(kotlin.String, kotlin.Array((kotlin.Any)))/format">format</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="keyword">vararg</span> <span class="identifier" id="com.hendraanggrian.javapoet.JavaFileBuilder$addComment(kotlin.String, kotlin.Array((kotlin.Any)))/args">args</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html"><span class="identifier">Any</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
-<p>Add a comment to this file.</p>
+<p>Add comment like <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.text/format.html">String.format</a>.</p>
 </td>
 </tr>
 <tr>
@@ -73,9 +79,10 @@
 <td>
 <code><span class="keyword">fun </span><span class="identifier">addStaticImport</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.JavaFileBuilder$addStaticImport(kotlin.Enum(()))/constant">constant</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-enum/index.html"><span class="identifier">Enum</span></a><span class="symbol">&lt;</span><span class="identifier">*</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code><br/>
 <code><span class="keyword">fun </span><span class="identifier">addStaticImport</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.JavaFileBuilder$addStaticImport(com.squareup.javapoet.ClassName, kotlin.Array((kotlin.String)))/type">type</span><span class="symbol">:</span>&nbsp;<span class="identifier">ClassName</span><span class="symbol">, </span><span class="keyword">vararg</span> <span class="identifier" id="com.hendraanggrian.javapoet.JavaFileBuilder$addStaticImport(com.squareup.javapoet.ClassName, kotlin.Array((kotlin.String)))/names">names</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code><br/>
-<code><span class="keyword">fun </span><span class="identifier">addStaticImport</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.JavaFileBuilder$addStaticImport(kotlin.reflect.KClass((kotlin.Any)), kotlin.Array((kotlin.String)))/type">type</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html"><span class="identifier">KClass</span></a><span class="symbol">&lt;</span><span class="identifier">*</span><span class="symbol">&gt;</span><span class="symbol">, </span><span class="keyword">vararg</span> <span class="identifier" id="com.hendraanggrian.javapoet.JavaFileBuilder$addStaticImport(kotlin.reflect.KClass((kotlin.Any)), kotlin.Array((kotlin.String)))/names">names</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code><br/>
+<code><span class="keyword">fun </span><span class="identifier">addStaticImport</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.JavaFileBuilder$addStaticImport(kotlin.reflect.KClass((kotlin.Any)), kotlin.Array((kotlin.String)))/type">type</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html"><span class="identifier">KClass</span></a><span class="symbol">&lt;</span><span class="identifier">*</span><span class="symbol">&gt;</span><span class="symbol">, </span><span class="keyword">vararg</span> <span class="identifier" id="com.hendraanggrian.javapoet.JavaFileBuilder$addStaticImport(kotlin.reflect.KClass((kotlin.Any)), kotlin.Array((kotlin.String)))/names">names</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
+<p>Add static imports.</p>
 <code><span class="keyword">fun </span><span class="symbol">&lt;</span><span class="identifier">T</span><span class="symbol">&gt;</span> <span class="identifier">addStaticImport</span><span class="symbol">(</span><span class="keyword">vararg</span> <span class="identifier" id="com.hendraanggrian.javapoet.JavaFileBuilder$addStaticImport(kotlin.Array((kotlin.String)))/names">names</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
-<p>Add static imports to this file.</p>
+<p>Add static imports with reified function.</p>
 </td>
 </tr>
 <tr>
@@ -83,7 +90,9 @@
 <p><a href="build.html">build</a></p>
 </td>
 <td>
-<code><span class="keyword">fun </span><span class="identifier">build</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">JavaFile</span></code></td>
+<code><span class="keyword">fun </span><span class="identifier">build</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">JavaFile</span></code>
+<p>Returns native spec.</p>
+</td>
 </tr>
 </tbody>
 </table>
