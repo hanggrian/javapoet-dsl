@@ -10,8 +10,12 @@ fun subtypeWildcardTypeNameOf(upperBound: TypeName): WildcardTypeName =
     WildcardTypeName.subtypeOf(upperBound)
 
 /** Returns a type that represents an unknown type that extends [upperBound]. */
+fun subtypeWildcardTypeNameOf(upperBound: Class<*>): WildcardTypeName =
+    WildcardTypeName.subtypeOf(upperBound)
+
+/** Returns a type that represents an unknown type that extends [upperBound]. */
 fun subtypeWildcardTypeNameOf(upperBound: KClass<*>): WildcardTypeName =
-    WildcardTypeName.subtypeOf(upperBound.java)
+    subtypeWildcardTypeNameOf(upperBound.java)
 
 /** Returns a type that represents an unknown type that extends [T]. */
 inline fun <reified T> subtypeWildcardTypeNameOf(): WildcardTypeName =
@@ -22,8 +26,12 @@ fun supertypeWildcardTypeNameOf(lowerBound: TypeName): WildcardTypeName =
     WildcardTypeName.supertypeOf(lowerBound)
 
 /** Returns a type that represents an unknown supertype of [lowerBound]. */
+fun supertypeWildcardTypeNameOf(lowerBound: Class<*>): WildcardTypeName =
+    WildcardTypeName.supertypeOf(lowerBound)
+
+/** Returns a type that represents an unknown supertype of [lowerBound]. */
 fun supertypeWildcardTypeNameOf(lowerBound: KClass<*>): WildcardTypeName =
-    WildcardTypeName.supertypeOf(lowerBound.java)
+    supertypeWildcardTypeNameOf(lowerBound.java)
 
 /** Returns a type that represents an unknown supertype of [T]. */
 inline fun <reified T> supertypeWildcardTypeNameOf(): WildcardTypeName =

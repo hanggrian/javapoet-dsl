@@ -10,7 +10,7 @@ import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
 /** Builds a new [FieldSpec] from [type] supplying its [name] and [modifiers]. */
-fun buildFieldSpec(type: TypeName, name: String, vararg modifiers: Modifier): FieldSpec =
+fun buildField(type: TypeName, name: String, vararg modifiers: Modifier): FieldSpec =
     FieldSpec.builder(type, name, *modifiers).build()
 
 /**

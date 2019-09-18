@@ -13,11 +13,11 @@ Lightweight Kotlin extension of [JavaPoet], providing Kotlin DSL functionality a
 
 ```kotlin
 buildJavaFile("com.example.helloworld") {
-    classType("HelloWorld") {
-        modifiers = public + final
+    addClass("HelloWorld") {
+        addModifiers(public, final)
         methods {
             "main" {
-                modifiers = public + static
+                addModifiers(public, static)
                 returns = void
                 parameters.add<Array<String>>("args")
                 appendln("%T.out.println(%S)", System::class, "Hello, JavaPoet!")
@@ -48,7 +48,7 @@ However in Kotlin, `$` in strings is reserved for variable referral. Avoid using
 
 ```kotlin
 buildMethod("getName") {
-    returns = TypeName.STRING
+    returns<String>()
     appendln("%S", name)
 }
 
@@ -66,7 +66,7 @@ buildCodeBlock {
 
 ```kotlin
 buildMethod("sortList") {
-    returns = TypeName.INT
+    returns = int
     parameters.add(parameterizedTypeNameOf(classNameOf("java.util", "List"), hoverboard), "list")
     appendln("%T.sort(list)", Collections::class)
     appendln("return list")
@@ -94,20 +94,20 @@ addClass("Car") {
         }
     }
     fields {
-        "wheels"<Int> {
+        "wheels"(int) {
             initializer = "4"
         }
     }
     methods {
         "getWheels" {
-            returns<Int>()
+            returns = int
             statements {
                 add("return wheels")
             }
         }
         "setWheels" {
             parameters {
-                add(Int::class, "wheels")
+                add(int, "wheels")
             }
             statements {
                 add("this.wheels = wheels")
@@ -120,15 +120,15 @@ addClass("Car") {
     annotations.add<SuppressWarnings> {
         members.add("value", "deprecation")
     }
-    fields.add<Int>("wheels") {
+    fields.add("wheels", int) {
         initializer = "4"
     }
     methods.add("getWheels") {
-        returns<Int>()
+        returns = int
         statements.add("return wheels")
     }
     methods.add("setWheels") {
-        parameters["wheels"] = Int::class
+        parameters["wheels"] = int
         statements.add("this.wheels = wheels")
     }
 }

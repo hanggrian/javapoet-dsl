@@ -17,17 +17,17 @@ abstract class MethodContainer internal constructor() : MethodAddable {
 
     /** Add method from [name], returning the method added. */
     fun add(name: String): MethodSpec =
-        add(MethodSpec.methodBuilder(name).build())
+        add(buildMethod(name))
 
-    /** Add method from [name] with custom initialization [builder], returning the method added. */
+    /** Add method from [name] with custom initialization [builderAction], returning the method added. */
     inline fun add(name: String, builderAction: MethodSpecBuilder.() -> Unit): MethodSpec =
         add(buildMethod(name, builderAction))
 
     /** Add constructor method, returning the method added. */
     fun addConstructor(): MethodSpec =
-        add(MethodSpec.constructorBuilder().build())
+        add(buildConstructorMethod())
 
-    /** Add constructor method with custom initialization [builder], returning the method added. */
+    /** Add constructor method with custom initialization [builderAction], returning the method added. */
     inline fun addConstructor(builderAction: MethodSpecBuilder.() -> Unit): MethodSpec =
         add(buildConstructorMethod(builderAction))
 

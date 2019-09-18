@@ -7,11 +7,6 @@ import com.hendraanggrian.javapoet.buildAnonymousType
 import com.hendraanggrian.javapoet.buildClassType
 import com.hendraanggrian.javapoet.buildEnumType
 import com.hendraanggrian.javapoet.buildInterfaceType
-import com.hendraanggrian.javapoet.toAnnotationType
-import com.hendraanggrian.javapoet.toAnonymousType
-import com.hendraanggrian.javapoet.toClassType
-import com.hendraanggrian.javapoet.toEnumType
-import com.hendraanggrian.javapoet.toInterfaceType
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.TypeSpec
@@ -26,7 +21,7 @@ abstract class TypeCollection internal constructor() : TypeAddable {
 
     /** Add class type from [type], returning the type added. */
     fun addClass(type: String): TypeSpec =
-        add(type.toClassType())
+        add(buildClassType(type))
 
     /** Add class type from [type] with custom initialization [builderAction], returning the type added. */
     inline fun addClass(type: String, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
@@ -34,7 +29,7 @@ abstract class TypeCollection internal constructor() : TypeAddable {
 
     /** Add class type from [type], returning the type added. */
     fun addClass(type: ClassName): TypeSpec =
-        add(type.toClassType())
+        add(buildClassType(type))
 
     /** Add class type from [type] with custom initialization [builderAction], returning the type added. */
     inline fun addClass(type: ClassName, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
@@ -42,7 +37,7 @@ abstract class TypeCollection internal constructor() : TypeAddable {
 
     /** Add interface type from [type], returning the type added. */
     fun addInterface(type: String): TypeSpec =
-        add(type.toInterfaceType())
+        add(buildInterfaceType(type))
 
     /** Add interface type from [type] with custom initialization [builderAction], returning the type added. */
     inline fun addInterface(type: String, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
@@ -50,7 +45,7 @@ abstract class TypeCollection internal constructor() : TypeAddable {
 
     /** Add interface type from [type], returning the type added. */
     fun addInterface(type: ClassName): TypeSpec =
-        add(type.toInterfaceType())
+        add(buildInterfaceType(type))
 
     /** Add interface type from [type] with custom initialization [builderAction], returning the type added. */
     inline fun addInterface(type: ClassName, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
@@ -58,7 +53,7 @@ abstract class TypeCollection internal constructor() : TypeAddable {
 
     /** Add enum type from [type], returning the type added. */
     fun addEnum(type: String): TypeSpec =
-        add(type.toEnumType())
+        add(buildEnumType(type))
 
     /** Add enum type from [type] with custom initialization [builderAction], returning the type added. */
     inline fun addEnum(type: String, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
@@ -66,7 +61,7 @@ abstract class TypeCollection internal constructor() : TypeAddable {
 
     /** Add enum type from [type], returning the type added. */
     fun addEnum(type: ClassName): TypeSpec =
-        add(type.toEnumType())
+        add(buildEnumType(type))
 
     /** Add enum type from [type] with custom initialization [builderAction], returning the type added. */
     inline fun addEnum(type: ClassName, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
@@ -74,23 +69,23 @@ abstract class TypeCollection internal constructor() : TypeAddable {
 
     /** Add anonymous type from block, returning the type added. */
     fun addAnonymous(format: String, vararg args: Any): TypeSpec =
-        add(format.toAnonymousType(*args))
+        add(buildAnonymousType(format, *args))
 
     /** Add anonymous type from block with custom initialization [builderAction], returning the type added. */
     inline fun addAnonymous(format: String, vararg args: Any, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
         add(buildAnonymousType(format, *args, builderAction = builderAction))
 
-    /** Add anonymous type from [block], returning the type added. */
-    fun addAnonymous(block: CodeBlock): TypeSpec =
-        add(block.toAnonymousType())
+    /** Add anonymous type from [code], returning the type added. */
+    fun addAnonymous(code: CodeBlock): TypeSpec =
+        add(buildAnonymousType(code))
 
-    /** Add anonymous type from [block] with custom initialization [builderAction], returning the type added. */
-    inline fun addAnonymous(block: CodeBlock, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
-        add(buildAnonymousType(block, builderAction = builderAction))
+    /** Add anonymous type from [code] with custom initialization [builderAction], returning the type added. */
+    inline fun addAnonymous(code: CodeBlock, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
+        add(buildAnonymousType(code, builderAction = builderAction))
 
     /** Add annotation type from [type], returning the type added. */
     fun addAnnotation(type: String): TypeSpec =
-        add(type.toAnnotationType())
+        add(buildAnnotationType(type))
 
     /** Add annotation type from [type] with custom initialization [builderAction], returning the type added. */
     inline fun addAnnotation(type: String, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
@@ -98,7 +93,7 @@ abstract class TypeCollection internal constructor() : TypeAddable {
 
     /** Add annotation type from [type], returning the type added. */
     fun addAnnotation(type: ClassName): TypeSpec =
-        add(type.toAnnotationType())
+        add(buildAnnotationType(type))
 
     /** Add annotation type from [type] with custom initialization [builderAction], returning the type added. */
     inline fun addAnnotation(type: ClassName, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =

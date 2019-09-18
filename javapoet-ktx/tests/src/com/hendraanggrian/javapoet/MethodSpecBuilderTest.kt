@@ -4,9 +4,7 @@ import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.ParameterSpec
-import com.squareup.javapoet.TypeName
 import java.io.IOException
-import javax.lang.model.element.Modifier
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -19,8 +17,8 @@ class MethodSpecBuilderTest {
                 .build()
         )
         .addAnnotation(AnnotationSpec.builder(Deprecated::class.java).build())
-        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-        .returns(TypeName.VOID)
+        .addModifiers(public, static)
+        .returns(void)
         .addParameter(ParameterSpec.builder(Array<String>::class.java, "param").build())
         .varargs(true)
         .addException(IOException::class.java)
@@ -36,8 +34,8 @@ class MethodSpecBuilderTest {
                 append("secondJavadoc")
             }
             annotations.add<Deprecated>()
-            addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-            returns = TypeName.VOID
+            addModifiers(public, static)
+            returns = void
             parameters.add<Array<String>>("param")
             varargs = true
             addException<IOException>()
@@ -58,8 +56,8 @@ class MethodSpecBuilderTest {
             annotations {
                 add<Deprecated>()
             }
-            addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-            returns = TypeName.VOID
+            addModifiers(public, static)
+            returns = void
             parameters {
                 add<Array<String>>("param")
             }

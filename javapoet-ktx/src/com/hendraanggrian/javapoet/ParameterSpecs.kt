@@ -12,48 +12,64 @@ import kotlin.reflect.KClass
 fun VariableElement.toParameter(): ParameterSpec =
     ParameterSpec.get(this)
 
-/** Converts type name to [AnnotationSpec]. */
-fun TypeName.toParameter(name: String, vararg modifiers: Modifier): ParameterSpec =
-    ParameterSpec.builder(this, name, *modifiers).build()
+/** Builds a new [AnnotationSpec] from [type]. */
+fun buildParameter(type: TypeName, name: String, vararg modifiers: Modifier): ParameterSpec =
+    ParameterSpec.builder(type, name, *modifiers).build()
 
 /**
- * Builds new [ParameterSpec] by populating newly created [ParameterSpecBuilder] using provided [builderAction]
- * and then building it.
+ * Builds a new [AnnotationSpec] from [type],
+ * by populating newly created [ParameterSpecBuilder] using provided [builderAction] and then building it.
  */
 inline fun buildParameter(
     type: TypeName,
     name: String,
     vararg modifiers: Modifier,
     builderAction: ParameterSpecBuilder.() -> Unit
-): ParameterSpec =
-    ParameterSpecBuilder(ParameterSpec.builder(type, name, *modifiers)).apply(builderAction).build()
+): ParameterSpec = ParameterSpecBuilder(ParameterSpec.builder(type, name, *modifiers)).apply(builderAction).build()
 
-/** Converts class to [AnnotationSpec]. */
-fun KClass<*>.toParameter(name: String, vararg modifiers: Modifier): ParameterSpec =
-    ParameterSpec.builder(java, name, *modifiers).build()
+/** Builds a new [AnnotationSpec] from [type]. */
+fun buildParameter(type: Class<*>, name: String, vararg modifiers: Modifier): ParameterSpec =
+    ParameterSpec.builder(type, name, *modifiers).build()
+
+/** Builds a new [AnnotationSpec] from [type]. */
+fun buildParameter(type: KClass<*>, name: String, vararg modifiers: Modifier): ParameterSpec =
+    buildParameter(type.java, name, *modifiers)
+
+/** Builds a new [AnnotationSpec] from [T]. */
+inline fun <reified T> buildParameter(name: String, vararg modifiers: Modifier): ParameterSpec =
+    buildParameter(T::class, name, *modifiers)
 
 /**
- * Builds new [ParameterSpec] by populating newly created [ParameterSpecBuilder] using provided [builderAction]
- * and then building it.
+ * Builds a new [AnnotationSpec] from [type],
+ * by populating newly created [ParameterSpecBuilder] using provided [builderAction] and then building it.
+ */
+inline fun buildParameter(
+    type: Class<*>,
+    name: String,
+    vararg modifiers: Modifier,
+    builderAction: ParameterSpecBuilder.() -> Unit
+): ParameterSpec = ParameterSpecBuilder(ParameterSpec.builder(type, name, *modifiers)).apply(builderAction).build()
+
+/**
+ * Builds a new [AnnotationSpec] from [type],
+ * by populating newly created [ParameterSpecBuilder] using provided [builderAction] and then building it.
  */
 inline fun buildParameter(
     type: KClass<*>,
     name: String,
     vararg modifiers: Modifier,
     builderAction: ParameterSpecBuilder.() -> Unit
-): ParameterSpec =
-    ParameterSpecBuilder(ParameterSpec.builder(type.java, name, *modifiers)).apply(builderAction).build()
+): ParameterSpec = buildParameter(type.java, name, *modifiers, builderAction = builderAction)
 
 /**
- * Builds new [ParameterSpec] by populating newly created [ParameterSpecBuilder] using provided [builderAction]
- * and then building it.
+ * Builds a new [AnnotationSpec] from [T],
+ * by populating newly created [ParameterSpecBuilder] using provided [builderAction] and then building it.
  */
 inline fun <reified T> buildParameter(
     name: String,
     vararg modifiers: Modifier,
     builderAction: ParameterSpecBuilder.() -> Unit
-): ParameterSpec =
-    buildParameter(T::class, name, *modifiers, builderAction = builderAction)
+): ParameterSpec = buildParameter(T::class, name, *modifiers, builderAction = builderAction)
 
 /** Wrapper of [ParameterSpec.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetDslMarker
