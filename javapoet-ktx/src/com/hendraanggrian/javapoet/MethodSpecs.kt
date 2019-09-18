@@ -13,16 +13,24 @@ import com.squareup.javapoet.TypeVariableName
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
+/** Builds a new [MethodSpec] from [name]. */
+fun buildMethod(name: String): MethodSpec =
+    MethodSpecBuilder(MethodSpec.methodBuilder(name)).build()
+
 /**
- * Builds new [MethodSpec] by populating newly created [MethodSpecBuilder] using provided [builderAction]
- * and then building it.
+ * Builds a new [MethodSpec] from [name],
+ * by populating newly created [MethodSpecBuilder] using provided [builderAction] and then building it.
  */
 inline fun buildMethod(name: String, builderAction: MethodSpecBuilder.() -> Unit): MethodSpec =
     MethodSpecBuilder(MethodSpec.methodBuilder(name)).apply(builderAction).build()
 
+/** Builds a new constructor [MethodSpec]. */
+fun buildConstructorMethod(): MethodSpec =
+    MethodSpecBuilder(MethodSpec.constructorBuilder()).build()
+
 /**
- * Builds new [MethodSpec] by populating newly created [MethodSpecBuilder] using provided [builderAction]
- * and then building it.
+ * Builds a new constructor [MethodSpec],
+ * by populating newly created [MethodSpecBuilder] using provided [builderAction] and then building it.
  */
 inline fun buildConstructorMethod(builderAction: MethodSpecBuilder.() -> Unit): MethodSpec =
     MethodSpecBuilder(MethodSpec.constructorBuilder()).apply(builderAction).build()

@@ -14,31 +14,46 @@ fun Annotation.toAnnotation(includeDefaultValues: Boolean = false): AnnotationSp
 fun AnnotationMirror.toAnnotation(): AnnotationSpec =
     AnnotationSpec.get(this)
 
-/** Converts class name to [AnnotationSpec]. */
-fun ClassName.toAnnotation(): AnnotationSpec =
-    AnnotationSpec.builder(this).build()
+/** Builds a new [AnnotationSpec] from [type]. */
+fun buildAnnotation(type: ClassName): AnnotationSpec =
+    AnnotationSpec.builder(type).build()
 
 /**
- * Builds new [AnnotationSpec] by populating newly created [AnnotationSpecBuilder] using provided [builderAction]
- * and then building it.
+ * Builds a new [AnnotationSpec] from [type],
+ * by populating newly created [AnnotationSpecBuilder] using provided [builderAction] and then building it.
  */
 inline fun buildAnnotation(type: ClassName, builderAction: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
     AnnotationSpecBuilder(AnnotationSpec.builder(type)).apply(builderAction).build()
 
-/** Converts class to [AnnotationSpec]. */
-fun KClass<*>.toAnnotation(): AnnotationSpec =
-    AnnotationSpec.builder(java).build()
+/** Builds a new [AnnotationSpec] from [type]. */
+fun buildAnnotation(type: Class<*>): AnnotationSpec =
+    AnnotationSpec.builder(type).build()
+
+/** Builds a new [AnnotationSpec] from [type]. */
+fun buildAnnotation(type: KClass<*>): AnnotationSpec =
+    buildAnnotation(type.java)
+
+/** Builds a new [AnnotationSpec] from [T]. */
+inline fun <reified T> buildAnnotation(): AnnotationSpec =
+    buildAnnotation(T::class.java)
 
 /**
- * Builds new [AnnotationSpec] by populating newly created [AnnotationSpecBuilder] using provided [builderAction]
- * and then building it.
+ * Builds a new [AnnotationSpec] from [type],
+ * by populating newly created [AnnotationSpecBuilder] using provided [builderAction] and then building it.
+ */
+inline fun buildAnnotation(type: Class<*>, builderAction: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+    AnnotationSpecBuilder(AnnotationSpec.builder(type)).apply(builderAction).build()
+
+/**
+ * Builds a new [AnnotationSpec] from [type],
+ * by populating newly created [AnnotationSpecBuilder] using provided [builderAction] and then building it.
  */
 inline fun buildAnnotation(type: KClass<*>, builderAction: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
-    AnnotationSpecBuilder(AnnotationSpec.builder(type.java)).apply(builderAction).build()
+    buildAnnotation(type.java, builderAction)
 
 /**
- * Builds new [AnnotationSpec] by populating newly created [AnnotationSpecBuilder] using provided [builderAction]
- * and then building it.
+ * Builds a new [AnnotationSpec] from [T],
+ * by populating newly created [AnnotationSpecBuilder] using provided [builderAction] and then building it.
  */
 inline fun <reified T> buildAnnotation(builderAction: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
     buildAnnotation(T::class, builderAction)

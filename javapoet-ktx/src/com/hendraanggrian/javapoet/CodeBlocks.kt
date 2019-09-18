@@ -8,8 +8,8 @@ fun String.toCode(vararg args: Any): CodeBlock =
     formatWith(args) { s, array -> CodeBlock.of(s, *array) }
 
 /**
- * Builds new [CodeBlock] by populating newly created [CodeBlockBuilder] using provided [builderAction]
- * and then building it.
+ * Builds a new [CodeBlock],
+ * by populating newly created [CodeBlockBuilder] using provided [builderAction] and then building it.
  */
 inline fun buildCode(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
     CodeBlockBuilder(CodeBlock.builder()).apply(builderAction).build()

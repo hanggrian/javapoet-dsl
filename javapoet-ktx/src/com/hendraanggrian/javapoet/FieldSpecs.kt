@@ -9,48 +9,64 @@ import com.squareup.javapoet.TypeName
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
-/** Converts type name to [FieldSpec] supplying its [name] and [modifiers]. */
-fun TypeName.toField(name: String, vararg modifiers: Modifier): FieldSpec =
-    FieldSpec.builder(this, name, *modifiers).build()
+/** Builds a new [FieldSpec] from [type] supplying its [name] and [modifiers]. */
+fun buildFieldSpec(type: TypeName, name: String, vararg modifiers: Modifier): FieldSpec =
+    FieldSpec.builder(type, name, *modifiers).build()
 
 /**
- * Builds new [FieldSpec] by populating newly created [FieldSpecBuilder] using provided [builderAction]
- * and then building it.
+ * Builds a new [FieldSpec] from [type] supplying its [name] and [modifiers],
+ * by populating newly created [FieldSpecBuilder] using provided [builderAction] and then building it.
  */
 inline fun buildField(
     type: TypeName,
     name: String,
     vararg modifiers: Modifier,
     builderAction: FieldSpecBuilder.() -> Unit
-): FieldSpec =
-    FieldSpecBuilder(FieldSpec.builder(type, name, *modifiers)).apply(builderAction).build()
+): FieldSpec = FieldSpecBuilder(FieldSpec.builder(type, name, *modifiers)).apply(builderAction).build()
 
-/** Converts class to [FieldSpec] supplying its [name] and [modifiers]. */
-fun KClass<*>.toField(name: String, vararg modifiers: Modifier): FieldSpec =
-    FieldSpec.builder(java, name, *modifiers).build()
+/** Builds a new [FieldSpec] from [type] supplying its [name] and [modifiers]. */
+fun buildField(type: Class<*>, name: String, vararg modifiers: Modifier): FieldSpec =
+    FieldSpec.builder(type, name, *modifiers).build()
+
+/** Builds a new [FieldSpec] from [type] supplying its [name] and [modifiers]. */
+fun buildField(type: KClass<*>, name: String, vararg modifiers: Modifier): FieldSpec =
+    buildField(type.java, name, *modifiers)
+
+/** Builds a new [FieldSpec] from [T] supplying its [name] and [modifiers]. */
+inline fun <reified T> buildField(name: String, vararg modifiers: Modifier): FieldSpec =
+    buildField(T::class, name, *modifiers)
 
 /**
- * Builds new [FieldSpec] by populating newly created [FieldSpecBuilder] using provided [builderAction]
- * and then building it.
+ * Builds a new [FieldSpec] from [type] supplying its [name] and [modifiers],
+ * by populating newly created [FieldSpecBuilder] using provided [builderAction] and then building it.
+ */
+inline fun buildField(
+    type: Class<*>,
+    name: String,
+    vararg modifiers: Modifier,
+    builderAction: FieldSpecBuilder.() -> Unit
+): FieldSpec = FieldSpecBuilder(FieldSpec.builder(type, name, *modifiers)).apply(builderAction).build()
+
+/**
+ * Builds a new [FieldSpec] from [type] supplying its [name] and [modifiers],
+ * by populating newly created [FieldSpecBuilder] using provided [builderAction] and then building it.
  */
 inline fun buildField(
     type: KClass<*>,
     name: String,
     vararg modifiers: Modifier,
     builderAction: FieldSpecBuilder.() -> Unit
-): FieldSpec =
-    FieldSpecBuilder(FieldSpec.builder(type.java, name, *modifiers)).apply(builderAction).build()
+): FieldSpec = buildField(type.java, name, *modifiers, builderAction = builderAction)
 
 /**
- * Builds new [FieldSpec] by populating newly created [FieldSpecBuilder] using provided [builderAction]
- * and then building it.
+ * Builds a new [FieldSpec] from [T] supplying its [name] and [modifiers],
+ * by populating newly created [FieldSpecBuilder] using provided [builderAction] and then building it.
  */
 inline fun <reified T> buildField(
     name: String,
     vararg modifiers: Modifier,
     builderAction: FieldSpecBuilder.() -> Unit
-): FieldSpec =
-    buildField(T::class, name, *modifiers, builderAction = builderAction)
+): FieldSpec = buildField(T::class, name, *modifiers, builderAction = builderAction)
 
 /** Wrapper of [FieldSpec.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetDslMarker

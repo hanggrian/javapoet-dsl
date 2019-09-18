@@ -11,8 +11,12 @@ fun arrayTypeNameOf(componentType: TypeName): ArrayTypeName =
     ArrayTypeName.of(componentType)
 
 /** Returns an array type whose elements are all instances of [componentType]. */
+fun arrayTypeNameOf(componentType: Class<*>): ArrayTypeName =
+    ArrayTypeName.of(componentType)
+
+/** Returns an array type whose elements are all instances of [componentType]. */
 fun arrayTypeNameOf(componentType: KClass<*>): ArrayTypeName =
-    ArrayTypeName.of(componentType.java)
+    arrayTypeNameOf(componentType.java)
 
 /** Returns an array type whose elements are all instances of [T]. */
 inline fun <reified T> arrayTypeNameOf(): ArrayTypeName =

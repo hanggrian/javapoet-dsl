@@ -4,9 +4,15 @@ import com.squareup.javapoet.ClassName
 import javax.lang.model.element.TypeElement
 import kotlin.reflect.KClass
 
-fun classNameOf(type: KClass<*>): ClassName =
-    ClassName.get(type.java)
+/** Returns a class name representative of [type]. */
+fun classNameOf(type: Class<*>): ClassName =
+    ClassName.get(type)
 
+/** Returns a class name representative of [type]. */
+fun classNameOf(type: KClass<*>): ClassName =
+    classNameOf(type.java)
+
+/** Returns a class name representative of [T]. */
 inline fun <reified T> classNameOf(): ClassName =
     classNameOf(T::class)
 

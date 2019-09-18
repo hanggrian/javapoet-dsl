@@ -7,8 +7,8 @@ import com.squareup.javapoet.TypeSpec
 import kotlin.reflect.KClass
 
 /**
- * Builds new [JavaFile] by populating newly created [JavaFileBuilder] using provided [builderAction]
- * and then building it.
+ * Builds a new [JavaFile],
+ * by populating newly created [JavaFileBuilder] using provided [builderAction] and then building it.
  */
 inline fun buildJavaFile(packageName: String, builderAction: JavaFileBuilder.() -> Unit): JavaFile =
     JavaFileBuilder(packageName).apply(builderAction).build()
