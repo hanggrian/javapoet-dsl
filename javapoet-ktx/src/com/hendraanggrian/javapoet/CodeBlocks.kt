@@ -23,8 +23,10 @@ fun Iterable<CodeBlock>.join(separator: String): CodeBlock =
 class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuilder: CodeBlock.Builder) :
     CodeCollection() {
 
+    /** Returns true if this builder contains no code. */
     fun isEmpty(): Boolean = nativeBuilder.isEmpty
 
+    /** Adds code using named arguments. */
     fun addNamed(format: String, arguments: Map<String, *>): Unit =
         format.formatWith(arguments) { s, map -> nativeBuilder.addNamed(s, map) }
 
@@ -53,14 +55,17 @@ class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuil
     override fun append(block: CodeBlock): CodeBlock =
         block.also { nativeBuilder.add(it) }
 
+    /** Indent current code. */
     fun indent() {
         nativeBuilder.indent()
     }
 
+    /** Unindent current code. */
     fun unindent() {
         nativeBuilder.unindent()
     }
 
+    /** Returns native spec. */
     fun build(): CodeBlock =
         nativeBuilder.build()
 }

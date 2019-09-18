@@ -75,15 +75,18 @@ inline fun <reified T> buildParameter(
 @JavapoetDslMarker
 class ParameterSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: ParameterSpec.Builder) {
 
+    /** Collection of annotations, may be configured with Kotlin DSL. */
     val annotations: AnnotationContainer = object : AnnotationContainer() {
         override fun add(spec: AnnotationSpec): AnnotationSpec =
             spec.also { nativeBuilder.addAnnotation(it) }
     }
 
+    /** Add field modifiers. */
     fun addModifiers(vararg modifiers: Modifier) {
         nativeBuilder.addModifiers(*modifiers)
     }
 
+    /** Returns native spec. */
     fun build(): ParameterSpec =
         nativeBuilder.build()
 }

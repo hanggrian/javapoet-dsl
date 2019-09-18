@@ -72,6 +72,7 @@ inline fun <reified T> buildField(
 @JavapoetDslMarker
 class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: FieldSpec.Builder) {
 
+    /** Collection of javadoc, may be configured with Kotlin DSL. */
     val javadoc: JavadocContainer = object : JavadocContainer() {
         override fun append(format: String, vararg args: Any): Unit =
             format.formatWith(args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
@@ -80,28 +81,35 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
             block.also { nativeBuilder.addJavadoc(it) }
     }
 
+    /** Collection of annotations, may be configured with Kotlin DSL. */
     val annotations: AnnotationContainer = object : AnnotationContainer() {
         override fun add(spec: AnnotationSpec): AnnotationSpec =
             spec.also { nativeBuilder.addAnnotation(it) }
     }
 
+    /** Add field modifiers. */
     fun addModifiers(vararg modifiers: Modifier) {
         nativeBuilder.addModifiers(*modifiers)
     }
 
+    /** Set field value like [String.format]. */
     fun initializer(format: String, vararg args: Any): Unit =
         format.formatWith(args) { s, array -> nativeBuilder.initializer(s, *array) }
 
+    /** Set field value to simple string. */
     inline var initializer: String
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
         set(value) = initializer(value)
 
+    /** Set field value to code. */
     fun initializer(block: CodeBlock): CodeBlock =
         block.also { nativeBuilder.initializer(it) }
 
+    /** Set field value to code with custom initialization [builderAction]. */
     inline fun initializer(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
         initializer(buildCode(builderAction))
 
+    /** Returns native spec. */
     fun build(): FieldSpec =
         nativeBuilder.build()
 }

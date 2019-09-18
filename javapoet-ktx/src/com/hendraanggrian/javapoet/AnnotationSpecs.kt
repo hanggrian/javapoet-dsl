@@ -62,21 +62,27 @@ inline fun <reified T> buildAnnotation(builderAction: AnnotationSpecBuilder.() -
 @JavapoetDslMarker
 class AnnotationSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: AnnotationSpec.Builder) {
 
+    /** Add code as a member of this annotation. */
     fun addMember(name: String, format: String, vararg args: Any): Unit =
         format.formatWith(args) { s, array -> nativeBuilder.addMember(name, s, *array) }
 
+    /** Add code as a member of this annotation. */
     fun addMember(name: String, block: CodeBlock): CodeBlock =
         block.also { nativeBuilder.addMember(name, it) }
 
+    /** Add code as a member of this annotation with custom initialization [builderAction]. */
     inline fun addMember(name: String, builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
         addMember(name, buildCode(builderAction))
 
+    /** Convenient method to add member with operator function. */
     operator fun String.invoke(format: String, vararg args: Any) =
         addMember(this, format, *args)
 
+    /** Convenient method to add member with operator function. */
     operator fun String.invoke(builderAction: CodeBlockBuilder.() -> Unit) =
         addMember(this, builderAction)
 
+    /** Returns native spec. */
     fun build(): AnnotationSpec =
         nativeBuilder.build()
 }

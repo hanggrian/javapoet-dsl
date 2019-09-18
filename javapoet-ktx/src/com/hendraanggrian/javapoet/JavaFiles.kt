@@ -28,7 +28,7 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
         typeSpec = it
     }
 
-    /** Add a comment to this file. */
+    /** Add comment like [String.format]. */
     fun addComment(format: String, vararg args: Any) {
         if (comments == null) {
             comments = mutableMapOf()
@@ -36,14 +36,14 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
         comments!![format] = arrayOf(*args)
     }
 
-    /** Set a comment to this file, cancelling all changes made with [addComment]. */
+    /** Set comment with simple string, cancelling all changes made with [addComment]. */
     var comment: String
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
         set(value) {
             comments = mutableMapOf(value to emptyArray())
         }
 
-    /** Add static imports to this file. */
+    /** Add static imports. */
     fun addStaticImport(constant: Enum<*>) {
         if (staticImports == null) {
             staticImports = mutableMapOf()
@@ -51,7 +51,7 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
         staticImports!![constant] = emptyArray()
     }
 
-    /** Add static imports to this file. */
+    /** Add static imports. */
     fun addStaticImport(type: ClassName, vararg names: String) {
         if (staticImports == null) {
             staticImports = mutableMapOf()
@@ -59,7 +59,7 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
         staticImports!![type] = arrayOf(*names)
     }
 
-    /** Add static imports to this file. */
+    /** Add static imports. */
     fun addStaticImport(type: KClass<*>, vararg names: String) {
         if (staticImports == null) {
             staticImports = mutableMapOf()
@@ -67,28 +67,32 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
         staticImports!![type] = arrayOf(*names)
     }
 
-    /** Add static imports to this file. */
+    /** Add static imports with reified function. */
     inline fun <reified T> addStaticImport(vararg names: String) =
         addStaticImport(T::class, *names)
 
+    /** Set to true to skip java imports. */
     var skipJavaLangImports: Boolean
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
         set(value) {
             isSkipJavaLangImports = value
         }
 
+    /** Set indent text. */
     var indent: String
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
         set(value) {
             indentString = value
         }
 
+    /** Set indent space count. */
     inline var indentCount: Int
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
         set(value) {
             indent = buildString { repeat(value) { append(' ') } }
         }
 
+    /** Returns native spec. */
     fun build(): JavaFile =
         JavaFile.builder(packageName, checkNotNull(typeSpec) { "A main type must be initialized" })
             .apply {

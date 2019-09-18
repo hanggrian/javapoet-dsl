@@ -136,6 +136,7 @@ inline fun buildAnnotationType(type: ClassName, builderAction: TypeSpecBuilder.(
 @JavapoetDslMarker
 class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: TypeSpec.Builder) {
 
+    /** Collection of javadoc, may be configured with Kotlin DSL. */
     val javadoc: JavadocContainer = object : JavadocContainer() {
         override fun append(format: String, vararg args: Any): Unit =
             format.formatWith(args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
@@ -144,86 +145,115 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
             block.also { nativeBuilder.addJavadoc(it) }
     }
 
+    /** Collection of annotations, may be configured with Kotlin DSL. */
     val annotations: AnnotationContainer = object : AnnotationContainer() {
         override fun add(spec: AnnotationSpec): AnnotationSpec =
             spec.also { nativeBuilder.addAnnotation(it) }
     }
 
+    /** Add field modifiers. */
     fun addModifiers(vararg modifiers: Modifier) {
         nativeBuilder.addModifiers(*modifiers)
     }
 
+    /** Add type variables. */
     fun addTypeVariable(typeVariable: TypeVariableName) {
         nativeBuilder.addTypeVariable(typeVariable)
     }
 
+    /** Add type variables. */
     fun addTypeVariables(typeVariables: Iterable<TypeVariableName>) {
         nativeBuilder.addTypeVariables(typeVariables)
     }
 
+    /** Set superclass to type. */
     var superClass: TypeName
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
         set(value) {
             nativeBuilder.superclass(value)
         }
 
-    fun superClass(type: KClass<*>) {
-        nativeBuilder.superclass(type.java)
+    /** Set superclass to [type]. */
+    fun superClass(type: Class<*>) {
+        nativeBuilder.superclass(type)
     }
 
+    /** Set superclass to [type]. */
+    fun superClass(type: KClass<*>) =
+        superClass(type.java)
+
+    /** Set superclass to [T]. */
     inline fun <reified T> superClass() =
         superClass(T::class)
 
+    /** Add superinterface to [type]. */
     fun addSuperInterface(type: TypeName) {
         nativeBuilder.addSuperinterface(type)
     }
 
-    fun addSuperInterface(type: KClass<*>) {
-        nativeBuilder.addSuperinterface(type.java)
+    /** Add superinterface to [type]. */
+    fun addSuperInterface(type: Class<*>) {
+        nativeBuilder.addSuperinterface(type)
     }
 
+    /** Add superinterface to [type]. */
+    fun addSuperInterface(type: KClass<*>) =
+        addSuperInterface(type.java)
+
+    /** Add superinterface to [T]. */
     inline fun <reified T> addSuperInterface() =
         addSuperInterface(T::class)
 
+    /** Add enum constant named [name]. */
     fun addEnumConstant(name: String) {
         nativeBuilder.addEnumConstant(name)
     }
 
+    /** Add enum constant named [name] with specified [TypeSpec]. */
     fun addEnumConstant(name: String, spec: TypeSpec) {
         nativeBuilder.addEnumConstant(name, spec)
     }
 
+    /** Collection of fields, may be configured with Kotlin DSL. */
     val fields: FieldContainer = object : FieldContainer() {
         override fun add(spec: FieldSpec): FieldSpec =
             spec.also { nativeBuilder.addField(it) }
     }
 
-    fun addStaticBlock(block: CodeBlock): CodeBlock =
-        block.also { nativeBuilder.addStaticBlock(it) }
+    /** Add static block containing [code]. */
+    fun addStaticBlock(code: CodeBlock): CodeBlock =
+        code.also { nativeBuilder.addStaticBlock(it) }
 
+    /** Add static block containing code with custom initialization [builderAction]. */
     inline fun addStaticBlock(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
         addStaticBlock(buildCode(builderAction))
 
-    fun addInitializerBlock(block: CodeBlock): CodeBlock =
-        block.also { nativeBuilder.addInitializerBlock(it) }
+    /** Add initializer block containing [code]. */
+    fun addInitializerBlock(code: CodeBlock): CodeBlock =
+        code.also { nativeBuilder.addInitializerBlock(it) }
 
+    /** Add initializer block containing code with custom initialization [builderAction]. */
     inline fun addInitializerBlock(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
         addInitializerBlock(buildCode(builderAction))
 
+    /** Collection of methods, may be configured with Kotlin DSL. */
     val methods: MethodContainer = object : MethodContainer() {
         override fun add(spec: MethodSpec): MethodSpec =
             spec.also { nativeBuilder.addMethod(it) }
     }
 
+    /** Collection of types, may be configured with Kotlin DSL. */
     val types: TypeContainer = object : TypeContainer() {
         override fun add(spec: TypeSpec): TypeSpec =
             spec.also { nativeBuilder.addType(it) }
     }
 
+    /** Add originating element. */
     fun addOriginatingElement(originatingElement: Element) {
         nativeBuilder.addOriginatingElement(originatingElement)
     }
 
+    /** Returns native spec. */
     fun build(): TypeSpec =
         nativeBuilder.build()
 }

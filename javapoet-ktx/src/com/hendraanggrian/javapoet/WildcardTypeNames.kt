@@ -37,8 +37,10 @@ fun supertypeWildcardTypeNameOf(lowerBound: KClass<*>): WildcardTypeName =
 inline fun <reified T> supertypeWildcardTypeNameOf(): WildcardTypeName =
     supertypeWildcardTypeNameOf(T::class)
 
+/** Converts [WildcardType] to [TypeName]. */
 fun wildcardTypeNameOf(mirror: WildcardType): TypeName =
     WildcardTypeName.get(mirror)
 
+/** Converts [java.lang.reflect.WildcardType] to [TypeName]. */
 fun wildcardTypeNameOf(wildcardName: java.lang.reflect.WildcardType): TypeName =
     WildcardTypeName.get(wildcardName)
