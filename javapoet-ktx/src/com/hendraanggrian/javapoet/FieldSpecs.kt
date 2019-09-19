@@ -77,8 +77,8 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
         override fun append(format: String, vararg args: Any): Unit =
             format.formatWith(args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
 
-        override fun append(block: CodeBlock): CodeBlock =
-            block.also { nativeBuilder.addJavadoc(it) }
+        override fun append(code: CodeBlock): CodeBlock =
+            code.also { nativeBuilder.addJavadoc(it) }
     }
 
     /** Collection of annotations, may be configured with Kotlin DSL. */
@@ -102,8 +102,8 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
         set(value) = initializer(value)
 
     /** Set field value to code. */
-    fun initializer(block: CodeBlock): CodeBlock =
-        block.also { nativeBuilder.initializer(it) }
+    fun initializer(code: CodeBlock): CodeBlock =
+        code.also { nativeBuilder.initializer(it) }
 
     /** Set field value to code with custom initialization [builderAction]. */
     inline fun initializer(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =

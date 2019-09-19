@@ -141,8 +141,8 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
         override fun append(format: String, vararg args: Any): Unit =
             format.formatWith(args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
 
-        override fun append(block: CodeBlock): CodeBlock =
-            block.also { nativeBuilder.addJavadoc(it) }
+        override fun append(code: CodeBlock): CodeBlock =
+            code.also { nativeBuilder.addJavadoc(it) }
     }
 
     /** Collection of annotations, may be configured with Kotlin DSL. */

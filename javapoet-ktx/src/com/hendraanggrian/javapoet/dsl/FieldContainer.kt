@@ -75,6 +75,11 @@ abstract class FieldContainer internal constructor() : FieldAddable {
     }
 
     /** Convenient method to add field with operator function. */
+    operator fun set(name: String, type: Class<*>) {
+        add(type, name)
+    }
+
+    /** Convenient method to add field with operator function. */
     operator fun set(name: String, type: KClass<*>) {
         add(type, name)
     }

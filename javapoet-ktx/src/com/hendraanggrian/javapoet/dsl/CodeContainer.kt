@@ -10,16 +10,16 @@ private interface CodeAppendable {
     /** Add code block to this container. */
     fun append(format: String, vararg args: Any)
 
-    /** Add code block to this container, returning the block added. */
-    fun append(block: CodeBlock): CodeBlock
+    /** Add code block to this container, returning the code added. */
+    fun append(code: CodeBlock): CodeBlock
 
     fun appendln()
 
     /** Add code block with a new line to this container. */
     fun appendln(format: String, vararg args: Any)
 
-    /** Add code block with a new line to this container, returning the block added. */
-    fun appendln(block: CodeBlock): CodeBlock
+    /** Add code block with a new line to this container, returning the code added. */
+    fun appendln(code: CodeBlock): CodeBlock
 }
 
 abstract class CodeCollection internal constructor() : CodeAppendable {
@@ -61,8 +61,8 @@ abstract class JavadocContainer internal constructor() : CodeAppendable {
     override fun appendln(format: String, vararg args: Any) =
         append("$format\n", *args)
 
-    override fun appendln(block: CodeBlock): CodeBlock {
-        val result = append(block)
+    override fun appendln(code: CodeBlock): CodeBlock {
+        val result = append(code)
         appendln()
         return result
     }
@@ -77,8 +77,8 @@ abstract class JavadocContainer internal constructor() : CodeAppendable {
     }
 
     /** Convenient method to add code block with operator function. */
-    operator fun plusAssign(block: CodeBlock) {
-        append(block)
+    operator fun plusAssign(code: CodeBlock) {
+        append(code)
     }
 
     /** Configure this container with DSL. */
@@ -91,7 +91,7 @@ abstract class JavadocContainer internal constructor() : CodeAppendable {
 class JavadocContainerScope @PublishedApi internal constructor(private val container: JavadocContainer) :
     JavadocContainer(), CodeAppendable by container {
 
-    override fun appendln(block: CodeBlock): CodeBlock = container.appendln(block)
+    override fun appendln(code: CodeBlock): CodeBlock = container.appendln(code)
     override fun appendln() = container.appendln()
     override fun appendln(format: String, vararg args: Any) = container.appendln(format, *args)
 }

@@ -4,9 +4,6 @@ import com.squareup.javapoet.ClassName
 import javax.lang.model.element.TypeElement
 import kotlin.reflect.KClass
 
-/** Object name. */
-inline val `object`: ClassName get() = ClassName.OBJECT
-
 /** Returns a class name representative of [type]. */
 fun classNameOf(type: Class<*>): ClassName =
     ClassName.get(type)

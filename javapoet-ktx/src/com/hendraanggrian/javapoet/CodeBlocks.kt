@@ -49,11 +49,11 @@ class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuil
     override fun appendln(format: String, vararg args: Any): Unit =
         format.formatWith(args) { s, array -> nativeBuilder.addStatement(s, *array) }
 
-    override fun appendln(block: CodeBlock): CodeBlock =
-        block.also { nativeBuilder.addStatement(block) }
+    override fun appendln(code: CodeBlock): CodeBlock =
+        code.also { nativeBuilder.addStatement(code) }
 
-    override fun append(block: CodeBlock): CodeBlock =
-        block.also { nativeBuilder.add(it) }
+    override fun append(code: CodeBlock): CodeBlock =
+        code.also { nativeBuilder.add(it) }
 
     /** Indent current code. */
     fun indent() {

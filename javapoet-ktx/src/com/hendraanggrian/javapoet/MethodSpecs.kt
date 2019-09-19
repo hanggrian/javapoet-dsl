@@ -45,8 +45,8 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
         override fun append(format: String, vararg args: Any): Unit =
             format.formatWith(args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
 
-        override fun append(block: CodeBlock): CodeBlock =
-            block.also { nativeBuilder.addJavadoc(it) }
+        override fun append(code: CodeBlock): CodeBlock =
+            code.also { nativeBuilder.addJavadoc(it) }
     }
 
     /** Collection of annotations, may be configured with Kotlin DSL. */
@@ -126,8 +126,8 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
     override fun append(format: String, vararg args: Any): Unit =
         format.formatWith(args) { s, array -> nativeBuilder.addCode(s, *array) }
 
-    override fun append(block: CodeBlock): CodeBlock =
-        block.also { nativeBuilder.addCode(it) }
+    override fun append(code: CodeBlock): CodeBlock =
+        code.also { nativeBuilder.addCode(it) }
 
     override fun beginFlow(flow: String, vararg args: Any): Unit =
         flow.formatWith(args) { s, array -> nativeBuilder.beginControlFlow(s, *array) }
@@ -145,8 +145,8 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
     override fun appendln(format: String, vararg args: Any): Unit =
         format.formatWith(args) { s, array -> nativeBuilder.addStatement(s, *array) }
 
-    override fun appendln(block: CodeBlock): CodeBlock =
-        block.also { nativeBuilder.addStatement(it) }
+    override fun appendln(code: CodeBlock): CodeBlock =
+        code.also { nativeBuilder.addStatement(it) }
 
     /** Add named code. */
     fun addNamedCode(format: String, args: Map<String, *>): Unit =

@@ -59,6 +59,11 @@ abstract class AnnotationContainer internal constructor() : AnnotationAddable {
     }
 
     /** Convenient method to add annotation with operator function. */
+    operator fun plusAssign(type: Class<*>) {
+        add(type)
+    }
+
+    /** Convenient method to add annotation with operator function. */
     operator fun plusAssign(type: KClass<*>) {
         add(type)
     }

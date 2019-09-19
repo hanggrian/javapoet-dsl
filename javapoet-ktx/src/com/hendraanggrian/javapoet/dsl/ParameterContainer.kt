@@ -75,6 +75,11 @@ abstract class ParameterContainer internal constructor() : ParameterAddable {
     }
 
     /** Convenient method to add parameter with operator function. */
+    operator fun set(name: String, type: Class<*>) {
+        add(type, name)
+    }
+
+    /** Convenient method to add parameter with operator function. */
     operator fun set(name: String, type: KClass<*>) {
         add(type, name)
     }
