@@ -21,7 +21,9 @@ class TypeNamesTest {
     }
 
     @Test
-    fun test() {
+    fun asTypeName() {
+        assertEquals(TypeName.get(String::class.java), String::class.java.asTypeName())
+        assertEquals(TypeName.get(String::class.java), String::class.asTypeName())
         assertEquals(TypeName.get(String::class.java), asTypeName<String>())
     }
 }

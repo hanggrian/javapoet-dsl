@@ -3,7 +3,6 @@ package com.hendraanggrian.javapoet
 import com.hendraanggrian.javapoet.dsl.MethodContainerScope
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.MethodSpec
-import com.squareup.javapoet.TypeName
 import java.util.Collections
 import java.util.Date
 import javax.lang.model.element.Modifier
@@ -255,7 +254,7 @@ class ReadmeTest {
                 methods.add("beyond") {
                     val hoverboard = classNameOf("com.mattel", "Hoverboard")
                     val arrayList = classNameOf("java.util", "ArrayList")
-                    val listOfHoverboards = parameterizedTypeNameOf(classNameOf("java.util", "List"), hoverboard)
+                    val listOfHoverboards = classNameOf("java.util", "List").parameterizedBy(hoverboard)
                     returns = listOfHoverboards
                     appendln("%T result = new %T<>()", listOfHoverboards, arrayList)
                     appendln("result.add(new %T())", hoverboard)
@@ -299,7 +298,7 @@ class ReadmeTest {
                     addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                     methods.add("beyond") {
                         val arrayList = classNameOf("java.util", "ArrayList")
-                        val listOfHoverboards = parameterizedTypeNameOf(classNameOf("java.util", "List"), hoverboard)
+                        val listOfHoverboards = classNameOf("java.util", "List").parameterizedBy(hoverboard)
                         returns = listOfHoverboards
                         appendln("%T result = new %T<>()", listOfHoverboards, arrayList)
                         appendln("result.add(%T.createNimbus(2000))", hoverboard)
@@ -538,9 +537,9 @@ class ReadmeTest {
         lateinit var sortByLength: MethodSpec
         buildClassType("HelloWorld") {
             sortByLength = methods.add("sortByLength") {
-                parameters.add(parameterizedTypeNameOf(List::class, String::class), "strings")
+                parameters.add(List::class.parameterizedBy(String::class), "strings")
                 appendln("%T.sort(%N, %L)", Collections::class, "strings", buildAnonymousType("") {
-                    addSuperInterface(parameterizedTypeNameOf(Comparator::class, String::class))
+                    addSuperInterface(Comparator::class.parameterizedBy(String::class))
                     methods.add("compare") {
                         annotations.add<Override>()
                         addModifiers(Modifier.PUBLIC)

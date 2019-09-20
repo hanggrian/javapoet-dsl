@@ -2,18 +2,19 @@ package com.hendraanggrian.javapoet
 
 import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.WildcardTypeName
+import java.lang.reflect.Type
 import javax.lang.model.type.WildcardType
 import kotlin.reflect.KClass
 
-/** Returns a [WildcardTypeName] that represents an unknown type that extends [upperBound]. */
+/** Returns a [WildcardTypeName] that represents an unknown type that extends [TypeName]. */
 fun TypeName.asSubtypeWildcardTypeName(): WildcardTypeName =
     WildcardTypeName.subtypeOf(this)
 
-/** Returns a [WildcardTypeName] that represents an unknown type that extends [upperBound]. */
-fun Class<*>.asSubtypeWildcardTypeName(): WildcardTypeName =
+/** Returns a [WildcardTypeName] that represents an unknown type that extends [Type]. */
+fun Type.asSubtypeWildcardTypeName(): WildcardTypeName =
     WildcardTypeName.subtypeOf(this)
 
-/** Returns a [WildcardTypeName] that represents an unknown type that extends [upperBound]. */
+/** Returns a [WildcardTypeName] that represents an unknown type that extends [KClass]. */
 fun KClass<*>.asSubtypeWildcardTypeName(): WildcardTypeName =
     java.asSubtypeWildcardTypeName()
 
@@ -21,15 +22,15 @@ fun KClass<*>.asSubtypeWildcardTypeName(): WildcardTypeName =
 inline fun <reified T> asSubtypeWildcardTypeName(): WildcardTypeName =
     T::class.asSubtypeWildcardTypeName()
 
-/** Returns a [WildcardTypeName] that represents an unknown supertype of [lowerBound]. */
+/** Returns a [WildcardTypeName] that represents an unknown supertype of [TypeName]. */
 fun TypeName.asSupertypeWildcardTypeName(): WildcardTypeName =
     WildcardTypeName.supertypeOf(this)
 
-/** Returns a [WildcardTypeName] that represents an unknown supertype of [lowerBound]. */
-fun Class<*>.asSupertypeWildcardTypeName(): WildcardTypeName =
+/** Returns a [WildcardTypeName] that represents an unknown supertype of [Type]. */
+fun Type.asSupertypeWildcardTypeName(): WildcardTypeName =
     WildcardTypeName.supertypeOf(this)
 
-/** Returns a [WildcardTypeName] that represents an unknown supertype of [lowerBound]. */
+/** Returns a [WildcardTypeName] that represents an unknown supertype of [KClass]. */
 fun KClass<*>.asSupertypeWildcardTypeName(): WildcardTypeName =
     java.asSupertypeWildcardTypeName()
 

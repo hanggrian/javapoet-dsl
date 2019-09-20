@@ -2,6 +2,7 @@ package com.hendraanggrian.javapoet
 
 import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeVariableName
+import java.lang.reflect.Type
 import javax.lang.model.element.TypeParameterElement
 import javax.lang.model.type.TypeVariable
 import kotlin.reflect.KClass
@@ -12,6 +13,10 @@ fun typeVariableNameOf(name: String): TypeVariableName =
 
 /** Returns a [TypeVariableName] named [name] with [bounds]. */
 fun typeVariableNameOf(name: String, vararg bounds: TypeName): TypeVariableName =
+    TypeVariableName.get(name, *bounds)
+
+/** Returns a [TypeVariableName] named [name] with [bounds]. */
+fun typeVariableNameOf(name: String, vararg bounds: Type): TypeVariableName =
     TypeVariableName.get(name, *bounds)
 
 /** Returns a [TypeVariableName] named [name] with [bounds]. */
