@@ -34,7 +34,7 @@ class ReadmeTest {
                     addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                     methods.add("main") {
                         addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-                        returns = TypeName.VOID
+                        returns = VOID
                         parameters.add<Array<String>>("args")
                         appendln("%T.out.println(%S)", System::class, "Hello, JavaPoet!")
                     }
@@ -58,7 +58,7 @@ class ReadmeTest {
         assertEquals(
             expected,
             buildMethod("main") {
-                returns = TypeName.VOID
+                returns = VOID
                 append(
                     """
                         int total = 0;
@@ -73,7 +73,7 @@ class ReadmeTest {
         assertEquals(
             expected,
             buildMethod("main") {
-                returns = TypeName.VOID
+                returns = VOID
                 appendln("int total = 0")
                 beginFlow("for (int i = 0; i < 10; i++)")
                 appendln("total += i")
@@ -92,7 +92,7 @@ class ReadmeTest {
 
             """.trimIndent(),
             buildMethod("multiply10to20") {
-                returns = TypeName.INT
+                returns = INT
                 appendln("int result = 1")
                 beginFlow("for (int i = 10; i < 20; i++)")
                 appendln("result = result * i")
@@ -160,7 +160,7 @@ class ReadmeTest {
 
             """.trimIndent(),
             buildMethod("computeRange") {
-                returns = TypeName.INT
+                returns = INT
                 appendln("int result = 0")
                 beginFlow("for (int i = %L; i < %L; i++)", 0, 10)
                 appendln("result = result %L i", "+=")
@@ -317,13 +317,13 @@ class ReadmeTest {
     fun `$NForNames`() {
         val hexDigit = buildMethod("hexDigit") {
             addModifiers(Modifier.PUBLIC)
-            parameters.add(TypeName.INT, "i")
-            returns = TypeName.CHAR
+            parameters.add(INT, "i")
+            returns = CHAR
             appendln("return (char) (i < 10 ? i + '0' : i - 10 + 'a')")
         }
         val byteToHex = buildMethod("byteToHex") {
             addModifiers(Modifier.PUBLIC)
-            parameters.add(TypeName.INT, "b")
+            parameters.add(INT, "b")
             returns<String>()
             appendln("char[] result = new char[2]")
             appendln("result[0] = %N((b >>> 4) & 0xf)", hexDigit)
@@ -548,7 +548,7 @@ class ReadmeTest {
                             add<String>("a")
                             add<String>("b")
                         }
-                        returns = TypeName.INT
+                        returns = INT
                         appendln("return %N.length() - %N.length()", "a", "b")
                     }
                 })

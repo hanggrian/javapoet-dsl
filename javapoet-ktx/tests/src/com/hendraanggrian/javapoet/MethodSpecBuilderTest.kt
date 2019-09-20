@@ -4,7 +4,6 @@ import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.ParameterSpec
-import com.squareup.javapoet.TypeName
 import java.io.IOException
 import javax.lang.model.element.Modifier
 import kotlin.test.Test
@@ -20,7 +19,7 @@ class MethodSpecBuilderTest {
         )
         .addAnnotation(AnnotationSpec.builder(Deprecated::class.java).build())
         .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-        .returns(TypeName.VOID)
+        .returns(VOID)
         .addParameter(ParameterSpec.builder(Array<String>::class.java, "param").build())
         .varargs(true)
         .addException(IOException::class.java)
@@ -37,7 +36,7 @@ class MethodSpecBuilderTest {
             }
             annotations.add<Deprecated>()
             addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-            returns = TypeName.VOID
+            returns = VOID
             parameters.add<Array<String>>("param")
             varargs = true
             addException<IOException>()
@@ -59,7 +58,7 @@ class MethodSpecBuilderTest {
                 add<Deprecated>()
             }
             addModifiers(Modifier.PUBLIC, Modifier.STATIC)
-            returns = TypeName.VOID
+            returns = VOID
             parameters {
                 add<Array<String>>("param")
             }

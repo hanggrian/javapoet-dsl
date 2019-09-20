@@ -6,26 +6,26 @@ import javax.lang.model.element.TypeParameterElement
 import javax.lang.model.type.TypeVariable
 import kotlin.reflect.KClass
 
-/** Returns type variable named [name] without bounds. */
+/** Returns a [TypeVariableName] named [name] without bounds. */
 fun typeVariableNameOf(name: String): TypeVariableName =
     TypeVariableName.get(name)
 
-/** Returns type variable named [name] with [bounds]. */
+/** Returns a [TypeVariableName] named [name] with [bounds]. */
 fun typeVariableNameOf(name: String, vararg bounds: TypeName): TypeVariableName =
     TypeVariableName.get(name, *bounds)
 
-/** Returns type variable named [name] with [bounds]. */
+/** Returns a [TypeVariableName] named [name] with [bounds]. */
 fun typeVariableNameOf(name: String, vararg bounds: KClass<*>): TypeVariableName =
     TypeVariableName.get(name, *bounds.toJavaClasses())
 
-/** Returns type variable equivalent to [mirror]. */
-fun typeVariableNameOf(mirror: TypeVariable): TypeVariableName =
-    TypeVariableName.get(mirror)
+/** Returns a [TypeVariableName] equivalent to this [TypeParameterElement].  */
+fun TypeParameterElement.asTypeVariableName(): TypeVariableName =
+    TypeVariableName.get(this)
 
-/** Returns type variable equivalent to [element]. */
-fun typeVariableNameOf(element: TypeParameterElement): TypeVariableName =
-    TypeVariableName.get(element)
+/** Returns a [TypeVariableName] equivalent to this [TypeVariable].  */
+fun TypeVariable.asTypeVariableName(): TypeVariableName =
+    TypeVariableName.get(this)
 
-/** Returns type variable equivalent to [type]. */
-fun typeVariableNameOf(type: java.lang.reflect.TypeVariable<*>): TypeVariableName =
-    TypeVariableName.get(type)
+/** Returns a [TypeVariableName] equivalent to this [java.lang.reflect.TypeVariable].  */
+fun java.lang.reflect.TypeVariable<*>.asTypeVariableName(): TypeVariableName =
+    TypeVariableName.get(this)

@@ -5,42 +5,42 @@ import com.squareup.javapoet.WildcardTypeName
 import javax.lang.model.type.WildcardType
 import kotlin.reflect.KClass
 
-/** Returns a type that represents an unknown type that extends [upperBound]. */
-fun subtypeWildcardTypeNameOf(upperBound: TypeName): WildcardTypeName =
-    WildcardTypeName.subtypeOf(upperBound)
+/** Returns a [WildcardTypeName] that represents an unknown type that extends [upperBound]. */
+fun TypeName.asSubtypeWildcardTypeName(): WildcardTypeName =
+    WildcardTypeName.subtypeOf(this)
 
-/** Returns a type that represents an unknown type that extends [upperBound]. */
-fun subtypeWildcardTypeNameOf(upperBound: Class<*>): WildcardTypeName =
-    WildcardTypeName.subtypeOf(upperBound)
+/** Returns a [WildcardTypeName] that represents an unknown type that extends [upperBound]. */
+fun Class<*>.asSubtypeWildcardTypeName(): WildcardTypeName =
+    WildcardTypeName.subtypeOf(this)
 
-/** Returns a type that represents an unknown type that extends [upperBound]. */
-fun subtypeWildcardTypeNameOf(upperBound: KClass<*>): WildcardTypeName =
-    subtypeWildcardTypeNameOf(upperBound.java)
+/** Returns a [WildcardTypeName] that represents an unknown type that extends [upperBound]. */
+fun KClass<*>.asSubtypeWildcardTypeName(): WildcardTypeName =
+    java.asSubtypeWildcardTypeName()
 
-/** Returns a type that represents an unknown type that extends [T]. */
-inline fun <reified T> subtypeWildcardTypeNameOf(): WildcardTypeName =
-    subtypeWildcardTypeNameOf(T::class)
+/** Returns a [WildcardTypeName] that represents an unknown type that extends [T]. */
+inline fun <reified T> asSubtypeWildcardTypeName(): WildcardTypeName =
+    T::class.asSubtypeWildcardTypeName()
 
-/** Returns a type that represents an unknown supertype of [lowerBound]. */
-fun supertypeWildcardTypeNameOf(lowerBound: TypeName): WildcardTypeName =
-    WildcardTypeName.supertypeOf(lowerBound)
+/** Returns a [WildcardTypeName] that represents an unknown supertype of [lowerBound]. */
+fun TypeName.asSupertypeWildcardTypeName(): WildcardTypeName =
+    WildcardTypeName.supertypeOf(this)
 
-/** Returns a type that represents an unknown supertype of [lowerBound]. */
-fun supertypeWildcardTypeNameOf(lowerBound: Class<*>): WildcardTypeName =
-    WildcardTypeName.supertypeOf(lowerBound)
+/** Returns a [WildcardTypeName] that represents an unknown supertype of [lowerBound]. */
+fun Class<*>.asSupertypeWildcardTypeName(): WildcardTypeName =
+    WildcardTypeName.supertypeOf(this)
 
-/** Returns a type that represents an unknown supertype of [lowerBound]. */
-fun supertypeWildcardTypeNameOf(lowerBound: KClass<*>): WildcardTypeName =
-    supertypeWildcardTypeNameOf(lowerBound.java)
+/** Returns a [WildcardTypeName] that represents an unknown supertype of [lowerBound]. */
+fun KClass<*>.asSupertypeWildcardTypeName(): WildcardTypeName =
+    java.asSupertypeWildcardTypeName()
 
-/** Returns a type that represents an unknown supertype of [T]. */
-inline fun <reified T> supertypeWildcardTypeNameOf(): WildcardTypeName =
-    supertypeWildcardTypeNameOf(T::class)
+/** Returns a [WildcardTypeName] that represents an unknown supertype of [T]. */
+inline fun <reified T> asSupertypeWildcardTypeName(): WildcardTypeName =
+    T::class.asSupertypeWildcardTypeName()
 
-/** Converts [WildcardType] to [TypeName]. */
-fun wildcardTypeNameOf(mirror: WildcardType): TypeName =
-    WildcardTypeName.get(mirror)
+/** Returns a [WildcardTypeName] equivalent to this [WildcardType].  */
+fun WildcardType.asWildcardTypeName(): TypeName =
+    WildcardTypeName.get(this)
 
-/** Converts [java.lang.reflect.WildcardType] to [TypeName]. */
-fun wildcardTypeNameOf(wildcardName: java.lang.reflect.WildcardType): TypeName =
-    WildcardTypeName.get(wildcardName)
+/** Returns a [WildcardTypeName] equivalent to this [java.lang.reflect.WildcardType].  */
+fun java.lang.reflect.WildcardType.asWildcardTypeName(): TypeName =
+    WildcardTypeName.get(this)

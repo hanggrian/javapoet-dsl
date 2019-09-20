@@ -6,26 +6,26 @@ import java.lang.reflect.GenericArrayType
 import javax.lang.model.type.ArrayType
 import kotlin.reflect.KClass
 
-/** Returns an array type whose elements are all instances of [componentType]. */
-fun arrayTypeNameOf(componentType: TypeName): ArrayTypeName =
-    ArrayTypeName.of(componentType)
+/** Returns an [ArrayTypeName] equivalent to this [TypeName]. */
+fun TypeName.asArrayTypeName(): ArrayTypeName =
+    ArrayTypeName.of(this)
 
-/** Returns an array type whose elements are all instances of [componentType]. */
-fun arrayTypeNameOf(componentType: Class<*>): ArrayTypeName =
-    ArrayTypeName.of(componentType)
+/** Returns an [ArrayTypeName] equivalent to this [Class]. */
+fun Class<*>.asArrayTypeName(): ArrayTypeName =
+    ArrayTypeName.of(this)
 
-/** Returns an array type whose elements are all instances of [componentType]. */
-fun arrayTypeNameOf(componentType: KClass<*>): ArrayTypeName =
-    arrayTypeNameOf(componentType.java)
+/** Returns an [ArrayTypeName] equivalent to this [KClass]. */
+fun KClass<*>.asArrayTypeName(): ArrayTypeName =
+    java.asArrayTypeName()
 
-/** Returns an array type whose elements are all instances of [T]. */
-inline fun <reified T> arrayTypeNameOf(): ArrayTypeName =
-    arrayTypeNameOf(T::class)
+/** Returns an [ArrayTypeName] equivalent to this [T]. */
+inline fun <reified T> asArrayTypeName(): ArrayTypeName =
+    T::class.asArrayTypeName()
 
-/** Returns an array type equivalent to [mirror]. */
-fun arrayTypeNameOf(mirror: ArrayType): ArrayTypeName =
-    ArrayTypeName.get(mirror)
+/** Returns an [ArrayTypeName] equivalent to this [ArrayType]. */
+fun ArrayType.asArrayTypeName(): ArrayTypeName =
+    ArrayTypeName.get(this)
 
-/** Returns an array type equivalent to [type]. */
-fun arrayTypeNameOf(type: GenericArrayType): ArrayTypeName =
-    ArrayTypeName.get(type)
+/** Returns an [ArrayTypeName] equivalent to this [GenericArrayType]. */
+fun GenericArrayType.asArrayTypeName(): ArrayTypeName =
+    ArrayTypeName.get(this)

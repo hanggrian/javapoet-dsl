@@ -1,8 +1,8 @@
 package com.example
 
+import com.hendraanggrian.javapoet.INT
 import com.hendraanggrian.javapoet.buildJavaFile
 import com.hendraanggrian.javapoet.classNameOf
-import com.squareup.javapoet.TypeName
 import java.nio.file.Paths
 import javax.lang.model.element.Modifier
 
@@ -31,7 +31,7 @@ class VehicleWriter {
                     }
                     "getWheelCount" {
                         addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
-                        returns = TypeName.INT
+                        returns = INT
                     }
                 }
             }
@@ -51,7 +51,7 @@ class VehicleWriter {
                     }
                     "getWheelCount" {
                         addModifiers(Modifier.PUBLIC)
-                        returns = TypeName.INT
+                        returns = INT
                         annotations.add<Override>()
                         appendln("return %L", wheelCount)
                     }
