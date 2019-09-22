@@ -5,6 +5,7 @@ import com.hendraanggrian.javapoet.JavapoetDslMarker
 import com.hendraanggrian.javapoet.buildField
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.TypeName
+import java.lang.reflect.Type
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
@@ -30,12 +31,12 @@ abstract class FieldContainer internal constructor() : FieldAddable {
     ): FieldSpec = add(buildField(type, name, *modifiers, builderAction = builderAction))
 
     /** Add field from [type] and [name], returning the field added. */
-    fun add(type: Class<*>, name: String, vararg modifiers: Modifier): FieldSpec =
+    fun add(type: Type, name: String, vararg modifiers: Modifier): FieldSpec =
         add(buildField(type, name, *modifiers))
 
     /** Add field from [type] and [name] with custom initialization [builderAction], returning the field added. */
     inline fun add(
-        type: Class<*>,
+        type: Type,
         name: String,
         vararg modifiers: Modifier,
         builderAction: FieldSpecBuilder.() -> Unit
@@ -75,7 +76,7 @@ abstract class FieldContainer internal constructor() : FieldAddable {
     }
 
     /** Convenient method to add field with operator function. */
-    operator fun set(name: String, type: Class<*>) {
+    operator fun set(name: String, type: Type) {
         add(type, name)
     }
 
@@ -103,7 +104,7 @@ class FieldContainerScope @PublishedApi internal constructor(container: FieldCon
 
     /** Convenient method to add field with receiver type. */
     inline operator fun String.invoke(
-        type: Class<*>,
+        type: Type,
         vararg modifiers: Modifier,
         builderAction: FieldSpecBuilder.() -> Unit
     ): FieldSpec = add(type, this, *modifiers, builderAction = builderAction)

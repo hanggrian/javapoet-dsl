@@ -75,10 +75,6 @@ class AnnotationSpecBuilder @PublishedApi internal constructor(private val nativ
         addMember(name, buildCode(builderAction))
 
     /** Convenient method to add member with operator function. */
-    operator fun String.invoke(format: String, vararg args: Any) =
-        addMember(this, format, *args)
-
-    /** Convenient method to add member with operator function. */
     operator fun String.invoke(builderAction: CodeBlockBuilder.() -> Unit) =
         addMember(this, builderAction)
 

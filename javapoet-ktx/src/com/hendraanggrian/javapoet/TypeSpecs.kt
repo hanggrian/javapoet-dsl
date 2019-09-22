@@ -13,6 +13,7 @@ import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeSpec
 import com.squareup.javapoet.TypeVariableName
+import java.lang.reflect.Type
 import javax.lang.model.element.Element
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
@@ -174,7 +175,7 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
         }
 
     /** Set superclass to [type]. */
-    fun superClass(type: Class<*>) {
+    fun superClass(type: Type) {
         nativeBuilder.superclass(type)
     }
 
@@ -192,7 +193,7 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
     }
 
     /** Add superinterface to [type]. */
-    fun addSuperInterface(type: Class<*>) {
+    fun addSuperInterface(type: Type) {
         nativeBuilder.addSuperinterface(type)
     }
 

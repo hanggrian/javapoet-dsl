@@ -4,6 +4,7 @@ import com.hendraanggrian.javapoet.dsl.AnnotationContainer
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ParameterSpec
 import com.squareup.javapoet.TypeName
+import java.lang.reflect.Type
 import javax.lang.model.element.Modifier
 import javax.lang.model.element.VariableElement
 import kotlin.reflect.KClass
@@ -28,7 +29,7 @@ inline fun buildParameter(
 ): ParameterSpec = ParameterSpecBuilder(ParameterSpec.builder(type, name, *modifiers)).apply(builderAction).build()
 
 /** Builds a new [ParameterSpec] from [type]. */
-fun buildParameter(type: Class<*>, name: String, vararg modifiers: Modifier): ParameterSpec =
+fun buildParameter(type: Type, name: String, vararg modifiers: Modifier): ParameterSpec =
     ParameterSpec.builder(type, name, *modifiers).build()
 
 /** Builds a new [ParameterSpec] from [type]. */
@@ -44,7 +45,7 @@ inline fun <reified T> buildParameter(name: String, vararg modifiers: Modifier):
  * by populating newly created [ParameterSpecBuilder] using provided [builderAction] and then building it.
  */
 inline fun buildParameter(
-    type: Class<*>,
+    type: Type,
     name: String,
     vararg modifiers: Modifier,
     builderAction: ParameterSpecBuilder.() -> Unit

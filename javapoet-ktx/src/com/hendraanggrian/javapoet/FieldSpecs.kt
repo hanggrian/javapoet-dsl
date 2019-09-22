@@ -6,6 +6,7 @@ import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.TypeName
+import java.lang.reflect.Type
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
@@ -25,7 +26,7 @@ inline fun buildField(
 ): FieldSpec = FieldSpecBuilder(FieldSpec.builder(type, name, *modifiers)).apply(builderAction).build()
 
 /** Builds a new [FieldSpec] from [type] supplying its [name] and [modifiers]. */
-fun buildField(type: Class<*>, name: String, vararg modifiers: Modifier): FieldSpec =
+fun buildField(type: Type, name: String, vararg modifiers: Modifier): FieldSpec =
     FieldSpec.builder(type, name, *modifiers).build()
 
 /** Builds a new [FieldSpec] from [type] supplying its [name] and [modifiers]. */
@@ -41,7 +42,7 @@ inline fun <reified T> buildField(name: String, vararg modifiers: Modifier): Fie
  * by populating newly created [FieldSpecBuilder] using provided [builderAction] and then building it.
  */
 inline fun buildField(
-    type: Class<*>,
+    type: Type,
     name: String,
     vararg modifiers: Modifier,
     builderAction: FieldSpecBuilder.() -> Unit
@@ -92,20 +93,20 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
         nativeBuilder.addModifiers(*modifiers)
     }
 
-    /** Set field value like [String.format]. */
+    /** Initialize field value like [String.format]. */
     fun initializer(format: String, vararg args: Any): Unit =
         format.formatWith(args) { s, array -> nativeBuilder.initializer(s, *array) }
 
-    /** Set field value to simple string. */
+    /** Initialize field value with simple string. */
     inline var initializer: String
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
         set(value) = initializer(value)
 
-    /** Set field value to code. */
+    /** Initialize field value with code. */
     fun initializer(code: CodeBlock): CodeBlock =
         code.also { nativeBuilder.initializer(it) }
 
-    /** Set field value to code with custom initialization [builderAction]. */
+    /** Initialize field value with custom initialization [builderAction]. */
     inline fun initializer(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
         initializer(buildCode(builderAction))
 
