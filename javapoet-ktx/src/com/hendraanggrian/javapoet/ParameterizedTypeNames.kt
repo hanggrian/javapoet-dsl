@@ -7,15 +7,15 @@ import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 import kotlin.reflect.KClass
 
-/** Returns a parameterized type, applying `typeArguments` to `this`.  */
+/** Returns a [ParameterizedTypeName], applying `typeArguments` to `this`.  */
 fun ClassName.parameterizedBy(vararg typeArguments: TypeName): ParameterizedTypeName =
     ParameterizedTypeName.get(this, *typeArguments)
 
-/** Returns a parameterized type, applying `typeArguments` to `this`.  */
+/** Returns a [ParameterizedTypeName], applying `typeArguments` to `this`.  */
 fun Class<*>.parameterizedBy(vararg typeArguments: Type): ParameterizedTypeName =
     ParameterizedTypeName.get(this, *typeArguments)
 
-/** Returns a parameterized type, applying `typeArguments` to `this`.  */
+/** Returns a [ParameterizedTypeName], applying `typeArguments` to `this`.  */
 fun KClass<*>.parameterizedBy(vararg typeArguments: KClass<*>): ParameterizedTypeName =
     java.parameterizedBy(*typeArguments.toJavaClasses())
 

@@ -43,7 +43,7 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
             comments = mutableMapOf(value to emptyArray())
         }
 
-    /** Add static imports. */
+    /** Add static import. */
     fun addStaticImport(constant: Enum<*>) {
         if (staticImports == null) {
             staticImports = mutableMapOf()
@@ -51,7 +51,7 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
         staticImports!![constant] = emptyArray()
     }
 
-    /** Add static imports. */
+    /** Add static import. */
     fun addStaticImport(type: ClassName, vararg names: String) {
         if (staticImports == null) {
             staticImports = mutableMapOf()
@@ -59,15 +59,19 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
         staticImports!![type] = arrayOf(*names)
     }
 
-    /** Add static imports. */
-    fun addStaticImport(type: KClass<*>, vararg names: String) {
+    /** Add static import. */
+    fun addStaticImport(type: Class<*>, vararg names: String) {
         if (staticImports == null) {
             staticImports = mutableMapOf()
         }
         staticImports!![type] = arrayOf(*names)
     }
 
-    /** Add static imports with reified function. */
+    /** Add static import. */
+    fun addStaticImport(type: KClass<*>, vararg names: String) =
+        addStaticImport(type.java, *names)
+
+    /** Add static import with reified function. */
     inline fun <reified T> addStaticImport(vararg names: String) =
         addStaticImport(T::class, *names)
 
@@ -101,7 +105,7 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
                     when (type) {
                         is Enum<*> -> addStaticImport(type)
                         is ClassName -> addStaticImport(type, *names)
-                        is KClass<*> -> addStaticImport(type.java, *names)
+                        is Class<*> -> addStaticImport(type, *names)
                     }
                 }
                 isSkipJavaLangImports?.let { skipJavaLangImports(it) }

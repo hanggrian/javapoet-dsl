@@ -14,11 +14,11 @@ Lightweight Kotlin extension of [JavaPoet], providing Kotlin DSL functionality a
 ```kotlin
 buildJavaFile("com.example.helloworld") {
     addClass("HelloWorld") {
-        addModifiers(public, final)
+        addModifiers(Modifier.PUBLIC, Modifier.FINAL)
         methods {
             "main" {
-                addModifiers(public, static)
-                returns = void
+                addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                returns = VOID
                 parameters.add<Array<String>>("args")
                 appendln("%T.out.println(%S)", System::class, "Hello, JavaPoet!")
             }
@@ -67,7 +67,7 @@ buildCodeBlock {
 ```kotlin
 buildMethod("sortList") {
     returns = int
-    parameters.add(parameterizedTypeNameOf(classNameOf("java.util", "List"), hoverboard), "list")
+    parameters.add(classNameOf("java.util", "List").parameterizedBy(hoverboard), "list")
     appendln("%T.sort(list)", Collections::class)
     appendln("return list")
 }
@@ -140,7 +140,7 @@ Top-level creators of `TypeName` and all its subclasses.
 ```kotlin
 val hoverboard = classNameOf("com.mattel", "Hoverboard")
 val list = classNameOf("java.util", "List")
-val listOfHoverboards = parameterizedTypeNameOf(list, hoverboard)
+val listOfHoverboards = list.parameterizedBy(hoverboard)
 ```
 
 License
