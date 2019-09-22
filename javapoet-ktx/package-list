@@ -1,6 +1,32 @@
 $dokka.format:html
 $dokka.linkExtension:html
+$dokka.location:com.hendraanggrian.javapoet$asArrayTypeName(com.squareup.javapoet.TypeName)com.hendraanggrian.javapoet/com.squareup.javapoet.-type-name/as-array-type-name.html
+$dokka.location:com.hendraanggrian.javapoet$asArrayTypeName(java.lang.Class((kotlin.Any)))com.hendraanggrian.javapoet/java.lang.-class/as-array-type-name.html
+$dokka.location:com.hendraanggrian.javapoet$asArrayTypeName(java.lang.reflect.GenericArrayType)com.hendraanggrian.javapoet/java.lang.reflect.-generic-array-type/as-array-type-name.html
+$dokka.location:com.hendraanggrian.javapoet$asArrayTypeName(javax.lang.model.type.ArrayType)com.hendraanggrian.javapoet/javax.lang.model.type.-array-type/as-array-type-name.html
+$dokka.location:com.hendraanggrian.javapoet$asArrayTypeName(kotlin.reflect.KClass((kotlin.Any)))com.hendraanggrian.javapoet/kotlin.reflect.-k-class/as-array-type-name.html
+$dokka.location:com.hendraanggrian.javapoet$asClassName(java.lang.Class((kotlin.Any)))com.hendraanggrian.javapoet/java.lang.-class/as-class-name.html
+$dokka.location:com.hendraanggrian.javapoet$asClassName(javax.lang.model.element.TypeElement)com.hendraanggrian.javapoet/javax.lang.model.element.-type-element/as-class-name.html
+$dokka.location:com.hendraanggrian.javapoet$asClassName(kotlin.reflect.KClass((kotlin.Any)))com.hendraanggrian.javapoet/kotlin.reflect.-k-class/as-class-name.html
+$dokka.location:com.hendraanggrian.javapoet$asParameterizedTypeName(java.lang.reflect.ParameterizedType)com.hendraanggrian.javapoet/java.lang.reflect.-parameterized-type/as-parameterized-type-name.html
+$dokka.location:com.hendraanggrian.javapoet$asSubtypeWildcardTypeName(com.squareup.javapoet.TypeName)com.hendraanggrian.javapoet/com.squareup.javapoet.-type-name/as-subtype-wildcard-type-name.html
+$dokka.location:com.hendraanggrian.javapoet$asSubtypeWildcardTypeName(java.lang.reflect.Type)com.hendraanggrian.javapoet/java.lang.reflect.-type/as-subtype-wildcard-type-name.html
+$dokka.location:com.hendraanggrian.javapoet$asSubtypeWildcardTypeName(kotlin.reflect.KClass((kotlin.Any)))com.hendraanggrian.javapoet/kotlin.reflect.-k-class/as-subtype-wildcard-type-name.html
+$dokka.location:com.hendraanggrian.javapoet$asSupertypeWildcardTypeName(com.squareup.javapoet.TypeName)com.hendraanggrian.javapoet/com.squareup.javapoet.-type-name/as-supertype-wildcard-type-name.html
+$dokka.location:com.hendraanggrian.javapoet$asSupertypeWildcardTypeName(java.lang.reflect.Type)com.hendraanggrian.javapoet/java.lang.reflect.-type/as-supertype-wildcard-type-name.html
+$dokka.location:com.hendraanggrian.javapoet$asSupertypeWildcardTypeName(kotlin.reflect.KClass((kotlin.Any)))com.hendraanggrian.javapoet/kotlin.reflect.-k-class/as-supertype-wildcard-type-name.html
+$dokka.location:com.hendraanggrian.javapoet$asTypeName(java.lang.reflect.Type)com.hendraanggrian.javapoet/java.lang.reflect.-type/as-type-name.html
+$dokka.location:com.hendraanggrian.javapoet$asTypeName(javax.lang.model.type.TypeMirror)com.hendraanggrian.javapoet/javax.lang.model.type.-type-mirror/as-type-name.html
+$dokka.location:com.hendraanggrian.javapoet$asTypeName(kotlin.reflect.KClass((kotlin.Any)))com.hendraanggrian.javapoet/kotlin.reflect.-k-class/as-type-name.html
+$dokka.location:com.hendraanggrian.javapoet$asTypeVariableName(java.lang.reflect.TypeVariable((java.lang.reflect.GenericDeclaration)))com.hendraanggrian.javapoet/java.lang.reflect.-type-variable/as-type-variable-name.html
+$dokka.location:com.hendraanggrian.javapoet$asTypeVariableName(javax.lang.model.element.TypeParameterElement)com.hendraanggrian.javapoet/javax.lang.model.element.-type-parameter-element/as-type-variable-name.html
+$dokka.location:com.hendraanggrian.javapoet$asTypeVariableName(javax.lang.model.type.TypeVariable)com.hendraanggrian.javapoet/javax.lang.model.type.-type-variable/as-type-variable-name.html
+$dokka.location:com.hendraanggrian.javapoet$asWildcardTypeName(java.lang.reflect.WildcardType)com.hendraanggrian.javapoet/java.lang.reflect.-wildcard-type/as-wildcard-type-name.html
+$dokka.location:com.hendraanggrian.javapoet$asWildcardTypeName(javax.lang.model.type.WildcardType)com.hendraanggrian.javapoet/javax.lang.model.type.-wildcard-type/as-wildcard-type-name.html
 $dokka.location:com.hendraanggrian.javapoet$join(kotlin.collections.Iterable((com.squareup.javapoet.CodeBlock)), kotlin.String)com.hendraanggrian.javapoet/kotlin.collections.-iterable/join.html
+$dokka.location:com.hendraanggrian.javapoet$parameterizedBy(com.squareup.javapoet.ClassName, kotlin.Array((com.squareup.javapoet.TypeName)))com.hendraanggrian.javapoet/com.squareup.javapoet.-class-name/parameterized-by.html
+$dokka.location:com.hendraanggrian.javapoet$parameterizedBy(java.lang.Class((kotlin.Any)), kotlin.Array((java.lang.reflect.Type)))com.hendraanggrian.javapoet/java.lang.-class/parameterized-by.html
+$dokka.location:com.hendraanggrian.javapoet$parameterizedBy(kotlin.reflect.KClass((kotlin.Any)), kotlin.Array((kotlin.reflect.KClass((kotlin.Any)))))com.hendraanggrian.javapoet/kotlin.reflect.-k-class/parameterized-by.html
 $dokka.location:com.hendraanggrian.javapoet$toAnnotation(javax.lang.model.element.AnnotationMirror)com.hendraanggrian.javapoet/javax.lang.model.element.-annotation-mirror/to-annotation.html
 $dokka.location:com.hendraanggrian.javapoet$toAnnotation(kotlin.Annotation, kotlin.Boolean)com.hendraanggrian.javapoet/kotlin.-annotation/to-annotation.html
 $dokka.location:com.hendraanggrian.javapoet$toCode(kotlin.String, kotlin.Array((kotlin.Any)))com.hendraanggrian.javapoet/kotlin.-string/to-code.html
