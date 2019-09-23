@@ -11,8 +11,8 @@ import kotlin.reflect.KClass
 
 private interface ParameterAddable {
 
-    /** Add parameter to this container, returning the parameter added. */
-    fun add(spec: ParameterSpec): ParameterSpec
+    /** Add parameter to this container. */
+    fun add(spec: ParameterSpec)
 }
 
 /** A [ParameterContainer] is responsible for managing a set of parameter instances. */
@@ -20,7 +20,7 @@ abstract class ParameterContainer internal constructor() : ParameterAddable {
 
     /** Add parameter from [type] and [name], returning the parameter added. */
     fun add(type: TypeName, name: String, vararg modifiers: Modifier): ParameterSpec =
-        add(buildParameter(type, name, *modifiers))
+        buildParameter(type, name, *modifiers).also { add(it) }
 
     /** Add parameter from [type] and [name] with custom initialization [builderAction], returning the parameter added. */
     inline fun add(
@@ -28,11 +28,11 @@ abstract class ParameterContainer internal constructor() : ParameterAddable {
         name: String,
         vararg modifiers: Modifier,
         builderAction: ParameterSpecBuilder.() -> Unit
-    ): ParameterSpec = add(buildParameter(type, name, *modifiers, builderAction = builderAction))
+    ): ParameterSpec = buildParameter(type, name, *modifiers, builderAction = builderAction).also { add(it) }
 
     /** Add parameter from [type] and [name], returning the parameter added. */
     fun add(type: Type, name: String, vararg modifiers: Modifier): ParameterSpec =
-        add(buildParameter(type, name, *modifiers))
+        buildParameter(type, name, *modifiers).also { add(it) }
 
     /** Add parameter from [type] and [name] with custom initialization [builderAction], returning the parameter added. */
     inline fun add(
@@ -40,11 +40,11 @@ abstract class ParameterContainer internal constructor() : ParameterAddable {
         name: String,
         vararg modifiers: Modifier,
         builderAction: ParameterSpecBuilder.() -> Unit
-    ): ParameterSpec = add(buildParameter(type, name, *modifiers, builderAction = builderAction))
+    ): ParameterSpec = buildParameter(type, name, *modifiers, builderAction = builderAction).also { add(it) }
 
     /** Add parameter from [type] and [name], returning the parameter added. */
     fun add(type: KClass<*>, name: String, vararg modifiers: Modifier): ParameterSpec =
-        add(buildParameter(type, name, *modifiers))
+        buildParameter(type, name, *modifiers).also { add(it) }
 
     /** Add parameter from [type] and [name] with custom initialization [builderAction], returning the parameter added. */
     inline fun add(
@@ -52,18 +52,18 @@ abstract class ParameterContainer internal constructor() : ParameterAddable {
         name: String,
         vararg modifiers: Modifier,
         builderAction: ParameterSpecBuilder.() -> Unit
-    ): ParameterSpec = add(buildParameter(type, name, *modifiers, builderAction = builderAction))
+    ): ParameterSpec = buildParameter(type, name, *modifiers, builderAction = builderAction).also { add(it) }
 
     /** Add parameter from reified [T] and [name], returning the parameter added. */
     inline fun <reified T> add(name: String, vararg modifiers: Modifier): ParameterSpec =
-        add(buildParameter<T>(name, *modifiers))
+        buildParameter<T>(name, *modifiers).also { add(it) }
 
     /** Add parameter from reified [T] and [name] with custom initialization [builderAction], returning the parameter added. */
     inline fun <reified T> add(
         name: String,
         vararg modifiers: Modifier,
         builderAction: ParameterSpecBuilder.() -> Unit
-    ): ParameterSpec = add(buildParameter<T>(name, *modifiers, builderAction = builderAction))
+    ): ParameterSpec = buildParameter<T>(name, *modifiers, builderAction = builderAction).also { add(it) }
 
     /** Convenient method to add parameter with operator function. */
     operator fun plusAssign(spec: ParameterSpec) {
@@ -86,7 +86,7 @@ abstract class ParameterContainer internal constructor() : ParameterAddable {
     }
 
     /** Configure this container with DSL. */
-    inline operator fun invoke(configuration: ParameterContainerScope.() -> Unit) =
+    inline operator fun invoke(configuration: ParameterContainerScope.() -> Unit): Unit =
         ParameterContainerScope(this).configuration()
 }
 

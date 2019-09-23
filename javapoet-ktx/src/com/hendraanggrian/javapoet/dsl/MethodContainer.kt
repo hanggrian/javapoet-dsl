@@ -8,8 +8,8 @@ import com.squareup.javapoet.MethodSpec
 
 private interface MethodAddable {
 
-    /** Add method to this container, returning the method added. */
-    fun add(spec: MethodSpec): MethodSpec
+    /** Add method to this container. */
+    fun add(spec: MethodSpec)
 }
 
 /** A [MethodContainer] is responsible for managing a set of method instances. */
@@ -17,19 +17,19 @@ abstract class MethodContainer internal constructor() : MethodAddable {
 
     /** Add method from [name], returning the method added. */
     fun add(name: String): MethodSpec =
-        add(buildMethod(name))
+        buildMethod(name).also { add(it) }
 
     /** Add method from [name] with custom initialization [builderAction], returning the method added. */
     inline fun add(name: String, builderAction: MethodSpecBuilder.() -> Unit): MethodSpec =
-        add(buildMethod(name, builderAction))
+        buildMethod(name, builderAction).also { add(it) }
 
     /** Add constructor method, returning the method added. */
     fun addConstructor(): MethodSpec =
-        add(buildConstructorMethod())
+        buildConstructorMethod().also { add(it) }
 
     /** Add constructor method with custom initialization [builderAction], returning the method added. */
     inline fun addConstructor(builderAction: MethodSpecBuilder.() -> Unit): MethodSpec =
-        add(buildConstructorMethod(builderAction))
+        buildConstructorMethod(builderAction).also { add(it) }
 
     /** Convenient method to add method with operator function. */
     operator fun plusAssign(spec: MethodSpec) {
@@ -42,7 +42,7 @@ abstract class MethodContainer internal constructor() : MethodAddable {
     }
 
     /** Configure this container with DSL. */
-    inline operator fun invoke(configuration: MethodContainerScope.() -> Unit) =
+    inline operator fun invoke(configuration: MethodContainerScope.() -> Unit): Unit =
         MethodContainerScope(this).configuration()
 }
 

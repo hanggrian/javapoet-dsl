@@ -441,7 +441,7 @@ class ReadmeTest {
         assertEquals(
             "private final java.lang.String android = \"Lollipop v.\" + 5.0;\n",
             buildField<String>("android", Modifier.PRIVATE, Modifier.FINAL) {
-                initializer = "\"Lollipop v.\" + 5.0"
+                initializer("\"Lollipop v.\" + 5.0")
             }.toString()
         )
     }

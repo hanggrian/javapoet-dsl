@@ -11,8 +11,8 @@ import kotlin.reflect.KClass
 
 private interface FieldAddable {
 
-    /** Add field to this container, returning the field added. */
-    fun add(spec: FieldSpec): FieldSpec
+    /** Add field to this container. */
+    fun add(spec: FieldSpec)
 }
 
 /** A [FieldContainer] is responsible for managing a set of field instances. */
@@ -20,7 +20,7 @@ abstract class FieldContainer internal constructor() : FieldAddable {
 
     /** Add field from [type] and [name], returning the field added. */
     fun add(type: TypeName, name: String, vararg modifiers: Modifier): FieldSpec =
-        add(buildField(type, name, *modifiers))
+        buildField(type, name, *modifiers).also { add(it) }
 
     /** Add field from [type] and [name] with custom initialization [builderAction], returning the field added. */
     inline fun add(
@@ -28,11 +28,11 @@ abstract class FieldContainer internal constructor() : FieldAddable {
         name: String,
         vararg modifiers: Modifier,
         builderAction: FieldSpecBuilder.() -> Unit
-    ): FieldSpec = add(buildField(type, name, *modifiers, builderAction = builderAction))
+    ): FieldSpec = buildField(type, name, *modifiers, builderAction = builderAction).also { add(it) }
 
     /** Add field from [type] and [name], returning the field added. */
     fun add(type: Type, name: String, vararg modifiers: Modifier): FieldSpec =
-        add(buildField(type, name, *modifiers))
+        buildField(type, name, *modifiers).also { add(it) }
 
     /** Add field from [type] and [name] with custom initialization [builderAction], returning the field added. */
     inline fun add(
@@ -40,11 +40,11 @@ abstract class FieldContainer internal constructor() : FieldAddable {
         name: String,
         vararg modifiers: Modifier,
         builderAction: FieldSpecBuilder.() -> Unit
-    ): FieldSpec = add(buildField(type, name, *modifiers, builderAction = builderAction))
+    ): FieldSpec = buildField(type, name, *modifiers, builderAction = builderAction).also { add(it) }
 
     /** Add field from [type] and [name], returning the field added. */
     fun add(type: KClass<*>, name: String, vararg modifiers: Modifier): FieldSpec =
-        add(buildField(type, name, *modifiers))
+        buildField(type, name, *modifiers).also { add(it) }
 
     /** Add field from [type] and [name] with custom initialization [builderAction], returning the field added. */
     inline fun add(
@@ -52,18 +52,18 @@ abstract class FieldContainer internal constructor() : FieldAddable {
         name: String,
         vararg modifiers: Modifier,
         builderAction: FieldSpecBuilder.() -> Unit
-    ): FieldSpec = add(buildField(type, name, *modifiers, builderAction = builderAction))
+    ): FieldSpec = buildField(type, name, *modifiers, builderAction = builderAction).also { add(it) }
 
     /** Add field from reified [T] and [name], returning the field added. */
     inline fun <reified T> add(name: String, vararg modifiers: Modifier): FieldSpec =
-        add(buildField<T>(name, *modifiers))
+        buildField<T>(name, *modifiers).also { add(it) }
 
     /** Add field from reified [T] and [name] with custom initialization [builderAction], returning the field added. */
     inline fun <reified T> add(
         name: String,
         vararg modifiers: Modifier,
         builderAction: FieldSpecBuilder.() -> Unit
-    ): FieldSpec = add(buildField<T>(name, *modifiers, builderAction = builderAction))
+    ): FieldSpec = buildField<T>(name, *modifiers, builderAction = builderAction).also { add(it) }
 
     /** Convenient method to add field with operator function. */
     operator fun plusAssign(spec: FieldSpec) {
@@ -86,7 +86,7 @@ abstract class FieldContainer internal constructor() : FieldAddable {
     }
 
     /** Configure this container with DSL. */
-    inline operator fun invoke(configuration: FieldContainerScope.() -> Unit) =
+    inline operator fun invoke(configuration: FieldContainerScope.() -> Unit): Unit =
         FieldContainerScope(this).configuration()
 }
 

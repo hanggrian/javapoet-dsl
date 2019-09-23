@@ -78,14 +78,16 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
         override fun append(format: String, vararg args: Any): Unit =
             format.formatWith(args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
 
-        override fun append(code: CodeBlock): CodeBlock =
-            code.also { nativeBuilder.addJavadoc(it) }
+        override fun append(code: CodeBlock) {
+            nativeBuilder.addJavadoc(code)
+        }
     }
 
     /** Collection of annotations, may be configured with Kotlin DSL. */
     val annotations: AnnotationContainer = object : AnnotationContainer() {
-        override fun add(spec: AnnotationSpec): AnnotationSpec =
-            spec.also { nativeBuilder.addAnnotation(it) }
+        override fun add(spec: AnnotationSpec) {
+            nativeBuilder.addAnnotation(spec)
+        }
     }
 
     /** Add field modifiers. */
@@ -97,18 +99,16 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
     fun initializer(format: String, vararg args: Any): Unit =
         format.formatWith(args) { s, array -> nativeBuilder.initializer(s, *array) }
 
-    /** Initialize field value with simple string. */
-    inline var initializer: String
-        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
-        set(value) = initializer(value)
-
     /** Initialize field value with code. */
-    fun initializer(code: CodeBlock): CodeBlock =
-        code.also { nativeBuilder.initializer(it) }
+    var initializer: CodeBlock
+        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
+        set(value) {
+            nativeBuilder.initializer(value)
+        }
 
     /** Initialize field value with custom initialization [builderAction]. */
     inline fun initializer(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
-        initializer(buildCode(builderAction))
+        buildCode(builderAction).also { initializer = it }
 
     /** Returns native spec. */
     fun build(): FieldSpec =

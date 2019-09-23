@@ -10,30 +10,31 @@ private interface CodeAppendable {
     /** Add code block to this container. */
     fun append(format: String, vararg args: Any)
 
-    /** Add code block to this container, returning the code added. */
-    fun append(code: CodeBlock): CodeBlock
+    /** Add code block to this container. */
+    fun append(code: CodeBlock)
 
+    /** Add empty new line to this container. */
     fun appendln()
 
     /** Add code block with a new line to this container. */
     fun appendln(format: String, vararg args: Any)
 
-    /** Add code block with a new line to this container, returning the code added. */
-    fun appendln(code: CodeBlock): CodeBlock
+    /** Add code block with a new line to this container. */
+    fun appendln(code: CodeBlock)
 }
 
 abstract class CodeCollection internal constructor() : CodeAppendable {
 
     /** Add code block with custom initialization [builderAction], returning the block added. */
     inline fun append(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
-        append(buildCode(builderAction))
+        buildCode(builderAction).also { append(it) }
 
     override fun appendln() =
         appendln("")
 
     /** Add code block with custom initialization [builderAction] and a new line to this container, returning the block added. */
-    inline fun appendln(builderAction: CodeBlockBuilder.() -> Unit) =
-        appendln(buildCode(builderAction))
+    inline fun appendln(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
+        buildCode(builderAction).also { appendln(it) }
 
     /** Starts the control flow. */
     abstract fun beginFlow(flow: String, vararg args: Any)
@@ -53,23 +54,22 @@ abstract class JavadocContainer internal constructor() : CodeAppendable {
 
     /** Add code block with custom initialization [builderAction], returning the block added. */
     inline fun append(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
-        append(buildCode(builderAction))
+        buildCode(builderAction).also { append(it) }
 
     override fun appendln(): Unit =
         append("\n")
 
-    override fun appendln(format: String, vararg args: Any) =
+    override fun appendln(format: String, vararg args: Any): Unit =
         append("$format\n", *args)
 
-    override fun appendln(code: CodeBlock): CodeBlock {
-        val result = append(code)
+    override fun appendln(code: CodeBlock) {
+        append(code)
         appendln()
-        return result
     }
 
     /** Add code block with custom initialization [builderAction] and a new line to this container, returning the block added. */
-    inline fun appendln(builderAction: CodeBlockBuilder.() -> Unit) =
-        appendln(buildCode(builderAction))
+    inline fun appendln(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
+        buildCode(builderAction).also { appendln(it) }
 
     /** Convenient method to add code block with operator function. */
     operator fun plusAssign(value: String) {
@@ -82,7 +82,7 @@ abstract class JavadocContainer internal constructor() : CodeAppendable {
     }
 
     /** Configure this container with DSL. */
-    inline operator fun invoke(configuration: JavadocContainerScope.() -> Unit) =
+    inline operator fun invoke(configuration: JavadocContainerScope.() -> Unit): Unit =
         JavadocContainerScope(this).configuration()
 }
 
@@ -91,7 +91,7 @@ abstract class JavadocContainer internal constructor() : CodeAppendable {
 class JavadocContainerScope @PublishedApi internal constructor(private val container: JavadocContainer) :
     JavadocContainer(), CodeAppendable by container {
 
-    override fun appendln(code: CodeBlock): CodeBlock = container.appendln(code)
-    override fun appendln() = container.appendln()
-    override fun appendln(format: String, vararg args: Any) = container.appendln(format, *args)
+    override fun appendln(code: CodeBlock): Unit = container.appendln(code)
+    override fun appendln(): Unit = container.appendln()
+    override fun appendln(format: String, vararg args: Any): Unit = container.appendln(format, *args)
 }

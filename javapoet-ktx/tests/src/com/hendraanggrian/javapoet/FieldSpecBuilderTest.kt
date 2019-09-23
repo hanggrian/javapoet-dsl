@@ -29,7 +29,7 @@ class FieldSpecBuilderTest {
             }
             annotations.add<Deprecated>()
             addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-            initializer = "value"
+            initializer("value")
         })
     }
 
@@ -46,7 +46,7 @@ class FieldSpecBuilderTest {
                 add<Deprecated>()
             }
             addModifiers(Modifier.PUBLIC, Modifier.FINAL)
-            initializer = "value"
+            initializer("value")
         })
     }
 }

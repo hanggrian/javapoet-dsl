@@ -142,14 +142,16 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
         override fun append(format: String, vararg args: Any): Unit =
             format.formatWith(args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
 
-        override fun append(code: CodeBlock): CodeBlock =
-            code.also { nativeBuilder.addJavadoc(it) }
+        override fun append(code: CodeBlock) {
+            nativeBuilder.addJavadoc(code)
+        }
     }
 
     /** Collection of annotations, may be configured with Kotlin DSL. */
     val annotations: AnnotationContainer = object : AnnotationContainer() {
-        override fun add(spec: AnnotationSpec): AnnotationSpec =
-            spec.also { nativeBuilder.addAnnotation(it) }
+        override fun add(spec: AnnotationSpec) {
+            nativeBuilder.addAnnotation(spec)
+        }
     }
 
     /** Add field modifiers. */
@@ -217,8 +219,9 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
 
     /** Collection of fields, may be configured with Kotlin DSL. */
     val fields: FieldContainer = object : FieldContainer() {
-        override fun add(spec: FieldSpec): FieldSpec =
-            spec.also { nativeBuilder.addField(it) }
+        override fun add(spec: FieldSpec) {
+            nativeBuilder.addField(spec)
+        }
     }
 
     /** Add static block containing [code]. */
@@ -239,14 +242,16 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
 
     /** Collection of methods, may be configured with Kotlin DSL. */
     val methods: MethodContainer = object : MethodContainer() {
-        override fun add(spec: MethodSpec): MethodSpec =
-            spec.also { nativeBuilder.addMethod(it) }
+        override fun add(spec: MethodSpec) {
+            nativeBuilder.addMethod(spec)
+        }
     }
 
     /** Collection of types, may be configured with Kotlin DSL. */
     val types: TypeContainer = object : TypeContainer() {
-        override fun add(spec: TypeSpec): TypeSpec =
-            spec.also { nativeBuilder.addType(it) }
+        override fun add(spec: TypeSpec) {
+            nativeBuilder.addType(spec)
+        }
     }
 
     /** Add originating element. */

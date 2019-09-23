@@ -23,9 +23,9 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
     private var isSkipJavaLangImports: Boolean? = null
     private var indentString: String? = null
 
-    override fun add(spec: TypeSpec): TypeSpec = spec.also {
+    override fun add(spec: TypeSpec) {
         check(typeSpec == null) { "Java file may only have 1 type" }
-        typeSpec = it
+        typeSpec = spec
     }
 
     /** Add comment like [String.format]. */

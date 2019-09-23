@@ -45,14 +45,16 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
         override fun append(format: String, vararg args: Any): Unit =
             format.formatWith(args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
 
-        override fun append(code: CodeBlock): CodeBlock =
-            code.also { nativeBuilder.addJavadoc(it) }
+        override fun append(code: CodeBlock) {
+            nativeBuilder.addJavadoc(code)
+        }
     }
 
     /** Collection of annotations, may be configured with Kotlin DSL. */
     val annotations: AnnotationContainer = object : AnnotationContainer() {
-        override fun add(spec: AnnotationSpec): AnnotationSpec =
-            spec.also { nativeBuilder.addAnnotation(it) }
+        override fun add(spec: AnnotationSpec) {
+            nativeBuilder.addAnnotation(spec)
+        }
     }
 
     /** Add field modifiers. */
@@ -93,8 +95,9 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
 
     /** Collection of parameters, may be configured with Kotlin DSL. */
     val parameters: ParameterContainer = object : ParameterContainer() {
-        override fun add(spec: ParameterSpec): ParameterSpec =
-            spec.also { nativeBuilder.addParameter(it) }
+        override fun add(spec: ParameterSpec) {
+            nativeBuilder.addParameter(spec)
+        }
     }
 
     /** Add vararg keyword to array type parameter. */
@@ -126,8 +129,9 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
     override fun append(format: String, vararg args: Any): Unit =
         format.formatWith(args) { s, array -> nativeBuilder.addCode(s, *array) }
 
-    override fun append(code: CodeBlock): CodeBlock =
-        code.also { nativeBuilder.addCode(it) }
+    override fun append(code: CodeBlock) {
+        nativeBuilder.addCode(code)
+    }
 
     override fun beginFlow(flow: String, vararg args: Any): Unit =
         flow.formatWith(args) { s, array -> nativeBuilder.beginControlFlow(s, *array) }
@@ -145,8 +149,9 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
     override fun appendln(format: String, vararg args: Any): Unit =
         format.formatWith(args) { s, array -> nativeBuilder.addStatement(s, *array) }
 
-    override fun appendln(code: CodeBlock): CodeBlock =
-        code.also { nativeBuilder.addStatement(it) }
+    override fun appendln(code: CodeBlock) {
+        nativeBuilder.addStatement(code)
+    }
 
     /** Add named code. */
     fun addNamedCode(format: String, args: Map<String, *>): Unit =
@@ -160,18 +165,16 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
     fun defaultValue(format: String, vararg args: Any): Unit =
         format.formatWith(args) { s, array -> nativeBuilder.defaultValue(s, *array) }
 
-    /** Set default value to simple string. */
-    inline var defaultValue: String
-        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
-        set(value) = defaultValue(value)
-
     /** Set default value to code. */
-    fun defaultValue(code: CodeBlock): CodeBlock =
-        code.also { nativeBuilder.defaultValue(it) }
+    var defaultValue: CodeBlock
+        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
+        set(value) {
+            nativeBuilder.defaultValue(value)
+        }
 
     /** Set default value to code with custom initialization [builderAction]. */
     inline fun defaultValue(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
-        defaultValue(buildCode(builderAction))
+        buildCode(builderAction).also { defaultValue = it }
 
     /** Returns native spec. */
     fun build(): MethodSpec =

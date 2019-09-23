@@ -95,7 +95,7 @@ addClass("Car") {
     }
     fields {
         "wheels"(int) {
-            initializer = "4"
+            initializer("4")
         }
     }
     methods {
@@ -121,7 +121,7 @@ addClass("Car") {
         members.add("value", "deprecation")
     }
     fields.add("wheels", int) {
-        initializer = "4"
+        initializer("4")
     }
     methods.add("getWheels") {
         returns = int
