@@ -1,7 +1,6 @@
 package com.hendraanggrian.javapoet
 
 import com.hendraanggrian.javapoet.dsl.AnnotationSpecContainer
-import com.hendraanggrian.javapoet.dsl.AnnotationSpecContainerScope
 import com.hendraanggrian.javapoet.dsl.CodeBlockCollection
 import com.hendraanggrian.javapoet.dsl.JavadocContainer
 import com.hendraanggrian.javapoet.dsl.ParameterSpecContainer
@@ -58,10 +57,6 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
             nativeBuilder.addAnnotation(spec)
         }
     }
-
-    /** Configure this container with DSL. */
-    inline operator fun invoke(configuration: AnnotationSpecContainerScope.() -> Unit): Unit =
-        AnnotationSpecContainerScope(annotations).configuration()
 
     /** Add field modifiers. */
     fun addModifiers(vararg modifiers: Modifier) {
