@@ -1,6 +1,6 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.dsl.AnnotationContainer
+import com.hendraanggrian.javapoet.dsl.AnnotationSpecContainer
 import com.hendraanggrian.javapoet.dsl.JavadocContainer
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.CodeBlock
@@ -84,7 +84,7 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
     }
 
     /** Collection of annotations, may be configured with Kotlin DSL. */
-    val annotations: AnnotationContainer = object : AnnotationContainer() {
+    val annotations: AnnotationSpecContainer = object : AnnotationSpecContainer() {
         override fun add(spec: AnnotationSpec) {
             nativeBuilder.addAnnotation(spec)
         }
@@ -107,7 +107,7 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
         }
 
     /** Initialize field value with custom initialization [builderAction]. */
-    inline fun initializer(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
+    inline fun initializer(builderAction: CodeBlockBlockBuilder.() -> Unit): CodeBlock =
         buildCode(builderAction).also { initializer = it }
 
     /** Returns native spec. */

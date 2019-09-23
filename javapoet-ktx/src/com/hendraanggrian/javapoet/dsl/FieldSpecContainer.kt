@@ -9,14 +9,14 @@ import java.lang.reflect.Type
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
-private interface FieldAddable {
+private interface FieldSpecAddable {
 
     /** Add field to this container. */
     fun add(spec: FieldSpec)
 }
 
-/** A [FieldContainer] is responsible for managing a set of field instances. */
-abstract class FieldContainer internal constructor() : FieldAddable {
+/** A [FieldSpecContainer] is responsible for managing a set of field instances. */
+abstract class FieldSpecContainer internal constructor() : FieldSpecAddable {
 
     /** Add field from [type] and [name], returning the field added. */
     fun add(type: TypeName, name: String, vararg modifiers: Modifier): FieldSpec =
@@ -86,14 +86,14 @@ abstract class FieldContainer internal constructor() : FieldAddable {
     }
 
     /** Configure this container with DSL. */
-    inline operator fun invoke(configuration: FieldContainerScope.() -> Unit): Unit =
-        FieldContainerScope(this).configuration()
+    inline operator fun invoke(configuration: FieldSpecContainerScope.() -> Unit): Unit =
+        FieldSpecContainerScope(this).configuration()
 }
 
 /** Receiver for the `fields` block providing an extended set of operators for the configuration. */
 @JavapoetDslMarker
-class FieldContainerScope @PublishedApi internal constructor(container: FieldContainer) :
-    FieldContainer(), FieldAddable by container {
+class FieldSpecContainerScope @PublishedApi internal constructor(container: FieldSpecContainer) :
+    FieldSpecContainer(), FieldSpecAddable by container {
 
     /** Convenient method to add field with receiver type. */
     inline operator fun String.invoke(

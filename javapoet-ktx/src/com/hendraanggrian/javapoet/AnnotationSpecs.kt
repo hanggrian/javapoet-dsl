@@ -35,7 +35,7 @@ fun buildAnnotation(type: KClass<*>): AnnotationSpec =
 
 /** Builds a new [AnnotationSpec] from [T]. */
 inline fun <reified T> buildAnnotation(): AnnotationSpec =
-    buildAnnotation(T::class.java)
+    buildAnnotation(T::class)
 
 /**
  * Builds a new [AnnotationSpec] from [type],
@@ -71,11 +71,11 @@ class AnnotationSpecBuilder @PublishedApi internal constructor(private val nativ
         code.also { nativeBuilder.addMember(name, it) }
 
     /** Add code as a member of this annotation with custom initialization [builderAction]. */
-    inline fun addMember(name: String, builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
+    inline fun addMember(name: String, builderAction: CodeBlockBlockBuilder.() -> Unit): CodeBlock =
         addMember(name, buildCode(builderAction))
 
     /** Convenient method to add member with operator function. */
-    operator fun String.invoke(builderAction: CodeBlockBuilder.() -> Unit) =
+    operator fun String.invoke(builderAction: CodeBlockBlockBuilder.() -> Unit) =
         addMember(this, builderAction)
 
     /** Returns native spec. */

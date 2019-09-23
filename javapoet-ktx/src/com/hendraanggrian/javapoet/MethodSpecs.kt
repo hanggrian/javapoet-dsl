@@ -1,15 +1,16 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.dsl.AnnotationContainer
-import com.hendraanggrian.javapoet.dsl.CodeCollection
+import com.hendraanggrian.javapoet.dsl.AnnotationSpecContainer
+import com.hendraanggrian.javapoet.dsl.CodeBlockCollection
 import com.hendraanggrian.javapoet.dsl.JavadocContainer
-import com.hendraanggrian.javapoet.dsl.ParameterContainer
+import com.hendraanggrian.javapoet.dsl.ParameterSpecContainer
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.ParameterSpec
 import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeVariableName
+import java.lang.reflect.Type
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
@@ -38,7 +39,7 @@ inline fun buildConstructorMethod(builderAction: MethodSpecBuilder.() -> Unit): 
 /** Wrapper of [MethodSpec.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetDslMarker
 class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: MethodSpec.Builder) :
-    CodeCollection() {
+    CodeBlockCollection() {
 
     /** Collection of javadoc, may be configured with Kotlin DSL. */
     val javadoc: JavadocContainer = object : JavadocContainer() {
@@ -51,7 +52,7 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
     }
 
     /** Collection of annotations, may be configured with Kotlin DSL. */
-    val annotations: AnnotationContainer = object : AnnotationContainer() {
+    val annotations: AnnotationSpecContainer = object : AnnotationSpecContainer() {
         override fun add(spec: AnnotationSpec) {
             nativeBuilder.addAnnotation(spec)
         }
@@ -85,16 +86,20 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
         }
 
     /** Add return line to [type]. */
-    fun returns(type: KClass<*>) {
-        nativeBuilder.returns(type.java)
+    fun returns(type: Type) {
+        nativeBuilder.returns(type)
     }
+
+    /** Add return line to [type]. */
+    fun returns(type: KClass<*>) =
+        returns(type.java)
 
     /** Add return line to [T]. */
     inline fun <reified T> returns() =
         returns(T::class)
 
     /** Collection of parameters, may be configured with Kotlin DSL. */
-    val parameters: ParameterContainer = object : ParameterContainer() {
+    val parameters: ParameterSpecContainer = object : ParameterSpecContainer() {
         override fun add(spec: ParameterSpec) {
             nativeBuilder.addParameter(spec)
         }
@@ -173,7 +178,7 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
         }
 
     /** Set default value to code with custom initialization [builderAction]. */
-    inline fun defaultValue(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
+    inline fun defaultValue(builderAction: CodeBlockBlockBuilder.() -> Unit): CodeBlock =
         buildCode(builderAction).also { defaultValue = it }
 
     /** Returns native spec. */

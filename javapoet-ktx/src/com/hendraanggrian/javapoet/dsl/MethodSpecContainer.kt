@@ -6,14 +6,14 @@ import com.hendraanggrian.javapoet.buildConstructorMethod
 import com.hendraanggrian.javapoet.buildMethod
 import com.squareup.javapoet.MethodSpec
 
-private interface MethodAddable {
+private interface MethodSpecAddable {
 
     /** Add method to this container. */
     fun add(spec: MethodSpec)
 }
 
-/** A [MethodContainer] is responsible for managing a set of method instances. */
-abstract class MethodContainer internal constructor() : MethodAddable {
+/** A [MethodSpecContainer] is responsible for managing a set of method instances. */
+abstract class MethodSpecContainer internal constructor() : MethodSpecAddable {
 
     /** Add method from [name], returning the method added. */
     fun add(name: String): MethodSpec =
@@ -42,14 +42,14 @@ abstract class MethodContainer internal constructor() : MethodAddable {
     }
 
     /** Configure this container with DSL. */
-    inline operator fun invoke(configuration: MethodContainerScope.() -> Unit): Unit =
-        MethodContainerScope(this).configuration()
+    inline operator fun invoke(configuration: MethodSpecContainerScope.() -> Unit): Unit =
+        MethodSpecContainerScope(this).configuration()
 }
 
 /** Receiver for the `methods` block providing an extended set of operators for the configuration. */
 @JavapoetDslMarker
-class MethodContainerScope @PublishedApi internal constructor(container: MethodContainer) :
-    MethodContainer(), MethodAddable by container {
+class MethodSpecContainerScope @PublishedApi internal constructor(container: MethodSpecContainer) :
+    MethodSpecContainer(), MethodSpecAddable by container {
 
     /** Convenient method to add method with receiver type. */
     inline operator fun String.invoke(builderAction: MethodSpecBuilder.() -> Unit): MethodSpec =

@@ -11,13 +11,13 @@ import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.TypeSpec
 
-private interface TypeAddable {
+private interface TypeSpecAddable {
 
     /** Add type to this container. */
     fun add(spec: TypeSpec)
 }
 
-abstract class TypeCollection internal constructor() : TypeAddable {
+abstract class TypeSpecCollection internal constructor() : TypeSpecAddable {
 
     /** Add class type from [type], returning the type added. */
     fun addClass(type: String): TypeSpec =
@@ -100,15 +100,15 @@ abstract class TypeCollection internal constructor() : TypeAddable {
         buildAnnotationType(type, builderAction).also { add(it) }
 }
 
-/** A [TypeContainer] is responsible for managing a set of type instances. */
-abstract class TypeContainer internal constructor() : TypeCollection() {
+/** A [TypeSpecContainer] is responsible for managing a set of type instances. */
+abstract class TypeSpecContainer internal constructor() : TypeSpecCollection() {
 
     /** Configure this container with DSL. */
-    inline operator fun invoke(configuration: TypeContainerScope.() -> Unit): Unit =
-        TypeContainerScope(this).configuration()
+    inline operator fun invoke(configuration: TypeSpecContainerScope.() -> Unit): Unit =
+        TypeSpecContainerScope(this).configuration()
 }
 
 /** Receiver for the `types` block providing an extended set of operators for the configuration. */
 @JavapoetDslMarker
-class TypeContainerScope @PublishedApi internal constructor(container: TypeContainer) :
-    TypeContainer(), TypeAddable by container
+class TypeSpecContainerScope @PublishedApi internal constructor(container: TypeSpecContainer) :
+    TypeSpecContainer(), TypeSpecAddable by container

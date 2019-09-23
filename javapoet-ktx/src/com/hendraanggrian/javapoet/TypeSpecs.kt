@@ -1,10 +1,10 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.dsl.AnnotationContainer
-import com.hendraanggrian.javapoet.dsl.FieldContainer
+import com.hendraanggrian.javapoet.dsl.AnnotationSpecContainer
+import com.hendraanggrian.javapoet.dsl.FieldSpecContainer
 import com.hendraanggrian.javapoet.dsl.JavadocContainer
-import com.hendraanggrian.javapoet.dsl.MethodContainer
-import com.hendraanggrian.javapoet.dsl.TypeContainer
+import com.hendraanggrian.javapoet.dsl.MethodSpecContainer
+import com.hendraanggrian.javapoet.dsl.TypeSpecContainer
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
@@ -148,7 +148,7 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
     }
 
     /** Collection of annotations, may be configured with Kotlin DSL. */
-    val annotations: AnnotationContainer = object : AnnotationContainer() {
+    val annotations: AnnotationSpecContainer = object : AnnotationSpecContainer() {
         override fun add(spec: AnnotationSpec) {
             nativeBuilder.addAnnotation(spec)
         }
@@ -218,7 +218,7 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
     }
 
     /** Collection of fields, may be configured with Kotlin DSL. */
-    val fields: FieldContainer = object : FieldContainer() {
+    val fields: FieldSpecContainer = object : FieldSpecContainer() {
         override fun add(spec: FieldSpec) {
             nativeBuilder.addField(spec)
         }
@@ -229,7 +229,7 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
         code.also { nativeBuilder.addStaticBlock(it) }
 
     /** Add static block containing code with custom initialization [builderAction]. */
-    inline fun addStaticBlock(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
+    inline fun addStaticBlock(builderAction: CodeBlockBlockBuilder.() -> Unit): CodeBlock =
         addStaticBlock(buildCode(builderAction))
 
     /** Add initializer block containing [code]. */
@@ -237,18 +237,18 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
         code.also { nativeBuilder.addInitializerBlock(it) }
 
     /** Add initializer block containing code with custom initialization [builderAction]. */
-    inline fun addInitializerBlock(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
+    inline fun addInitializerBlock(builderAction: CodeBlockBlockBuilder.() -> Unit): CodeBlock =
         addInitializerBlock(buildCode(builderAction))
 
     /** Collection of methods, may be configured with Kotlin DSL. */
-    val methods: MethodContainer = object : MethodContainer() {
+    val methods: MethodSpecContainer = object : MethodSpecContainer() {
         override fun add(spec: MethodSpec) {
             nativeBuilder.addMethod(spec)
         }
     }
 
     /** Collection of types, may be configured with Kotlin DSL. */
-    val types: TypeContainer = object : TypeContainer() {
+    val types: TypeSpecContainer = object : TypeSpecContainer() {
         override fun add(spec: TypeSpec) {
             nativeBuilder.addType(spec)
         }
