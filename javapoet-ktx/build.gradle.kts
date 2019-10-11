@@ -1,3 +1,5 @@
+import javax.xml.ws.Endpoint.publish
+
 plugins {
     kotlin("jvm")
     dokka()
@@ -16,10 +18,10 @@ val ktlint by configurations.registering
 
 dependencies {
     compile(kotlin("stdlib", VERSION_KOTLIN))
-    compile(javapoet())
+    compile(squareup("javapoet", VERSION_JAVAPOET))
 
     testImplementation(kotlin("test-junit", VERSION_KOTLIN))
-    testImplementation(truth())
+    testImplementation(google("truth", "truth", VERSION_TRUTH))
 
     ktlint {
         invoke(ktlint())
