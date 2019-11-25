@@ -7,25 +7,19 @@ import javax.lang.model.type.ArrayType
 import kotlin.reflect.KClass
 
 /** Returns an [ArrayTypeName] equivalent to this [TypeName]. */
-fun TypeName.asArrayTypeName(): ArrayTypeName =
-    ArrayTypeName.of(this)
+fun TypeName.asArrayTypeName(): ArrayTypeName = ArrayTypeName.of(this)
 
 /** Returns an [ArrayTypeName] equivalent to this [Class]. */
-fun Class<*>.asArrayTypeName(): ArrayTypeName =
-    ArrayTypeName.of(this)
+fun Class<*>.asArrayTypeName(): ArrayTypeName = ArrayTypeName.of(this)
 
 /** Returns an [ArrayTypeName] equivalent to this [KClass]. */
-fun KClass<*>.asArrayTypeName(): ArrayTypeName =
-    java.asArrayTypeName()
+fun KClass<*>.asArrayTypeName(): ArrayTypeName = java.asArrayTypeName()
 
 /** Returns an [ArrayTypeName] equivalent to this [T]. */
-inline fun <reified T> asArrayTypeName(): ArrayTypeName =
-    T::class.asArrayTypeName()
+inline fun <reified T> asArrayTypeName(): ArrayTypeName = T::class.asArrayTypeName()
 
 /** Returns an [ArrayTypeName] equivalent to this [ArrayType]. */
-fun ArrayType.asArrayTypeName(): ArrayTypeName =
-    ArrayTypeName.get(this)
+fun ArrayType.asArrayTypeName(): ArrayTypeName = ArrayTypeName.get(this)
 
 /** Returns an [ArrayTypeName] equivalent to this [GenericArrayType]. */
-fun GenericArrayType.asArrayTypeName(): ArrayTypeName =
-    ArrayTypeName.get(this)
+fun GenericArrayType.asArrayTypeName(): ArrayTypeName = ArrayTypeName.get(this)

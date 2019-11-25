@@ -9,17 +9,13 @@ fun classNameOf(packageName: String, simpleName: String, vararg simpleNames: Str
     ClassName.get(packageName, simpleName, *simpleNames)
 
 /** Returns a [ClassName] equivalent to this [Class].  */
-fun Class<*>.asClassName(): ClassName =
-    ClassName.get(this)
+fun Class<*>.asClassName(): ClassName = ClassName.get(this)
 
 /** Returns a [ClassName] equivalent to this [KClass].  */
-fun KClass<*>.asClassName(): ClassName =
-    java.asClassName()
+fun KClass<*>.asClassName(): ClassName = java.asClassName()
 
 /** Returns a [ClassName] equivalent to this [T].  */
-inline fun <reified T> asClassName(): ClassName =
-    T::class.asClassName()
+inline fun <reified T> asClassName(): ClassName = T::class.asClassName()
 
 /** Returns a [ClassName] equivalent to this [TypeElement].  */
-fun TypeElement.asClassName(): ClassName =
-    ClassName.get(this)
+fun TypeElement.asClassName(): ClassName = ClassName.get(this)

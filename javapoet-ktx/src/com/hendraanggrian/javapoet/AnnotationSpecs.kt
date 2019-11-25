@@ -67,18 +67,15 @@ class AnnotationSpecBuilder @PublishedApi internal constructor(private val nativ
         format.formatWith(args) { s, array -> nativeBuilder.addMember(name, s, *array) }
 
     /** Add code as a member of this annotation. */
-    fun addMember(name: String, code: CodeBlock): CodeBlock =
-        code.also { nativeBuilder.addMember(name, it) }
+    fun addMember(name: String, code: CodeBlock): CodeBlock = code.also { nativeBuilder.addMember(name, it) }
 
     /** Add code as a member of this annotation with custom initialization [builderAction]. */
     inline fun addMember(name: String, builderAction: CodeBlockBlockBuilder.() -> Unit): CodeBlock =
         addMember(name, buildCode(builderAction))
 
     /** Convenient method to add member with operator function. */
-    operator fun String.invoke(builderAction: CodeBlockBlockBuilder.() -> Unit) =
-        addMember(this, builderAction)
+    operator fun String.invoke(builderAction: CodeBlockBlockBuilder.() -> Unit) = addMember(this, builderAction)
 
     /** Returns native spec. */
-    fun build(): AnnotationSpec =
-        nativeBuilder.build()
+    fun build(): AnnotationSpec = nativeBuilder.build()
 }

@@ -17,17 +17,13 @@ val DOUBLE: TypeName = TypeName.DOUBLE
 val OBJECT: TypeName = TypeName.OBJECT
 
 /** Returns a [TypeName] equivalent to this [TypeMirror]. */
-fun TypeMirror.asTypeName(): TypeName =
-    TypeName.get(this)
+fun TypeMirror.asTypeName(): TypeName = TypeName.get(this)
 
 /** Returns a [TypeName] equivalent to this [Type]. */
-fun Type.asTypeName(): TypeName =
-    TypeName.get(this)
+fun Type.asTypeName(): TypeName = TypeName.get(this)
 
 /** Returns a [TypeName] equivalent to this [KClass].  */
-fun KClass<*>.asTypeName(): TypeName =
-    java.asTypeName()
+fun KClass<*>.asTypeName(): TypeName = java.asTypeName()
 
 /** Returns a [TypeName] equivalent to this [T].  */
-inline fun <reified T> asTypeName(): TypeName =
-    T::class.asTypeName()
+inline fun <reified T> asTypeName(): TypeName = T::class.asTypeName()

@@ -19,8 +19,7 @@ import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
 /** Builds a new class [TypeSpec] from [type]. */
-fun buildClassType(type: String): TypeSpec =
-    TypeSpec.classBuilder(type).build()
+fun buildClassType(type: String): TypeSpec = TypeSpec.classBuilder(type).build()
 
 /**
  * Builds a new class [TypeSpec] from [type],
@@ -30,8 +29,7 @@ inline fun buildClassType(type: String, builderAction: TypeSpecBuilder.() -> Uni
     TypeSpecBuilder(TypeSpec.classBuilder(type)).apply(builderAction).build()
 
 /** Builds a new class [TypeSpec] from [type]. */
-fun buildClassType(type: ClassName): TypeSpec =
-    TypeSpec.classBuilder(type).build()
+fun buildClassType(type: ClassName): TypeSpec = TypeSpec.classBuilder(type).build()
 
 /**
  * Builds a new class [TypeSpec] from [type],
@@ -41,8 +39,7 @@ inline fun buildClassType(type: ClassName, builderAction: TypeSpecBuilder.() -> 
     TypeSpecBuilder(TypeSpec.classBuilder(type)).apply(builderAction).build()
 
 /** Builds a new interface [TypeSpec] from [type]. */
-fun buildInterfaceType(type: String): TypeSpec =
-    TypeSpec.interfaceBuilder(type).build()
+fun buildInterfaceType(type: String): TypeSpec = TypeSpec.interfaceBuilder(type).build()
 
 /**
  * Builds a new interface [TypeSpec] from [type],
@@ -52,8 +49,7 @@ inline fun buildInterfaceType(type: String, builderAction: TypeSpecBuilder.() ->
     TypeSpecBuilder(TypeSpec.interfaceBuilder(type)).apply(builderAction).build()
 
 /** Builds a new interface [TypeSpec] from [type]. */
-fun buildInterfaceType(type: ClassName): TypeSpec =
-    TypeSpec.interfaceBuilder(type).build()
+fun buildInterfaceType(type: ClassName): TypeSpec = TypeSpec.interfaceBuilder(type).build()
 
 /**
  * Builds a new interface [TypeSpec] from [type],
@@ -63,8 +59,7 @@ inline fun buildInterfaceType(type: ClassName, builderAction: TypeSpecBuilder.()
     TypeSpecBuilder(TypeSpec.interfaceBuilder(type)).apply(builderAction).build()
 
 /** Builds a new enum [TypeSpec] from [type]. */
-fun buildEnumType(type: String): TypeSpec =
-    TypeSpec.enumBuilder(type).build()
+fun buildEnumType(type: String): TypeSpec = TypeSpec.enumBuilder(type).build()
 
 /**
  * Builds a new enum [TypeSpec] from [type],
@@ -74,8 +69,7 @@ inline fun buildEnumType(type: String, builderAction: TypeSpecBuilder.() -> Unit
     TypeSpecBuilder(TypeSpec.enumBuilder(type)).apply(builderAction).build()
 
 /** Builds a new enum [TypeSpec] from [type]. */
-fun buildEnumType(type: ClassName): TypeSpec =
-    TypeSpec.enumBuilder(type).build()
+fun buildEnumType(type: ClassName): TypeSpec = TypeSpec.enumBuilder(type).build()
 
 /**
  * Builds a new enum [TypeSpec] from [type],
@@ -91,18 +85,15 @@ fun buildAnonymousType(format: String, vararg args: Any): TypeSpec =
 /**
  * Builds a new anonymous [TypeSpec] from [format] using formatted [args],
  * by populating newly created [TypeSpecBuilder] using provided [builderAction] and then building it.
+ * Not inlining this function since [formatWith] is not inlined.
  */
-inline fun buildAnonymousType(
-    format: String,
-    vararg args: Any,
-    builderAction: TypeSpecBuilder.() -> Unit
-): TypeSpec = format.formatWith(args) { s, array ->
-    TypeSpecBuilder(TypeSpec.anonymousClassBuilder(s, *array)).apply(builderAction).build()
-}
+fun buildAnonymousType(format: String, vararg args: Any, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
+    format.formatWith(args) { s, array ->
+        TypeSpecBuilder(TypeSpec.anonymousClassBuilder(s, *array)).apply(builderAction).build()
+    }
 
 /** Builds a new anonymous [TypeSpec] from [code]. */
-fun buildAnonymousType(code: CodeBlock): TypeSpec =
-    TypeSpec.anonymousClassBuilder(code).build()
+fun buildAnonymousType(code: CodeBlock): TypeSpec = TypeSpec.anonymousClassBuilder(code).build()
 
 /**
  * Builds a new anonymous [TypeSpec] from [code],
@@ -112,8 +103,7 @@ inline fun buildAnonymousType(code: CodeBlock, builderAction: TypeSpecBuilder.()
     TypeSpecBuilder(TypeSpec.anonymousClassBuilder(code)).apply(builderAction).build()
 
 /** Builds a new annotation [TypeSpec] from [type]. */
-fun buildAnnotationType(type: String): TypeSpec =
-    TypeSpec.annotationBuilder(type).build()
+fun buildAnnotationType(type: String): TypeSpec = TypeSpec.annotationBuilder(type).build()
 
 /**
  * Builds a new annotation [TypeSpec] from [type],
@@ -123,8 +113,7 @@ inline fun buildAnnotationType(type: String, builderAction: TypeSpecBuilder.() -
     TypeSpecBuilder(TypeSpec.annotationBuilder(type)).apply(builderAction).build()
 
 /** Builds a new annotation [TypeSpec] from [type]. */
-fun buildAnnotationType(type: ClassName): TypeSpec =
-    TypeSpec.annotationBuilder(type).build()
+fun buildAnnotationType(type: ClassName): TypeSpec = TypeSpec.annotationBuilder(type).build()
 
 /**
  * Builds a new annotation [TypeSpec] from [type],
@@ -182,12 +171,10 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
     }
 
     /** Set superclass to [type]. */
-    fun superClass(type: KClass<*>) =
-        superClass(type.java)
+    fun superClass(type: KClass<*>) = superClass(type.java)
 
     /** Set superclass to [T]. */
-    inline fun <reified T> superClass() =
-        superClass(T::class)
+    inline fun <reified T> superClass() = superClass(T::class)
 
     /** Add superinterface to [type]. */
     fun addSuperInterface(type: TypeName) {
@@ -200,12 +187,10 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
     }
 
     /** Add superinterface to [type]. */
-    fun addSuperInterface(type: KClass<*>) =
-        addSuperInterface(type.java)
+    fun addSuperInterface(type: KClass<*>) = addSuperInterface(type.java)
 
     /** Add superinterface to [T]. */
-    inline fun <reified T> addSuperInterface() =
-        addSuperInterface(T::class)
+    inline fun <reified T> addSuperInterface() = addSuperInterface(T::class)
 
     /** Add enum constant named [name]. */
     fun addEnumConstant(name: String) {
@@ -225,16 +210,14 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
     }
 
     /** Add static block containing [code]. */
-    fun addStaticBlock(code: CodeBlock): CodeBlock =
-        code.also { nativeBuilder.addStaticBlock(it) }
+    fun addStaticBlock(code: CodeBlock): CodeBlock = code.also { nativeBuilder.addStaticBlock(it) }
 
     /** Add static block containing code with custom initialization [builderAction]. */
     inline fun addStaticBlock(builderAction: CodeBlockBlockBuilder.() -> Unit): CodeBlock =
         addStaticBlock(buildCode(builderAction))
 
     /** Add initializer block containing [code]. */
-    fun addInitializerBlock(code: CodeBlock): CodeBlock =
-        code.also { nativeBuilder.addInitializerBlock(it) }
+    fun addInitializerBlock(code: CodeBlock): CodeBlock = code.also { nativeBuilder.addInitializerBlock(it) }
 
     /** Add initializer block containing code with custom initialization [builderAction]. */
     inline fun addInitializerBlock(builderAction: CodeBlockBlockBuilder.() -> Unit): CodeBlock =
@@ -260,6 +243,5 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
     }
 
     /** Returns native spec. */
-    fun build(): TypeSpec =
-        nativeBuilder.build()
+    fun build(): TypeSpec = nativeBuilder.build()
 }

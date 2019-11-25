@@ -111,6 +111,5 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
         buildCode(builderAction).also { initializer = it }
 
     /** Returns native spec. */
-    fun build(): FieldSpec =
-        nativeBuilder.build()
+    fun build(): FieldSpec = nativeBuilder.build()
 }

@@ -15,8 +15,7 @@ import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
 /** Builds a new [MethodSpec] from [name]. */
-fun buildMethod(name: String): MethodSpec =
-    MethodSpecBuilder(MethodSpec.methodBuilder(name)).build()
+fun buildMethod(name: String): MethodSpec = MethodSpecBuilder(MethodSpec.methodBuilder(name)).build()
 
 /**
  * Builds a new [MethodSpec] from [name],
@@ -26,8 +25,7 @@ inline fun buildMethod(name: String, builderAction: MethodSpecBuilder.() -> Unit
     MethodSpecBuilder(MethodSpec.methodBuilder(name)).apply(builderAction).build()
 
 /** Builds a new constructor [MethodSpec]. */
-fun buildConstructorMethod(): MethodSpec =
-    MethodSpecBuilder(MethodSpec.constructorBuilder()).build()
+fun buildConstructorMethod(): MethodSpec = MethodSpecBuilder(MethodSpec.constructorBuilder()).build()
 
 /**
  * Builds a new constructor [MethodSpec],
@@ -182,6 +180,5 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
         buildCode(builderAction).also { defaultValue = it }
 
     /** Returns native spec. */
-    fun build(): MethodSpec =
-        nativeBuilder.build()
+    fun build(): MethodSpec = nativeBuilder.build()
 }

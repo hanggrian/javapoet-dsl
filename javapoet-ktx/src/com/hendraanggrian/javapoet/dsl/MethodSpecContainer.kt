@@ -16,16 +16,14 @@ private interface MethodSpecAddable {
 abstract class MethodSpecContainer internal constructor() : MethodSpecAddable {
 
     /** Add method from [name], returning the method added. */
-    fun add(name: String): MethodSpec =
-        buildMethod(name).also { add(it) }
+    fun add(name: String): MethodSpec = buildMethod(name).also { add(it) }
 
     /** Add method from [name] with custom initialization [builderAction], returning the method added. */
     inline fun add(name: String, builderAction: MethodSpecBuilder.() -> Unit): MethodSpec =
         buildMethod(name, builderAction).also { add(it) }
 
     /** Add constructor method, returning the method added. */
-    fun addConstructor(): MethodSpec =
-        buildConstructorMethod().also { add(it) }
+    fun addConstructor(): MethodSpec = buildConstructorMethod().also { add(it) }
 
     /** Add constructor method with custom initialization [builderAction], returning the method added. */
     inline fun addConstructor(builderAction: MethodSpecBuilder.() -> Unit): MethodSpec =

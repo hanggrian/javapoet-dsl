@@ -10,8 +10,7 @@ import javax.lang.model.element.VariableElement
 import kotlin.reflect.KClass
 
 /** Converts element to [ParameterSpec]. */
-fun VariableElement.toParameter(): ParameterSpec =
-    ParameterSpec.get(this)
+fun VariableElement.toParameter(): ParameterSpec = ParameterSpec.get(this)
 
 /** Builds a new [ParameterSpec] from [type]. */
 fun buildParameter(type: TypeName, name: String, vararg modifiers: Modifier): ParameterSpec =
@@ -89,6 +88,5 @@ class ParameterSpecBuilder @PublishedApi internal constructor(private val native
     }
 
     /** Returns native spec. */
-    fun build(): ParameterSpec =
-        nativeBuilder.build()
+    fun build(): ParameterSpec = nativeBuilder.build()
 }

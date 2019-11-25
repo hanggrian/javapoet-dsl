@@ -29,8 +29,7 @@ abstract class CodeBlockCollection internal constructor() : CodeBlockAppendable 
     inline fun append(builderAction: CodeBlockBlockBuilder.() -> Unit): CodeBlock =
         buildCode(builderAction).also { append(it) }
 
-    override fun appendln() =
-        appendln("")
+    override fun appendln() = appendln("")
 
     /** Add code block with custom initialization [builderAction] and a new line to this container, returning the block added. */
     inline fun appendln(builderAction: CodeBlockBlockBuilder.() -> Unit): CodeBlock =
@@ -56,11 +55,12 @@ abstract class JavadocContainer internal constructor() : CodeBlockAppendable {
     inline fun append(builderAction: CodeBlockBlockBuilder.() -> Unit): CodeBlock =
         buildCode(builderAction).also { append(it) }
 
-    override fun appendln(): Unit =
-        append("\n")
+    override fun appendln(): Unit = append(SystemProperties.LINE_SEPARATOR)
 
-    override fun appendln(format: String, vararg args: Any): Unit =
-        append("$format\n", *args)
+    override fun appendln(format: String, vararg args: Any) {
+        append(format, *args)
+        appendln()
+    }
 
     override fun appendln(code: CodeBlock) {
         append(code)
@@ -84,6 +84,16 @@ abstract class JavadocContainer internal constructor() : CodeBlockAppendable {
     /** Configure this container with DSL. */
     inline operator fun invoke(configuration: JavadocContainerScope.() -> Unit): Unit =
         JavadocContainerScope(this).configuration()
+
+    /**
+     * @see kotlin.text.SystemProperties
+     */
+    private object SystemProperties {
+        /** Line separator for current system. */
+        @JvmField
+        val LINE_SEPARATOR =
+            checkNotNull(System.getProperty("line.separator")) { "Unable to obtain separator character." }
+    }
 }
 
 /** Receiver for the `javadoc` block providing an extended set of operators for the configuration. */

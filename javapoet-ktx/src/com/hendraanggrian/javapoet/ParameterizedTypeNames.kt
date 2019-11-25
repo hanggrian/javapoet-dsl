@@ -20,5 +20,4 @@ fun KClass<*>.parameterizedBy(vararg typeArguments: KClass<*>): ParameterizedTyp
     java.parameterizedBy(*typeArguments.toJavaClasses())
 
 /** Returns a [ParameterizedTypeName] equivalent to this [ParameterizedType].  */
-fun ParameterizedType.asParameterizedTypeName(): ParameterizedTypeName =
-    ParameterizedTypeName.get(this)
+fun ParameterizedType.asParameterizedTypeName(): ParameterizedTypeName = ParameterizedTypeName.get(this)

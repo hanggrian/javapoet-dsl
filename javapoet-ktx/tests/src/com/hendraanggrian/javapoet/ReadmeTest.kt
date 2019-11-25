@@ -351,11 +351,11 @@ class ReadmeTest {
     fun codeBlockFormatStrings() {
         assertEquals(
             CodeBlock.of("I ate \$L \$L", 3, "tacos"),
-            "I ate %L %L".toCode(3, "tacos")
+            "I ate %L %L".formatCode(3, "tacos")
         )
         assertEquals(
             CodeBlock.of("I ate \$2L \$1L", "tacos", 3),
-            "I ate %2L %1L".toCode("tacos", 3)
+            "I ate %2L %1L".formatCode("tacos", 3)
         )
     }
 

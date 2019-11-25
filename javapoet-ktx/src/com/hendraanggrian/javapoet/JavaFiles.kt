@@ -97,19 +97,18 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
         }
 
     /** Returns native spec. */
-    fun build(): JavaFile =
-        JavaFile.builder(packageName, checkNotNull(typeSpec) { "A main type must be initialized" })
-            .apply {
-                comments?.forEach { (format, args) -> addFileComment(format, *args) }
-                staticImports?.forEach { (type, names) ->
-                    when (type) {
-                        is Enum<*> -> addStaticImport(type)
-                        is ClassName -> addStaticImport(type, *names)
-                        is Class<*> -> addStaticImport(type, *names)
-                    }
+    fun build(): JavaFile = JavaFile.builder(packageName, checkNotNull(typeSpec) { "A main type must be initialized" })
+        .apply {
+            comments?.forEach { (format, args) -> addFileComment(format, *args) }
+            staticImports?.forEach { (type, names) ->
+                when (type) {
+                    is Enum<*> -> addStaticImport(type)
+                    is ClassName -> addStaticImport(type, *names)
+                    is Class<*> -> addStaticImport(type, *names)
                 }
-                isSkipJavaLangImports?.let { skipJavaLangImports(it) }
-                indentString?.let { indent(it) }
             }
-            .build()
+            isSkipJavaLangImports?.let { skipJavaLangImports(it) }
+            indentString?.let { indent(it) }
+        }
+        .build()
 }
