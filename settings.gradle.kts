@@ -1,3 +1,3 @@
-include(RELEASE_ARTIFACT)
+include("javapoet-ktx")
 include("demo")
 include("website")
