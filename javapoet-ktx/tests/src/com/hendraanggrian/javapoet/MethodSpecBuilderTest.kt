@@ -27,8 +27,7 @@ class MethodSpecBuilderTest {
         .addCode("doSomething()")
         .build()
 
-    @Test
-    fun simple() {
+    @Test fun simple() {
         assertEquals(expected, buildMethod("main") {
             javadoc.append("firstJavadoc")
             javadoc.append {
@@ -45,8 +44,7 @@ class MethodSpecBuilderTest {
         })
     }
 
-    @Test
-    fun invocation() {
+    @Test fun invocation() {
         assertEquals(expected, buildMethod("main") {
             javadoc {
                 append("firstJavadoc")

@@ -12,8 +12,7 @@ import kotlin.test.assertEquals
 /** From `https://github.com/square/javapoet`. */
 class ReadmeTest {
 
-    @Test
-    fun example() {
+    @Test fun example() {
         assertEquals(
             """
                 package com.example.helloworld;
@@ -42,8 +41,7 @@ class ReadmeTest {
         )
     }
 
-    @Test
-    fun `code&ControlFlow`() {
+    @Test fun `code&ControlFlow`() {
         val expected =
             """
                 void main() {
@@ -145,8 +143,7 @@ class ReadmeTest {
         )
     }
 
-    @Test
-    fun `$LForLiterals`() {
+    @Test fun `$LForLiterals`() {
         assertEquals(
             """
                 int computeRange() {
@@ -169,8 +166,7 @@ class ReadmeTest {
         )
     }
 
-    @Test
-    fun `$SForStrings`() {
+    @Test fun `$SForStrings`() {
         assertEquals(
             """
                 public final class HelloWorld {
@@ -199,8 +195,7 @@ class ReadmeTest {
         )
     }
 
-    @Test
-    fun `$TForTypes`() {
+    @Test fun `$TForTypes`() {
         assertEquals(
             """
                 public final class HelloWorld {
@@ -312,8 +307,7 @@ class ReadmeTest {
         )
     }
 
-    @Test
-    fun `$NForNames`() {
+    @Test fun `$NForNames`() {
         val hexDigit = buildMethod("hexDigit") {
             addModifiers(Modifier.PUBLIC)
             parameters.add(INT, "i")
@@ -347,8 +341,7 @@ class ReadmeTest {
         )
     }
 
-    @Test
-    fun codeBlockFormatStrings() {
+    @Test fun codeBlockFormatStrings() {
         assertEquals(
             CodeBlock.of("I ate \$L \$L", 3, "tacos"),
             "I ate %L %L".formatCode(3, "tacos")
@@ -359,8 +352,7 @@ class ReadmeTest {
         )
     }
 
-    @Test
-    fun methods() {
+    @Test fun methods() {
         assertEquals(
             """
                 public abstract class HelloWorld {
@@ -377,8 +369,7 @@ class ReadmeTest {
         )
     }
 
-    @Test
-    fun constructors() {
+    @Test fun constructors() {
         assertEquals(
             """
                 public class HelloWorld {
@@ -402,8 +393,7 @@ class ReadmeTest {
         )
     }
 
-    @Test
-    fun parameters() {
+    @Test fun parameters() {
         assertEquals(
             """
                 void welcomeOverlords(final java.lang.String android, final java.lang.String robot) {
@@ -419,8 +409,7 @@ class ReadmeTest {
         )
     }
 
-    @Test
-    fun fields() {
+    @Test fun fields() {
         assertEquals(
             """
                 public class HelloWorld {
@@ -446,8 +435,7 @@ class ReadmeTest {
         )
     }
 
-    @Test
-    fun interfaces() {
+    @Test fun interfaces() {
         assertEquals(
             """
                 public interface HelloWorld {
@@ -469,8 +457,7 @@ class ReadmeTest {
         )
     }
 
-    @Test
-    fun enums() {
+    @Test fun enums() {
         assertEquals(
             """
                 public enum Roshambo {
@@ -532,8 +519,7 @@ class ReadmeTest {
         )
     }
 
-    @Test
-    fun anonymousInnerClasses() {
+    @Test fun anonymousInnerClasses() {
         lateinit var sortByLength: MethodSpec
         buildClassType("HelloWorld") {
             sortByLength = methods.add("sortByLength") {
@@ -569,8 +555,7 @@ class ReadmeTest {
         )
     }
 
-    @Test
-    fun annotations() {
+    @Test fun annotations() {
         assertEquals(
             """
                 @java.lang.Override
@@ -634,8 +619,7 @@ class ReadmeTest {
         )
     }
 
-    @Test
-    fun javadoc() {
+    @Test fun javadoc() {
         assertEquals(
             """
                 /**

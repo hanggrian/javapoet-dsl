@@ -6,8 +6,7 @@ import kotlin.test.assertEquals
 
 class WildcardTypeNamesTest {
 
-    @Test
-    fun asSubtypeWildcardTypeName() {
+    @Test fun asSubtypeWildcardTypeName() {
         assertEquals(
             WildcardTypeName.subtypeOf(asClassName<String>()),
             asClassName<String>().asSubtypeWildcardTypeName()
@@ -26,8 +25,7 @@ class WildcardTypeNamesTest {
         )
     }
 
-    @Test
-    fun asSupertypeWildcardTypeName() {
+    @Test fun asSupertypeWildcardTypeName() {
         assertEquals(
             WildcardTypeName.supertypeOf(asClassName<String>()),
             asClassName<String>().asSupertypeWildcardTypeName()

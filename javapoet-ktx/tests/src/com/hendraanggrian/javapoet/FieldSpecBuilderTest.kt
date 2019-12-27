@@ -20,8 +20,7 @@ class FieldSpecBuilderTest {
         .initializer("value")
         .build()
 
-    @Test
-    fun simple() {
+    @Test fun simple() {
         assertEquals(expected, buildField<String>("name") {
             javadoc.append("firstJavadoc")
             javadoc.append {
@@ -33,8 +32,7 @@ class FieldSpecBuilderTest {
         })
     }
 
-    @Test
-    fun invocation() {
+    @Test fun invocation() {
         assertEquals(expected, buildField<String>("name") {
             javadoc {
                 append("firstJavadoc")

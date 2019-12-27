@@ -13,8 +13,7 @@ class CodeBlockBuilderTest {
         .endControlFlow()
         .build()
 
-    @Test
-    fun simple() {
+    @Test fun simple() {
         assertEquals(expected, buildCode {
             appendln("int total = 0")
             beginFlow("for (int i = 0; i < 10; i++)")
