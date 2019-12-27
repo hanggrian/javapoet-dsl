@@ -1,7 +1,7 @@
 package com.hendraanggrian.javapoet
 
 import com.hendraanggrian.javapoet.dsl.AnnotationSpecContainer
-import com.hendraanggrian.javapoet.dsl.CodeBlockCollection
+import com.hendraanggrian.javapoet.dsl.CodeBlockContainer
 import com.hendraanggrian.javapoet.dsl.JavadocContainer
 import com.hendraanggrian.javapoet.dsl.ParameterSpecContainer
 import com.squareup.javapoet.AnnotationSpec
@@ -37,7 +37,7 @@ inline fun buildConstructorMethod(builderAction: MethodSpecBuilder.() -> Unit): 
 /** Wrapper of [MethodSpec.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetDslMarker
 class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: MethodSpec.Builder) :
-    CodeBlockCollection() {
+    CodeBlockContainer() {
 
     /** Collection of javadoc, may be configured with Kotlin DSL. */
     val javadoc: JavadocContainer = object : JavadocContainer() {

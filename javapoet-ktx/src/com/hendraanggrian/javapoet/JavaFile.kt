@@ -1,6 +1,6 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.dsl.TypeSpecCollection
+import com.hendraanggrian.javapoet.dsl.TypeSpecContainer
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.TypeSpec
@@ -15,7 +15,7 @@ inline fun buildJavaFile(packageName: String, builderAction: JavaFileBuilder.() 
 
 /** Wrapper of [JavaFile.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetDslMarker
-class JavaFileBuilder @PublishedApi internal constructor(private val packageName: String) : TypeSpecCollection() {
+class JavaFileBuilder @PublishedApi internal constructor(private val packageName: String) : TypeSpecContainer() {
 
     private var typeSpec: TypeSpec? = null
     private var comments: MutableMap<String, Array<Any>>? = null

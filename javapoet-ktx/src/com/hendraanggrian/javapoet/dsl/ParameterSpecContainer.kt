@@ -9,14 +9,11 @@ import java.lang.reflect.Type
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
-private interface ParameterSpecAddable {
+/** A [ParameterSpecContainer] is responsible for managing a set of parameter instances. */
+abstract class ParameterSpecContainer internal constructor() {
 
     /** Add parameter to this container. */
-    fun add(spec: ParameterSpec)
-}
-
-/** A [ParameterSpecContainer] is responsible for managing a set of parameter instances. */
-abstract class ParameterSpecContainer internal constructor() : ParameterSpecAddable {
+    abstract fun add(spec: ParameterSpec)
 
     /** Add parameter from [type] and [name], returning the parameter added. */
     fun add(type: TypeName, name: String, vararg modifiers: Modifier): ParameterSpec =
@@ -92,8 +89,10 @@ abstract class ParameterSpecContainer internal constructor() : ParameterSpecAdda
 
 /** Receiver for the `parameters` block providing an extended set of operators for the configuration. */
 @JavapoetDslMarker
-class ParameterSpecContainerScope @PublishedApi internal constructor(container: ParameterSpecContainer) :
-    ParameterSpecContainer(), ParameterSpecAddable by container {
+class ParameterSpecContainerScope @PublishedApi internal constructor(private val container: ParameterSpecContainer) :
+    ParameterSpecContainer() {
+
+    override fun add(spec: ParameterSpec) = container.add(spec)
 
     /** Convenient method to add parameter with receiver type. */
     inline operator fun String.invoke(
