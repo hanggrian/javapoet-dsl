@@ -1,6 +1,6 @@
 package com.hendraanggrian.javapoet.dsl
 
-import com.hendraanggrian.javapoet.CodeBlockBlockBuilder
+import com.hendraanggrian.javapoet.CodeBlockBuilder
 import com.hendraanggrian.javapoet.JavapoetDslMarker
 import com.hendraanggrian.javapoet.buildCode
 import com.squareup.javapoet.CodeBlock
@@ -26,13 +26,13 @@ private interface CodeBlockAppendable {
 abstract class CodeBlockContainer internal constructor() : CodeBlockAppendable {
 
     /** Add code block with custom initialization [builderAction], returning the block added. */
-    inline fun append(builderAction: CodeBlockBlockBuilder.() -> Unit): CodeBlock =
+    inline fun append(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
         buildCode(builderAction).also { append(it) }
 
     override fun appendln() = appendln("")
 
     /** Add code block with custom initialization [builderAction] and a new line to this container, returning the block added. */
-    inline fun appendln(builderAction: CodeBlockBlockBuilder.() -> Unit): CodeBlock =
+    inline fun appendln(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
         buildCode(builderAction).also { appendln(it) }
 
     /** Starts the control flow. */
@@ -52,7 +52,7 @@ abstract class CodeBlockContainer internal constructor() : CodeBlockAppendable {
 abstract class JavadocContainer internal constructor() : CodeBlockAppendable {
 
     /** Add code block with custom initialization [builderAction], returning the block added. */
-    inline fun append(builderAction: CodeBlockBlockBuilder.() -> Unit): CodeBlock =
+    inline fun append(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
         buildCode(builderAction).also { append(it) }
 
     override fun appendln(): Unit = append(SystemProperties.LINE_SEPARATOR)
@@ -68,7 +68,7 @@ abstract class JavadocContainer internal constructor() : CodeBlockAppendable {
     }
 
     /** Add code block with custom initialization [builderAction] and a new line to this container, returning the block added. */
-    inline fun appendln(builderAction: CodeBlockBlockBuilder.() -> Unit): CodeBlock =
+    inline fun appendln(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
         buildCode(builderAction).also { appendln(it) }
 
     /** Convenient method to add code block with operator function. */
@@ -81,10 +81,6 @@ abstract class JavadocContainer internal constructor() : CodeBlockAppendable {
         append(code)
     }
 
-    /** Configure this container with DSL. */
-    inline operator fun invoke(configuration: JavadocContainerScope.() -> Unit): Unit =
-        JavadocContainerScope(this).configuration()
-
     /**
      * @see kotlin.text.SystemProperties
      */
@@ -96,12 +92,11 @@ abstract class JavadocContainer internal constructor() : CodeBlockAppendable {
     }
 }
 
-/** Receiver for the `javadoc` block providing an extended set of operators for the configuration. */
+/** Receiver for the `javadoc` function type providing an extended set of operators for the configuration. */
 @JavapoetDslMarker
 class JavadocContainerScope @PublishedApi internal constructor(private val container: JavadocContainer) :
-    JavadocContainer(), CodeBlockAppendable by container {
+    JavadocContainer() {
 
-    override fun appendln(code: CodeBlock): Unit = container.appendln(code)
-    override fun appendln(): Unit = container.appendln()
-    override fun appendln(format: String, vararg args: Any): Unit = container.appendln(format, *args)
+    override fun append(format: String, vararg args: Any) = container.append(format, *args)
+    override fun append(code: CodeBlock) = container.append(code)
 }

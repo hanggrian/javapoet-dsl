@@ -4,7 +4,7 @@ import com.squareup.javapoet.TypeName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class TypeNamesTest {
+class TypeNameTest {
 
     @Test fun staticFields() {
         assertEquals(TypeName.VOID, VOID)

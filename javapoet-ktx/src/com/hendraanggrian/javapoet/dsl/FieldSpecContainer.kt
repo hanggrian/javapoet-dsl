@@ -81,13 +81,9 @@ abstract class FieldSpecContainer internal constructor() {
     operator fun set(name: String, type: KClass<*>) {
         add(type, name)
     }
-
-    /** Configure this container with DSL. */
-    inline operator fun invoke(configuration: FieldSpecContainerScope.() -> Unit): Unit =
-        FieldSpecContainerScope(this).configuration()
 }
 
-/** Receiver for the `fields` block providing an extended set of operators for the configuration. */
+/** Receiver for the `fields` function type providing an extended set of operators for the configuration. */
 @JavapoetDslMarker
 class FieldSpecContainerScope @PublishedApi internal constructor(private val container: FieldSpecContainer) :
     FieldSpecContainer() {

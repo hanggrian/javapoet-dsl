@@ -4,7 +4,7 @@ import com.squareup.javapoet.TypeVariableName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class TypeVariableNamesTest {
+class TypeVariableNameTest {
 
     @Test fun typeVariableNameOf() {
         assertEquals(

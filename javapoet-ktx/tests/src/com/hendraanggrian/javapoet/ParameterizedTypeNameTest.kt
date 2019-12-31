@@ -4,12 +4,12 @@ import com.squareup.javapoet.ParameterizedTypeName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class ParameterizedTypeNamesTest {
+class ParameterizedTypeNameTest {
 
     @Test fun parameterizedBy() {
         assertEquals(
-            ParameterizedTypeName.get(List::class.java.asClassName(), OBJECT),
-            List::class.java.asClassName().parameterizedBy(OBJECT)
+            ParameterizedTypeName.get(List::class.asClassName(), OBJECT),
+            List::class.asClassName().parameterizedBy(OBJECT)
         )
         assertEquals(
             ParameterizedTypeName.get(List::class.java, String::class.java),
@@ -18,6 +18,10 @@ class ParameterizedTypeNamesTest {
         assertEquals(
             ParameterizedTypeName.get(List::class.java, String::class.java),
             List::class.parameterizedBy(String::class)
+        )
+        assertEquals(
+            ParameterizedTypeName.get(List::class.java, String::class.java),
+            List::class.parameterizedBy<String>()
         )
     }
 }

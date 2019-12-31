@@ -11,38 +11,33 @@ fun Annotation.toAnnotation(includeDefaultValues: Boolean = false): AnnotationSp
     AnnotationSpec.get(this, includeDefaultValues)
 
 /** Converts mirror to [AnnotationSpec]. */
-fun AnnotationMirror.toAnnotation(): AnnotationSpec =
-    AnnotationSpec.get(this)
+fun AnnotationMirror.toAnnotation(): AnnotationSpec = AnnotationSpec.get(this)
 
 /** Builds a new [AnnotationSpec] from [type]. */
-fun buildAnnotation(type: ClassName): AnnotationSpec =
-    AnnotationSpec.builder(type).build()
+fun buildAnnotation(type: ClassName): AnnotationSpec = AnnotationSpec.builder(type).build()
 
 /**
  * Builds a new [AnnotationSpec] from [type],
  * by populating newly created [AnnotationSpecBuilder] using provided [builderAction] and then building it.
  */
 inline fun buildAnnotation(type: ClassName, builderAction: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
-    AnnotationSpecBuilder(AnnotationSpec.builder(type)).apply(builderAction).build()
+    AnnotationSpec.builder(type).build(builderAction)
 
 /** Builds a new [AnnotationSpec] from [type]. */
-fun buildAnnotation(type: Class<*>): AnnotationSpec =
-    AnnotationSpec.builder(type).build()
+fun buildAnnotation(type: Class<*>): AnnotationSpec = AnnotationSpec.builder(type).build()
 
 /** Builds a new [AnnotationSpec] from [type]. */
-fun buildAnnotation(type: KClass<*>): AnnotationSpec =
-    buildAnnotation(type.java)
+fun buildAnnotation(type: KClass<*>): AnnotationSpec = buildAnnotation(type.java)
 
 /** Builds a new [AnnotationSpec] from [T]. */
-inline fun <reified T> buildAnnotation(): AnnotationSpec =
-    buildAnnotation(T::class)
+inline fun <reified T> buildAnnotation(): AnnotationSpec = buildAnnotation(T::class)
 
 /**
  * Builds a new [AnnotationSpec] from [type],
  * by populating newly created [AnnotationSpecBuilder] using provided [builderAction] and then building it.
  */
 inline fun buildAnnotation(type: Class<*>, builderAction: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
-    AnnotationSpecBuilder(AnnotationSpec.builder(type)).apply(builderAction).build()
+    AnnotationSpec.builder(type).build(builderAction)
 
 /**
  * Builds a new [AnnotationSpec] from [type],
@@ -58,6 +53,10 @@ inline fun buildAnnotation(type: KClass<*>, builderAction: AnnotationSpecBuilder
 inline fun <reified T> buildAnnotation(builderAction: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
     buildAnnotation(T::class, builderAction)
 
+/** Modify existing [AnnotationSpec.Builder] using provided [builderAction] and then building it. */
+inline fun AnnotationSpec.Builder.build(builderAction: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+    AnnotationSpecBuilder(this).apply(builderAction).build()
+
 /** Wrapper of [AnnotationSpec.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetDslMarker
 class AnnotationSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: AnnotationSpec.Builder) {
@@ -67,14 +66,16 @@ class AnnotationSpecBuilder @PublishedApi internal constructor(private val nativ
         format.formatWith(args) { s, array -> nativeBuilder.addMember(name, s, *array) }
 
     /** Add code as a member of this annotation. */
-    fun addMember(name: String, code: CodeBlock): CodeBlock = code.also { nativeBuilder.addMember(name, it) }
+    fun addMember(name: String, code: CodeBlock): CodeBlock =
+        code.also { nativeBuilder.addMember(name, it) }
 
     /** Add code as a member of this annotation with custom initialization [builderAction]. */
-    inline fun addMember(name: String, builderAction: CodeBlockBlockBuilder.() -> Unit): CodeBlock =
+    inline fun addMember(name: String, builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
         addMember(name, buildCode(builderAction))
 
     /** Convenient method to add member with operator function. */
-    operator fun String.invoke(builderAction: CodeBlockBlockBuilder.() -> Unit) = addMember(this, builderAction)
+    operator fun String.invoke(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
+        addMember(this, builderAction)
 
     /** Returns native spec. */
     fun build(): AnnotationSpec = nativeBuilder.build()

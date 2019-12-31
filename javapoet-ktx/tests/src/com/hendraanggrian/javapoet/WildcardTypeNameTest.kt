@@ -4,7 +4,7 @@ import com.squareup.javapoet.WildcardTypeName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-class WildcardTypeNamesTest {
+class WildcardTypeNameTest {
 
     @Test fun asSubtypeWildcardTypeName() {
         assertEquals(

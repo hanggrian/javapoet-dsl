@@ -3,7 +3,7 @@ plugins {
     application
 }
 
-application.mainClassName = "com.example.JavaFileWriter"
+application.mainClassName = "com.example.VehicleWriter"
 
 sourceSets["main"].java.srcDir("src")
 

@@ -1,6 +1,7 @@
 package com.hendraanggrian.javapoet
 
 import com.hendraanggrian.javapoet.dsl.AnnotationSpecContainer
+import com.hendraanggrian.javapoet.dsl.AnnotationSpecContainerScope
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ParameterSpec
 import com.squareup.javapoet.TypeName
@@ -25,7 +26,7 @@ inline fun buildParameter(
     name: String,
     vararg modifiers: Modifier,
     builderAction: ParameterSpecBuilder.() -> Unit
-): ParameterSpec = ParameterSpecBuilder(ParameterSpec.builder(type, name, *modifiers)).apply(builderAction).build()
+): ParameterSpec = ParameterSpec.builder(type, name, *modifiers).build(builderAction)
 
 /** Builds a new [ParameterSpec] from [type]. */
 fun buildParameter(type: Type, name: String, vararg modifiers: Modifier): ParameterSpec =
@@ -48,7 +49,7 @@ inline fun buildParameter(
     name: String,
     vararg modifiers: Modifier,
     builderAction: ParameterSpecBuilder.() -> Unit
-): ParameterSpec = ParameterSpecBuilder(ParameterSpec.builder(type, name, *modifiers)).apply(builderAction).build()
+): ParameterSpec = ParameterSpec.builder(type, name, *modifiers).build(builderAction)
 
 /**
  * Builds a new [ParameterSpec] from [type],
@@ -71,18 +72,26 @@ inline fun <reified T> buildParameter(
     builderAction: ParameterSpecBuilder.() -> Unit
 ): ParameterSpec = buildParameter(T::class, name, *modifiers, builderAction = builderAction)
 
+/** Modify existing [ParameterSpec.Builder] using provided [builderAction] and then building it. */
+inline fun ParameterSpec.Builder.build(builderAction: ParameterSpecBuilder.() -> Unit): ParameterSpec =
+    ParameterSpecBuilder(this).apply(builderAction).build()
+
 /** Wrapper of [ParameterSpec.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetDslMarker
 class ParameterSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: ParameterSpec.Builder) {
 
-    /** Collection of annotations, may be configured with Kotlin DSL. */
+    /** Configure annotations without DSL. */
     val annotations: AnnotationSpecContainer = object : AnnotationSpecContainer() {
         override fun add(spec: AnnotationSpec) {
             nativeBuilder.addAnnotation(spec)
         }
     }
 
-    /** Add field modifiers. */
+    /** Configure annotations with DSL. */
+    inline fun annotations(configuration: AnnotationSpecContainerScope.() -> Unit) =
+        AnnotationSpecContainerScope(annotations).configuration()
+
+    /** Add parameter modifiers. */
     fun addModifiers(vararg modifiers: Modifier) {
         nativeBuilder.addModifiers(*modifiers)
     }

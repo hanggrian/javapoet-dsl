@@ -7,7 +7,6 @@ import java.nio.file.Paths
 import javax.lang.model.element.Modifier
 
 class VehicleWriter {
-
     companion object {
         private const val PACKAGE_NAME = "com.example.output"
         private val VEHICLE_NAME = classNameOf(PACKAGE_NAME, "Vehicle")

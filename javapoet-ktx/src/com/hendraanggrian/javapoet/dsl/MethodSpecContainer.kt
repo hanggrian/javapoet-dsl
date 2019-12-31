@@ -35,13 +35,9 @@ abstract class MethodSpecContainer internal constructor() {
     operator fun plusAssign(name: String) {
         add(name)
     }
-
-    /** Configure this container with DSL. */
-    inline operator fun invoke(configuration: MethodSpecContainerScope.() -> Unit): Unit =
-        MethodSpecContainerScope(this).configuration()
 }
 
-/** Receiver for the `methods` block providing an extended set of operators for the configuration. */
+/** Receiver for the `methods` function type providing an extended set of operators for the configuration. */
 @JavapoetDslMarker
 class MethodSpecContainerScope @PublishedApi internal constructor(private val container: MethodSpecContainer) :
     MethodSpecContainer() {

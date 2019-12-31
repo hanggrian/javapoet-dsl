@@ -58,13 +58,9 @@ abstract class AnnotationSpecContainer internal constructor() {
     operator fun plusAssign(type: KClass<*>) {
         add(type)
     }
-
-    /** Configure this container with DSL. */
-    inline operator fun invoke(configuration: AnnotationSpecContainerScope.() -> Unit): Unit =
-        AnnotationSpecContainerScope(this).configuration()
 }
 
-/** Receiver for the `annotations` block providing an extended set of operators for the configuration. */
+/** Receiver for the `annotations` function type providing an extended set of operators for the configuration. */
 @JavapoetDslMarker
 class AnnotationSpecContainerScope @PublishedApi internal constructor(private val container: AnnotationSpecContainer) :
     AnnotationSpecContainer() {

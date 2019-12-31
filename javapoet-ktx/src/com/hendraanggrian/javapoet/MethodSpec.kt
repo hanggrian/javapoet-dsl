@@ -1,9 +1,12 @@
 package com.hendraanggrian.javapoet
 
 import com.hendraanggrian.javapoet.dsl.AnnotationSpecContainer
+import com.hendraanggrian.javapoet.dsl.AnnotationSpecContainerScope
 import com.hendraanggrian.javapoet.dsl.CodeBlockContainer
 import com.hendraanggrian.javapoet.dsl.JavadocContainer
+import com.hendraanggrian.javapoet.dsl.JavadocContainerScope
 import com.hendraanggrian.javapoet.dsl.ParameterSpecContainer
+import com.hendraanggrian.javapoet.dsl.ParameterSpecContainerScope
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.MethodSpec
@@ -22,7 +25,7 @@ fun buildMethod(name: String): MethodSpec = MethodSpecBuilder(MethodSpec.methodB
  * by populating newly created [MethodSpecBuilder] using provided [builderAction] and then building it.
  */
 inline fun buildMethod(name: String, builderAction: MethodSpecBuilder.() -> Unit): MethodSpec =
-    MethodSpecBuilder(MethodSpec.methodBuilder(name)).apply(builderAction).build()
+    MethodSpec.methodBuilder(name).build(builderAction)
 
 /** Builds a new constructor [MethodSpec]. */
 fun buildConstructorMethod(): MethodSpec = MethodSpecBuilder(MethodSpec.constructorBuilder()).build()
@@ -32,14 +35,18 @@ fun buildConstructorMethod(): MethodSpec = MethodSpecBuilder(MethodSpec.construc
  * by populating newly created [MethodSpecBuilder] using provided [builderAction] and then building it.
  */
 inline fun buildConstructorMethod(builderAction: MethodSpecBuilder.() -> Unit): MethodSpec =
-    MethodSpecBuilder(MethodSpec.constructorBuilder()).apply(builderAction).build()
+    MethodSpec.constructorBuilder().build(builderAction)
+
+/** Modify existing [MethodSpec.Builder] using provided [builderAction] and then building it. */
+inline fun MethodSpec.Builder.build(builderAction: MethodSpecBuilder.() -> Unit): MethodSpec =
+    MethodSpecBuilder(this).apply(builderAction).build()
 
 /** Wrapper of [MethodSpec.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetDslMarker
 class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: MethodSpec.Builder) :
     CodeBlockContainer() {
 
-    /** Collection of javadoc, may be configured with Kotlin DSL. */
+    /** Configure javadoc without DSL. */
     val javadoc: JavadocContainer = object : JavadocContainer() {
         override fun append(format: String, vararg args: Any): Unit =
             format.formatWith(args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
@@ -49,19 +56,27 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
         }
     }
 
-    /** Collection of annotations, may be configured with Kotlin DSL. */
+    /** Configure javadoc with DSL. */
+    inline fun javadoc(configuration: JavadocContainerScope.() -> Unit) =
+        JavadocContainerScope(javadoc).configuration()
+
+    /** Configure annotations without DSL. */
     val annotations: AnnotationSpecContainer = object : AnnotationSpecContainer() {
         override fun add(spec: AnnotationSpec) {
             nativeBuilder.addAnnotation(spec)
         }
     }
 
+    /** Configure annotations with DSL. */
+    inline fun annotations(configuration: AnnotationSpecContainerScope.() -> Unit) =
+        AnnotationSpecContainerScope(annotations).configuration()
+
     /** Add field modifiers. */
     fun addModifiers(vararg modifiers: Modifier) {
         nativeBuilder.addModifiers(*modifiers)
     }
 
-    /** Add field modifiers. */
+    /** Add method modifiers. */
     fun addModifiers(modifiers: Iterable<Modifier>) {
         nativeBuilder.addModifiers(modifiers)
     }
@@ -89,19 +104,21 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
     }
 
     /** Add return line to [type]. */
-    fun returns(type: KClass<*>) =
-        returns(type.java)
+    fun returns(type: KClass<*>) = returns(type.java)
 
     /** Add return line to [T]. */
-    inline fun <reified T> returns() =
-        returns(T::class)
+    inline fun <reified T> returns() = returns(T::class)
 
-    /** Collection of parameters, may be configured with Kotlin DSL. */
+    /** Configure parameters without DSL. */
     val parameters: ParameterSpecContainer = object : ParameterSpecContainer() {
         override fun add(spec: ParameterSpec) {
             nativeBuilder.addParameter(spec)
         }
     }
+
+    /** Configure parameters with DSL. */
+    inline fun parameters(configuration: ParameterSpecContainerScope.() -> Unit) =
+        ParameterSpecContainerScope(parameters).configuration()
 
     /** Add vararg keyword to array type parameter. */
     var varargs: Boolean
@@ -121,13 +138,15 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
     }
 
     /** Add exception throwing keyword. */
-    fun addException(type: KClass<*>) {
-        nativeBuilder.addException(type.java)
+    fun addException(type: Type) {
+        nativeBuilder.addException(type)
     }
 
+    /** Add exception throwing keyword. */
+    fun addException(type: KClass<*>) = addException(type.java)
+
     /** Add exception throwing keyword with reified function. */
-    inline fun <reified T> addException() =
-        addException(T::class)
+    inline fun <reified T> addException() = addException(T::class)
 
     override fun append(format: String, vararg args: Any): Unit =
         format.formatWith(args) { s, array -> nativeBuilder.addCode(s, *array) }
@@ -176,7 +195,7 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
         }
 
     /** Set default value to code with custom initialization [builderAction]. */
-    inline fun defaultValue(builderAction: CodeBlockBlockBuilder.() -> Unit): CodeBlock =
+    inline fun defaultValue(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
         buildCode(builderAction).also { defaultValue = it }
 
     /** Returns native spec. */

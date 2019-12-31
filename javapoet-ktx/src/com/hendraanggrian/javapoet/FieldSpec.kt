@@ -1,7 +1,9 @@
 package com.hendraanggrian.javapoet
 
 import com.hendraanggrian.javapoet.dsl.AnnotationSpecContainer
+import com.hendraanggrian.javapoet.dsl.AnnotationSpecContainerScope
 import com.hendraanggrian.javapoet.dsl.JavadocContainer
+import com.hendraanggrian.javapoet.dsl.JavadocContainerScope
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.FieldSpec
@@ -23,7 +25,7 @@ inline fun buildField(
     name: String,
     vararg modifiers: Modifier,
     builderAction: FieldSpecBuilder.() -> Unit
-): FieldSpec = FieldSpecBuilder(FieldSpec.builder(type, name, *modifiers)).apply(builderAction).build()
+): FieldSpec = FieldSpec.builder(type, name, *modifiers).build(builderAction)
 
 /** Builds a new [FieldSpec] from [type] supplying its [name] and [modifiers]. */
 fun buildField(type: Type, name: String, vararg modifiers: Modifier): FieldSpec =
@@ -46,7 +48,7 @@ inline fun buildField(
     name: String,
     vararg modifiers: Modifier,
     builderAction: FieldSpecBuilder.() -> Unit
-): FieldSpec = FieldSpecBuilder(FieldSpec.builder(type, name, *modifiers)).apply(builderAction).build()
+): FieldSpec = FieldSpec.builder(type, name, *modifiers).build(builderAction)
 
 /**
  * Builds a new [FieldSpec] from [type] supplying its [name] and [modifiers],
@@ -69,11 +71,15 @@ inline fun <reified T> buildField(
     builderAction: FieldSpecBuilder.() -> Unit
 ): FieldSpec = buildField(T::class, name, *modifiers, builderAction = builderAction)
 
+/** Modify existing [FieldSpec.Builder] using provided [builderAction] and then building it. */
+inline fun FieldSpec.Builder.build(builderAction: FieldSpecBuilder.() -> Unit): FieldSpec =
+    FieldSpecBuilder(this).apply(builderAction).build()
+
 /** Wrapper of [FieldSpec.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetDslMarker
 class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: FieldSpec.Builder) {
 
-    /** Collection of javadoc, may be configured with Kotlin DSL. */
+    /** Configure javadoc without DSL. */
     val javadoc: JavadocContainer = object : JavadocContainer() {
         override fun append(format: String, vararg args: Any): Unit =
             format.formatWith(args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
@@ -83,12 +89,20 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
         }
     }
 
-    /** Collection of annotations, may be configured with Kotlin DSL. */
+    /** Configure javadoc with DSL. */
+    inline fun javadoc(configuration: JavadocContainerScope.() -> Unit) =
+        JavadocContainerScope(javadoc).configuration()
+
+    /** Configure annotations without DSL. */
     val annotations: AnnotationSpecContainer = object : AnnotationSpecContainer() {
         override fun add(spec: AnnotationSpec) {
             nativeBuilder.addAnnotation(spec)
         }
     }
+
+    /** Configure annotations with DSL. */
+    inline fun annotations(configuration: AnnotationSpecContainerScope.() -> Unit) =
+        AnnotationSpecContainerScope(annotations).configuration()
 
     /** Add field modifiers. */
     fun addModifiers(vararg modifiers: Modifier) {
@@ -107,7 +121,7 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
         }
 
     /** Initialize field value with custom initialization [builderAction]. */
-    inline fun initializer(builderAction: CodeBlockBlockBuilder.() -> Unit): CodeBlock =
+    inline fun initializer(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
         buildCode(builderAction).also { initializer = it }
 
     /** Returns native spec. */

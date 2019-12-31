@@ -89,16 +89,20 @@ abstract class TypeSpecContainer internal constructor() {
     /** Add annotation type from [type] with custom initialization [builderAction], returning the type added. */
     inline fun addAnnotation(type: ClassName, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
         buildAnnotationType(type, builderAction).also { add(it) }
-
-    /** Configure this container with DSL. */
-    inline operator fun invoke(configuration: TypeSpecContainerScope.() -> Unit): Unit =
-        TypeSpecContainerScope(this).configuration()
 }
 
-/** Receiver for the `types` block providing an extended set of operators for the configuration. */
+/** Receiver for the `types` function type providing an extended set of operators for the configuration. */
 @JavapoetDslMarker
 class TypeSpecContainerScope @PublishedApi internal constructor(private val container: TypeSpecContainer) :
     TypeSpecContainer() {
 
     override fun add(spec: TypeSpec) = container.add(spec)
+
+    /** Convenient method to add class with receiver type. */
+    inline operator fun String.invoke(builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
+        addClass(this, builderAction)
+
+    /** Convenient method to add class with receiver type. */
+    inline operator fun ClassName.invoke(builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
+        addClass(this, builderAction)
 }

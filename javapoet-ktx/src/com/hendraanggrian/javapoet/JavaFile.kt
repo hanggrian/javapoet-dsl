@@ -16,31 +16,30 @@ inline fun buildJavaFile(packageName: String, builderAction: JavaFileBuilder.() 
 /** Wrapper of [JavaFile.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetDslMarker
 class JavaFileBuilder @PublishedApi internal constructor(private val packageName: String) : TypeSpecContainer() {
-
     private var typeSpec: TypeSpec? = null
-    private var comments: MutableMap<String, Array<Any>>? = null
-    private var staticImports: MutableMap<Any, Array<String>>? = null
+    private var comments: MutableList<Pair<String, Array<*>>>? = null
+    private var staticImports: MutableMap<Any, MutableSet<String>>? = null
     private var isSkipJavaLangImports: Boolean? = null
     private var indentString: String? = null
 
     override fun add(spec: TypeSpec) {
-        check(typeSpec == null) { "Java file may only have 1 type" }
+        check(typeSpec == null) { "Java file may only have single type" }
         typeSpec = spec
     }
 
     /** Add comment like [String.format]. */
     fun addComment(format: String, vararg args: Any) {
         if (comments == null) {
-            comments = mutableMapOf()
+            comments = mutableListOf()
         }
-        comments!![format] = arrayOf(*args)
+        comments!! += format to arrayOf(*args)
     }
 
     /** Set comment with simple string, cancelling all changes made with [addComment]. */
     var comment: String
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
         set(value) {
-            comments = mutableMapOf(value to emptyArray())
+            comments = mutableListOf(value to emptyArray<Any>())
         }
 
     /** Add static import. */
@@ -48,7 +47,7 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
         if (staticImports == null) {
             staticImports = mutableMapOf()
         }
-        staticImports!![constant] = emptyArray()
+        staticImports!![constant] = mutableSetOf()
     }
 
     /** Add static import. */
@@ -56,7 +55,10 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
         if (staticImports == null) {
             staticImports = mutableMapOf()
         }
-        staticImports!![type] = arrayOf(*names)
+        when (type) {
+            in staticImports!! -> staticImports!![type]!! += names
+            else -> staticImports!![type] = mutableSetOf(*names)
+        }
     }
 
     /** Add static import. */
@@ -64,16 +66,17 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
         if (staticImports == null) {
             staticImports = mutableMapOf()
         }
-        staticImports!![type] = arrayOf(*names)
+        when (type) {
+            in staticImports!! -> staticImports!![type]!! += names
+            else -> staticImports!![type] = mutableSetOf(*names)
+        }
     }
 
     /** Add static import. */
-    fun addStaticImport(type: KClass<*>, vararg names: String) =
-        addStaticImport(type.java, *names)
+    fun addStaticImport(type: KClass<*>, vararg names: String) = addStaticImport(type.java, *names)
 
     /** Add static import with reified function. */
-    inline fun <reified T> addStaticImport(vararg names: String) =
-        addStaticImport(T::class, *names)
+    inline fun <reified T> addStaticImport(vararg names: String) = addStaticImport(T::class, *names)
 
     /** Set to true to skip java imports. */
     var skipJavaLangImports: Boolean
@@ -103,8 +106,8 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
             staticImports?.forEach { (type, names) ->
                 when (type) {
                     is Enum<*> -> addStaticImport(type)
-                    is ClassName -> addStaticImport(type, *names)
-                    is Class<*> -> addStaticImport(type, *names)
+                    is ClassName -> addStaticImport(type, *names.toTypedArray())
+                    is Class<*> -> addStaticImport(type, *names.toTypedArray())
                 }
             }
             isSkipJavaLangImports?.let { skipJavaLangImports(it) }

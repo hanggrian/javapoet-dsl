@@ -81,13 +81,9 @@ abstract class ParameterSpecContainer internal constructor() {
     operator fun set(name: String, type: KClass<*>) {
         add(type, name)
     }
-
-    /** Configure this container with DSL. */
-    inline operator fun invoke(configuration: ParameterSpecContainerScope.() -> Unit): Unit =
-        ParameterSpecContainerScope(this).configuration()
 }
 
-/** Receiver for the `parameters` block providing an extended set of operators for the configuration. */
+/** Receiver for the `parameters` function type providing an extended set of operators for the configuration. */
 @JavapoetDslMarker
 class ParameterSpecContainerScope @PublishedApi internal constructor(private val container: ParameterSpecContainer) :
     ParameterSpecContainer() {
