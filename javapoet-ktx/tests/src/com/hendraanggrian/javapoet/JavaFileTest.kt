@@ -1,11 +1,13 @@
 package com.hendraanggrian.javapoet
 
+import com.squareup.javapoet.JavaFile
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
 
 class JavaFileTest {
 
+    /** A java file may only have one type. */
     @Test fun invalidNumberOfType() {
         // multiple types
         buildJavaFile("com.example") {
@@ -19,35 +21,32 @@ class JavaFileTest {
     @Test fun comments() {
         // stacking addComment
         assertEquals(
-            """
-                // A very long comment
-                package com.example;
-
-                class MyClass {
-                }
-
-            """.trimIndent(), buildJavaFile("com.example") {
+            JavaFile.builder("com.example", buildClassType("MyClass"))
+                .addFileComment("A ")
+                .addFileComment("very ")
+                .addFileComment("long ")
+                .addFileComment("comment")
+                .build(),
+            buildJavaFile("com.example") {
                 addClass("MyClass")
                 addComment("A ")
                 addComment("very ")
                 addComment("long ")
                 addComment("comment")
-            }.toString()
+            }
         )
         // single-line comment
         assertEquals(
-            """
-                // A simple comment
-                package com.example;
-
-                class MyOtherClass {
-                }
-
-            """.trimIndent(), buildJavaFile("com.example") {
+            JavaFile.builder("com.example", buildClassType("MyOtherClass"))
+                .addFileComment("A ")
+                .addFileComment("simple ")
+                .addFileComment("comment")
+                .build(),
+            buildJavaFile("com.example") {
                 addClass("MyOtherClass")
                 addComment("A very long comment")
                 comment = "A simple comment"
-            }.toString()
+            }
         )
     }
 

@@ -89,6 +89,9 @@ abstract class TypeSpecContainer internal constructor() {
     /** Add annotation type from [type] with custom initialization [builderAction], returning the type added. */
     inline fun addAnnotation(type: ClassName, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
         buildAnnotationType(type, builderAction).also { add(it) }
+
+    /** Convenient method to add type with operator function. */
+    operator fun plusAssign(spec: TypeSpec) = add(spec)
 }
 
 /** Receiver for the `types` function type providing an extended set of operators for the configuration. */
