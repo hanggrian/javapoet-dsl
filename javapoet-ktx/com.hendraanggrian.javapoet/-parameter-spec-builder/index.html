@@ -15,12 +15,11 @@
 <tbody>
 <tr>
 <td>
-<p><a href="annotations.html">annotations</a></p>
+<h4><a href="annotations.html">annotations</a></h4>
 </td>
 <td>
-<code><span class="keyword">val </span><span class="identifier">annotations</span><span class="symbol">: </span><a href="../../com.hendraanggrian.javapoet.dsl/-annotation-container/index.html"><span class="identifier">AnnotationContainer</span></a></code>
-<p>Collection of annotations, may be configured with Kotlin DSL.</p>
-</td>
+<p>Configure annotations without DSL.</p>
+<code><span class="keyword">val </span><span class="identifier">annotations</span><span class="symbol">: </span><a href="../../com.hendraanggrian.javapoet.dsl/-annotation-spec-container/index.html"><span class="identifier">AnnotationSpecContainer</span></a></code></td>
 </tr>
 </tbody>
 </table>
@@ -29,21 +28,27 @@
 <tbody>
 <tr>
 <td>
-<p><a href="add-modifiers.html">addModifiers</a></p>
+<h4><a href="add-modifiers.html">addModifiers</a></h4>
 </td>
 <td>
-<code><span class="keyword">fun </span><span class="identifier">addModifiers</span><span class="symbol">(</span><span class="keyword">vararg</span> <span class="identifier" id="com.hendraanggrian.javapoet.ParameterSpecBuilder$addModifiers(kotlin.Array((javax.lang.model.element.Modifier)))/modifiers">modifiers</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/javax/lang/model/element/Modifier.html"><span class="identifier">Modifier</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code>
-<p>Add field modifiers.</p>
-</td>
+<p>Add parameter modifiers.</p>
+<code><span class="keyword">fun </span><span class="identifier">addModifiers</span><span class="symbol">(</span><span class="keyword">vararg</span> <span class="identifier" id="com.hendraanggrian.javapoet.ParameterSpecBuilder$addModifiers(kotlin.Array((javax.lang.model.element.Modifier)))/modifiers">modifiers</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/javax/lang/model/element/Modifier.html"><span class="identifier">Modifier</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
 </tr>
 <tr>
 <td>
-<p><a href="build.html">build</a></p>
+<h4><a href="annotations.html">annotations</a></h4>
 </td>
 <td>
-<code><span class="keyword">fun </span><span class="identifier">build</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">ParameterSpec</span></code>
-<p>Returns native spec.</p>
+<p>Configure annotations with DSL.</p>
+<code><span class="keyword">fun </span><span class="identifier">annotations</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.ParameterSpecBuilder$annotations(kotlin.Function1((com.hendraanggrian.javapoet.dsl.AnnotationSpecContainerScope, kotlin.Unit)))/configuration">configuration</span><span class="symbol">:</span>&nbsp;<a href="../../com.hendraanggrian.javapoet.dsl/-annotation-spec-container-scope/index.html"><span class="identifier">AnnotationSpecContainerScope</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="build.html">build</a></h4>
 </td>
+<td>
+<p>Returns native spec.</p>
+<code><span class="keyword">fun </span><span class="identifier">build</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">ParameterSpec</span></code></td>
 </tr>
 </tbody>
 </table>

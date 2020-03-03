@@ -23,13 +23,21 @@ $dokka.location:com.hendraanggrian.javapoet$asTypeVariableName(javax.lang.model.
 $dokka.location:com.hendraanggrian.javapoet$asTypeVariableName(javax.lang.model.type.TypeVariable)com.hendraanggrian.javapoet/javax.lang.model.type.-type-variable/as-type-variable-name.html
 $dokka.location:com.hendraanggrian.javapoet$asWildcardTypeName(java.lang.reflect.WildcardType)com.hendraanggrian.javapoet/java.lang.reflect.-wildcard-type/as-wildcard-type-name.html
 $dokka.location:com.hendraanggrian.javapoet$asWildcardTypeName(javax.lang.model.type.WildcardType)com.hendraanggrian.javapoet/javax.lang.model.type.-wildcard-type/as-wildcard-type-name.html
+$dokka.location:com.hendraanggrian.javapoet$build(com.squareup.javapoet.AnnotationSpec.Builder, kotlin.Function1((com.hendraanggrian.javapoet.AnnotationSpecBuilder, kotlin.Unit)))com.hendraanggrian.javapoet/com.squareup.javapoet.-annotation-spec.-builder/build.html
+$dokka.location:com.hendraanggrian.javapoet$build(com.squareup.javapoet.CodeBlock.Builder, kotlin.Function1((com.hendraanggrian.javapoet.CodeBlockBuilder, kotlin.Unit)))com.hendraanggrian.javapoet/com.squareup.javapoet.-code-block.-builder/build.html
+$dokka.location:com.hendraanggrian.javapoet$build(com.squareup.javapoet.FieldSpec.Builder, kotlin.Function1((com.hendraanggrian.javapoet.FieldSpecBuilder, kotlin.Unit)))com.hendraanggrian.javapoet/com.squareup.javapoet.-field-spec.-builder/build.html
+$dokka.location:com.hendraanggrian.javapoet$build(com.squareup.javapoet.MethodSpec.Builder, kotlin.Function1((com.hendraanggrian.javapoet.MethodSpecBuilder, kotlin.Unit)))com.hendraanggrian.javapoet/com.squareup.javapoet.-method-spec.-builder/build.html
+$dokka.location:com.hendraanggrian.javapoet$build(com.squareup.javapoet.ParameterSpec.Builder, kotlin.Function1((com.hendraanggrian.javapoet.ParameterSpecBuilder, kotlin.Unit)))com.hendraanggrian.javapoet/com.squareup.javapoet.-parameter-spec.-builder/build.html
+$dokka.location:com.hendraanggrian.javapoet$build(com.squareup.javapoet.TypeSpec.Builder, kotlin.Function1((com.hendraanggrian.javapoet.TypeSpecBuilder, kotlin.Unit)))com.hendraanggrian.javapoet/com.squareup.javapoet.-type-spec.-builder/build.html
+$dokka.location:com.hendraanggrian.javapoet$class(kotlin.String, kotlin.String, kotlin.Array((kotlin.String)))com.hendraanggrian.javapoet/kotlin.-string/class.html
+$dokka.location:com.hendraanggrian.javapoet$formatCode(kotlin.String, kotlin.Array((kotlin.Any)))com.hendraanggrian.javapoet/kotlin.-string/format-code.html
 $dokka.location:com.hendraanggrian.javapoet$join(kotlin.collections.Iterable((com.squareup.javapoet.CodeBlock)), kotlin.String)com.hendraanggrian.javapoet/kotlin.collections.-iterable/join.html
 $dokka.location:com.hendraanggrian.javapoet$parameterizedBy(com.squareup.javapoet.ClassName, kotlin.Array((com.squareup.javapoet.TypeName)))com.hendraanggrian.javapoet/com.squareup.javapoet.-class-name/parameterized-by.html
 $dokka.location:com.hendraanggrian.javapoet$parameterizedBy(java.lang.Class((kotlin.Any)), kotlin.Array((java.lang.reflect.Type)))com.hendraanggrian.javapoet/java.lang.-class/parameterized-by.html
+$dokka.location:com.hendraanggrian.javapoet$parameterizedBy(kotlin.reflect.KClass((kotlin.Any)))com.hendraanggrian.javapoet/kotlin.reflect.-k-class/parameterized-by.html
 $dokka.location:com.hendraanggrian.javapoet$parameterizedBy(kotlin.reflect.KClass((kotlin.Any)), kotlin.Array((kotlin.reflect.KClass((kotlin.Any)))))com.hendraanggrian.javapoet/kotlin.reflect.-k-class/parameterized-by.html
 $dokka.location:com.hendraanggrian.javapoet$toAnnotation(javax.lang.model.element.AnnotationMirror)com.hendraanggrian.javapoet/javax.lang.model.element.-annotation-mirror/to-annotation.html
 $dokka.location:com.hendraanggrian.javapoet$toAnnotation(kotlin.Annotation, kotlin.Boolean)com.hendraanggrian.javapoet/kotlin.-annotation/to-annotation.html
-$dokka.location:com.hendraanggrian.javapoet$toCode(kotlin.String, kotlin.Array((kotlin.Any)))com.hendraanggrian.javapoet/kotlin.-string/to-code.html
 $dokka.location:com.hendraanggrian.javapoet$toParameter(javax.lang.model.element.VariableElement)com.hendraanggrian.javapoet/javax.lang.model.element.-variable-element/to-parameter.html
 com.hendraanggrian.javapoet
 com.hendraanggrian.javapoet.dsl
