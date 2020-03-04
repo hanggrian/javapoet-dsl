@@ -1,5 +1,3 @@
-import javax.xml.ws.Endpoint.publish
-
 plugins {
     kotlin("jvm")
     dokka()

@@ -139,7 +139,7 @@ class JavaFileTest {
                 addClass("MyClass") {
                     methods.addConstructor()
                 }
-                indentCount = 4
+                indentSize = 4
             }.toString()
         )
     }

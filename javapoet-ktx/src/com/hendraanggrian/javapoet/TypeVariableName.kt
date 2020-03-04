@@ -7,24 +7,42 @@ import javax.lang.model.element.TypeParameterElement
 import javax.lang.model.type.TypeVariable
 import kotlin.reflect.KClass
 
-/** Returns a [TypeVariableName] named [name] without bounds. */
-fun typeVariableNameOf(name: String): TypeVariableName = TypeVariableName.get(name)
+/** Returns a [TypeVariableName] without bounds. */
+fun String.typeVariableBy(): TypeVariableName = TypeVariableName.get(this)
 
-/** Returns a [TypeVariableName] named [name] with [bounds]. */
-fun typeVariableNameOf(name: String, vararg bounds: TypeName): TypeVariableName = TypeVariableName.get(name, *bounds)
+/** Returns a [TypeVariableName] with [TypeName] bounds. */
+fun String.typeVariableBy(vararg bounds: TypeName): TypeVariableName = TypeVariableName.get(this, *bounds)
 
-/** Returns a [TypeVariableName] named [name] with [bounds]. */
-fun typeVariableNameOf(name: String, vararg bounds: Type): TypeVariableName = TypeVariableName.get(name, *bounds)
+/** Returns a [TypeVariableName] with [Type] bounds. */
+fun String.typeVariableBy(vararg bounds: Type): TypeVariableName = TypeVariableName.get(this, *bounds)
 
-/** Returns a [TypeVariableName] named [name] with [bounds]. */
-fun typeVariableNameOf(name: String, vararg bounds: KClass<*>): TypeVariableName =
-    TypeVariableName.get(name, *bounds.toJavaClasses())
+/** Returns a [TypeVariableName] with [KClass] bounds. */
+fun String.typeVariableBy(vararg bounds: KClass<*>): TypeVariableName =
+    TypeVariableName.get(this, *bounds.toJavaClasses())
 
-/** Returns a [TypeVariableName] equivalent to this [TypeParameterElement].  */
+/**
+ * Returns a [TypeVariableName] equivalent to [TypeParameterElement].
+ *
+ * **See Also**
+ *
+ * [KotlinPoet counterpart](https://square.github.io/kotlinpoet/1.x/kotlinpoet/com.squareup.kotlinpoet/javax.lang.model.element.-type-parameter-element/as-type-variable-name/)
+ */
 fun TypeParameterElement.asTypeVariableName(): TypeVariableName = TypeVariableName.get(this)
 
-/** Returns a [TypeVariableName] equivalent to this [TypeVariable].  */
+/**
+ * Returns a [TypeVariableName] equivalent to [TypeVariable].
+ *
+ * **See Also**
+ *
+ * [KotlinPoet counterpart](https://square.github.io/kotlinpoet/1.x/kotlinpoet/com.squareup.kotlinpoet/javax.lang.model.type.-type-variable/as-type-variable-name/)
+ */
 fun TypeVariable.asTypeVariableName(): TypeVariableName = TypeVariableName.get(this)
 
-/** Returns a [TypeVariableName] equivalent to this [java.lang.reflect.TypeVariable].  */
+/**
+ * Returns a [TypeVariableName] equivalent to [java.lang.reflect.TypeVariable].
+ *
+ * **See Also**
+ *
+ * [KotlinPoet counterpart](https://square.github.io/kotlinpoet/1.x/kotlinpoet/com.squareup.kotlinpoet/javax.lang.model.type.-type-variable/as-type-variable-name/)
+ */
 fun java.lang.reflect.TypeVariable<*>.asTypeVariableName(): TypeVariableName = TypeVariableName.get(this)

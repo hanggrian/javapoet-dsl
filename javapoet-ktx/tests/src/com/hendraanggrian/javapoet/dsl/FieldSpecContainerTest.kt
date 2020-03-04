@@ -1,8 +1,8 @@
 package com.hendraanggrian.javapoet.dsl
 
 import com.google.common.truth.Truth.assertThat
+import com.hendraanggrian.javapoet.classOf
 import com.hendraanggrian.javapoet.buildField
-import com.hendraanggrian.javapoet.classNameOf
 import com.squareup.javapoet.FieldSpec
 import kotlin.test.Test
 
@@ -28,9 +28,9 @@ class FieldSpecContainerTest {
 
     @Test fun className() {
         val packageName = "com.hendraanggrian.javapoet.dsl.FieldSpecContainerTest"
-        container.add(classNameOf(packageName, "Field1"), "field1")
-        container["field2"] = classNameOf(packageName, "Field2")
-        container { "field3"(classNameOf(packageName, "Field3")) { } }
+        container.add(packageName.classOf("Field1"), "field1")
+        container["field2"] = packageName.classOf("Field2")
+        container { "field3"(packageName.classOf("Field3")) { } }
         assertThat(specs).containsExactly(
             buildField<Field1>("field1"),
             buildField<Field2>("field2"),

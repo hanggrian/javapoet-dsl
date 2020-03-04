@@ -1,8 +1,8 @@
 package com.hendraanggrian.javapoet.dsl
 
 import com.google.common.truth.Truth.assertThat
+import com.hendraanggrian.javapoet.classOf
 import com.hendraanggrian.javapoet.buildParameter
-import com.hendraanggrian.javapoet.classNameOf
 import com.squareup.javapoet.ParameterSpec
 import kotlin.test.Test
 
@@ -28,9 +28,9 @@ class ParameterSpecContainerTest {
 
     @Test fun className() {
         val packageName = "com.hendraanggrian.javapoet.dsl.ParameterSpecContainerTest"
-        container.add(classNameOf(packageName, "Parameter1"), "parameter1")
-        container["parameter2"] = classNameOf(packageName, "Parameter2")
-        container { "parameter3"(classNameOf(packageName, "Parameter3")) { } }
+        container.add(packageName.classOf("Parameter1"), "parameter1")
+        container["parameter2"] = packageName.classOf("Parameter2")
+        container { "parameter3"(packageName.classOf("Parameter3")) { } }
         assertThat(specs).containsExactly(
             buildParameter<Parameter1>("parameter1"),
             buildParameter<Parameter2>("parameter2"),

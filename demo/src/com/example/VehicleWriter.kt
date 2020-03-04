@@ -1,15 +1,15 @@
 package com.example
 
 import com.hendraanggrian.javapoet.INT
+import com.hendraanggrian.javapoet.classOf
 import com.hendraanggrian.javapoet.buildJavaFile
-import com.hendraanggrian.javapoet.classNameOf
 import java.nio.file.Paths
 import javax.lang.model.element.Modifier
 
 class VehicleWriter {
     companion object {
         private const val PACKAGE_NAME = "com.example.output"
-        private val VEHICLE_NAME = classNameOf(PACKAGE_NAME, "Vehicle")
+        private val VEHICLE_NAME = PACKAGE_NAME.classOf("Vehicle")
 
         @JvmStatic
         fun main(args: Array<String>) {

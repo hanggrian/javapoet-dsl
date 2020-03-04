@@ -1,27 +1,37 @@
 package com.hendraanggrian.javapoet
 
-import com.squareup.javapoet.ParameterizedTypeName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ParameterizedTypeNameTest {
 
-    @Test fun parameterizedBy() {
+    @Test fun multiple() {
         assertEquals(
-            ParameterizedTypeName.get(List::class.asClassName(), OBJECT),
-            List::class.asClassName().parameterizedBy(OBJECT)
+            "kotlin.Pair<java.lang.Integer, java.lang.Double>",
+            "${Pair::class.java.asClassName().parameterizedBy(INT.box(), DOUBLE.box())}"
         )
         assertEquals(
-            ParameterizedTypeName.get(List::class.java, String::class.java),
-            List::class.java.parameterizedBy(String::class.java)
+            "kotlin.Pair<java.lang.Integer, java.lang.Double>",
+            "${Pair::class.java.parameterizedBy(java.lang.Integer::class.java, java.lang.Double::class.java)}"
         )
         assertEquals(
-            ParameterizedTypeName.get(List::class.java, String::class.java),
-            List::class.parameterizedBy(String::class)
+            "kotlin.Pair<java.lang.Integer, java.lang.Double>",
+            "${Pair::class.parameterizedBy(java.lang.Integer::class, java.lang.Double::class)}"
+        )
+    }
+
+    @Test fun single() {
+        assertEquals(
+            "java.util.List<java.lang.String>",
+            "${List::class.asClassName().parameterizedBy<String>()}"
         )
         assertEquals(
-            ParameterizedTypeName.get(List::class.java, String::class.java),
-            List::class.parameterizedBy<String>()
+            "java.util.List<java.lang.String>",
+            "${List::class.java.parameterizedBy<String>()}"
+        )
+        assertEquals(
+            "java.util.List<java.lang.String>",
+            "${List::class.parameterizedBy<String>()}"
         )
     }
 }

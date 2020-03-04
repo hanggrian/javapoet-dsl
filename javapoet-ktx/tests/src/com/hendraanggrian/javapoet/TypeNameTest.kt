@@ -20,8 +20,8 @@ class TypeNameTest {
     }
 
     @Test fun asTypeName() {
-        assertEquals(TypeName.get(String::class.java), String::class.java.asTypeName())
-        assertEquals(TypeName.get(String::class.java), String::class.asTypeName())
-        assertEquals(TypeName.get(String::class.java), asTypeName<String>())
+        assertEquals("java.lang.String", "${String::class.java.asTypeName()}")
+        assertEquals("java.lang.String", "${String::class.asTypeName()}")
+        assertEquals("java.lang.String", "${typeNameOf<String>()}")
     }
 }

@@ -1,8 +1,8 @@
 package com.hendraanggrian.javapoet.dsl
 
 import com.google.common.truth.Truth.assertThat
+import com.hendraanggrian.javapoet.classOf
 import com.hendraanggrian.javapoet.buildAnnotation
-import com.hendraanggrian.javapoet.classNameOf
 import com.squareup.javapoet.AnnotationSpec
 import kotlin.test.Test
 
@@ -28,9 +28,9 @@ class AnnotationSpecContainerTest {
 
     @Test fun className() {
         val packageName = "com.hendraanggrian.javapoet.dsl.AnnotationSpecContainerTest"
-        container.add(classNameOf(packageName, "Annotation1"))
-        container += classNameOf(packageName, "Annotation2")
-        container { (classNameOf(packageName, "Annotation3")) { } }
+        container.add(packageName.classOf("Annotation1"))
+        container += packageName.classOf("Annotation2")
+        container { (packageName.classOf("Annotation3")) { } }
         assertThat(specs).containsExactly(
             buildAnnotation<Annotation1>(),
             buildAnnotation<Annotation2>(),

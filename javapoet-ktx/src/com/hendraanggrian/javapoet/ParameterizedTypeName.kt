@@ -7,21 +7,59 @@ import java.lang.reflect.ParameterizedType
 import java.lang.reflect.Type
 import kotlin.reflect.KClass
 
-/** Returns a [ParameterizedTypeName], applying `typeArguments` to `this`.  */
+/**
+ * Returns a [ParameterizedTypeName] applying [TypeName] arguments to [ClassName].
+ *
+ * **See Also**
+ *
+ * [KotlinPoet counterpart](https://square.github.io/kotlinpoet/1.x/kotlinpoet/com.squareup.kotlinpoet/-parameterized-type-name/parameterized-by/)
+ */
 fun ClassName.parameterizedBy(vararg typeArguments: TypeName): ParameterizedTypeName =
     ParameterizedTypeName.get(this, *typeArguments)
 
-/** Returns a [ParameterizedTypeName], applying `typeArguments` to `this`.  */
+/**
+ * Returns a [ParameterizedTypeName] applying [T] argument to [KClass].
+ * @see ClassName.parameterizedBy
+ */
+inline fun <reified T> ClassName.parameterizedBy(): ParameterizedTypeName = parameterizedBy(T::class.asClassName())
+
+/**
+ * Returns a [ParameterizedTypeName] applying [Type] arguments to [Class].
+ *
+ * **See Also**
+ *
+ * [KotlinPoet counterpart](https://square.github.io/kotlinpoet/1.x/kotlinpoet/com.squareup.kotlinpoet/-parameterized-type-name/parameterized-by/)
+ */
 fun Class<*>.parameterizedBy(vararg typeArguments: Type): ParameterizedTypeName =
     ParameterizedTypeName.get(this, *typeArguments)
 
-/** Returns a [ParameterizedTypeName], applying `typeArguments` to `this`.  */
+/**
+ * Returns a [ParameterizedTypeName] applying [T] argument to [Class].
+ * @see Class.parameterizedBy
+ */
+inline fun <reified T> Class<*>.parameterizedBy(): ParameterizedTypeName = parameterizedBy(T::class.java)
+
+/**
+ * Returns a [ParameterizedTypeName] applying [KClass] arguments to [KClass].
+ *
+ * **See Also**
+ *
+ * [KotlinPoet counterpart](https://square.github.io/kotlinpoet/1.x/kotlinpoet/com.squareup.kotlinpoet/-parameterized-type-name/parameterized-by/)
+ */
 fun KClass<*>.parameterizedBy(vararg typeArguments: KClass<*>): ParameterizedTypeName =
-    java.parameterizedBy(*typeArguments.toJavaClasses())
+    ParameterizedTypeName.get(java, *typeArguments.toJavaClasses())
 
-/** Returns a [ParameterizedTypeName], applying `typeArguments` to `this`.  */
-inline fun <reified T> KClass<*>.parameterizedBy(): ParameterizedTypeName =
-    parameterizedBy(T::class)
+/**
+ * Returns a [ParameterizedTypeName] applying [T] argument to [KClass].
+ * @see KClass.parameterizedBy
+ */
+inline fun <reified T> KClass<*>.parameterizedBy(): ParameterizedTypeName = parameterizedBy(T::class)
 
-/** Returns a [ParameterizedTypeName] equivalent to this [ParameterizedType].  */
+/**
+ * Returns a [ParameterizedTypeName] equivalent to [ParameterizedType].
+ *
+ * **See Also**
+ *
+ * [KotlinPoet counterpart](https://square.github.io/kotlinpoet/1.x/kotlinpoet/com.squareup.kotlinpoet/java.lang.reflect.-parameterized-type/as-parameterized-type-name/)
+ */
 fun ParameterizedType.asParameterizedTypeName(): ParameterizedTypeName = ParameterizedTypeName.get(this)

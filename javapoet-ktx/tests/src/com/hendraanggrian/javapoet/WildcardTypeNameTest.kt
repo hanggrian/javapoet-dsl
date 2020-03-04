@@ -1,46 +1,27 @@
 package com.hendraanggrian.javapoet
 
-import com.squareup.javapoet.WildcardTypeName
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class WildcardTypeNameTest {
-
-    @Test fun asSubtypeWildcardTypeName() {
-        assertEquals(
-            WildcardTypeName.subtypeOf(asClassName<String>()),
-            asClassName<String>().asSubtypeWildcardTypeName()
-        )
-        assertEquals(
-            WildcardTypeName.subtypeOf(String::class.java),
-            String::class.java.asSubtypeWildcardTypeName()
-        )
-        assertEquals(
-            WildcardTypeName.subtypeOf(String::class.java),
-            String::class.asSubtypeWildcardTypeName()
-        )
-        assertEquals(
-            WildcardTypeName.subtypeOf(String::class.java),
-            asSubtypeWildcardTypeName<String>()
-        )
+    private companion object {
+        const val EXPECTED_SUBTYPE = "? extends com.hendraanggrian.javapoet.WildcardTypeNameTest.MyClass"
+        const val EXPECTED_SUPERTYPE = "? super com.hendraanggrian.javapoet.WildcardTypeNameTest.MyClass"
     }
 
-    @Test fun asSupertypeWildcardTypeName() {
-        assertEquals(
-            WildcardTypeName.supertypeOf(asClassName<String>()),
-            asClassName<String>().asSupertypeWildcardTypeName()
-        )
-        assertEquals(
-            WildcardTypeName.supertypeOf(String::class.java),
-            String::class.java.asSupertypeWildcardTypeName()
-        )
-        assertEquals(
-            WildcardTypeName.supertypeOf(String::class.java),
-            String::class.asSupertypeWildcardTypeName()
-        )
-        assertEquals(
-            WildcardTypeName.supertypeOf(String::class.java),
-            asSupertypeWildcardTypeName<String>()
-        )
+    @Test fun subtype() {
+        assertEquals(EXPECTED_SUBTYPE, "${MyClass::class.asTypeName().subtypeOf()}")
+        assertEquals(EXPECTED_SUBTYPE, "${MyClass::class.java.subtypeOf()}")
+        assertEquals(EXPECTED_SUBTYPE, "${MyClass::class.subtypeOf()}")
+        assertEquals(EXPECTED_SUBTYPE, "${wildcardTypeNameSubtypeOf<String>()}")
     }
+
+    @Test fun supertype() {
+        assertEquals(EXPECTED_SUPERTYPE, "${MyClass::class.asTypeName().supertypeOf()}")
+        assertEquals(EXPECTED_SUPERTYPE, "${MyClass::class.java.supertypeOf()}")
+        assertEquals(EXPECTED_SUPERTYPE, "${MyClass::class.supertypeOf()}")
+        assertEquals(EXPECTED_SUPERTYPE, "${wildcardTypeNameSupertypeOf<MyClass>()}")
+    }
+
+    class MyClass
 }

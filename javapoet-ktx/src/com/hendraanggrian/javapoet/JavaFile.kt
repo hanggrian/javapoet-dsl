@@ -18,7 +18,7 @@ inline fun buildJavaFile(packageName: String, builderAction: JavaFileBuilder.() 
 class JavaFileBuilder @PublishedApi internal constructor(private val packageName: String) : TypeSpecContainer() {
     private var typeSpec: TypeSpec? = null
     private var comments: MutableList<Pair<String, Array<*>>>? = null
-    private var staticImports: MutableMap<Any, MutableSet<String>>? = null
+    private var imports: MutableMap<Any, MutableSet<String>>? = null
     private var isSkipJavaLangImports: Boolean? = null
     private var indentString: String? = null
 
@@ -44,31 +44,31 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
 
     /** Add static import. */
     fun addStaticImport(constant: Enum<*>) {
-        if (staticImports == null) {
-            staticImports = mutableMapOf()
+        if (imports == null) {
+            imports = mutableMapOf()
         }
-        staticImports!![constant] = mutableSetOf()
+        imports!![constant] = mutableSetOf()
     }
 
     /** Add static import. */
     fun addStaticImport(type: ClassName, vararg names: String) {
-        if (staticImports == null) {
-            staticImports = mutableMapOf()
+        if (imports == null) {
+            imports = mutableMapOf()
         }
         when (type) {
-            in staticImports!! -> staticImports!![type]!! += names
-            else -> staticImports!![type] = mutableSetOf(*names)
+            in imports!! -> imports!![type]!! += names
+            else -> imports!![type] = mutableSetOf(*names)
         }
     }
 
     /** Add static import. */
     fun addStaticImport(type: Class<*>, vararg names: String) {
-        if (staticImports == null) {
-            staticImports = mutableMapOf()
+        if (imports == null) {
+            imports = mutableMapOf()
         }
         when (type) {
-            in staticImports!! -> staticImports!![type]!! += names
-            else -> staticImports!![type] = mutableSetOf(*names)
+            in imports!! -> imports!![type]!! += names
+            else -> imports!![type] = mutableSetOf(*names)
         }
     }
 
@@ -92,8 +92,8 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
             indentString = value
         }
 
-    /** Set indent space count. */
-    inline var indentCount: Int
+    /** Convenient method to set [indent] with space the length of [indentSize]. */
+    inline var indentSize: Int
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
         set(value) {
             indent = buildString { repeat(value) { append(' ') } }
@@ -103,7 +103,7 @@ class JavaFileBuilder @PublishedApi internal constructor(private val packageName
     fun build(): JavaFile = JavaFile.builder(packageName, checkNotNull(typeSpec) { "A main type must be initialized" })
         .apply {
             comments?.forEach { (format, args) -> addFileComment(format, *args) }
-            staticImports?.forEach { (type, names) ->
+            imports?.forEach { (type, names) ->
                 when (type) {
                     is Enum<*> -> addStaticImport(type)
                     is ClassName -> addStaticImport(type, *names.toTypedArray())

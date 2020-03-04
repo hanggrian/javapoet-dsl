@@ -1,12 +1,12 @@
 package com.hendraanggrian.javapoet.dsl
 
 import com.google.common.truth.Truth.assertThat
+import com.hendraanggrian.javapoet.classOf
 import com.hendraanggrian.javapoet.buildAnnotationType
 import com.hendraanggrian.javapoet.buildAnonymousType
 import com.hendraanggrian.javapoet.buildClassType
 import com.hendraanggrian.javapoet.buildEnumType
 import com.hendraanggrian.javapoet.buildInterfaceType
-import com.hendraanggrian.javapoet.classNameOf
 import com.squareup.javapoet.TypeSpec
 import kotlin.test.Test
 
@@ -34,11 +34,11 @@ class TypeSpecContainerTest {
         val packageName = "com.hendraanggrian.javapoet.dsl.TypeSpecContainerTest"
         container {
             "Class1" { }
-            (classNameOf(packageName, "MyType")) { }
+            (packageName.classOf("MyType")) { }
         }
         assertThat(specs).containsExactly(
             buildClassType("Class1"),
-            buildClassType(classNameOf(packageName, "MyType"))
+            buildClassType(packageName.classOf("MyType"))
         )
     }
 
