@@ -12,19 +12,11 @@
 <tbody>
 <tr>
 <td>
-<h4><a href="as-subtype-wildcard-type-name.html">asSubtypeWildcardTypeName</a></h4>
+<h4><a href="array-of.html">arrayOf</a></h4>
 </td>
 <td>
-<p>Returns a <a href="#">WildcardTypeName</a> that represents an unknown type that extends <a href="https://docs.oracle.com/javase/6/docs/api/java/lang/reflect/Type.html">Type</a>.</p>
-<code><span class="keyword">fun </span><a href="https://docs.oracle.com/javase/6/docs/api/java/lang/reflect/Type.html"><span class="identifier">Type</span></a><span class="symbol">.</span><span class="identifier">asSubtypeWildcardTypeName</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">WildcardTypeName</span></code></td>
-</tr>
-<tr>
-<td>
-<h4><a href="as-supertype-wildcard-type-name.html">asSupertypeWildcardTypeName</a></h4>
-</td>
-<td>
-<p>Returns a <a href="#">WildcardTypeName</a> that represents an unknown supertype of <a href="https://docs.oracle.com/javase/6/docs/api/java/lang/reflect/Type.html">Type</a>.</p>
-<code><span class="keyword">fun </span><a href="https://docs.oracle.com/javase/6/docs/api/java/lang/reflect/Type.html"><span class="identifier">Type</span></a><span class="symbol">.</span><span class="identifier">asSupertypeWildcardTypeName</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">WildcardTypeName</span></code></td>
+<p>Returns an <a href="#">ArrayTypeName</a> equivalent to <a href="https://docs.oracle.com/javase/6/docs/api/java/lang/Class.html">Class</a>.</p>
+<code><span class="keyword">fun </span><a href="https://docs.oracle.com/javase/6/docs/api/java/lang/reflect/Type.html"><span class="identifier">Type</span></a><span class="symbol">.</span><span class="identifier">arrayOf</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">ArrayTypeName</span></code></td>
 </tr>
 <tr>
 <td>
@@ -33,6 +25,22 @@
 <td>
 <p>Returns a <a href="#">TypeName</a> equivalent to <a href="https://docs.oracle.com/javase/6/docs/api/java/lang/reflect/Type.html">Type</a>.</p>
 <code><span class="keyword">fun </span><a href="https://docs.oracle.com/javase/6/docs/api/java/lang/reflect/Type.html"><span class="identifier">Type</span></a><span class="symbol">.</span><span class="identifier">asTypeName</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">TypeName</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="subtype-of.html">subtypeOf</a></h4>
+</td>
+<td>
+<p>Returns a <a href="#">WildcardTypeName</a> that represents an unknown type that extends <a href="https://docs.oracle.com/javase/6/docs/api/java/lang/reflect/Type.html">Type</a>.</p>
+<code><span class="keyword">fun </span><a href="https://docs.oracle.com/javase/6/docs/api/java/lang/reflect/Type.html"><span class="identifier">Type</span></a><span class="symbol">.</span><span class="identifier">subtypeOf</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">WildcardTypeName</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="supertype-of.html">supertypeOf</a></h4>
+</td>
+<td>
+<p>Returns a <a href="#">WildcardTypeName</a> that represents an unknown supertype of <a href="https://docs.oracle.com/javase/6/docs/api/java/lang/reflect/Type.html">Type</a>.</p>
+<code><span class="keyword">fun </span><a href="https://docs.oracle.com/javase/6/docs/api/java/lang/reflect/Type.html"><span class="identifier">Type</span></a><span class="symbol">.</span><span class="identifier">supertypeOf</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">WildcardTypeName</span></code></td>
 </tr>
 </tbody>
 </table>
