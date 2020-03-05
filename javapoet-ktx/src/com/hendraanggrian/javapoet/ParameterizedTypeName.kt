@@ -8,6 +8,13 @@ import java.lang.reflect.Type
 import kotlin.reflect.KClass
 
 /**
+ * Returns a [ParameterizedTypeName] applying [KClass] to [T].
+ * @see typeNameOf
+ */
+inline fun <reified T> parameterizedTypeNameOf(vararg typeArguments: KClass<*>): ParameterizedTypeName =
+    T::class.parameterizedBy(*typeArguments)
+
+/**
  * Returns a [ParameterizedTypeName] applying [TypeName] arguments to [ClassName].
  *
  * **See Also**
@@ -16,12 +23,6 @@ import kotlin.reflect.KClass
  */
 fun ClassName.parameterizedBy(vararg typeArguments: TypeName): ParameterizedTypeName =
     ParameterizedTypeName.get(this, *typeArguments)
-
-/**
- * Returns a [ParameterizedTypeName] applying [T] argument to [KClass].
- * @see ClassName.parameterizedBy
- */
-inline fun <reified T> ClassName.parameterizedBy(): ParameterizedTypeName = parameterizedBy(T::class.asClassName())
 
 /**
  * Returns a [ParameterizedTypeName] applying [Type] arguments to [Class].
@@ -34,12 +35,6 @@ fun Class<*>.parameterizedBy(vararg typeArguments: Type): ParameterizedTypeName 
     ParameterizedTypeName.get(this, *typeArguments)
 
 /**
- * Returns a [ParameterizedTypeName] applying [T] argument to [Class].
- * @see Class.parameterizedBy
- */
-inline fun <reified T> Class<*>.parameterizedBy(): ParameterizedTypeName = parameterizedBy(T::class.java)
-
-/**
  * Returns a [ParameterizedTypeName] applying [KClass] arguments to [KClass].
  *
  * **See Also**
@@ -48,12 +43,6 @@ inline fun <reified T> Class<*>.parameterizedBy(): ParameterizedTypeName = param
  */
 fun KClass<*>.parameterizedBy(vararg typeArguments: KClass<*>): ParameterizedTypeName =
     ParameterizedTypeName.get(java, *typeArguments.toJavaClasses())
-
-/**
- * Returns a [ParameterizedTypeName] applying [T] argument to [KClass].
- * @see KClass.parameterizedBy
- */
-inline fun <reified T> KClass<*>.parameterizedBy(): ParameterizedTypeName = parameterizedBy(T::class)
 
 /**
  * Returns a [ParameterizedTypeName] equivalent to [ParameterizedType].

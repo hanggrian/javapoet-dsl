@@ -1,19 +1,20 @@
 package com.hendraanggrian.javapoet
 
+import com.example.MyClass
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class WildcardTypeNameTest {
     private companion object {
-        const val EXPECTED_SUBTYPE = "? extends com.hendraanggrian.javapoet.WildcardTypeNameTest.MyClass"
-        const val EXPECTED_SUPERTYPE = "? super com.hendraanggrian.javapoet.WildcardTypeNameTest.MyClass"
+        const val EXPECTED_SUBTYPE = "? extends com.example.MyClass"
+        const val EXPECTED_SUPERTYPE = "? super com.example.MyClass"
     }
 
     @Test fun subtype() {
         assertEquals(EXPECTED_SUBTYPE, "${MyClass::class.asTypeName().subtypeOf()}")
         assertEquals(EXPECTED_SUBTYPE, "${MyClass::class.java.subtypeOf()}")
         assertEquals(EXPECTED_SUBTYPE, "${MyClass::class.subtypeOf()}")
-        assertEquals(EXPECTED_SUBTYPE, "${wildcardTypeNameSubtypeOf<String>()}")
+        assertEquals(EXPECTED_SUBTYPE, "${wildcardTypeNameSubtypeOf<MyClass>()}")
     }
 
     @Test fun supertype() {
@@ -22,6 +23,4 @@ class WildcardTypeNameTest {
         assertEquals(EXPECTED_SUPERTYPE, "${MyClass::class.supertypeOf()}")
         assertEquals(EXPECTED_SUPERTYPE, "${wildcardTypeNameSupertypeOf<MyClass>()}")
     }
-
-    class MyClass
 }

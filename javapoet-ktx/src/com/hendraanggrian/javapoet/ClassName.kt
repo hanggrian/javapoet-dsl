@@ -4,15 +4,15 @@ import com.squareup.javapoet.ClassName
 import javax.lang.model.element.TypeElement
 import kotlin.reflect.KClass
 
-/** Returns a [ClassName] created from the given parts. */
-fun String.classOf(simpleName: String, vararg simpleNames: String): ClassName =
-    ClassName.get(this, simpleName, *simpleNames)
-
 /**
  * Returns a [ClassName] equivalent to [T].
  * @see typeNameOf
  */
 inline fun <reified T> classNameOf(): ClassName = T::class.asClassName()
+
+/** Returns a [ClassName] created from the given parts. */
+fun String.classOf(simpleName: String, vararg simpleNames: String): ClassName =
+    ClassName.get(this, simpleName, *simpleNames)
 
 /**
  * Returns a [ClassName] equivalent to [TypeElement].

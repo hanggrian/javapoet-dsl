@@ -11,6 +11,21 @@ Lightweight Kotlin extension of [JavaPoet], providing Kotlin DSL functionality a
  * Options to invoke DSL. For example, `methods.add("main") { ... }` is as good as `methods { "main" { ... } }`. Scroll down for more information.
  * Smooth transition, existing JavaPoet native specs can still be configured with DSL.
 
+Download
+--------
+```gradle
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation "com.hendraanggrian:javapoet-ktx:$version"
+}
+```
+
+Build everything with DSL
+-------------------------
+
 ```kotlin
 buildJavaFile("com.example.helloworld") {
     addClass("HelloWorld") {
@@ -26,21 +41,6 @@ buildJavaFile("com.example.helloworld") {
     }
 }.writeTo(System.out)
 ```
-
-Download
---------
-```gradle
-repositories {
-    jcenter()
-}
-
-dependencies {
-    implementation "com.hendraanggrian:javapoet-ktx:$version"
-}
-```
-
-Usage
------
 
 #### Use `%` in string formatter
 [JavaPoet] uses char prefix `$` when formatting literals (`$L`), strings (`$S`), types (`$T`), an names (`$N`) within strings.
@@ -134,30 +134,26 @@ addClass("Car") {
 }
 ```
 
-#### Type names extensions
-Top-level creators of `TypeName` and all its subclasses.
+Fluent TypeName API
+-------------------
+Write `TypeName` and all its subtypes fluently.
 
 ```kotlin
-val hoverboard = classNameOf("com.mattel", "Hoverboard")
-val list = classNameOf("java.util", "List")
-val listOfHoverboards = list.parameterizedBy(hoverboard)
+val myClass: ClassName = "com.example".classOf("MyClass")
+val arrayOfString: ArrayTypeName = "java.lang".classOf("String").arrayOf()
+val pairOfInteger: ParameterizedTypeName = "android.util".classOf("Pair").parameterizedBy(Integer::class, Integer::class)
+val tVariable: TypeVariableName = "T".typeVariableBy()
+val subtypeOfCharSequence: WildcardTypeName = "java.lang".classOf("CharSequence").subtypeOf() 
 ```
 
-License
--------
-    Copyright 2019 Hendra Anggrian
+If you have access to those types, they can also be strongly-typed. 
 
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-       http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
+```kotlin
+val myClass = classNameOf<com.example.MyClass>()
+val arrayOfString = arrayTypeNameOf<java.lang.String>()
+val pairOfInteger = parameterizedTypeNameOf<android.util.Pair>(Integer::class, Integer::class)
+val subtypeOfCharSequence = wildcardTypeNameSubtypeOf<java.lang.CharSequence>()
+```
 
 [JavaPoet]: https://github.com/square/javapoet
 [KotlinPoet]: https://github.com/square/kotlinpoet

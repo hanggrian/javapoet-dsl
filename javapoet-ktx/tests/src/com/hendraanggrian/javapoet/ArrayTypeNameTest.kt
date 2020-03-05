@@ -9,10 +9,13 @@ class ArrayTypeNameTest {
         const val EXPECTED = "com.example.MyClass[]"
     }
 
-    @Test fun test() {
-        assertEquals(EXPECTED, "${"com.hendraanggrian.javapoet".classOf("ArrayTypeNameTest", "MyClass").arrayOf()}")
+    @Test fun arrayOf() {
+        assertEquals(EXPECTED, "${"com.example".classOf("MyClass").arrayOf()}")
         assertEquals(EXPECTED, "${MyClass::class.java.arrayOf()}")
         assertEquals(EXPECTED, "${MyClass::class.arrayOf()}")
+    }
+
+    @Test fun arrayTypeNameOf() {
         assertEquals(EXPECTED, "${arrayTypeNameOf<MyClass>()}")
     }
 }
