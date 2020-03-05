@@ -6,18 +6,6 @@ import java.lang.reflect.Type
 import javax.lang.model.type.WildcardType
 import kotlin.reflect.KClass
 
-/**
- * Returns a [WildcardTypeName] subtype of [T].
- * @see typeNameOf
- */
-inline fun <reified T> wildcardTypeNameSubtypeOf(): WildcardTypeName = T::class.subtypeOf()
-
-/**
- * Returns a [WildcardTypeName] supertype of [T].
- * @see typeNameOf
- */
-inline fun <reified T> wildcardTypeNameSupertypeOf(): WildcardTypeName = T::class.supertypeOf()
-
 /** Returns a [WildcardTypeName] that represents an unknown type that extends [TypeName]. */
 fun TypeName.subtypeOf(): WildcardTypeName = WildcardTypeName.subtypeOf(this)
 

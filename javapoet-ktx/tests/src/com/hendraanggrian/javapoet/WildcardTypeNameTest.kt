@@ -14,13 +14,11 @@ class WildcardTypeNameTest {
         assertEquals(EXPECTED_SUBTYPE, "${MyClass::class.asTypeName().subtypeOf()}")
         assertEquals(EXPECTED_SUBTYPE, "${MyClass::class.java.subtypeOf()}")
         assertEquals(EXPECTED_SUBTYPE, "${MyClass::class.subtypeOf()}")
-        assertEquals(EXPECTED_SUBTYPE, "${wildcardTypeNameSubtypeOf<MyClass>()}")
     }
 
     @Test fun supertype() {
         assertEquals(EXPECTED_SUPERTYPE, "${MyClass::class.asTypeName().supertypeOf()}")
         assertEquals(EXPECTED_SUPERTYPE, "${MyClass::class.java.supertypeOf()}")
         assertEquals(EXPECTED_SUPERTYPE, "${MyClass::class.supertypeOf()}")
-        assertEquals(EXPECTED_SUPERTYPE, "${wildcardTypeNameSupertypeOf<MyClass>()}")
     }
 }

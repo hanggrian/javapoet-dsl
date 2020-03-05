@@ -14,8 +14,4 @@ class ArrayTypeNameTest {
         assertEquals(EXPECTED, "${MyClass::class.java.arrayOf()}")
         assertEquals(EXPECTED, "${MyClass::class.arrayOf()}")
     }
-
-    @Test fun arrayTypeNameOf() {
-        assertEquals(EXPECTED, "${arrayTypeNameOf<MyClass>()}")
-    }
 }

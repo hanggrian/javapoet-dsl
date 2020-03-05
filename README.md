@@ -149,7 +149,7 @@ val subtypeOfCharSequence: WildcardTypeName = "java.lang".classOf("CharSequence"
 If you have access to those types, they can also be strongly-typed. 
 
 ```kotlin
-val myClass = classNameOf<com.example.MyClass>()
+val myClass = com.example.MyClass.asClassName()
 val arrayOfString = arrayTypeNameOf<java.lang.String>()
 val pairOfInteger = parameterizedTypeNameOf<android.util.Pair>(Integer::class, Integer::class)
 val subtypeOfCharSequence = wildcardTypeNameSubtypeOf<java.lang.CharSequence>()

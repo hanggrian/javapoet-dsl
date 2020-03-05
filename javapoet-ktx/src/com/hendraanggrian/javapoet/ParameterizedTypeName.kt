@@ -8,13 +8,6 @@ import java.lang.reflect.Type
 import kotlin.reflect.KClass
 
 /**
- * Returns a [ParameterizedTypeName] applying [KClass] to [T].
- * @see typeNameOf
- */
-inline fun <reified T> parameterizedTypeNameOf(vararg typeArguments: KClass<*>): ParameterizedTypeName =
-    T::class.parameterizedBy(*typeArguments)
-
-/**
  * Returns a [ParameterizedTypeName] applying [TypeName] arguments to [ClassName].
  *
  * **See Also**
