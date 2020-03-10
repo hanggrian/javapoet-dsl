@@ -7,7 +7,7 @@ import com.hendraanggrian.javapoet.buildMethod
 import com.squareup.javapoet.MethodSpec
 
 /** A [MethodSpecContainer] is responsible for managing a set of method instances. */
-abstract class MethodSpecContainer internal constructor() {
+abstract class MethodSpecContainer {
 
     /** Add method to this container. */
     abstract fun add(spec: MethodSpec)
@@ -39,8 +39,7 @@ abstract class MethodSpecContainer internal constructor() {
 
 /** Receiver for the `methods` function type providing an extended set of operators for the configuration. */
 @JavapoetDslMarker
-class MethodSpecContainerScope @PublishedApi internal constructor(private val container: MethodSpecContainer) :
-    MethodSpecContainer() {
+class MethodSpecContainerScope(private val container: MethodSpecContainer) : MethodSpecContainer() {
 
     override fun add(spec: MethodSpec) = container.add(spec)
 

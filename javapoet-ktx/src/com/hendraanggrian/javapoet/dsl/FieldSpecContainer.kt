@@ -10,7 +10,7 @@ import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
 /** A [FieldSpecContainer] is responsible for managing a set of field instances. */
-abstract class FieldSpecContainer internal constructor() {
+abstract class FieldSpecContainer {
 
     /** Add field to this container. */
     abstract fun add(spec: FieldSpec)
@@ -85,8 +85,7 @@ abstract class FieldSpecContainer internal constructor() {
 
 /** Receiver for the `fields` function type providing an extended set of operators for the configuration. */
 @JavapoetDslMarker
-class FieldSpecContainerScope @PublishedApi internal constructor(private val container: FieldSpecContainer) :
-    FieldSpecContainer() {
+class FieldSpecContainerScope(private val container: FieldSpecContainer) : FieldSpecContainer() {
 
     override fun add(spec: FieldSpec) = container.add(spec)
 

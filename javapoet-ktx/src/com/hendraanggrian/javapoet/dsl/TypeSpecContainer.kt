@@ -12,7 +12,7 @@ import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.TypeSpec
 
 /** A [TypeSpecContainer] is responsible for managing a set of type instances. */
-abstract class TypeSpecContainer internal constructor() {
+abstract class TypeSpecContainer {
 
     /** Add type to this container. */
     abstract fun add(spec: TypeSpec)
@@ -96,8 +96,7 @@ abstract class TypeSpecContainer internal constructor() {
 
 /** Receiver for the `types` function type providing an extended set of operators for the configuration. */
 @JavapoetDslMarker
-class TypeSpecContainerScope @PublishedApi internal constructor(private val container: TypeSpecContainer) :
-    TypeSpecContainer() {
+class TypeSpecContainerScope(private val container: TypeSpecContainer) : TypeSpecContainer() {
 
     override fun add(spec: TypeSpec) = container.add(spec)
 

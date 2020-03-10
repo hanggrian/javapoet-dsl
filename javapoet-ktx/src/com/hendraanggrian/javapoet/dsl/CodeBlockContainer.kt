@@ -23,7 +23,7 @@ private interface CodeBlockAppendable {
     fun appendln(code: CodeBlock)
 }
 
-abstract class CodeBlockContainer internal constructor() : CodeBlockAppendable {
+abstract class CodeBlockContainer : CodeBlockAppendable {
 
     /** Add code block with custom initialization [builderAction], returning the block added. */
     inline fun append(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
@@ -49,7 +49,7 @@ abstract class CodeBlockContainer internal constructor() : CodeBlockAppendable {
 }
 
 /** A [JavadocContainer] is responsible for managing a set of code instances. */
-abstract class JavadocContainer internal constructor() : CodeBlockAppendable {
+abstract class JavadocContainer : CodeBlockAppendable {
 
     /** Add code block with custom initialization [builderAction], returning the block added. */
     inline fun append(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
@@ -94,8 +94,7 @@ abstract class JavadocContainer internal constructor() : CodeBlockAppendable {
 
 /** Receiver for the `javadoc` function type providing an extended set of operators for the configuration. */
 @JavapoetDslMarker
-class JavadocContainerScope @PublishedApi internal constructor(private val container: JavadocContainer) :
-    JavadocContainer() {
+class JavadocContainerScope(private val container: JavadocContainer) : JavadocContainer() {
 
     override fun append(format: String, vararg args: Any) = container.append(format, *args)
     override fun append(code: CodeBlock) = container.append(code)
