@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package com.hendraanggrian.javapoet
 
 import kotlin.reflect.KClass
@@ -36,4 +38,5 @@ internal fun <T> String.formatWith(args: Map<String, *>, action: (String, Map<St
     formatWith(args.values.toTypedArray()) { s, array -> action(s, args.keys.zip(array).toMap()) }
 
 /** Converts array of Kotlin classes to Java classes. */
-internal fun Array<out KClass<*>>.toJavaClasses(): Array<Class<*>> = map { it.java }.toTypedArray()
+@PublishedApi
+internal inline fun Array<out KClass<*>>.toJavaClasses(): Array<Class<*>> = map { it.java }.toTypedArray()

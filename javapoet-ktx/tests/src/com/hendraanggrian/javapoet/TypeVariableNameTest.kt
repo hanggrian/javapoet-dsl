@@ -5,8 +5,32 @@ import kotlin.test.assertEquals
 
 class TypeVariableNameTest {
 
-    @Test fun test() {
-        println("T".typeVariableBy(CharSequence::class))
-        assertEquals("T", "${"T".typeVariableBy()}")
-    }
+    @Test fun noBounds() = assertEquals("T", "${"T".typeVarOf()}")
+
+    @Test fun classNameBounds() = assertEquals(
+        """
+            <T extends java.lang.Integer> void go() {
+            }
+            
+            """.trimIndent(),
+        "${buildMethod("go") { addTypeVariable("T".typeVarBoundedBy(INT.box())) }}"
+    )
+
+    @Test fun classBounds() = assertEquals(
+        """
+            <T extends java.lang.Integer> void go() {
+            }
+            
+            """.trimIndent(),
+        "${buildMethod("go") { addTypeVariable("T".typeVarBoundedBy(java.lang.Integer::class.java)) }}"
+    )
+
+    @Test fun kclassBounds() = assertEquals(
+        """
+            <T extends java.lang.Integer> void go() {
+            }
+            
+            """.trimIndent(),
+        "${buildMethod("go") { addTypeVariable("T".typeVarBoundedBy(java.lang.Integer::class)) }}"
+    )
 }

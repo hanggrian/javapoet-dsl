@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package com.hendraanggrian.javapoet
 
 import com.squareup.javapoet.TypeName
@@ -32,7 +34,7 @@ inline fun <reified T> typeNameOf(): TypeName = T::class.asTypeName()
  *
  * [KotlinPoet counterpart](https://square.github.io/kotlinpoet/1.x/kotlinpoet/com.squareup.kotlinpoet/javax.lang.model.type.-type-mirror/as-type-name/)
  */
-fun TypeMirror.asTypeName(): TypeName = TypeName.get(this)
+inline fun TypeMirror.asTypeName(): TypeName = TypeName.get(this)
 
 /**
  * Returns a [TypeName] equivalent to [Type].
@@ -41,7 +43,7 @@ fun TypeMirror.asTypeName(): TypeName = TypeName.get(this)
  *
  * [KotlinPoet counterpart](https://square.github.io/kotlinpoet/1.x/kotlinpoet/com.squareup.kotlinpoet/java.lang.reflect.-type/as-type-name/)
  */
-fun Type.asTypeName(): TypeName = TypeName.get(this)
+inline fun Type.asTypeName(): TypeName = TypeName.get(this)
 
 /**
  * Returns a [TypeName] equivalent to [KClass].
@@ -50,4 +52,4 @@ fun Type.asTypeName(): TypeName = TypeName.get(this)
  *
  * [KotlinPoet counterpart](https://square.github.io/kotlinpoet/1.x/kotlinpoet/com.squareup.kotlinpoet/kotlin.reflect.-k-class/as-type-name/)
  */
-fun KClass<*>.asTypeName(): TypeName = TypeName.get(java)
+inline fun KClass<*>.asTypeName(): TypeName = TypeName.get(java)

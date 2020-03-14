@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package com.hendraanggrian.javapoet
 
 import com.squareup.javapoet.ClassName
@@ -5,7 +7,7 @@ import javax.lang.model.element.TypeElement
 import kotlin.reflect.KClass
 
 /** Returns a [ClassName] created from the given parts. */
-fun String.classOf(simpleName: String, vararg simpleNames: String): ClassName =
+inline fun String.classOf(simpleName: String, vararg simpleNames: String): ClassName =
     ClassName.get(this, simpleName, *simpleNames)
 
 /**
@@ -15,7 +17,7 @@ fun String.classOf(simpleName: String, vararg simpleNames: String): ClassName =
  *
  * [KotlinPoet counterpart](https://square.github.io/kotlinpoet/1.x/kotlinpoet/com.squareup.kotlinpoet/java.lang.-class/as-class-name/)
  */
-fun Class<*>.asClassName(): ClassName = ClassName.get(this)
+inline fun Class<*>.asClassName(): ClassName = ClassName.get(this)
 
 /**
  * Returns a [ClassName] equivalent to [KClass].
@@ -24,7 +26,7 @@ fun Class<*>.asClassName(): ClassName = ClassName.get(this)
  *
  * [KotlinPoet counterpart](https://square.github.io/kotlinpoet/1.x/kotlinpoet/com.squareup.kotlinpoet/kotlin.reflect.-k-class/as-class-name/)
  */
-fun KClass<*>.asClassName(): ClassName = ClassName.get(java)
+inline fun KClass<*>.asClassName(): ClassName = ClassName.get(java)
 
 /**
  * Returns a [ClassName] equivalent to [TypeElement].
@@ -33,4 +35,4 @@ fun KClass<*>.asClassName(): ClassName = ClassName.get(java)
  *
  * [KotlinPoet counterpart](https://square.github.io/kotlinpoet/1.x/kotlinpoet/com.squareup.kotlinpoet/javax.lang.model.element.-type-element/as-class-name/)
  */
-fun TypeElement.asClassName(): ClassName = ClassName.get(this)
+inline fun TypeElement.asClassName(): ClassName = ClassName.get(this)

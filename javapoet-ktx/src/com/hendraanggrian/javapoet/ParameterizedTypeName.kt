@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package com.hendraanggrian.javapoet
 
 import com.squareup.javapoet.ClassName
@@ -14,8 +16,16 @@ import kotlin.reflect.KClass
  *
  * [KotlinPoet counterpart](https://square.github.io/kotlinpoet/1.x/kotlinpoet/com.squareup.kotlinpoet/-parameterized-type-name/parameterized-by/)
  */
-fun ClassName.parameterizedBy(vararg typeArguments: TypeName): ParameterizedTypeName =
+inline fun ClassName.parameterizedBy(vararg typeArguments: TypeName): ParameterizedTypeName =
     ParameterizedTypeName.get(this, *typeArguments)
+
+/** Returns a [ParameterizedTypeName] applying [Type] arguments to [ClassName]. */
+fun ClassName.parameterizedBy(vararg typeArguments: Type = emptyArray()): ParameterizedTypeName =
+    parameterizedBy(*typeArguments.map { it.asTypeName() }.toTypedArray())
+
+/** Returns a [ParameterizedTypeName] applying [KClass] arguments to [ClassName]. */
+fun ClassName.parameterizedBy(vararg typeArguments: KClass<*> = emptyArray()): ParameterizedTypeName =
+    parameterizedBy(*typeArguments.map { it.asTypeName() }.toTypedArray())
 
 /**
  * Returns a [ParameterizedTypeName] applying [Type] arguments to [Class].
@@ -24,8 +34,16 @@ fun ClassName.parameterizedBy(vararg typeArguments: TypeName): ParameterizedType
  *
  * [KotlinPoet counterpart](https://square.github.io/kotlinpoet/1.x/kotlinpoet/com.squareup.kotlinpoet/-parameterized-type-name/parameterized-by/)
  */
-fun Class<*>.parameterizedBy(vararg typeArguments: Type): ParameterizedTypeName =
+inline fun Class<*>.parameterizedBy(vararg typeArguments: Type): ParameterizedTypeName =
     ParameterizedTypeName.get(this, *typeArguments)
+
+/** Returns a [ParameterizedTypeName] applying [TypeName] arguments to [Class]. */
+fun Class<*>.parameterizedBy(vararg typeArguments: TypeName = emptyArray()): ParameterizedTypeName =
+    asClassName().parameterizedBy(*typeArguments)
+
+/** Returns a [ParameterizedTypeName] applying [KClass] arguments to [Class]. */
+fun Class<*>.parameterizedBy(vararg typeArguments: KClass<*> = emptyArray()): ParameterizedTypeName =
+    asClassName().parameterizedBy(*typeArguments)
 
 /**
  * Returns a [ParameterizedTypeName] applying [KClass] arguments to [KClass].
@@ -34,8 +52,16 @@ fun Class<*>.parameterizedBy(vararg typeArguments: Type): ParameterizedTypeName 
  *
  * [KotlinPoet counterpart](https://square.github.io/kotlinpoet/1.x/kotlinpoet/com.squareup.kotlinpoet/-parameterized-type-name/parameterized-by/)
  */
-fun KClass<*>.parameterizedBy(vararg typeArguments: KClass<*>): ParameterizedTypeName =
+inline fun KClass<*>.parameterizedBy(vararg typeArguments: KClass<*>): ParameterizedTypeName =
     ParameterizedTypeName.get(java, *typeArguments.toJavaClasses())
+
+/** Returns a [ParameterizedTypeName] applying [Type] arguments to [KClass]. */
+fun KClass<*>.parameterizedBy(vararg typeArguments: Type = emptyArray()): ParameterizedTypeName =
+    asClassName().parameterizedBy(*typeArguments)
+
+/** Returns a [ParameterizedTypeName] applying [TypeName] arguments to [KClass]. */
+fun KClass<*>.parameterizedBy(vararg typeArguments: TypeName = emptyArray()): ParameterizedTypeName =
+    asClassName().parameterizedBy(*typeArguments)
 
 /**
  * Returns a [ParameterizedTypeName] equivalent to [ParameterizedType].
@@ -44,4 +70,4 @@ fun KClass<*>.parameterizedBy(vararg typeArguments: KClass<*>): ParameterizedTyp
  *
  * [KotlinPoet counterpart](https://square.github.io/kotlinpoet/1.x/kotlinpoet/com.squareup.kotlinpoet/java.lang.reflect.-parameterized-type/as-parameterized-type-name/)
  */
-fun ParameterizedType.asParameterizedTypeName(): ParameterizedTypeName = ParameterizedTypeName.get(this)
+inline fun ParameterizedType.asParameterizedTypeName(): ParameterizedTypeName = ParameterizedTypeName.get(this)
