@@ -4,11 +4,14 @@ $dokka.location:com.hendraanggrian.javapoet$arrayOf(com.squareup.javapoet.TypeNa
 $dokka.location:com.hendraanggrian.javapoet$arrayOf(java.lang.reflect.Type)com.hendraanggrian.javapoet/java.lang.reflect.-type/array-of.html
 $dokka.location:com.hendraanggrian.javapoet$arrayOf(kotlin.String, kotlin.String, kotlin.Array((kotlin.String)))com.hendraanggrian.javapoet/kotlin.-string/array-of.html
 $dokka.location:com.hendraanggrian.javapoet$arrayOf(kotlin.reflect.KClass((kotlin.Any)))com.hendraanggrian.javapoet/kotlin.reflect.-k-class/array-of.html
+$dokka.location:com.hendraanggrian.javapoet$asAnnotationSpec(javax.lang.model.element.AnnotationMirror)com.hendraanggrian.javapoet/javax.lang.model.element.-annotation-mirror/as-annotation-spec.html
+$dokka.location:com.hendraanggrian.javapoet$asAnnotationSpec(kotlin.Annotation, kotlin.Boolean)com.hendraanggrian.javapoet/kotlin.-annotation/as-annotation-spec.html
 $dokka.location:com.hendraanggrian.javapoet$asArrayTypeName(java.lang.reflect.GenericArrayType)com.hendraanggrian.javapoet/java.lang.reflect.-generic-array-type/as-array-type-name.html
 $dokka.location:com.hendraanggrian.javapoet$asArrayTypeName(javax.lang.model.type.ArrayType)com.hendraanggrian.javapoet/javax.lang.model.type.-array-type/as-array-type-name.html
 $dokka.location:com.hendraanggrian.javapoet$asClassName(java.lang.Class((kotlin.Any)))com.hendraanggrian.javapoet/java.lang.-class/as-class-name.html
 $dokka.location:com.hendraanggrian.javapoet$asClassName(javax.lang.model.element.TypeElement)com.hendraanggrian.javapoet/javax.lang.model.element.-type-element/as-class-name.html
 $dokka.location:com.hendraanggrian.javapoet$asClassName(kotlin.reflect.KClass((kotlin.Any)))com.hendraanggrian.javapoet/kotlin.reflect.-k-class/as-class-name.html
+$dokka.location:com.hendraanggrian.javapoet$asParameterSpec(javax.lang.model.element.VariableElement)com.hendraanggrian.javapoet/javax.lang.model.element.-variable-element/as-parameter-spec.html
 $dokka.location:com.hendraanggrian.javapoet$asParameterizedTypeName(java.lang.reflect.ParameterizedType)com.hendraanggrian.javapoet/java.lang.reflect.-parameterized-type/as-parameterized-type-name.html
 $dokka.location:com.hendraanggrian.javapoet$asTypeName(java.lang.reflect.Type)com.hendraanggrian.javapoet/java.lang.reflect.-type/as-type-name.html
 $dokka.location:com.hendraanggrian.javapoet$asTypeName(javax.lang.model.type.TypeMirror)com.hendraanggrian.javapoet/javax.lang.model.type.-type-mirror/as-type-name.html
@@ -25,7 +28,6 @@ $dokka.location:com.hendraanggrian.javapoet$build(com.squareup.javapoet.MethodSp
 $dokka.location:com.hendraanggrian.javapoet$build(com.squareup.javapoet.ParameterSpec.Builder, kotlin.Function1((com.hendraanggrian.javapoet.ParameterSpecBuilder, kotlin.Unit)))com.hendraanggrian.javapoet/com.squareup.javapoet.-parameter-spec.-builder/build.html
 $dokka.location:com.hendraanggrian.javapoet$build(com.squareup.javapoet.TypeSpec.Builder, kotlin.Function1((com.hendraanggrian.javapoet.TypeSpecBuilder, kotlin.Unit)))com.hendraanggrian.javapoet/com.squareup.javapoet.-type-spec.-builder/build.html
 $dokka.location:com.hendraanggrian.javapoet$classOf(kotlin.String, kotlin.String, kotlin.Array((kotlin.String)))com.hendraanggrian.javapoet/kotlin.-string/class-of.html
-$dokka.location:com.hendraanggrian.javapoet$formatCode(kotlin.String, kotlin.Array((kotlin.Any)))com.hendraanggrian.javapoet/kotlin.-string/format-code.html
 $dokka.location:com.hendraanggrian.javapoet$join(kotlin.collections.Iterable((com.squareup.javapoet.CodeBlock)), kotlin.String)com.hendraanggrian.javapoet/kotlin.collections.-iterable/join.html
 $dokka.location:com.hendraanggrian.javapoet$parameterizedBy(com.squareup.javapoet.ClassName, kotlin.Array((com.squareup.javapoet.TypeName)))com.hendraanggrian.javapoet/com.squareup.javapoet.-class-name/parameterized-by.html
 $dokka.location:com.hendraanggrian.javapoet$parameterizedBy(com.squareup.javapoet.ClassName, kotlin.Array((java.lang.reflect.Type)))com.hendraanggrian.javapoet/com.squareup.javapoet.-class-name/parameterized-by.html
@@ -36,9 +38,6 @@ $dokka.location:com.hendraanggrian.javapoet$parameterizedBy(java.lang.Class((kot
 $dokka.location:com.hendraanggrian.javapoet$parameterizedBy(kotlin.reflect.KClass((kotlin.Any)), kotlin.Array((com.squareup.javapoet.TypeName)))com.hendraanggrian.javapoet/kotlin.reflect.-k-class/parameterized-by.html
 $dokka.location:com.hendraanggrian.javapoet$parameterizedBy(kotlin.reflect.KClass((kotlin.Any)), kotlin.Array((java.lang.reflect.Type)))com.hendraanggrian.javapoet/kotlin.reflect.-k-class/parameterized-by.html
 $dokka.location:com.hendraanggrian.javapoet$parameterizedBy(kotlin.reflect.KClass((kotlin.Any)), kotlin.Array((kotlin.reflect.KClass((kotlin.Any)))))com.hendraanggrian.javapoet/kotlin.reflect.-k-class/parameterized-by.html
-$dokka.location:com.hendraanggrian.javapoet$toAnnotation(javax.lang.model.element.AnnotationMirror)com.hendraanggrian.javapoet/javax.lang.model.element.-annotation-mirror/to-annotation.html
-$dokka.location:com.hendraanggrian.javapoet$toAnnotation(kotlin.Annotation, kotlin.Boolean)com.hendraanggrian.javapoet/kotlin.-annotation/to-annotation.html
-$dokka.location:com.hendraanggrian.javapoet$toParameter(javax.lang.model.element.VariableElement)com.hendraanggrian.javapoet/javax.lang.model.element.-variable-element/to-parameter.html
 $dokka.location:com.hendraanggrian.javapoet$typeVarBoundedBy(kotlin.String, kotlin.Array((com.squareup.javapoet.TypeName)))com.hendraanggrian.javapoet/kotlin.-string/type-var-bounded-by.html
 $dokka.location:com.hendraanggrian.javapoet$typeVarBoundedBy(kotlin.String, kotlin.Array((java.lang.reflect.Type)))com.hendraanggrian.javapoet/kotlin.-string/type-var-bounded-by.html
 $dokka.location:com.hendraanggrian.javapoet$typeVarBoundedBy(kotlin.String, kotlin.Array((kotlin.reflect.KClass((kotlin.Any)))))com.hendraanggrian.javapoet/kotlin.-string/type-var-bounded-by.html
