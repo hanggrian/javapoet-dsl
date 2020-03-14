@@ -12,6 +12,14 @@
 <tbody>
 <tr>
 <td>
+<h4><a href="array-of.html">arrayOf</a></h4>
+</td>
+<td>
+<p>Returns a <a href="#">ClassName</a> created from the given parts and convert it to <a href="#">ArrayTypeName</a>.</p>
+<code><span class="keyword">fun </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">.</span><span class="identifier">arrayOf</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet$arrayOf(kotlin.String, kotlin.String, kotlin.Array((kotlin.String)))/simpleName">simpleName</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">, </span><span class="keyword">vararg</span> <span class="identifier" id="com.hendraanggrian.javapoet$arrayOf(kotlin.String, kotlin.String, kotlin.Array((kotlin.String)))/simpleNames">simpleNames</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">ArrayTypeName</span></code></td>
+</tr>
+<tr>
+<td>
 <h4><a href="class-of.html">classOf</a></h4>
 </td>
 <td>
@@ -28,17 +36,23 @@
 </tr>
 <tr>
 <td>
-<h4><a href="type-variable-by.html">typeVariableBy</a></h4>
+<h4><a href="type-var-bounded-by.html">typeVarBoundedBy</a></h4>
+</td>
+<td>
+<p>Returns a <a href="#">TypeVariableName</a> with <a href="#">TypeName</a> bounds.</p>
+<code><span class="keyword">fun </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">.</span><span class="identifier">typeVarBoundedBy</span><span class="symbol">(</span><span class="keyword">vararg</span> <span class="identifier" id="com.hendraanggrian.javapoet$typeVarBoundedBy(kotlin.String, kotlin.Array((com.squareup.javapoet.TypeName)))/bounds">bounds</span><span class="symbol">:</span>&nbsp;<span class="identifier">TypeName</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">TypeVariableName</span></code>
+<p>Returns a <a href="#">TypeVariableName</a> with <a href="https://docs.oracle.com/javase/6/docs/api/java/lang/reflect/Type.html">Type</a> bounds.</p>
+<code><span class="keyword">fun </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">.</span><span class="identifier">typeVarBoundedBy</span><span class="symbol">(</span><span class="keyword">vararg</span> <span class="identifier" id="com.hendraanggrian.javapoet$typeVarBoundedBy(kotlin.String, kotlin.Array((java.lang.reflect.Type)))/bounds">bounds</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/lang/reflect/Type.html"><span class="identifier">Type</span></a><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">TypeVariableName</span></code>
+<p>Returns a <a href="#">TypeVariableName</a> with <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html">KClass</a> bounds.</p>
+<code><span class="keyword">fun </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">.</span><span class="identifier">typeVarBoundedBy</span><span class="symbol">(</span><span class="keyword">vararg</span> <span class="identifier" id="com.hendraanggrian.javapoet$typeVarBoundedBy(kotlin.String, kotlin.Array((kotlin.reflect.KClass((kotlin.Any)))))/bounds">bounds</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html"><span class="identifier">KClass</span></a><span class="symbol">&lt;</span><span class="identifier">*</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">TypeVariableName</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="type-var-of.html">typeVarOf</a></h4>
 </td>
 <td>
 <p>Returns a <a href="#">TypeVariableName</a> without bounds.</p>
-<code><span class="keyword">fun </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">.</span><span class="identifier">typeVariableBy</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">TypeVariableName</span></code>
-<p>Returns a <a href="#">TypeVariableName</a> with <a href="#">TypeName</a> bounds.</p>
-<code><span class="keyword">fun </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">.</span><span class="identifier">typeVariableBy</span><span class="symbol">(</span><span class="keyword">vararg</span> <span class="identifier" id="com.hendraanggrian.javapoet$typeVariableBy(kotlin.String, kotlin.Array((com.squareup.javapoet.TypeName)))/bounds">bounds</span><span class="symbol">:</span>&nbsp;<span class="identifier">TypeName</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">TypeVariableName</span></code>
-<p>Returns a <a href="#">TypeVariableName</a> with <a href="https://docs.oracle.com/javase/6/docs/api/java/lang/reflect/Type.html">Type</a> bounds.</p>
-<code><span class="keyword">fun </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">.</span><span class="identifier">typeVariableBy</span><span class="symbol">(</span><span class="keyword">vararg</span> <span class="identifier" id="com.hendraanggrian.javapoet$typeVariableBy(kotlin.String, kotlin.Array((java.lang.reflect.Type)))/bounds">bounds</span><span class="symbol">:</span>&nbsp;<a href="https://docs.oracle.com/javase/6/docs/api/java/lang/reflect/Type.html"><span class="identifier">Type</span></a><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">TypeVariableName</span></code>
-<p>Returns a <a href="#">TypeVariableName</a> with <a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html">KClass</a> bounds.</p>
-<code><span class="keyword">fun </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">.</span><span class="identifier">typeVariableBy</span><span class="symbol">(</span><span class="keyword">vararg</span> <span class="identifier" id="com.hendraanggrian.javapoet$typeVariableBy(kotlin.String, kotlin.Array((kotlin.reflect.KClass((kotlin.Any)))))/bounds">bounds</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html"><span class="identifier">KClass</span></a><span class="symbol">&lt;</span><span class="identifier">*</span><span class="symbol">&gt;</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">TypeVariableName</span></code></td>
+<code><span class="keyword">fun </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-string/index.html"><span class="identifier">String</span></a><span class="symbol">.</span><span class="identifier">typeVarOf</span><span class="symbol">(</span><span class="symbol">)</span><span class="symbol">: </span><span class="identifier">TypeVariableName</span></code></td>
 </tr>
 </tbody>
 </table>
