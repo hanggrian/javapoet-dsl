@@ -54,7 +54,7 @@ class ReadmeTest {
             """.trimIndent()
         assertEquals(
             expected,
-            buildMethod("main") {
+            buildMethodSpec("main") {
                 returns = VOID
                 append(
                     """
@@ -69,7 +69,7 @@ class ReadmeTest {
         )
         assertEquals(
             expected,
-            buildMethod("main") {
+            buildMethodSpec("main") {
                 returns = VOID
                 appendln("int total = 0")
                 beginFlow("for (int i = 0; i < 10; i++)")
@@ -88,7 +88,7 @@ class ReadmeTest {
                 }
 
             """.trimIndent(),
-            buildMethod("multiply10to20") {
+            buildMethodSpec("multiply10to20") {
                 returns = INT
                 appendln("int result = 1")
                 beginFlow("for (int i = 10; i < 20; i++)")
@@ -111,7 +111,7 @@ class ReadmeTest {
                 }
 
             """.trimIndent(),
-            buildMethod("main") {
+            buildMethodSpec("main") {
                 appendln("long now = %T.currentTimeMillis()", System::class)
                 beginFlow("if (%T.currentTimeMillis() < now)", System::class)
                 appendln("%T.out.println(%S)", System::class, "Time travelling, woo hoo!")
@@ -133,7 +133,7 @@ class ReadmeTest {
                 }
                 
             """.trimIndent(),
-            buildMethod("main") {
+            buildMethodSpec("main") {
                 beginFlow("try")
                 appendln("throw new Exception(%S)", "Failed")
                 nextFlow("catch (%T e)", Exception::class)
@@ -155,7 +155,7 @@ class ReadmeTest {
                 }
 
             """.trimIndent(),
-            buildMethod("computeRange") {
+            buildMethodSpec("computeRange") {
                 returns = INT
                 appendln("int result = 0")
                 beginFlow("for (int i = %L; i < %L; i++)", 0, 10)
@@ -184,7 +184,7 @@ class ReadmeTest {
                 }
 
             """.trimIndent(),
-            buildClassType("HelloWorld") {
+            buildClassTypeSpec("HelloWorld") {
                 addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 methods {
                     whatsMyName("slimShady")
@@ -205,7 +205,7 @@ class ReadmeTest {
                 }
 
             """.trimIndent(),
-            buildClassType("HelloWorld") {
+            buildClassTypeSpec("HelloWorld") {
                 addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 methods.add("today") {
                     returns<Date>()
@@ -222,7 +222,7 @@ class ReadmeTest {
                 }
 
             """.trimIndent(),
-            buildClassType("HelloWorld") {
+            buildClassTypeSpec("HelloWorld") {
                 addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 methods.add("tomorrow") {
                     val hoverboard = "com.mattel".classOf("Hoverboard")
@@ -244,7 +244,7 @@ class ReadmeTest {
                 }
 
             """.trimIndent(),
-            buildClassType("HelloWorld") {
+            buildClassTypeSpec("HelloWorld") {
                 addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 methods.add("beyond") {
                     val hoverboard = "com.mattel".classOf("Hoverboard")
@@ -308,13 +308,13 @@ class ReadmeTest {
     }
 
     @Test fun `$NForNames`() {
-        val hexDigit = buildMethod("hexDigit") {
+        val hexDigit = buildMethodSpec("hexDigit") {
             addModifiers(Modifier.PUBLIC)
             parameters.add(INT, "i")
             returns = CHAR
             appendln("return (char) (i < 10 ? i + '0' : i - 10 + 'a')")
         }
-        val byteToHex = buildMethod("byteToHex") {
+        val byteToHex = buildMethodSpec("byteToHex") {
             addModifiers(Modifier.PUBLIC)
             parameters.add(INT, "b")
             returns<String>()
@@ -344,11 +344,11 @@ class ReadmeTest {
     @Test fun codeBlockFormatStrings() {
         assertEquals(
             CodeBlock.of("I ate \$L \$L", 3, "tacos"),
-            "I ate %L %L".formatCode(3, "tacos")
+            codeBlockOf("I ate %L %L", 3, "tacos")
         )
         assertEquals(
             CodeBlock.of("I ate \$2L \$1L", "tacos", 3),
-            "I ate %2L %1L".formatCode("tacos", 3)
+            codeBlockOf("I ate %2L %1L", "tacos", 3)
         )
     }
 
@@ -360,7 +360,7 @@ class ReadmeTest {
                 }
                 
             """.trimIndent(),
-            buildClassType("HelloWorld") {
+            buildClassTypeSpec("HelloWorld") {
                 addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
                 methods.add("flux") {
                     addModifiers(Modifier.PROTECTED, Modifier.ABSTRACT)
@@ -381,7 +381,7 @@ class ReadmeTest {
                 }
                 
             """.trimIndent(),
-            buildClassType("HelloWorld") {
+            buildClassTypeSpec("HelloWorld") {
                 addModifiers(Modifier.PUBLIC)
                 fields.add<String>("greeting", Modifier.PRIVATE, Modifier.FINAL)
                 methods.addConstructor {
@@ -400,7 +400,7 @@ class ReadmeTest {
                 }
 
             """.trimIndent(),
-            buildMethod("welcomeOverlords") {
+            buildMethodSpec("welcomeOverlords") {
                 parameters {
                     add<String>("android", Modifier.FINAL)
                     add<String>("robot", Modifier.FINAL)
@@ -419,7 +419,7 @@ class ReadmeTest {
                 }
                 
             """.trimIndent(),
-            buildClassType("HelloWorld") {
+            buildClassTypeSpec("HelloWorld") {
                 addModifiers(Modifier.PUBLIC)
                 fields {
                     add<String>("android", Modifier.PRIVATE, Modifier.FINAL)
@@ -429,7 +429,7 @@ class ReadmeTest {
         )
         assertEquals(
             "private final java.lang.String android = \"Lollipop v.\" + 5.0;\n",
-            buildField<String>("android", Modifier.PRIVATE, Modifier.FINAL) {
+            buildFieldSpec<String>("android", Modifier.PRIVATE, Modifier.FINAL) {
                 initializer("\"Lollipop v.\" + 5.0")
             }.toString()
         )
@@ -445,7 +445,7 @@ class ReadmeTest {
                 }
                 
             """.trimIndent(),
-            buildInterfaceType("HelloWorld") {
+            buildInterfaceTypeSpec("HelloWorld") {
                 addModifiers(Modifier.PUBLIC)
                 fields.add<String>("ONLY_THING_THAT_IS_CONSTANT", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL) {
                     initializer("%S", "change")
@@ -469,7 +469,7 @@ class ReadmeTest {
                 }
                 
             """.trimIndent(),
-            buildEnumType("Roshambo") {
+            buildEnumTypeSpec("Roshambo") {
                 addModifiers(Modifier.PUBLIC)
                 addEnumConstant("ROCK")
                 addEnumConstant("SCISSORS")
@@ -498,9 +498,9 @@ class ReadmeTest {
                 }
                 
             """.trimIndent(),
-            buildEnumType("Roshambo") {
+            buildEnumTypeSpec("Roshambo") {
                 addModifiers(Modifier.PUBLIC)
-                addEnumConstant("ROCK", buildAnonymousType("%S", "fist") {
+                addEnumConstant("ROCK", buildAnonymousTypeSpec("%S", "fist") {
                     methods.add("toString") {
                         annotations.add<Override>()
                         addModifiers(Modifier.PUBLIC)
@@ -508,8 +508,8 @@ class ReadmeTest {
                         returns<String>()
                     }
                 })
-                addEnumConstant("SCISSORS", buildAnonymousType("%S", "peace"))
-                addEnumConstant("PAPER", buildAnonymousType("%S", "flat"))
+                addEnumConstant("SCISSORS", anonymousTypeSpecOf("%S", "peace"))
+                addEnumConstant("PAPER", anonymousTypeSpecOf("%S", "flat"))
                 fields.add<String>("handsign", Modifier.PRIVATE, Modifier.FINAL)
                 methods.addConstructor {
                     parameters.add<String>("handsign")
@@ -521,10 +521,10 @@ class ReadmeTest {
 
     @Test fun anonymousInnerClasses() {
         lateinit var sortByLength: MethodSpec
-        buildClassType("HelloWorld") {
+        buildClassTypeSpec("HelloWorld") {
             sortByLength = methods.add("sortByLength") {
                 parameters.add(List::class.parameterizedBy(String::class), "strings")
-                appendln("%T.sort(%N, %L)", Collections::class, "strings", buildAnonymousType("") {
+                appendln("%T.sort(%N, %L)", Collections::class, "strings", buildAnonymousTypeSpec("") {
                     addSuperInterface(Comparator::class.parameterizedBy(String::class))
                     methods.add("compare") {
                         annotations.add<Override>()
@@ -564,7 +564,7 @@ class ReadmeTest {
                 }
                 
             """.trimIndent(),
-            buildMethod("toString") {
+            buildMethodSpec("toString") {
                 annotations.add<Override>()
                 returns<String>()
                 addModifiers(Modifier.PUBLIC)
@@ -581,7 +581,7 @@ class ReadmeTest {
                     com.hendraanggrian.javapoet.ReadmeTest.LogRecord logRecord);
                 
             """.trimIndent(),
-            buildMethod("recordEvent") {
+            buildMethodSpec("recordEvent") {
                 addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
                 annotations.add<Headers> {
                     addMember("accept", "%S", "application/json; charset=utf-8")
@@ -601,14 +601,14 @@ class ReadmeTest {
                     com.hendraanggrian.javapoet.ReadmeTest.LogRecord logRecord);
                 
             """.trimIndent(),
-            buildMethod("recordEvent") {
+            buildMethodSpec("recordEvent") {
                 addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
                 annotations.add<HeaderList> {
-                    addMember("value", "%L", buildAnnotation<Header> {
+                    addMember("value", "%L", buildAnnotationSpec<Header> {
                         addMember("name", "%S", "Accept")
                         addMember("value", "%S", "application/json; charset=utf-8")
                     })
-                    addMember("value", "%L", buildAnnotation<Header> {
+                    addMember("value", "%L", buildAnnotationSpec<Header> {
                         addMember("name", "%S", "User-Agent")
                         addMember("value", "%S", "Square Cash")
                     })
@@ -633,7 +633,7 @@ class ReadmeTest {
                 public abstract void dismiss(com.hendraanggrian.javapoet.ReadmeTest.Message message);
 
             """.trimIndent(),
-            buildMethod("dismiss") {
+            buildMethodSpec("dismiss") {
                 javadoc {
                     appendln("Hides {@code message} from the caller's history. Other")
                     appendln("participants in the conversation will continue to see the")

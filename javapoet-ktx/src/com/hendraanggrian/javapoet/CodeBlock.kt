@@ -3,21 +3,22 @@ package com.hendraanggrian.javapoet
 import com.hendraanggrian.javapoet.dsl.CodeBlockContainer
 import com.squareup.javapoet.CodeBlock
 
+/** Joins code blocks into a single [CodeBlock], each separated by [separator]. */
+fun Iterable<CodeBlock>.join(separator: String): CodeBlock = CodeBlock.join(this, separator)
+
 /**
  * Converts string to [CodeBlock] using formatted [args].
  *
  * @see kotlin.text.format
  */
-fun String.formatCode(vararg args: Any): CodeBlock = formatWith(args) { s, array -> CodeBlock.of(s, *array) }
-
-/** Joins code blocks into a single [CodeBlock], each separated by [separator]. */
-fun Iterable<CodeBlock>.join(separator: String): CodeBlock = CodeBlock.join(this, separator)
+fun codeBlockOf(format: String, vararg args: Any): CodeBlock =
+    format.formatWith(args) { s, array -> CodeBlock.of(s, *array) }
 
 /**
  * Builds a new [CodeBlock],
  * by populating newly created [CodeBlockBuilder] using provided [builderAction] and then building it.
  */
-inline fun buildCode(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
+inline fun buildCodeBlock(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
     CodeBlock.builder().build(builderAction)
 
 /** Modify existing [CodeBlock.Builder] using provided [builderAction] and then building it. */

@@ -2,8 +2,10 @@ package com.hendraanggrian.javapoet.dsl
 
 import com.hendraanggrian.javapoet.JavapoetDslMarker
 import com.hendraanggrian.javapoet.MethodSpecBuilder
-import com.hendraanggrian.javapoet.buildConstructorMethod
-import com.hendraanggrian.javapoet.buildMethod
+import com.hendraanggrian.javapoet.buildConstructorMethodSpec
+import com.hendraanggrian.javapoet.buildMethodSpec
+import com.hendraanggrian.javapoet.constructorMethodSpecOf
+import com.hendraanggrian.javapoet.methodSpecOf
 import com.squareup.javapoet.MethodSpec
 
 /** A [MethodSpecContainer] is responsible for managing a set of method instances. */
@@ -13,18 +15,18 @@ abstract class MethodSpecContainer {
     abstract fun add(spec: MethodSpec)
 
     /** Add method from [name], returning the method added. */
-    fun add(name: String): MethodSpec = buildMethod(name).also { add(it) }
+    fun add(name: String): MethodSpec = methodSpecOf(name).also { add(it) }
 
     /** Add method from [name] with custom initialization [builderAction], returning the method added. */
     inline fun add(name: String, builderAction: MethodSpecBuilder.() -> Unit): MethodSpec =
-        buildMethod(name, builderAction).also { add(it) }
+        buildMethodSpec(name, builderAction).also { add(it) }
 
     /** Add constructor method, returning the method added. */
-    fun addConstructor(): MethodSpec = buildConstructorMethod().also { add(it) }
+    fun addConstructor(): MethodSpec = constructorMethodSpecOf().also { add(it) }
 
     /** Add constructor method with custom initialization [builderAction], returning the method added. */
     inline fun addConstructor(builderAction: MethodSpecBuilder.() -> Unit): MethodSpec =
-        buildConstructorMethod(builderAction).also { add(it) }
+        buildConstructorMethodSpec(builderAction).also { add(it) }
 
     /** Convenient method to add method with operator function. */
     operator fun plusAssign(spec: MethodSpec) {

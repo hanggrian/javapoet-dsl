@@ -47,7 +47,7 @@ buildJavaFile("com.example.helloworld") {
 However in Kotlin, `$` in strings is reserved for variable referral. Avoid using `\$` and instead use `%` as the prefix, this is also the approach taken by [KotlinPoet].
 
 ```kotlin
-buildMethod("getName") {
+buildMethodSpec("getName") {
     returns<String>()
     appendln("%S", name)
 }
@@ -65,14 +65,14 @@ buildCodeBlock {
 `KClass<*>` can now be used as format arguments. There is also inline reified type function whenever possible.
 
 ```kotlin
-buildMethod("sortList") {
+buildMethodSpec("sortList") {
     returns = int
     parameters.add(classNameOf("java.util", "List").parameterizedBy(hoverboard), "list")
     appendln("%T.sort(list)", Collections::class)
     appendln("return list")
 }
 
-buildField<Int>("count") {
+buildFieldSpec<Int>("count") {
     initializer("%L", 0)
 }
 ```
@@ -142,7 +142,7 @@ Write `TypeName` and all its subtypes fluently.
 val myClass: ClassName = "com.example".classOf("MyClass")
 val arrayOfString: ArrayTypeName = "java.lang".classOf("String").arrayOf()
 val pairOfInteger: ParameterizedTypeName = "android.util".classOf("Pair").parameterizedBy(Integer::class, Integer::class)
-val tVariable: TypeVariableName = "T".typeVariableBy()
+val tVariable: TypeVariableName = "T".typeVarOf()
 val subtypeOfCharSequence: WildcardTypeName = "java.lang".classOf("CharSequence").subtypeOf() 
 ```
 

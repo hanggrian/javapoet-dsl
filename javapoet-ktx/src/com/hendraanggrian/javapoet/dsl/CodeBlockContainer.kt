@@ -2,7 +2,7 @@ package com.hendraanggrian.javapoet.dsl
 
 import com.hendraanggrian.javapoet.CodeBlockBuilder
 import com.hendraanggrian.javapoet.JavapoetDslMarker
-import com.hendraanggrian.javapoet.buildCode
+import com.hendraanggrian.javapoet.buildCodeBlock
 import com.squareup.javapoet.CodeBlock
 
 private interface CodeBlockAppendable {
@@ -27,13 +27,13 @@ abstract class CodeBlockContainer : CodeBlockAppendable {
 
     /** Add code block with custom initialization [builderAction], returning the block added. */
     inline fun append(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
-        buildCode(builderAction).also { append(it) }
+        buildCodeBlock(builderAction).also { append(it) }
 
     override fun appendln() = appendln("")
 
     /** Add code block with custom initialization [builderAction] and a new line to this container, returning the block added. */
     inline fun appendln(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
-        buildCode(builderAction).also { appendln(it) }
+        buildCodeBlock(builderAction).also { appendln(it) }
 
     /** Starts the control flow. */
     abstract fun beginFlow(flow: String, vararg args: Any)
@@ -53,7 +53,7 @@ abstract class JavadocContainer : CodeBlockAppendable {
 
     /** Add code block with custom initialization [builderAction], returning the block added. */
     inline fun append(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
-        buildCode(builderAction).also { append(it) }
+        buildCodeBlock(builderAction).also { append(it) }
 
     override fun appendln(): Unit = append(SystemProperties.LINE_SEPARATOR)
 
@@ -69,7 +69,7 @@ abstract class JavadocContainer : CodeBlockAppendable {
 
     /** Add code block with custom initialization [builderAction] and a new line to this container, returning the block added. */
     inline fun appendln(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
-        buildCode(builderAction).also { appendln(it) }
+        buildCodeBlock(builderAction).also { appendln(it) }
 
     /** Convenient method to add code block with operator function. */
     operator fun plusAssign(value: String) {

@@ -1,8 +1,8 @@
 package com.hendraanggrian.javapoet.dsl
 
 import com.google.common.truth.Truth.assertThat
-import com.hendraanggrian.javapoet.buildConstructorMethod
-import com.hendraanggrian.javapoet.buildMethod
+import com.hendraanggrian.javapoet.constructorMethodSpecOf
+import com.hendraanggrian.javapoet.methodSpecOf
 import com.squareup.javapoet.MethodSpec
 import kotlin.test.Test
 
@@ -18,11 +18,11 @@ class MethodSpecContainerTest {
         MethodSpecContainerScope(container).configuration()
 
     @Test fun nativeSpec() {
-        container.add(buildMethod("method"))
-        container += buildConstructorMethod()
+        container.add(methodSpecOf("method"))
+        container += constructorMethodSpecOf()
         assertThat(specs).containsExactly(
-            buildMethod("method"),
-            buildConstructorMethod()
+            methodSpecOf("method"),
+            constructorMethodSpecOf()
         )
     }
 
@@ -31,16 +31,16 @@ class MethodSpecContainerTest {
         container += "method2"
         container { "method3" { } }
         assertThat(specs).containsExactly(
-            buildMethod("method1"),
-            buildMethod("method2"),
-            buildMethod("method3")
+            methodSpecOf("method1"),
+            methodSpecOf("method2"),
+            methodSpecOf("method3")
         )
     }
 
     @Test fun others() {
         container.addConstructor()
         assertThat(specs).containsExactly(
-            buildConstructorMethod()
+            constructorMethodSpecOf()
         )
     }
 }

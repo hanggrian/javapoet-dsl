@@ -2,7 +2,8 @@ package com.hendraanggrian.javapoet.dsl
 
 import com.hendraanggrian.javapoet.FieldSpecBuilder
 import com.hendraanggrian.javapoet.JavapoetDslMarker
-import com.hendraanggrian.javapoet.buildField
+import com.hendraanggrian.javapoet.buildFieldSpec
+import com.hendraanggrian.javapoet.fieldSpecOf
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.TypeName
 import java.lang.reflect.Type
@@ -17,7 +18,7 @@ abstract class FieldSpecContainer {
 
     /** Add field from [type] and [name], returning the field added. */
     fun add(type: TypeName, name: String, vararg modifiers: Modifier): FieldSpec =
-        buildField(type, name, *modifiers).also { add(it) }
+        fieldSpecOf(type, name, *modifiers).also { add(it) }
 
     /** Add field from [type] and [name] with custom initialization [builderAction], returning the field added. */
     inline fun add(
@@ -25,11 +26,11 @@ abstract class FieldSpecContainer {
         name: String,
         vararg modifiers: Modifier,
         builderAction: FieldSpecBuilder.() -> Unit
-    ): FieldSpec = buildField(type, name, *modifiers, builderAction = builderAction).also { add(it) }
+    ): FieldSpec = buildFieldSpec(type, name, *modifiers, builderAction = builderAction).also { add(it) }
 
     /** Add field from [type] and [name], returning the field added. */
     fun add(type: Type, name: String, vararg modifiers: Modifier): FieldSpec =
-        buildField(type, name, *modifiers).also { add(it) }
+        fieldSpecOf(type, name, *modifiers).also { add(it) }
 
     /** Add field from [type] and [name] with custom initialization [builderAction], returning the field added. */
     inline fun add(
@@ -37,11 +38,11 @@ abstract class FieldSpecContainer {
         name: String,
         vararg modifiers: Modifier,
         builderAction: FieldSpecBuilder.() -> Unit
-    ): FieldSpec = buildField(type, name, *modifiers, builderAction = builderAction).also { add(it) }
+    ): FieldSpec = buildFieldSpec(type, name, *modifiers, builderAction = builderAction).also { add(it) }
 
     /** Add field from [type] and [name], returning the field added. */
     fun add(type: KClass<*>, name: String, vararg modifiers: Modifier): FieldSpec =
-        buildField(type, name, *modifiers).also { add(it) }
+        fieldSpecOf(type, name, *modifiers).also { add(it) }
 
     /** Add field from [type] and [name] with custom initialization [builderAction], returning the field added. */
     inline fun add(
@@ -49,18 +50,18 @@ abstract class FieldSpecContainer {
         name: String,
         vararg modifiers: Modifier,
         builderAction: FieldSpecBuilder.() -> Unit
-    ): FieldSpec = buildField(type, name, *modifiers, builderAction = builderAction).also { add(it) }
+    ): FieldSpec = buildFieldSpec(type, name, *modifiers, builderAction = builderAction).also { add(it) }
 
     /** Add field from reified [T] and [name], returning the field added. */
     inline fun <reified T> add(name: String, vararg modifiers: Modifier): FieldSpec =
-        buildField<T>(name, *modifiers).also { add(it) }
+        fieldSpecOf<T>(name, *modifiers).also { add(it) }
 
     /** Add field from reified [T] and [name] with custom initialization [builderAction], returning the field added. */
     inline fun <reified T> add(
         name: String,
         vararg modifiers: Modifier,
         builderAction: FieldSpecBuilder.() -> Unit
-    ): FieldSpec = buildField<T>(name, *modifiers, builderAction = builderAction).also { add(it) }
+    ): FieldSpec = buildFieldSpec<T>(name, *modifiers, builderAction = builderAction).also { add(it) }
 
     /** Convenient method to add field with operator function. */
     operator fun plusAssign(spec: FieldSpec) {

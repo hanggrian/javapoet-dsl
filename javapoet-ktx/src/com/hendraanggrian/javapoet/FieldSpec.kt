@@ -13,14 +13,14 @@ import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
 /** Builds a new [FieldSpec] from [type] supplying its [name] and [modifiers]. */
-fun buildField(type: TypeName, name: String, vararg modifiers: Modifier): FieldSpec =
+fun fieldSpecOf(type: TypeName, name: String, vararg modifiers: Modifier): FieldSpec =
     FieldSpec.builder(type, name, *modifiers).build()
 
 /**
  * Builds a new [FieldSpec] from [type] supplying its [name] and [modifiers],
  * by populating newly created [FieldSpecBuilder] using provided [builderAction] and then building it.
  */
-inline fun buildField(
+inline fun buildFieldSpec(
     type: TypeName,
     name: String,
     vararg modifiers: Modifier,
@@ -28,22 +28,22 @@ inline fun buildField(
 ): FieldSpec = FieldSpec.builder(type, name, *modifiers).build(builderAction)
 
 /** Builds a new [FieldSpec] from [type] supplying its [name] and [modifiers]. */
-fun buildField(type: Type, name: String, vararg modifiers: Modifier): FieldSpec =
+fun fieldSpecOf(type: Type, name: String, vararg modifiers: Modifier): FieldSpec =
     FieldSpec.builder(type, name, *modifiers).build()
 
 /** Builds a new [FieldSpec] from [type] supplying its [name] and [modifiers]. */
-fun buildField(type: KClass<*>, name: String, vararg modifiers: Modifier): FieldSpec =
-    buildField(type.java, name, *modifiers)
+fun fieldSpecOf(type: KClass<*>, name: String, vararg modifiers: Modifier): FieldSpec =
+    fieldSpecOf(type.java, name, *modifiers)
 
 /** Builds a new [FieldSpec] from [T] supplying its [name] and [modifiers]. */
-inline fun <reified T> buildField(name: String, vararg modifiers: Modifier): FieldSpec =
-    buildField(T::class, name, *modifiers)
+inline fun <reified T> fieldSpecOf(name: String, vararg modifiers: Modifier): FieldSpec =
+    fieldSpecOf(T::class, name, *modifiers)
 
 /**
  * Builds a new [FieldSpec] from [type] supplying its [name] and [modifiers],
  * by populating newly created [FieldSpecBuilder] using provided [builderAction] and then building it.
  */
-inline fun buildField(
+inline fun buildFieldSpec(
     type: Type,
     name: String,
     vararg modifiers: Modifier,
@@ -54,22 +54,22 @@ inline fun buildField(
  * Builds a new [FieldSpec] from [type] supplying its [name] and [modifiers],
  * by populating newly created [FieldSpecBuilder] using provided [builderAction] and then building it.
  */
-inline fun buildField(
+inline fun buildFieldSpec(
     type: KClass<*>,
     name: String,
     vararg modifiers: Modifier,
     builderAction: FieldSpecBuilder.() -> Unit
-): FieldSpec = buildField(type.java, name, *modifiers, builderAction = builderAction)
+): FieldSpec = buildFieldSpec(type.java, name, *modifiers, builderAction = builderAction)
 
 /**
  * Builds a new [FieldSpec] from [T] supplying its [name] and [modifiers],
  * by populating newly created [FieldSpecBuilder] using provided [builderAction] and then building it.
  */
-inline fun <reified T> buildField(
+inline fun <reified T> buildFieldSpec(
     name: String,
     vararg modifiers: Modifier,
     builderAction: FieldSpecBuilder.() -> Unit
-): FieldSpec = buildField(T::class, name, *modifiers, builderAction = builderAction)
+): FieldSpec = buildFieldSpec(T::class, name, *modifiers, builderAction = builderAction)
 
 /** Modify existing [FieldSpec.Builder] using provided [builderAction] and then building it. */
 inline fun FieldSpec.Builder.build(builderAction: FieldSpecBuilder.() -> Unit): FieldSpec =
@@ -122,7 +122,7 @@ class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuil
 
     /** Initialize field value with custom initialization [builderAction]. */
     inline fun initializer(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
-        buildCode(builderAction).also { initializer = it }
+        buildCodeBlock(builderAction).also { initializer = it }
 
     /** Returns native spec. */
     fun build(): FieldSpec = nativeBuilder.build()

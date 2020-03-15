@@ -7,51 +7,51 @@ import javax.lang.model.element.AnnotationMirror
 import kotlin.reflect.KClass
 
 /** Converts annotation to [AnnotationSpec]. */
-fun Annotation.toAnnotation(includeDefaultValues: Boolean = false): AnnotationSpec =
+fun Annotation.asAnnotationSpec(includeDefaultValues: Boolean = false): AnnotationSpec =
     AnnotationSpec.get(this, includeDefaultValues)
 
 /** Converts mirror to [AnnotationSpec]. */
-fun AnnotationMirror.toAnnotation(): AnnotationSpec = AnnotationSpec.get(this)
+fun AnnotationMirror.asAnnotationSpec(): AnnotationSpec = AnnotationSpec.get(this)
 
 /** Builds a new [AnnotationSpec] from [type]. */
-fun buildAnnotation(type: ClassName): AnnotationSpec = AnnotationSpec.builder(type).build()
+fun annotationSpecOf(type: ClassName): AnnotationSpec = AnnotationSpec.builder(type).build()
 
 /**
  * Builds a new [AnnotationSpec] from [type],
  * by populating newly created [AnnotationSpecBuilder] using provided [builderAction] and then building it.
  */
-inline fun buildAnnotation(type: ClassName, builderAction: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+inline fun buildAnnotationSpec(type: ClassName, builderAction: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
     AnnotationSpec.builder(type).build(builderAction)
 
 /** Builds a new [AnnotationSpec] from [type]. */
-fun buildAnnotation(type: Class<*>): AnnotationSpec = AnnotationSpec.builder(type).build()
+fun annotationSpecOf(type: Class<*>): AnnotationSpec = AnnotationSpec.builder(type).build()
 
 /** Builds a new [AnnotationSpec] from [type]. */
-fun buildAnnotation(type: KClass<*>): AnnotationSpec = buildAnnotation(type.java)
+fun annotationSpecOf(type: KClass<*>): AnnotationSpec = annotationSpecOf(type.java)
 
 /** Builds a new [AnnotationSpec] from [T]. */
-inline fun <reified T> buildAnnotation(): AnnotationSpec = buildAnnotation(T::class)
+inline fun <reified T> annotationSpecOf(): AnnotationSpec = annotationSpecOf(T::class)
 
 /**
  * Builds a new [AnnotationSpec] from [type],
  * by populating newly created [AnnotationSpecBuilder] using provided [builderAction] and then building it.
  */
-inline fun buildAnnotation(type: Class<*>, builderAction: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+inline fun buildAnnotationSpec(type: Class<*>, builderAction: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
     AnnotationSpec.builder(type).build(builderAction)
 
 /**
  * Builds a new [AnnotationSpec] from [type],
  * by populating newly created [AnnotationSpecBuilder] using provided [builderAction] and then building it.
  */
-inline fun buildAnnotation(type: KClass<*>, builderAction: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
-    buildAnnotation(type.java, builderAction)
+inline fun buildAnnotationSpec(type: KClass<*>, builderAction: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+    buildAnnotationSpec(type.java, builderAction)
 
 /**
  * Builds a new [AnnotationSpec] from [T],
  * by populating newly created [AnnotationSpecBuilder] using provided [builderAction] and then building it.
  */
-inline fun <reified T> buildAnnotation(builderAction: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
-    buildAnnotation(T::class, builderAction)
+inline fun <reified T> buildAnnotationSpec(builderAction: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+    buildAnnotationSpec(T::class, builderAction)
 
 /** Modify existing [AnnotationSpec.Builder] using provided [builderAction] and then building it. */
 inline fun AnnotationSpec.Builder.build(builderAction: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
@@ -70,7 +70,7 @@ class AnnotationSpecBuilder @PublishedApi internal constructor(private val nativ
 
     /** Add code as a member of this annotation with custom initialization [builderAction]. */
     inline fun addMember(name: String, builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
-        addMember(name, buildCode(builderAction))
+        addMember(name, buildCodeBlock(builderAction))
 
     /** Convenient method to add member with operator function. */
     operator fun String.invoke(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =

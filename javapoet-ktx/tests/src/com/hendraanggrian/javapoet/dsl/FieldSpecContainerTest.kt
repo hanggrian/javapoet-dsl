@@ -2,7 +2,7 @@ package com.hendraanggrian.javapoet.dsl
 
 import com.google.common.truth.Truth.assertThat
 import com.hendraanggrian.javapoet.classOf
-import com.hendraanggrian.javapoet.buildField
+import com.hendraanggrian.javapoet.fieldSpecOf
 import com.squareup.javapoet.FieldSpec
 import kotlin.test.Test
 
@@ -18,11 +18,11 @@ class FieldSpecContainerTest {
         FieldSpecContainerScope(container).configuration()
 
     @Test fun nativeSpec() {
-        container.add(buildField<Field1>("field1"))
-        container += buildField<Field2>("field2")
+        container.add(fieldSpecOf<Field1>("field1"))
+        container += fieldSpecOf<Field2>("field2")
         assertThat(specs).containsExactly(
-            buildField<Field1>("field1"),
-            buildField<Field2>("field2")
+            fieldSpecOf<Field1>("field1"),
+            fieldSpecOf<Field2>("field2")
         )
     }
 
@@ -32,9 +32,9 @@ class FieldSpecContainerTest {
         container["field2"] = packageName.classOf("Field2")
         container { "field3"(packageName.classOf("Field3")) { } }
         assertThat(specs).containsExactly(
-            buildField<Field1>("field1"),
-            buildField<Field2>("field2"),
-            buildField<Field3>("field3")
+            fieldSpecOf<Field1>("field1"),
+            fieldSpecOf<Field2>("field2"),
+            fieldSpecOf<Field3>("field3")
         )
     }
 
@@ -43,9 +43,9 @@ class FieldSpecContainerTest {
         container["field2"] = Field2::class.java
         container { "field3"(Field3::class.java) { } }
         assertThat(specs).containsExactly(
-            buildField<Field1>("field1"),
-            buildField<Field2>("field2"),
-            buildField<Field3>("field3")
+            fieldSpecOf<Field1>("field1"),
+            fieldSpecOf<Field2>("field2"),
+            fieldSpecOf<Field3>("field3")
         )
     }
 
@@ -54,9 +54,9 @@ class FieldSpecContainerTest {
         container["field2"] = Field2::class
         container { "field3"(Field3::class) { } }
         assertThat(specs).containsExactly(
-            buildField<Field1>("field1"),
-            buildField<Field2>("field2"),
-            buildField<Field3>("field3")
+            fieldSpecOf<Field1>("field1"),
+            fieldSpecOf<Field2>("field2"),
+            fieldSpecOf<Field3>("field3")
         )
     }
 
@@ -64,8 +64,8 @@ class FieldSpecContainerTest {
         container.add<Field1>("field1")
         container { "field2"<Field2> { } }
         assertThat(specs).containsExactly(
-            buildField<Field1>("field1"),
-            buildField<Field2>("field2")
+            fieldSpecOf<Field1>("field1"),
+            fieldSpecOf<Field2>("field2")
         )
     }
 

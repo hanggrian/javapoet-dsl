@@ -11,17 +11,17 @@ import javax.lang.model.element.VariableElement
 import kotlin.reflect.KClass
 
 /** Converts element to [ParameterSpec]. */
-fun VariableElement.toParameter(): ParameterSpec = ParameterSpec.get(this)
+fun VariableElement.asParameterSpec(): ParameterSpec = ParameterSpec.get(this)
 
 /** Builds a new [ParameterSpec] from [type]. */
-fun buildParameter(type: TypeName, name: String, vararg modifiers: Modifier): ParameterSpec =
+fun parameterSpecOf(type: TypeName, name: String, vararg modifiers: Modifier): ParameterSpec =
     ParameterSpec.builder(type, name, *modifiers).build()
 
 /**
  * Builds a new [ParameterSpec] from [type],
  * by populating newly created [ParameterSpecBuilder] using provided [builderAction] and then building it.
  */
-inline fun buildParameter(
+inline fun buildParameterSpec(
     type: TypeName,
     name: String,
     vararg modifiers: Modifier,
@@ -29,22 +29,22 @@ inline fun buildParameter(
 ): ParameterSpec = ParameterSpec.builder(type, name, *modifiers).build(builderAction)
 
 /** Builds a new [ParameterSpec] from [type]. */
-fun buildParameter(type: Type, name: String, vararg modifiers: Modifier): ParameterSpec =
+fun parameterSpecOf(type: Type, name: String, vararg modifiers: Modifier): ParameterSpec =
     ParameterSpec.builder(type, name, *modifiers).build()
 
 /** Builds a new [ParameterSpec] from [type]. */
-fun buildParameter(type: KClass<*>, name: String, vararg modifiers: Modifier): ParameterSpec =
-    buildParameter(type.java, name, *modifiers)
+fun parameterSpecOf(type: KClass<*>, name: String, vararg modifiers: Modifier): ParameterSpec =
+    parameterSpecOf(type.java, name, *modifiers)
 
 /** Builds a new [ParameterSpec] from [T]. */
-inline fun <reified T> buildParameter(name: String, vararg modifiers: Modifier): ParameterSpec =
-    buildParameter(T::class, name, *modifiers)
+inline fun <reified T> parameterSpecOf(name: String, vararg modifiers: Modifier): ParameterSpec =
+    parameterSpecOf(T::class, name, *modifiers)
 
 /**
  * Builds a new [ParameterSpec] from [type],
  * by populating newly created [ParameterSpecBuilder] using provided [builderAction] and then building it.
  */
-inline fun buildParameter(
+inline fun buildParameterSpec(
     type: Type,
     name: String,
     vararg modifiers: Modifier,
@@ -55,22 +55,22 @@ inline fun buildParameter(
  * Builds a new [ParameterSpec] from [type],
  * by populating newly created [ParameterSpecBuilder] using provided [builderAction] and then building it.
  */
-inline fun buildParameter(
+inline fun buildParameterSpec(
     type: KClass<*>,
     name: String,
     vararg modifiers: Modifier,
     builderAction: ParameterSpecBuilder.() -> Unit
-): ParameterSpec = buildParameter(type.java, name, *modifiers, builderAction = builderAction)
+): ParameterSpec = buildParameterSpec(type.java, name, *modifiers, builderAction = builderAction)
 
 /**
  * Builds a new [ParameterSpec] from [T],
  * by populating newly created [ParameterSpecBuilder] using provided [builderAction] and then building it.
  */
-inline fun <reified T> buildParameter(
+inline fun <reified T> buildParameterSpec(
     name: String,
     vararg modifiers: Modifier,
     builderAction: ParameterSpecBuilder.() -> Unit
-): ParameterSpec = buildParameter(T::class, name, *modifiers, builderAction = builderAction)
+): ParameterSpec = buildParameterSpec(T::class, name, *modifiers, builderAction = builderAction)
 
 /** Modify existing [ParameterSpec.Builder] using provided [builderAction] and then building it. */
 inline fun ParameterSpec.Builder.build(builderAction: ParameterSpecBuilder.() -> Unit): ParameterSpec =

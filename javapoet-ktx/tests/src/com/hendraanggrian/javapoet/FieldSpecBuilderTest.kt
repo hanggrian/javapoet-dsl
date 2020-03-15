@@ -21,7 +21,7 @@ class FieldSpecBuilderTest {
         .build()
 
     @Test fun simple() {
-        assertEquals(expected, buildField<String>("name") {
+        assertEquals(expected, buildFieldSpec<String>("name") {
             javadoc.append("firstJavadoc")
             javadoc.append {
                 append("secondJavadoc")
@@ -33,7 +33,7 @@ class FieldSpecBuilderTest {
     }
 
     @Test fun invocation() {
-        assertEquals(expected, buildField<String>("name") {
+        assertEquals(expected, buildFieldSpec<String>("name") {
             javadoc {
                 append("firstJavadoc")
                 append {

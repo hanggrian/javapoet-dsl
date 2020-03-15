@@ -18,23 +18,23 @@ import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
 /** Builds a new [MethodSpec] from [name]. */
-fun buildMethod(name: String): MethodSpec = MethodSpecBuilder(MethodSpec.methodBuilder(name)).build()
+fun methodSpecOf(name: String): MethodSpec = MethodSpecBuilder(MethodSpec.methodBuilder(name)).build()
 
 /**
  * Builds a new [MethodSpec] from [name],
  * by populating newly created [MethodSpecBuilder] using provided [builderAction] and then building it.
  */
-inline fun buildMethod(name: String, builderAction: MethodSpecBuilder.() -> Unit): MethodSpec =
+inline fun buildMethodSpec(name: String, builderAction: MethodSpecBuilder.() -> Unit): MethodSpec =
     MethodSpec.methodBuilder(name).build(builderAction)
 
 /** Builds a new constructor [MethodSpec]. */
-fun buildConstructorMethod(): MethodSpec = MethodSpecBuilder(MethodSpec.constructorBuilder()).build()
+fun constructorMethodSpecOf(): MethodSpec = MethodSpecBuilder(MethodSpec.constructorBuilder()).build()
 
 /**
  * Builds a new constructor [MethodSpec],
  * by populating newly created [MethodSpecBuilder] using provided [builderAction] and then building it.
  */
-inline fun buildConstructorMethod(builderAction: MethodSpecBuilder.() -> Unit): MethodSpec =
+inline fun buildConstructorMethodSpec(builderAction: MethodSpecBuilder.() -> Unit): MethodSpec =
     MethodSpec.constructorBuilder().build(builderAction)
 
 /** Modify existing [MethodSpec.Builder] using provided [builderAction] and then building it. */
@@ -196,7 +196,7 @@ class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBui
 
     /** Set default value to code with custom initialization [builderAction]. */
     inline fun defaultValue(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
-        buildCode(builderAction).also { defaultValue = it }
+        buildCodeBlock(builderAction).also { defaultValue = it }
 
     /** Returns native spec. */
     fun build(): MethodSpec = nativeBuilder.build()

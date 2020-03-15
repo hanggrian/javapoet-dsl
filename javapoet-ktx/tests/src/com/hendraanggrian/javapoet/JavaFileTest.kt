@@ -21,7 +21,7 @@ class JavaFileTest {
     @Test fun comments() {
         // stacking addComment
         assertEquals(
-            JavaFile.builder("com.example", buildClassType("MyClass"))
+            JavaFile.builder("com.example", classTypeSpecOf("MyClass"))
                 .addFileComment("A ")
                 .addFileComment("very ")
                 .addFileComment("long ")
@@ -37,7 +37,7 @@ class JavaFileTest {
         )
         // single-line comment
         assertEquals(
-            JavaFile.builder("com.example", buildClassType("MyOtherClass"))
+            JavaFile.builder("com.example", classTypeSpecOf("MyOtherClass"))
                 .addFileComment("A ")
                 .addFileComment("simple ")
                 .addFileComment("comment")
