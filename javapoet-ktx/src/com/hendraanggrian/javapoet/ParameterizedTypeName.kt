@@ -64,6 +64,36 @@ fun KClass<*>.parameterizedBy(vararg typeArguments: TypeName = emptyArray()): Pa
     asClassName().parameterizedBy(*typeArguments)
 
 /**
+ * Returns a [ParameterizedTypeName] applying [TypeName] argument list to [ClassName].
+ *
+ * **See Also**
+ *
+ * [KotlinPoet counterpart](https://square.github.io/kotlinpoet/1.x/kotlinpoet/com.squareup.kotlinpoet/-parameterized-type-name/parameterized-by/)
+ */
+fun ClassName.parameterizedBy(typeArguments: Collection<TypeName>): ParameterizedTypeName =
+    parameterizedBy(*typeArguments.toTypedArray())
+
+/**
+ * Returns a [ParameterizedTypeName] applying [Type] argument list to [Class].
+ *
+ * **See Also**
+ *
+ * [KotlinPoet counterpart](https://square.github.io/kotlinpoet/1.x/kotlinpoet/com.squareup.kotlinpoet/-parameterized-type-name/parameterized-by/)
+ */
+fun Class<*>.parameterizedBy(typeArguments: Collection<Type>): ParameterizedTypeName =
+    parameterizedBy(*typeArguments.toTypedArray())
+
+/**
+ * Returns a [ParameterizedTypeName] applying [KClass] argument list to [KClass].
+ *
+ * **See Also**
+ *
+ * [KotlinPoet counterpart](https://square.github.io/kotlinpoet/1.x/kotlinpoet/com.squareup.kotlinpoet/-parameterized-type-name/parameterized-by/)
+ */
+fun KClass<*>.parameterizedBy(typeArguments: Collection<KClass<*>>): ParameterizedTypeName =
+    parameterizedBy(*typeArguments.toTypedArray())
+
+/**
  * Returns a [ParameterizedTypeName] equivalent to [ParameterizedType].
  *
  * **See Also**
