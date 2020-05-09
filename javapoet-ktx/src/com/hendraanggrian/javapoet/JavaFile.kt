@@ -15,7 +15,7 @@ inline fun buildJavaFile(packageName: String, builderAction: JavaFileBuilder.() 
 
 /** Wrapper of [JavaFile.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetDslMarker
-class JavaFileBuilder @PublishedApi internal constructor(private val packageName: String) : TypeSpecContainer() {
+class JavaFileBuilder(private val packageName: String) : TypeSpecContainer() {
     private var typeSpec: TypeSpec? = null
     private var comments: MutableList<Pair<String, Array<*>>>? = null
     private var imports: MutableMap<Any, MutableSet<String>>? = null

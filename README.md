@@ -6,25 +6,9 @@
 JavaPoet KTX
 ============
 Lightweight Kotlin extension of [JavaPoet], providing Kotlin DSL functionality and other convenient solutions. 
-
- * Full of convenient methods to achieve minimum code writing possible.
- * Options to invoke DSL. For example, `methods.add("main") { ... }` is as good as `methods { "main" { ... } }`. Scroll down for more information.
- * Smooth transition, existing JavaPoet native specs can still be configured with DSL.
-
-Download
---------
-```gradle
-repositories {
-    jcenter()
-}
-
-dependencies {
-    implementation "com.hendraanggrian:javapoet-ktx:$version"
-}
-```
-
-Build everything with DSL
--------------------------
+* Full of convenient methods to achieve minimum code writing possible.
+* Options to invoke DSL. For example, `methods.add("main") { ... }` is as good as `methods { "main" { ... } }`. Scroll down for more information.
+* Smooth transition, existing JavaPoet native specs can still be configured with DSL.
 
 ```kotlin
 buildJavaFile("com.example.helloworld") {
@@ -42,7 +26,22 @@ buildJavaFile("com.example.helloworld") {
 }.writeTo(System.out)
 ```
 
-#### Use `%` in string formatter
+Download
+--------
+```gradle
+repositories {
+    jcenter()
+}
+
+dependencies {
+    implementation "com.hendraanggrian:javapoet-ktx:$version"
+}
+```
+
+Usage
+-----
+
+### Use `%` in string formatter
 [JavaPoet] uses char prefix `$` when formatting literals (`$L`), strings (`$S`), types (`$T`), an names (`$N`) within strings.
 However in Kotlin, `$` in strings is reserved for variable referral. Avoid using `\$` and instead use `%` as the prefix, this is also the approach taken by [KotlinPoet].
 
@@ -61,7 +60,7 @@ buildCodeBlock {
 }
 ```
 
-#### Use `T::class` as parameters
+### Use `T::class` as parameters
 `KClass<*>` can now be used as format arguments. There is also inline reified type function whenever possible.
 
 ```kotlin
@@ -77,7 +76,7 @@ buildFieldSpec<Int>("count") {
 }
 ```
 
-#### Optional DSL
+### Optional DSL
 Some elements (field, method, parameter, etc.) are wrapped in container class. These containers have ability to add components with/without invoking DSL.
 
 For example, 2 examples below will produce the same result.
@@ -134,8 +133,7 @@ addClass("Car") {
 }
 ```
 
-Fluent TypeName API
--------------------
+### Fluent TypeName API
 Write `TypeName` and all its subtypes fluently.
 
 ```kotlin

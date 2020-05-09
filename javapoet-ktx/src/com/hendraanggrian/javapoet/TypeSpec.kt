@@ -24,7 +24,8 @@ import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
 /** Builds a new class [TypeSpec] from [type]. */
-fun classTypeSpecOf(type: String): TypeSpec = TypeSpec.classBuilder(type).build()
+fun classTypeSpecOf(type: String): TypeSpec =
+    TypeSpec.classBuilder(type).build()
 
 /**
  * Builds a new class [TypeSpec] from [type],
@@ -34,7 +35,8 @@ inline fun buildClassTypeSpec(type: String, builderAction: TypeSpecBuilder.() ->
     TypeSpec.classBuilder(type).build(builderAction)
 
 /** Builds a new class [TypeSpec] from [type]. */
-fun classTypeSpecOf(type: ClassName): TypeSpec = TypeSpec.classBuilder(type).build()
+fun classTypeSpecOf(type: ClassName): TypeSpec =
+    TypeSpec.classBuilder(type).build()
 
 /**
  * Builds a new class [TypeSpec] from [type],
@@ -44,7 +46,8 @@ inline fun buildClassTypeSpec(type: ClassName, builderAction: TypeSpecBuilder.()
     TypeSpec.classBuilder(type).build(builderAction)
 
 /** Builds a new interface [TypeSpec] from [type]. */
-fun interfaceTypeSpecOf(type: String): TypeSpec = TypeSpec.interfaceBuilder(type).build()
+fun interfaceTypeSpecOf(type: String): TypeSpec =
+    TypeSpec.interfaceBuilder(type).build()
 
 /**
  * Builds a new interface [TypeSpec] from [type],
@@ -54,7 +57,8 @@ inline fun buildInterfaceTypeSpec(type: String, builderAction: TypeSpecBuilder.(
     TypeSpec.interfaceBuilder(type).build(builderAction)
 
 /** Builds a new interface [TypeSpec] from [type]. */
-fun interfaceTypeSpecOf(type: ClassName): TypeSpec = TypeSpec.interfaceBuilder(type).build()
+fun interfaceTypeSpecOf(type: ClassName): TypeSpec =
+    TypeSpec.interfaceBuilder(type).build()
 
 /**
  * Builds a new interface [TypeSpec] from [type],
@@ -64,7 +68,8 @@ inline fun buildInterfaceTypeSpec(type: ClassName, builderAction: TypeSpecBuilde
     TypeSpec.interfaceBuilder(type).build(builderAction)
 
 /** Builds a new enum [TypeSpec] from [type]. */
-fun enumTypeSpecOf(type: String): TypeSpec = TypeSpec.enumBuilder(type).build()
+fun enumTypeSpecOf(type: String): TypeSpec =
+    TypeSpec.enumBuilder(type).build()
 
 /**
  * Builds a new enum [TypeSpec] from [type],
@@ -74,7 +79,8 @@ inline fun buildEnumTypeSpec(type: String, builderAction: TypeSpecBuilder.() -> 
     TypeSpec.enumBuilder(type).build(builderAction)
 
 /** Builds a new enum [TypeSpec] from [type]. */
-fun enumTypeSpecOf(type: ClassName): TypeSpec = TypeSpec.enumBuilder(type).build()
+fun enumTypeSpecOf(type: ClassName): TypeSpec =
+    TypeSpec.enumBuilder(type).build()
 
 /**
  * Builds a new enum [TypeSpec] from [type],
@@ -96,7 +102,8 @@ fun buildAnonymousTypeSpec(format: String, vararg args: Any, builderAction: Type
     format.formatWith(args) { s, array -> TypeSpec.anonymousClassBuilder(s, *array).build(builderAction) }
 
 /** Builds a new anonymous [TypeSpec] from [code]. */
-fun anonymousTypeSpecOf(code: CodeBlock): TypeSpec = TypeSpec.anonymousClassBuilder(code).build()
+fun anonymousTypeSpecOf(code: CodeBlock): TypeSpec =
+    TypeSpec.anonymousClassBuilder(code).build()
 
 /**
  * Builds a new anonymous [TypeSpec] from [code],
@@ -106,7 +113,8 @@ inline fun buildAnonymousTypeSpec(code: CodeBlock, builderAction: TypeSpecBuilde
     TypeSpec.anonymousClassBuilder(code).build(builderAction)
 
 /** Builds a new annotation [TypeSpec] from [type]. */
-fun annotationTypeSpecOf(type: String): TypeSpec = TypeSpec.annotationBuilder(type).build()
+fun annotationTypeSpecOf(type: String): TypeSpec =
+    TypeSpec.annotationBuilder(type).build()
 
 /**
  * Builds a new annotation [TypeSpec] from [type],
@@ -116,7 +124,8 @@ inline fun buildAnnotationTypeSpec(type: String, builderAction: TypeSpecBuilder.
     TypeSpec.annotationBuilder(type).build(builderAction)
 
 /** Builds a new annotation [TypeSpec] from [type]. */
-fun annotationTypeSpecOf(type: ClassName): TypeSpec = TypeSpec.annotationBuilder(type).build()
+fun annotationTypeSpecOf(type: ClassName): TypeSpec =
+    TypeSpec.annotationBuilder(type).build()
 
 /**
  * Builds a new annotation [TypeSpec] from [type],
@@ -131,7 +140,7 @@ inline fun TypeSpec.Builder.build(builderAction: TypeSpecBuilder.() -> Unit): Ty
 
 /** Wrapper of [TypeSpec.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetDslMarker
-class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: TypeSpec.Builder) {
+class TypeSpecBuilder(private val nativeBuilder: TypeSpec.Builder) {
 
     /** Enum constants of this type. */
     val enumConstants: MutableMap<String, TypeSpec> get() = nativeBuilder.enumConstants

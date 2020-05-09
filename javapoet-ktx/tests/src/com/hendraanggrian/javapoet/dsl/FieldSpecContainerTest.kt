@@ -19,8 +19,8 @@ class FieldSpecContainerTest {
         FieldSpecContainerScope(container).configuration()
 
     @Test fun nativeSpec() {
-        container.add(fieldSpecOf<Field1>("field1"))
-        container += fieldSpecOf<Field2>("field2")
+        container += fieldSpecOf<Field1>("field1")
+        container += listOf(fieldSpecOf<Field2>("field2"))
         assertThat(fields).containsExactly(
             fieldSpecOf<Field1>("field1"),
             fieldSpecOf<Field2>("field2")

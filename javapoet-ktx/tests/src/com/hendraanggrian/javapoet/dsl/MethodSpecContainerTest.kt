@@ -19,8 +19,8 @@ class MethodSpecContainerTest {
         MethodSpecContainerScope(container).configuration()
 
     @Test fun nativeSpec() {
-        container.add(methodSpecOf("method"))
-        container += constructorMethodSpecOf()
+        container += methodSpecOf("method")
+        container += listOf(constructorMethodSpecOf())
         assertThat(methods).containsExactly(
             methodSpecOf("method"),
             constructorMethodSpecOf()

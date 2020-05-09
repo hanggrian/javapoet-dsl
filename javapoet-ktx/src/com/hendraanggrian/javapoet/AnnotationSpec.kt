@@ -11,10 +11,12 @@ fun Annotation.asAnnotationSpec(includeDefaultValues: Boolean = false): Annotati
     AnnotationSpec.get(this, includeDefaultValues)
 
 /** Converts mirror to [AnnotationSpec]. */
-fun AnnotationMirror.asAnnotationSpec(): AnnotationSpec = AnnotationSpec.get(this)
+fun AnnotationMirror.asAnnotationSpec(): AnnotationSpec =
+    AnnotationSpec.get(this)
 
 /** Builds a new [AnnotationSpec] from [type]. */
-fun annotationSpecOf(type: ClassName): AnnotationSpec = AnnotationSpec.builder(type).build()
+fun annotationSpecOf(type: ClassName): AnnotationSpec =
+    AnnotationSpec.builder(type).build()
 
 /**
  * Builds a new [AnnotationSpec] from [type],
@@ -24,13 +26,16 @@ inline fun buildAnnotationSpec(type: ClassName, builderAction: AnnotationSpecBui
     AnnotationSpec.builder(type).build(builderAction)
 
 /** Builds a new [AnnotationSpec] from [type]. */
-fun annotationSpecOf(type: Class<*>): AnnotationSpec = AnnotationSpec.builder(type).build()
+fun annotationSpecOf(type: Class<*>): AnnotationSpec =
+    AnnotationSpec.builder(type).build()
 
 /** Builds a new [AnnotationSpec] from [type]. */
-fun annotationSpecOf(type: KClass<*>): AnnotationSpec = annotationSpecOf(type.java)
+fun annotationSpecOf(type: KClass<*>): AnnotationSpec =
+    annotationSpecOf(type.java)
 
 /** Builds a new [AnnotationSpec] from [T]. */
-inline fun <reified T> annotationSpecOf(): AnnotationSpec = annotationSpecOf(T::class)
+inline fun <reified T> annotationSpecOf(): AnnotationSpec =
+    annotationSpecOf(T::class)
 
 /**
  * Builds a new [AnnotationSpec] from [type],
@@ -59,7 +64,7 @@ inline fun AnnotationSpec.Builder.build(builderAction: AnnotationSpecBuilder.() 
 
 /** Wrapper of [AnnotationSpec.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetDslMarker
-class AnnotationSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: AnnotationSpec.Builder) {
+class AnnotationSpecBuilder(private val nativeBuilder: AnnotationSpec.Builder) {
 
     /** Add code as a member of this annotation. */
     fun addMember(name: String, format: String, vararg args: Any): Unit =

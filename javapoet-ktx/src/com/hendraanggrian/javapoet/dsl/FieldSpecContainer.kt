@@ -10,14 +10,17 @@ import java.lang.reflect.Type
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
-/** A [FieldSpecContainer] is responsible for managing a set of field instances. */
-abstract class FieldSpecContainer {
-
-    /** Add collection of fields to this container. */
-    abstract fun addAll(specs: Iterable<FieldSpec>): Boolean
+private interface FieldSpecAddable {
 
     /** Add field to this container. */
-    abstract fun add(spec: FieldSpec)
+    fun add(spec: FieldSpec)
+
+    /** Add collection of fields to this container. */
+    fun addAll(specs: Iterable<FieldSpec>): Boolean
+}
+
+/** A [FieldSpecContainer] is responsible for managing a set of field instances. */
+abstract class FieldSpecContainer : FieldSpecAddable {
 
     /** Add field from [type] and [name], returning the field added. */
     fun add(type: TypeName, name: String, vararg modifiers: Modifier): FieldSpec =
@@ -67,8 +70,11 @@ abstract class FieldSpecContainer {
     ): FieldSpec = buildFieldSpec<T>(name, *modifiers, builderAction = builderAction).also { add(it) }
 
     /** Convenient method to add field with operator function. */
-    operator fun plusAssign(spec: FieldSpec) {
-        add(spec)
+    operator fun plusAssign(spec: FieldSpec): Unit = add(spec)
+
+    /** Convenient method to add collection of fields with operator function. */
+    operator fun plusAssign(specs: Iterable<FieldSpec>) {
+        addAll(specs)
     }
 
     /** Convenient method to add field with operator function. */
@@ -89,10 +95,8 @@ abstract class FieldSpecContainer {
 
 /** Receiver for the `fields` function type providing an extended set of operators for the configuration. */
 @JavapoetDslMarker
-class FieldSpecContainerScope(private val container: FieldSpecContainer) : FieldSpecContainer() {
-
-    override fun addAll(specs: Iterable<FieldSpec>): Boolean = container.addAll(specs)
-    override fun add(spec: FieldSpec): Unit = container.add(spec)
+class FieldSpecContainerScope(container: FieldSpecContainer) : FieldSpecContainer(),
+    FieldSpecAddable by container {
 
     /** Convenient method to add field with receiver type. */
     inline operator fun String.invoke(

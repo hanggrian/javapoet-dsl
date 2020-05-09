@@ -29,7 +29,8 @@ abstract class CodeBlockContainer : CodeBlockAppendable {
     inline fun append(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
         buildCodeBlock(builderAction).also { append(it) }
 
-    override fun appendln() = appendln("")
+    override fun appendln(): Unit =
+        appendln("")
 
     /** Add code block with custom initialization [builderAction] and a new line to this container, returning the block added. */
     inline fun appendln(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
@@ -55,7 +56,8 @@ abstract class JavadocContainer : CodeBlockAppendable {
     inline fun append(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
         buildCodeBlock(builderAction).also { append(it) }
 
-    override fun appendln(): Unit = append(SystemProperties.LINE_SEPARATOR)
+    override fun appendln(): Unit =
+        append(SystemProperties.LINE_SEPARATOR)
 
     override fun appendln(format: String, vararg args: Any) {
         append(format, *args)
@@ -94,8 +96,10 @@ abstract class JavadocContainer : CodeBlockAppendable {
 
 /** Receiver for the `javadoc` function type providing an extended set of operators for the configuration. */
 @JavapoetDslMarker
-class JavadocContainerScope(private val container: JavadocContainer) : JavadocContainer() {
+class JavadocContainerScope(private val container: JavadocContainer) : JavadocContainer(),
+    CodeBlockAppendable by container {
 
-    override fun append(format: String, vararg args: Any): Unit = container.append(format, *args)
-    override fun append(code: CodeBlock): Unit = container.append(code)
+    override fun appendln(): Unit = container.appendln()
+    override fun appendln(code: CodeBlock): Unit = container.appendln(code)
+    override fun appendln(format: String, vararg args: Any): Unit = container.appendln(format, *args)
 }

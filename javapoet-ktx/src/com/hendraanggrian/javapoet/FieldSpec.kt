@@ -77,7 +77,7 @@ inline fun FieldSpec.Builder.build(builderAction: FieldSpecBuilder.() -> Unit): 
 
 /** Wrapper of [FieldSpec.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetDslMarker
-class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: FieldSpec.Builder) {
+class FieldSpecBuilder(private val nativeBuilder: FieldSpec.Builder) {
 
     /** Annotations of this field. */
     val annotationSpecs: MutableList<AnnotationSpec> get() = nativeBuilder.annotations

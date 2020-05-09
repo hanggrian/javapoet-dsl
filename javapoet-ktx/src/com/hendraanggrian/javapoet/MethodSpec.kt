@@ -18,7 +18,8 @@ import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
 /** Builds a new [MethodSpec] from [name]. */
-fun methodSpecOf(name: String): MethodSpec = MethodSpecBuilder(MethodSpec.methodBuilder(name)).build()
+fun methodSpecOf(name: String): MethodSpec =
+    MethodSpecBuilder(MethodSpec.methodBuilder(name)).build()
 
 /**
  * Builds a new [MethodSpec] from [name],
@@ -28,7 +29,8 @@ inline fun buildMethodSpec(name: String, builderAction: MethodSpecBuilder.() -> 
     MethodSpec.methodBuilder(name).build(builderAction)
 
 /** Builds a new constructor [MethodSpec]. */
-fun constructorMethodSpecOf(): MethodSpec = MethodSpecBuilder(MethodSpec.constructorBuilder()).build()
+fun constructorMethodSpecOf(): MethodSpec =
+    MethodSpecBuilder(MethodSpec.constructorBuilder()).build()
 
 /**
  * Builds a new constructor [MethodSpec],
@@ -43,8 +45,7 @@ inline fun MethodSpec.Builder.build(builderAction: MethodSpecBuilder.() -> Unit)
 
 /** Wrapper of [MethodSpec.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetDslMarker
-class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: MethodSpec.Builder) :
-    CodeBlockContainer() {
+class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlockContainer() {
 
     /** Type variables of this method. */
     val typeVariables: MutableList<TypeVariableName> get() = nativeBuilder.typeVariables
