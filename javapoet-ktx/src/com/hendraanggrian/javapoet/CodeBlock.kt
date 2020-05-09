@@ -33,6 +33,9 @@ class CodeBlockBuilder @PublishedApi internal constructor(private val nativeBuil
     /** Returns true if this builder contains no code. */
     fun isEmpty(): Boolean = nativeBuilder.isEmpty
 
+    /** Returns true if this builder contains code. */
+    fun isNotEmpty(): Boolean = !nativeBuilder.isEmpty
+
     /** Adds code using named arguments. */
     fun addNamed(format: String, arguments: Map<String, *>): Unit =
         format.formatWith(arguments) { s, map -> nativeBuilder.addNamed(s, map) }

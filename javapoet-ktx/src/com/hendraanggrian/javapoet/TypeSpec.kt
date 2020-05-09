@@ -133,6 +133,36 @@ inline fun TypeSpec.Builder.build(builderAction: TypeSpecBuilder.() -> Unit): Ty
 @JavapoetDslMarker
 class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: TypeSpec.Builder) {
 
+    /** Enum constants of this type. */
+    val enumConstants: MutableMap<String, TypeSpec> get() = nativeBuilder.enumConstants
+
+    /** Annotations of this type. */
+    val annotationSpecs: MutableList<AnnotationSpec> get() = nativeBuilder.annotations
+
+    /** Modifiers of this type. */
+    val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
+
+    /** Type variables of this type. */
+    val typeVariables: MutableList<TypeVariableName> get() = nativeBuilder.typeVariables
+
+    /** Super interfaces of this type. */
+    val superinterfaces: MutableList<TypeName> get() = nativeBuilder.superinterfaces
+
+    /** Fields of this type. */
+    val fieldSpecs: MutableList<FieldSpec> get() = nativeBuilder.fieldSpecs
+
+    /** Methods of this type. */
+    val methodSpecs: MutableList<MethodSpec> get() = nativeBuilder.methodSpecs
+
+    /** Types of this type. */
+    val typeSpecs: MutableList<TypeSpec> get() = nativeBuilder.typeSpecs
+
+    /** Originating elements of this type. */
+    val originatingElements: MutableList<Element> get() = nativeBuilder.originatingElements
+
+    /** Always qualified names of this type. */
+    val alwaysQualifiedNames: MutableSet<String> get() = nativeBuilder.alwaysQualifiedNames
+
     /** Configure javadoc without DSL. */
     val javadoc: JavadocContainer = object : JavadocContainer() {
         override fun append(format: String, vararg args: Any): Unit =
@@ -182,31 +212,31 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
         }
 
     /** Set superclass to [type]. */
-    fun superClass(type: Type) {
+    fun superclass(type: Type) {
         nativeBuilder.superclass(type)
     }
 
     /** Set superclass to [type]. */
-    fun superClass(type: KClass<*>) = superClass(type.java)
+    fun superclass(type: KClass<*>) = superclass(type.java)
 
     /** Set superclass to [T]. */
-    inline fun <reified T> superClass() = superClass(T::class)
+    inline fun <reified T> superclass() = superclass(T::class)
 
     /** Add superinterface to [type]. */
-    fun addSuperInterface(type: TypeName) {
+    fun addSuperinterface(type: TypeName) {
         nativeBuilder.addSuperinterface(type)
     }
 
     /** Add superinterface to [type]. */
-    fun addSuperInterface(type: Type) {
+    fun addSuperinterface(type: Type) {
         nativeBuilder.addSuperinterface(type)
     }
 
     /** Add superinterface to [type]. */
-    fun addSuperInterface(type: KClass<*>) = addSuperInterface(type.java)
+    fun addSuperinterface(type: KClass<*>) = addSuperinterface(type.java)
 
     /** Add superinterface to [T]. */
-    inline fun <reified T> addSuperInterface() = addSuperInterface(T::class)
+    inline fun <reified T> addSuperinterface() = addSuperinterface(T::class)
 
     /** Add enum constant named [name]. */
     fun addEnumConstant(name: String) {

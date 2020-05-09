@@ -79,6 +79,12 @@ inline fun FieldSpec.Builder.build(builderAction: FieldSpecBuilder.() -> Unit): 
 @JavapoetDslMarker
 class FieldSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: FieldSpec.Builder) {
 
+    /** Annotations of this field. */
+    val annotationSpecs: MutableList<AnnotationSpec> get() = nativeBuilder.annotations
+
+    /** Modifiers of this field. */
+    val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
+
     /** Configure javadoc without DSL. */
     val javadoc: JavadocContainer = object : JavadocContainer() {
         override fun append(format: String, vararg args: Any): Unit =

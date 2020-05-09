@@ -46,6 +46,18 @@ inline fun MethodSpec.Builder.build(builderAction: MethodSpecBuilder.() -> Unit)
 class MethodSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: MethodSpec.Builder) :
     CodeBlockContainer() {
 
+    /** Type variables of this method. */
+    val typeVariables: MutableList<TypeVariableName> get() = nativeBuilder.typeVariables
+
+    /** Annotations of this method. */
+    val annotationSpecs: MutableList<AnnotationSpec> get() = nativeBuilder.annotations
+
+    /** Modifiers of this method. */
+    val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
+
+    /** Parameters of this method. */
+    val parameterSpecs: MutableList<ParameterSpec> get() = nativeBuilder.parameters
+
     /** Configure javadoc without DSL. */
     val javadoc: JavadocContainer = object : JavadocContainer() {
         override fun append(format: String, vararg args: Any): Unit =

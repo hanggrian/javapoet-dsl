@@ -80,6 +80,12 @@ inline fun ParameterSpec.Builder.build(builderAction: ParameterSpecBuilder.() ->
 @JavapoetDslMarker
 class ParameterSpecBuilder @PublishedApi internal constructor(private val nativeBuilder: ParameterSpec.Builder) {
 
+    /** Annotations of this parameter. */
+    val annotationSpecs: MutableList<AnnotationSpec> get() = nativeBuilder.annotations
+
+    /** Modifiers of this parameter. */
+    val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
+
     /** Configure annotations without DSL. */
     val annotations: AnnotationSpecContainer = object : AnnotationSpecContainer() {
         override fun addAll(specs: Iterable<AnnotationSpec>) = nativeBuilder.annotations.addAll(specs)
