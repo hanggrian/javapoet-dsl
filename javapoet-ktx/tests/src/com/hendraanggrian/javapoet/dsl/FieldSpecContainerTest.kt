@@ -7,10 +7,11 @@ import com.squareup.javapoet.FieldSpec
 import kotlin.test.Test
 
 class FieldSpecContainerTest {
-    private val specs = mutableListOf<FieldSpec>()
+    private val fields = mutableListOf<FieldSpec>()
     private val container = object : FieldSpecContainer() {
+        override fun addAll(specs: Iterable<FieldSpec>): Boolean = fields.addAll(specs)
         override fun add(spec: FieldSpec) {
-            specs += spec
+            fields += spec
         }
     }
 
@@ -20,7 +21,7 @@ class FieldSpecContainerTest {
     @Test fun nativeSpec() {
         container.add(fieldSpecOf<Field1>("field1"))
         container += fieldSpecOf<Field2>("field2")
-        assertThat(specs).containsExactly(
+        assertThat(fields).containsExactly(
             fieldSpecOf<Field1>("field1"),
             fieldSpecOf<Field2>("field2")
         )
@@ -31,7 +32,7 @@ class FieldSpecContainerTest {
         container.add(packageName.classOf("Field1"), "field1")
         container["field2"] = packageName.classOf("Field2")
         container { "field3"(packageName.classOf("Field3")) { } }
-        assertThat(specs).containsExactly(
+        assertThat(fields).containsExactly(
             fieldSpecOf<Field1>("field1"),
             fieldSpecOf<Field2>("field2"),
             fieldSpecOf<Field3>("field3")
@@ -42,7 +43,7 @@ class FieldSpecContainerTest {
         container.add(Field1::class.java, "field1")
         container["field2"] = Field2::class.java
         container { "field3"(Field3::class.java) { } }
-        assertThat(specs).containsExactly(
+        assertThat(fields).containsExactly(
             fieldSpecOf<Field1>("field1"),
             fieldSpecOf<Field2>("field2"),
             fieldSpecOf<Field3>("field3")
@@ -53,7 +54,7 @@ class FieldSpecContainerTest {
         container.add(Field1::class, "field1")
         container["field2"] = Field2::class
         container { "field3"(Field3::class) { } }
-        assertThat(specs).containsExactly(
+        assertThat(fields).containsExactly(
             fieldSpecOf<Field1>("field1"),
             fieldSpecOf<Field2>("field2"),
             fieldSpecOf<Field3>("field3")
@@ -63,7 +64,7 @@ class FieldSpecContainerTest {
     @Test fun reifiedType() {
         container.add<Field1>("field1")
         container { "field2"<Field2> { } }
-        assertThat(specs).containsExactly(
+        assertThat(fields).containsExactly(
             fieldSpecOf<Field1>("field1"),
             fieldSpecOf<Field2>("field2")
         )

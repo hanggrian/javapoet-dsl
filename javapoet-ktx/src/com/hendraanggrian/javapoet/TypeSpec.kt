@@ -149,6 +149,7 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
 
     /** Configure annotations without DSL. */
     val annotations: AnnotationSpecContainer = object : AnnotationSpecContainer() {
+        override fun addAll(specs: Iterable<AnnotationSpec>) = nativeBuilder.annotations.addAll(specs)
         override fun add(spec: AnnotationSpec) {
             nativeBuilder.addAnnotation(spec)
         }
@@ -219,6 +220,7 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
 
     /** Configure fields without DSL. */
     val fields: FieldSpecContainer = object : FieldSpecContainer() {
+        override fun addAll(specs: Iterable<FieldSpec>) = nativeBuilder.fieldSpecs.addAll(specs)
         override fun add(spec: FieldSpec) {
             nativeBuilder.addField(spec)
         }
@@ -244,6 +246,7 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
 
     /** Configure methods without DSL. */
     val methods: MethodSpecContainer = object : MethodSpecContainer() {
+        override fun addAll(specs: Iterable<MethodSpec>) = nativeBuilder.methodSpecs.addAll(specs)
         override fun add(spec: MethodSpec) {
             nativeBuilder.addMethod(spec)
         }
@@ -255,6 +258,7 @@ class TypeSpecBuilder @PublishedApi internal constructor(private val nativeBuild
 
     /** Configure types without DSL. */
     val types: TypeSpecContainer = object : TypeSpecContainer() {
+        override fun addAll(specs: Iterable<TypeSpec>) = nativeBuilder.typeSpecs.addAll(specs)
         override fun add(spec: TypeSpec) {
             nativeBuilder.addType(spec)
         }

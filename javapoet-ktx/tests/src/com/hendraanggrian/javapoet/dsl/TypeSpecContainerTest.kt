@@ -11,10 +11,11 @@ import com.squareup.javapoet.TypeSpec
 import kotlin.test.Test
 
 class TypeSpecContainerTest {
-    private val specs = mutableListOf<TypeSpec>()
+    private val types = mutableListOf<TypeSpec>()
     private val container = object : TypeSpecContainer() {
+        override fun addAll(specs: Iterable<TypeSpec>): Boolean = types.addAll(specs)
         override fun add(spec: TypeSpec) {
-            specs += spec
+            types += spec
         }
     }
 
@@ -24,7 +25,7 @@ class TypeSpecContainerTest {
     @Test fun nativeSpec() {
         container.add(classTypeSpecOf("Class1"))
         container += classTypeSpecOf("Class2")
-        assertThat(specs).containsExactly(
+        assertThat(types).containsExactly(
             classTypeSpecOf("Class1"),
             classTypeSpecOf("Class2")
         )
@@ -36,7 +37,7 @@ class TypeSpecContainerTest {
             "Class1" { }
             (packageName.classOf("MyType")) { }
         }
-        assertThat(specs).containsExactly(
+        assertThat(types).containsExactly(
             classTypeSpecOf("Class1"),
             classTypeSpecOf(packageName.classOf("MyType"))
         )
@@ -48,7 +49,7 @@ class TypeSpecContainerTest {
         container.addEnum("Enum1") { addEnumConstant("A") }
         container.addAnonymous("Anonymous1")
         container.addAnnotation("Annotation1")
-        assertThat(specs).containsExactly(
+        assertThat(types).containsExactly(
             classTypeSpecOf("Class1"),
             interfaceTypeSpecOf("Interface1"),
             buildEnumTypeSpec("Enum1") { addEnumConstant("A") },

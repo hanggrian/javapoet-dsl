@@ -11,6 +11,9 @@ import com.squareup.javapoet.MethodSpec
 /** A [MethodSpecContainer] is responsible for managing a set of method instances. */
 abstract class MethodSpecContainer {
 
+    /** Add collection of methods to this container. */
+    abstract fun addAll(specs: Iterable<MethodSpec>): Boolean
+
     /** Add method to this container. */
     abstract fun add(spec: MethodSpec)
 
@@ -43,7 +46,8 @@ abstract class MethodSpecContainer {
 @JavapoetDslMarker
 class MethodSpecContainerScope(private val container: MethodSpecContainer) : MethodSpecContainer() {
 
-    override fun add(spec: MethodSpec) = container.add(spec)
+    override fun addAll(specs: Iterable<MethodSpec>): Boolean = container.addAll(specs)
+    override fun add(spec: MethodSpec): Unit = container.add(spec)
 
     /** Convenient method to add method with receiver type. */
     inline operator fun String.invoke(builderAction: MethodSpecBuilder.() -> Unit): MethodSpec =

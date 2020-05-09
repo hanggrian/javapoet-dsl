@@ -96,6 +96,6 @@ abstract class JavadocContainer : CodeBlockAppendable {
 @JavapoetDslMarker
 class JavadocContainerScope(private val container: JavadocContainer) : JavadocContainer() {
 
-    override fun append(format: String, vararg args: Any) = container.append(format, *args)
-    override fun append(code: CodeBlock) = container.append(code)
+    override fun append(format: String, vararg args: Any): Unit = container.append(format, *args)
+    override fun append(code: CodeBlock): Unit = container.append(code)
 }

@@ -82,6 +82,7 @@ class ParameterSpecBuilder @PublishedApi internal constructor(private val native
 
     /** Configure annotations without DSL. */
     val annotations: AnnotationSpecContainer = object : AnnotationSpecContainer() {
+        override fun addAll(specs: Iterable<AnnotationSpec>) = nativeBuilder.annotations.addAll(specs)
         override fun add(spec: AnnotationSpec) {
             nativeBuilder.addAnnotation(spec)
         }

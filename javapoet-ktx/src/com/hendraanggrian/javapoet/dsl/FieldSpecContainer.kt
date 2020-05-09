@@ -13,6 +13,9 @@ import kotlin.reflect.KClass
 /** A [FieldSpecContainer] is responsible for managing a set of field instances. */
 abstract class FieldSpecContainer {
 
+    /** Add collection of fields to this container. */
+    abstract fun addAll(specs: Iterable<FieldSpec>): Boolean
+
     /** Add field to this container. */
     abstract fun add(spec: FieldSpec)
 
@@ -88,7 +91,8 @@ abstract class FieldSpecContainer {
 @JavapoetDslMarker
 class FieldSpecContainerScope(private val container: FieldSpecContainer) : FieldSpecContainer() {
 
-    override fun add(spec: FieldSpec) = container.add(spec)
+    override fun addAll(specs: Iterable<FieldSpec>): Boolean = container.addAll(specs)
+    override fun add(spec: FieldSpec): Unit = container.add(spec)
 
     /** Convenient method to add field with receiver type. */
     inline operator fun String.invoke(

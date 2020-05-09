@@ -7,10 +7,11 @@ import com.squareup.javapoet.MethodSpec
 import kotlin.test.Test
 
 class MethodSpecContainerTest {
-    private val specs = mutableListOf<MethodSpec>()
+    private val methods = mutableListOf<MethodSpec>()
     private val container = object : MethodSpecContainer() {
+        override fun addAll(specs: Iterable<MethodSpec>): Boolean = methods.addAll(specs)
         override fun add(spec: MethodSpec) {
-            specs += spec
+            methods += spec
         }
     }
 
@@ -20,7 +21,7 @@ class MethodSpecContainerTest {
     @Test fun nativeSpec() {
         container.add(methodSpecOf("method"))
         container += constructorMethodSpecOf()
-        assertThat(specs).containsExactly(
+        assertThat(methods).containsExactly(
             methodSpecOf("method"),
             constructorMethodSpecOf()
         )
@@ -30,7 +31,7 @@ class MethodSpecContainerTest {
         container.add("method1")
         container += "method2"
         container { "method3" { } }
-        assertThat(specs).containsExactly(
+        assertThat(methods).containsExactly(
             methodSpecOf("method1"),
             methodSpecOf("method2"),
             methodSpecOf("method3")
@@ -39,7 +40,7 @@ class MethodSpecContainerTest {
 
     @Test fun others() {
         container.addConstructor()
-        assertThat(specs).containsExactly(
+        assertThat(methods).containsExactly(
             constructorMethodSpecOf()
         )
     }
