@@ -157,7 +157,7 @@ class TypeSpecBuilder(private val nativeBuilder: TypeSpec.Builder) {
     /** Always qualified names of this type. */
     val alwaysQualifiedNames: MutableSet<String> get() = nativeBuilder.alwaysQualifiedNames
 
-    /** Configure javadoc without DSL. */
+    /** Javadoc of this type. */
     val javadoc: JavadocContainer = object : JavadocContainer() {
         override fun append(format: String, vararg args: Any): Unit =
             format.formatWith(args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
@@ -167,14 +167,14 @@ class TypeSpecBuilder(private val nativeBuilder: TypeSpec.Builder) {
         }
     }
 
-    /** Configure javadoc with DSL. */
+    /** Configures javadoc of this type. */
     inline fun javadoc(configuration: JavadocContainerScope.() -> Unit) =
         JavadocContainerScope(javadoc).configuration()
 
-    /** Configure annotations without DSL. */
+    /** Annotations of this type. */
     val annotations: AnnotationSpecList = AnnotationSpecList(nativeBuilder.annotations)
 
-    /** Configure annotations with DSL. */
+    /** Configures annotations of this type. */
     inline fun annotations(configuration: AnnotationSpecListScope.() -> Unit) =
         AnnotationSpecListScope(annotations).configuration()
 
@@ -237,10 +237,10 @@ class TypeSpecBuilder(private val nativeBuilder: TypeSpec.Builder) {
         nativeBuilder.addEnumConstant(name, spec)
     }
 
-    /** Configure fields without DSL. */
+    /** Fields of this type. */
     val fields: FieldSpecList = FieldSpecList(nativeBuilder.fieldSpecs)
 
-    /** Configure fields with DSL. */
+    /** Configures fields of this type. */
     inline fun fields(configuration: FieldSpecListScope.() -> Unit) =
         FieldSpecListScope(fields).configuration()
 
@@ -258,17 +258,17 @@ class TypeSpecBuilder(private val nativeBuilder: TypeSpec.Builder) {
     inline fun addInitializerBlock(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
         addInitializerBlock(buildCodeBlock(builderAction))
 
-    /** Configure methods without DSL. */
+    /** Methods of this type. */
     val methods: MethodSpecList = MethodSpecList(nativeBuilder.methodSpecs)
 
-    /** Configure methods with DSL. */
+    /** Configures methods of this type. */
     inline fun methods(configuration: MethodSpecListScope.() -> Unit) =
         MethodSpecListScope(methods).configuration()
 
-    /** Configure types without DSL. */
+    /** Types of this type. */
     val types: TypeSpecList = TypeSpecList(nativeBuilder.typeSpecs)
 
-    /** Configure types with DSL. */
+    /** Configures types of this type. */
     inline fun types(configuration: TypeSpecListScope.() -> Unit) =
         TypeSpecListScope(types).configuration()
 

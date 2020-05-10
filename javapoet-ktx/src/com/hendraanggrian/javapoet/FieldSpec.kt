@@ -81,7 +81,7 @@ class FieldSpecBuilder(private val nativeBuilder: FieldSpec.Builder) {
     /** Modifiers of this field. */
     val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
 
-    /** Configure javadoc without DSL. */
+    /** Javadoc of this field. */
     val javadoc: JavadocContainer = object : JavadocContainer() {
         override fun append(format: String, vararg args: Any): Unit =
             format.formatWith(args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
@@ -91,14 +91,14 @@ class FieldSpecBuilder(private val nativeBuilder: FieldSpec.Builder) {
         }
     }
 
-    /** Configure javadoc with DSL. */
+    /** Configures javadoc for this field. */
     inline fun javadoc(configuration: JavadocContainerScope.() -> Unit) =
         JavadocContainerScope(javadoc).configuration()
 
-    /** Configure annotations without DSL. */
+    /** Annotations of this field. */
     val annotations: AnnotationSpecList = AnnotationSpecList(nativeBuilder.annotations)
 
-    /** Configure annotations with DSL. */
+    /** Configures annotations for this field. */
     inline fun annotations(configuration: AnnotationSpecListScope.() -> Unit) =
         AnnotationSpecListScope(annotations).configuration()
 

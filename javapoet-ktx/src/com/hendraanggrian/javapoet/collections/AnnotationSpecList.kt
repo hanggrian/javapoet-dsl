@@ -9,8 +9,8 @@ import com.squareup.javapoet.ClassName
 import kotlin.reflect.KClass
 
 /** An [AnnotationSpecList] is responsible for managing a set of annotation instances. */
-open class AnnotationSpecList internal constructor(specs: MutableList<AnnotationSpec>) :
-    MutableList<AnnotationSpec> by specs {
+open class AnnotationSpecList internal constructor(actualList: MutableList<AnnotationSpec>) :
+    MutableList<AnnotationSpec> by actualList {
 
     /** Add annotation from [type], returning the annotation added. */
     fun add(type: ClassName): AnnotationSpec =
@@ -62,7 +62,7 @@ open class AnnotationSpecList internal constructor(specs: MutableList<Annotation
 
 /** Receiver for the `annotations` function type providing an extended set of operators for the configuration. */
 @JavapoetDslMarker
-class AnnotationSpecListScope(specs: MutableList<AnnotationSpec>) : AnnotationSpecList(specs) {
+class AnnotationSpecListScope(actualList: MutableList<AnnotationSpec>) : AnnotationSpecList(actualList) {
 
     /** Convenient method to add annotation with receiver type. */
     inline operator fun ClassName.invoke(builderAction: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =

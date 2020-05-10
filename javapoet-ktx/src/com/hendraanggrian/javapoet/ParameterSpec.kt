@@ -83,10 +83,10 @@ class ParameterSpecBuilder(private val nativeBuilder: ParameterSpec.Builder) {
     /** Modifiers of this parameter. */
     val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
 
-    /** Configure annotations without DSL. */
+    /** Annotations of this parameter. */
     val annotations: AnnotationSpecList = AnnotationSpecList(nativeBuilder.annotations)
 
-    /** Configure annotations with DSL. */
+    /** Configures annotations of this parameter. */
     inline fun annotations(configuration: AnnotationSpecListScope.() -> Unit) =
         AnnotationSpecListScope(annotations).configuration()
 

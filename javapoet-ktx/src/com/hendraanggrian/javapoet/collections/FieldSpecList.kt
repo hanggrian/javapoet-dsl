@@ -11,7 +11,8 @@ import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
 /** A [FieldSpecList] is responsible for managing a set of field instances. */
-open class FieldSpecList internal constructor(specs: MutableList<FieldSpec>) : MutableList<FieldSpec> by specs {
+open class FieldSpecList internal constructor(actualList: MutableList<FieldSpec>) :
+    MutableList<FieldSpec> by actualList {
 
     /** Add field from [type] and [name], returning the field added. */
     fun add(type: TypeName, name: String, vararg modifiers: Modifier): FieldSpec =
@@ -78,7 +79,7 @@ open class FieldSpecList internal constructor(specs: MutableList<FieldSpec>) : M
 
 /** Receiver for the `fields` function type providing an extended set of operators for the configuration. */
 @JavapoetDslMarker
-class FieldSpecListScope(specs: MutableList<FieldSpec>) : FieldSpecList(specs) {
+class FieldSpecListScope(actualList: MutableList<FieldSpec>) : FieldSpecList(actualList) {
 
     /** Convenient method to add field with receiver type. */
     inline operator fun String.invoke(

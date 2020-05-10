@@ -11,8 +11,8 @@ import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
 /** A [ParameterSpecList] is responsible for managing a set of parameter instances. */
-open class ParameterSpecList internal constructor(specs: MutableList<ParameterSpec>) :
-    MutableList<ParameterSpec> by specs {
+open class ParameterSpecList internal constructor(actualList: MutableList<ParameterSpec>) :
+    MutableList<ParameterSpec> by actualList {
 
     /** Add parameter from [type] and [name], returning the parameter added. */
     fun add(type: TypeName, name: String, vararg modifiers: Modifier): ParameterSpec =
@@ -79,7 +79,7 @@ open class ParameterSpecList internal constructor(specs: MutableList<ParameterSp
 
 /** Receiver for the `parameters` function type providing an extended set of operators for the configuration. */
 @JavapoetDslMarker
-class ParameterSpecListScope(specs: MutableList<ParameterSpec>) : ParameterSpecList(specs) {
+class ParameterSpecListScope(actualList: MutableList<ParameterSpec>) : ParameterSpecList(actualList) {
 
     /** Convenient method to add parameter with receiver type. */
     inline operator fun String.invoke(

@@ -51,7 +51,7 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
     /** Modifiers of this method. */
     val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
 
-    /** Configure javadoc without DSL. */
+    /** Javadoc of this method. */
     val javadoc: JavadocContainer = object : JavadocContainer() {
         override fun append(format: String, vararg args: Any): Unit =
             format.formatWith(args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
@@ -61,14 +61,14 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
         }
     }
 
-    /** Configure javadoc with DSL. */
+    /** Configures javadoc of this method. */
     inline fun javadoc(configuration: JavadocContainerScope.() -> Unit) =
         JavadocContainerScope(javadoc).configuration()
 
-    /** Configure annotations without DSL. */
+    /** Annotations of this method. */
     val annotations: AnnotationSpecList = AnnotationSpecList(nativeBuilder.annotations)
 
-    /** Configure annotations with DSL. */
+    /** Configures annotations of this method. */
     inline fun annotations(configuration: AnnotationSpecListScope.() -> Unit) =
         AnnotationSpecListScope(annotations).configuration()
 
@@ -110,10 +110,10 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
     /** Add return line to [T]. */
     inline fun <reified T> returns() = returns(T::class)
 
-    /** Configure parameters without DSL. */
+    /** Parameters of this method. */
     val parameters: ParameterSpecList = ParameterSpecList(nativeBuilder.parameters)
 
-    /** Configure parameters with DSL. */
+    /** Configures parameters of this method. */
     inline fun parameters(configuration: ParameterSpecListScope.() -> Unit) =
         ParameterSpecListScope(parameters).configuration()
 

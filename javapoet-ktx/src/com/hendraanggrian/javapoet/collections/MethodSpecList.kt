@@ -9,7 +9,8 @@ import com.hendraanggrian.javapoet.methodSpecOf
 import com.squareup.javapoet.MethodSpec
 
 /** A [MethodSpecList] is responsible for managing a set of method instances. */
-open class MethodSpecList internal constructor(specs: MutableList<MethodSpec>) : MutableList<MethodSpec> by specs {
+open class MethodSpecList internal constructor(actualList: MutableList<MethodSpec>) :
+    MutableList<MethodSpec> by actualList {
 
     /** Add method from [name], returning the method added. */
     fun add(name: String): MethodSpec =
@@ -35,7 +36,7 @@ open class MethodSpecList internal constructor(specs: MutableList<MethodSpec>) :
 
 /** Receiver for the `methods` function type providing an extended set of operators for the configuration. */
 @JavapoetDslMarker
-class MethodSpecListScope(specs: MutableList<MethodSpec>) : MethodSpecList(specs) {
+class MethodSpecListScope(actualList: MutableList<MethodSpec>) : MethodSpecList(actualList) {
 
     /** Convenient method to add method with receiver type. */
     inline operator fun String.invoke(builderAction: MethodSpecBuilder.() -> Unit): MethodSpec =
