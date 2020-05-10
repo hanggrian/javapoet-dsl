@@ -6,15 +6,15 @@ import com.hendraanggrian.javapoet.fieldSpecOf
 import kotlin.test.Test
 
 class FieldSpecListTest {
-    private val container = FieldSpecList(mutableListOf())
+    private val list = FieldSpecList(mutableListOf())
 
     private inline fun container(configuration: FieldSpecListScope.() -> Unit) =
-        FieldSpecListScope(container).configuration()
+        FieldSpecListScope(list).configuration()
 
     @Test fun nativeSpec() {
-        container += fieldSpecOf<Field1>("field1")
-        container += listOf(fieldSpecOf<Field2>("field2"))
-        assertThat(container).containsExactly(
+        list += fieldSpecOf<Field1>("field1")
+        list += listOf(fieldSpecOf<Field2>("field2"))
+        assertThat(list).containsExactly(
             fieldSpecOf<Field1>("field1"),
             fieldSpecOf<Field2>("field2")
         )
@@ -22,10 +22,10 @@ class FieldSpecListTest {
 
     @Test fun className() {
         val packageName = "com.hendraanggrian.javapoet.collections.FieldSpecListTest"
-        container.add(packageName.classOf("Field1"), "field1")
-        container["field2"] = packageName.classOf("Field2")
+        list.add(packageName.classOf("Field1"), "field1")
+        list["field2"] = packageName.classOf("Field2")
         container { "field3"(packageName.classOf("Field3")) { } }
-        assertThat(container).containsExactly(
+        assertThat(list).containsExactly(
             fieldSpecOf<Field1>("field1"),
             fieldSpecOf<Field2>("field2"),
             fieldSpecOf<Field3>("field3")
@@ -33,10 +33,10 @@ class FieldSpecListTest {
     }
 
     @Test fun javaClass() {
-        container.add(Field1::class.java, "field1")
-        container["field2"] = Field2::class.java
+        list.add(Field1::class.java, "field1")
+        list["field2"] = Field2::class.java
         container { "field3"(Field3::class.java) { } }
-        assertThat(container).containsExactly(
+        assertThat(list).containsExactly(
             fieldSpecOf<Field1>("field1"),
             fieldSpecOf<Field2>("field2"),
             fieldSpecOf<Field3>("field3")
@@ -44,10 +44,10 @@ class FieldSpecListTest {
     }
 
     @Test fun kotlinClass() {
-        container.add(Field1::class, "field1")
-        container["field2"] = Field2::class
+        list.add(Field1::class, "field1")
+        list["field2"] = Field2::class
         container { "field3"(Field3::class) { } }
-        assertThat(container).containsExactly(
+        assertThat(list).containsExactly(
             fieldSpecOf<Field1>("field1"),
             fieldSpecOf<Field2>("field2"),
             fieldSpecOf<Field3>("field3")
@@ -55,9 +55,9 @@ class FieldSpecListTest {
     }
 
     @Test fun reifiedType() {
-        container.add<Field1>("field1")
+        list.add<Field1>("field1")
         container { "field2"<Field2> { } }
-        assertThat(container).containsExactly(
+        assertThat(list).containsExactly(
             fieldSpecOf<Field1>("field1"),
             fieldSpecOf<Field2>("field2")
         )

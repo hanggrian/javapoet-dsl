@@ -7,10 +7,10 @@ import com.hendraanggrian.javapoet.collections.JavadocContainer
 import com.hendraanggrian.javapoet.collections.JavadocContainerScope
 import com.hendraanggrian.javapoet.collections.ParameterSpecList
 import com.hendraanggrian.javapoet.collections.ParameterSpecListScope
+import com.hendraanggrian.javapoet.collections.TypeVariableNameList
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeName
-import com.squareup.javapoet.TypeVariableName
 import java.lang.reflect.Type
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
@@ -44,9 +44,6 @@ inline fun MethodSpec.Builder.build(builderAction: MethodSpecBuilder.() -> Unit)
 /** Wrapper of [MethodSpec.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetDslMarker
 class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlockContainer() {
-
-    /** Type variables of this method. */
-    val typeVariables: MutableList<TypeVariableName> get() = nativeBuilder.typeVariables
 
     /** Modifiers of this method. */
     val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
@@ -82,15 +79,8 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
         nativeBuilder.addModifiers(modifiers)
     }
 
-    /** Add type variables. */
-    fun addTypeVariables(typeVariables: Iterable<TypeVariableName>) {
-        nativeBuilder.addTypeVariables(typeVariables)
-    }
-
-    /** Add type variables. */
-    fun addTypeVariable(typeVariable: TypeVariableName) {
-        nativeBuilder.addTypeVariable(typeVariable)
-    }
+    /** Type variables of this method. */
+    val typeVariables: TypeVariableNameList = TypeVariableNameList(nativeBuilder.typeVariables)
 
     /** Add return line to type name. */
     var returns: TypeName

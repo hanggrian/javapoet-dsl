@@ -6,25 +6,25 @@ import com.hendraanggrian.javapoet.methodSpecOf
 import kotlin.test.Test
 
 class MethodSpecListTest {
-    private val container = MethodSpecList(mutableListOf())
+    private val list = MethodSpecList(mutableListOf())
 
     private inline fun container(configuration: MethodSpecListScope.() -> Unit) =
-        MethodSpecListScope(container).configuration()
+        MethodSpecListScope(list).configuration()
 
     @Test fun nativeSpec() {
-        container += methodSpecOf("method")
-        container += listOf(constructorMethodSpecOf())
-        assertThat(container).containsExactly(
+        list += methodSpecOf("method")
+        list += listOf(constructorMethodSpecOf())
+        assertThat(list).containsExactly(
             methodSpecOf("method"),
             constructorMethodSpecOf()
         )
     }
 
     @Test fun string() {
-        container.add("method1")
-        container += "method2"
+        list.add("method1")
+        list += "method2"
         container { "method3" { } }
-        assertThat(container).containsExactly(
+        assertThat(list).containsExactly(
             methodSpecOf("method1"),
             methodSpecOf("method2"),
             methodSpecOf("method3")
@@ -32,8 +32,8 @@ class MethodSpecListTest {
     }
 
     @Test fun others() {
-        container.addConstructor()
-        assertThat(container).containsExactly(
+        list.addConstructor()
+        assertThat(list).containsExactly(
             constructorMethodSpecOf()
         )
     }

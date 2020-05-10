@@ -8,13 +8,14 @@ import com.hendraanggrian.javapoet.collections.JavadocContainer
 import com.hendraanggrian.javapoet.collections.JavadocContainerScope
 import com.hendraanggrian.javapoet.collections.MethodSpecList
 import com.hendraanggrian.javapoet.collections.MethodSpecListScope
+import com.hendraanggrian.javapoet.collections.TypeNameList
 import com.hendraanggrian.javapoet.collections.TypeSpecList
 import com.hendraanggrian.javapoet.collections.TypeSpecListScope
+import com.hendraanggrian.javapoet.collections.TypeVariableNameList
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeSpec
-import com.squareup.javapoet.TypeVariableName
 import java.lang.reflect.Type
 import javax.lang.model.element.Element
 import javax.lang.model.element.Modifier
@@ -145,12 +146,6 @@ class TypeSpecBuilder(private val nativeBuilder: TypeSpec.Builder) {
     /** Modifiers of this type. */
     val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
 
-    /** Type variables of this type. */
-    val typeVariables: MutableList<TypeVariableName> get() = nativeBuilder.typeVariables
-
-    /** Super interfaces of this type. */
-    val superinterfaces: MutableList<TypeName> get() = nativeBuilder.superinterfaces
-
     /** Originating elements of this type. */
     val originatingElements: MutableList<Element> get() = nativeBuilder.originatingElements
 
@@ -183,18 +178,11 @@ class TypeSpecBuilder(private val nativeBuilder: TypeSpec.Builder) {
         nativeBuilder.addModifiers(*modifiers)
     }
 
-    /** Add type variables. */
-    fun addTypeVariable(typeVariable: TypeVariableName) {
-        nativeBuilder.addTypeVariable(typeVariable)
-    }
-
-    /** Add type variables. */
-    fun addTypeVariables(typeVariables: Iterable<TypeVariableName>) {
-        nativeBuilder.addTypeVariables(typeVariables)
-    }
+    /** Type variables of this type. */
+    val typeVariables: TypeVariableNameList = TypeVariableNameList(nativeBuilder.typeVariables)
 
     /** Set superclass to type. */
-    var superClass: TypeName
+    var superclass: TypeName
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
         set(value) {
             nativeBuilder.superclass(value)
@@ -209,23 +197,10 @@ class TypeSpecBuilder(private val nativeBuilder: TypeSpec.Builder) {
     fun superclass(type: KClass<*>) = superclass(type.java)
 
     /** Set superclass to [T]. */
-    inline fun <reified T> superclass() = superclass(T::class)
+    inline fun <reified T> superclass() = superclass(T::class.java)
 
-    /** Add superinterface to [type]. */
-    fun addSuperinterface(type: TypeName) {
-        nativeBuilder.addSuperinterface(type)
-    }
-
-    /** Add superinterface to [type]. */
-    fun addSuperinterface(type: Type) {
-        nativeBuilder.addSuperinterface(type)
-    }
-
-    /** Add superinterface to [type]. */
-    fun addSuperinterface(type: KClass<*>) = addSuperinterface(type.java)
-
-    /** Add superinterface to [T]. */
-    inline fun <reified T> addSuperinterface() = addSuperinterface(T::class)
+    /** Super interfaces of this type. */
+    val superinterfaces: TypeNameList = TypeNameList(nativeBuilder.superinterfaces)
 
     /** Add enum constant named [name]. */
     fun addEnumConstant(name: String) {

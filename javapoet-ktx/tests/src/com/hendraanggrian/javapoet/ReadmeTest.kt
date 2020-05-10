@@ -525,7 +525,7 @@ class ReadmeTest {
             sortByLength = methods.add("sortByLength") {
                 parameters.add(List::class.parameterizedBy(String::class), "strings")
                 appendln("%T.sort(%N, %L)", Collections::class, "strings", buildAnonymousTypeSpec("") {
-                    addSuperinterface(Comparator::class.parameterizedBy(String::class))
+                    superinterfaces += Comparator::class.parameterizedBy(String::class)
                     methods.add("compare") {
                         annotations.add<Override>()
                         addModifiers(Modifier.PUBLIC)

@@ -40,7 +40,7 @@ class VehicleWriter {
     fun write(name: String, wheelCount: Int) {
         buildJavaFile(PACKAGE_NAME) {
             addClass(name) {
-                addSuperinterface(VEHICLE_NAME)
+                superinterfaces += VEHICLE_NAME
                 methods {
                     "getName" {
                         addModifiers(Modifier.PUBLIC)
