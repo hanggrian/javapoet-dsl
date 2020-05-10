@@ -1,27 +1,20 @@
-package com.hendraanggrian.javapoet.dsl
+package com.hendraanggrian.javapoet.collections
 
 import com.google.common.truth.Truth.assertThat
 import com.hendraanggrian.javapoet.constructorMethodSpecOf
 import com.hendraanggrian.javapoet.methodSpecOf
-import com.squareup.javapoet.MethodSpec
 import kotlin.test.Test
 
-class MethodSpecContainerTest {
-    private val methods = mutableListOf<MethodSpec>()
-    private val container = object : MethodSpecContainer() {
-        override fun addAll(specs: Iterable<MethodSpec>): Boolean = methods.addAll(specs)
-        override fun add(spec: MethodSpec) {
-            methods += spec
-        }
-    }
+class MethodSpecListTest {
+    private val container = MethodSpecList(mutableListOf())
 
-    private inline fun container(configuration: MethodSpecContainerScope.() -> Unit) =
-        MethodSpecContainerScope(container).configuration()
+    private inline fun container(configuration: MethodSpecListScope.() -> Unit) =
+        MethodSpecListScope(container).configuration()
 
     @Test fun nativeSpec() {
         container += methodSpecOf("method")
         container += listOf(constructorMethodSpecOf())
-        assertThat(methods).containsExactly(
+        assertThat(container).containsExactly(
             methodSpecOf("method"),
             constructorMethodSpecOf()
         )
@@ -31,7 +24,7 @@ class MethodSpecContainerTest {
         container.add("method1")
         container += "method2"
         container { "method3" { } }
-        assertThat(methods).containsExactly(
+        assertThat(container).containsExactly(
             methodSpecOf("method1"),
             methodSpecOf("method2"),
             methodSpecOf("method3")
@@ -40,7 +33,7 @@ class MethodSpecContainerTest {
 
     @Test fun others() {
         container.addConstructor()
-        assertThat(methods).containsExactly(
+        assertThat(container).containsExactly(
             constructorMethodSpecOf()
         )
     }

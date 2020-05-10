@@ -1,4 +1,4 @@
-package com.hendraanggrian.javapoet.dsl
+package com.hendraanggrian.javapoet.collections
 
 import com.hendraanggrian.javapoet.FieldSpecBuilder
 import com.hendraanggrian.javapoet.JavapoetDslMarker
@@ -10,17 +10,9 @@ import java.lang.reflect.Type
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
-private interface FieldSpecAddable {
-
-    /** Add field to this container. */
-    fun add(spec: FieldSpec)
-
-    /** Add collection of fields to this container. */
-    fun addAll(specs: Iterable<FieldSpec>): Boolean
-}
-
-/** A [FieldSpecContainer] is responsible for managing a set of field instances. */
-abstract class FieldSpecContainer : FieldSpecAddable {
+/** A [FieldSpecList] is responsible for managing a set of field instances. */
+open class FieldSpecList internal constructor(actualList: MutableList<FieldSpec>) :
+    MutableList<FieldSpec> by actualList {
 
     /** Add field from [type] and [name], returning the field added. */
     fun add(type: TypeName, name: String, vararg modifiers: Modifier): FieldSpec =
@@ -70,14 +62,6 @@ abstract class FieldSpecContainer : FieldSpecAddable {
     ): FieldSpec = buildFieldSpec<T>(name, *modifiers, builderAction = builderAction).also { add(it) }
 
     /** Convenient method to add field with operator function. */
-    operator fun plusAssign(spec: FieldSpec): Unit = add(spec)
-
-    /** Convenient method to add collection of fields with operator function. */
-    operator fun plusAssign(specs: Iterable<FieldSpec>) {
-        addAll(specs)
-    }
-
-    /** Convenient method to add field with operator function. */
     operator fun set(name: String, type: TypeName) {
         add(type, name)
     }
@@ -95,8 +79,7 @@ abstract class FieldSpecContainer : FieldSpecAddable {
 
 /** Receiver for the `fields` function type providing an extended set of operators for the configuration. */
 @JavapoetDslMarker
-class FieldSpecContainerScope(container: FieldSpecContainer) : FieldSpecContainer(),
-    FieldSpecAddable by container {
+class FieldSpecListScope(actualList: MutableList<FieldSpec>) : FieldSpecList(actualList) {
 
     /** Convenient method to add field with receiver type. */
     inline operator fun String.invoke(

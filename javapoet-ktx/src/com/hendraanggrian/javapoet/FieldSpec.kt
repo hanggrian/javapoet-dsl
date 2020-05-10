@@ -1,10 +1,9 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.dsl.AnnotationSpecContainer
-import com.hendraanggrian.javapoet.dsl.AnnotationSpecContainerScope
-import com.hendraanggrian.javapoet.dsl.JavadocContainer
-import com.hendraanggrian.javapoet.dsl.JavadocContainerScope
-import com.squareup.javapoet.AnnotationSpec
+import com.hendraanggrian.javapoet.collections.AnnotationSpecList
+import com.hendraanggrian.javapoet.collections.AnnotationSpecListScope
+import com.hendraanggrian.javapoet.collections.JavadocContainer
+import com.hendraanggrian.javapoet.collections.JavadocContainerScope
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.TypeName
@@ -79,13 +78,10 @@ inline fun FieldSpec.Builder.build(builderAction: FieldSpecBuilder.() -> Unit): 
 @JavapoetDslMarker
 class FieldSpecBuilder(private val nativeBuilder: FieldSpec.Builder) {
 
-    /** Annotations of this field. */
-    val annotationSpecs: MutableList<AnnotationSpec> get() = nativeBuilder.annotations
-
     /** Modifiers of this field. */
     val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
 
-    /** Configure javadoc without DSL. */
+    /** Javadoc of this field. */
     val javadoc: JavadocContainer = object : JavadocContainer() {
         override fun append(format: String, vararg args: Any): Unit =
             format.formatWith(args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
@@ -95,21 +91,16 @@ class FieldSpecBuilder(private val nativeBuilder: FieldSpec.Builder) {
         }
     }
 
-    /** Configure javadoc with DSL. */
+    /** Configures javadoc for this field. */
     inline fun javadoc(configuration: JavadocContainerScope.() -> Unit) =
         JavadocContainerScope(javadoc).configuration()
 
-    /** Configure annotations without DSL. */
-    val annotations: AnnotationSpecContainer = object : AnnotationSpecContainer() {
-        override fun addAll(specs: Iterable<AnnotationSpec>) = nativeBuilder.annotations.addAll(specs)
-        override fun add(spec: AnnotationSpec) {
-            nativeBuilder.addAnnotation(spec)
-        }
-    }
+    /** Annotations of this field. */
+    val annotations: AnnotationSpecList = AnnotationSpecList(nativeBuilder.annotations)
 
-    /** Configure annotations with DSL. */
-    inline fun annotations(configuration: AnnotationSpecContainerScope.() -> Unit) =
-        AnnotationSpecContainerScope(annotations).configuration()
+    /** Configures annotations for this field. */
+    inline fun annotations(configuration: AnnotationSpecListScope.() -> Unit) =
+        AnnotationSpecListScope(annotations).configuration()
 
     /** Add field modifiers. */
     fun addModifiers(vararg modifiers: Modifier) {

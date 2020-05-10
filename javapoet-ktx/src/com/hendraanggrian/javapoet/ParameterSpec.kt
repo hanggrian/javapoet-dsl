@@ -1,8 +1,7 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.dsl.AnnotationSpecContainer
-import com.hendraanggrian.javapoet.dsl.AnnotationSpecContainerScope
-import com.squareup.javapoet.AnnotationSpec
+import com.hendraanggrian.javapoet.collections.AnnotationSpecList
+import com.hendraanggrian.javapoet.collections.AnnotationSpecListScope
 import com.squareup.javapoet.ParameterSpec
 import com.squareup.javapoet.TypeName
 import java.lang.reflect.Type
@@ -81,23 +80,15 @@ inline fun ParameterSpec.Builder.build(builderAction: ParameterSpecBuilder.() ->
 @JavapoetDslMarker
 class ParameterSpecBuilder(private val nativeBuilder: ParameterSpec.Builder) {
 
-    /** Annotations of this parameter. */
-    val annotationSpecs: MutableList<AnnotationSpec> get() = nativeBuilder.annotations
-
     /** Modifiers of this parameter. */
     val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
 
-    /** Configure annotations without DSL. */
-    val annotations: AnnotationSpecContainer = object : AnnotationSpecContainer() {
-        override fun addAll(specs: Iterable<AnnotationSpec>) = nativeBuilder.annotations.addAll(specs)
-        override fun add(spec: AnnotationSpec) {
-            nativeBuilder.addAnnotation(spec)
-        }
-    }
+    /** Annotations of this parameter. */
+    val annotations: AnnotationSpecList = AnnotationSpecList(nativeBuilder.annotations)
 
-    /** Configure annotations with DSL. */
-    inline fun annotations(configuration: AnnotationSpecContainerScope.() -> Unit) =
-        AnnotationSpecContainerScope(annotations).configuration()
+    /** Configures annotations of this parameter. */
+    inline fun annotations(configuration: AnnotationSpecListScope.() -> Unit) =
+        AnnotationSpecListScope(annotations).configuration()
 
     /** Add parameter modifiers. */
     fun addModifiers(vararg modifiers: Modifier) {

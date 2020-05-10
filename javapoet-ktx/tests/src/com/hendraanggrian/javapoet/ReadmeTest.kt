@@ -1,6 +1,6 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.dsl.MethodSpecContainerScope
+import com.hendraanggrian.javapoet.collections.MethodSpecListScope
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.MethodSpec
 import java.util.Collections
@@ -650,7 +650,7 @@ class ReadmeTest {
         )
     }
 
-    private fun MethodSpecContainerScope.whatsMyName(name: String) {
+    private fun MethodSpecListScope.whatsMyName(name: String) {
         name {
             returns<String>()
             appendln("return %S", name)

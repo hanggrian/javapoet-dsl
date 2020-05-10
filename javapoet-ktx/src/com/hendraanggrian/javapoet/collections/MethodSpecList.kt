@@ -1,4 +1,4 @@
-package com.hendraanggrian.javapoet.dsl
+package com.hendraanggrian.javapoet.collections
 
 import com.hendraanggrian.javapoet.JavapoetDslMarker
 import com.hendraanggrian.javapoet.MethodSpecBuilder
@@ -8,17 +8,9 @@ import com.hendraanggrian.javapoet.constructorMethodSpecOf
 import com.hendraanggrian.javapoet.methodSpecOf
 import com.squareup.javapoet.MethodSpec
 
-private interface MethodSpecAddable {
-
-    /** Add method to this container. */
-    fun add(spec: MethodSpec)
-
-    /** Add collection of methods to this container. */
-    fun addAll(specs: Iterable<MethodSpec>): Boolean
-}
-
-/** A [MethodSpecContainer] is responsible for managing a set of method instances. */
-abstract class MethodSpecContainer : MethodSpecAddable {
+/** A [MethodSpecList] is responsible for managing a set of method instances. */
+open class MethodSpecList internal constructor(actualList: MutableList<MethodSpec>) :
+    MutableList<MethodSpec> by actualList {
 
     /** Add method from [name], returning the method added. */
     fun add(name: String): MethodSpec =
@@ -37,14 +29,6 @@ abstract class MethodSpecContainer : MethodSpecAddable {
         buildConstructorMethodSpec(builderAction).also { add(it) }
 
     /** Convenient method to add method with operator function. */
-    operator fun plusAssign(spec: MethodSpec): Unit = add(spec)
-
-    /** Convenient method to add collection of methods with operator function. */
-    operator fun plusAssign(specs: Iterable<MethodSpec>) {
-        addAll(specs)
-    }
-
-    /** Convenient method to add method with operator function. */
     operator fun plusAssign(name: String) {
         add(name)
     }
@@ -52,8 +36,7 @@ abstract class MethodSpecContainer : MethodSpecAddable {
 
 /** Receiver for the `methods` function type providing an extended set of operators for the configuration. */
 @JavapoetDslMarker
-class MethodSpecContainerScope(container: MethodSpecContainer) : MethodSpecContainer(),
-    MethodSpecAddable by container {
+class MethodSpecListScope(actualList: MutableList<MethodSpec>) : MethodSpecList(actualList) {
 
     /** Convenient method to add method with receiver type. */
     inline operator fun String.invoke(builderAction: MethodSpecBuilder.() -> Unit): MethodSpec =

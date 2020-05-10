@@ -1,9 +1,8 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.dsl.TypeSpecContainer
+import com.hendraanggrian.javapoet.collections.TypeSpecList
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.JavaFile
-import com.squareup.javapoet.TypeSpec
 import kotlin.reflect.KClass
 
 /**
@@ -15,20 +14,11 @@ inline fun buildJavaFile(packageName: String, builderAction: JavaFileBuilder.() 
 
 /** Wrapper of [JavaFile.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetDslMarker
-class JavaFileBuilder(private val packageName: String) : TypeSpecContainer() {
-    private var typeSpec: TypeSpec? = null
+class JavaFileBuilder(private val packageName: String) : TypeSpecList(ArrayList()) {
     private var comments: MutableList<Pair<String, Array<*>>>? = null
     private var imports: MutableMap<Any, MutableSet<String>>? = null
     private var isSkipJavaLangImports: Boolean? = null
     private var indentString: String? = null
-
-    override fun addAll(specs: Iterable<TypeSpec>): Boolean =
-        throw UnsupportedOperationException("Java file may only have single type.")
-
-    override fun add(spec: TypeSpec) {
-        check(typeSpec == null) { "Java file may only have single type." }
-        typeSpec = spec
-    }
 
     /** Add comment like [String.format]. */
     fun addComment(format: String, vararg args: Any) {
@@ -103,18 +93,22 @@ class JavaFileBuilder(private val packageName: String) : TypeSpecContainer() {
         }
 
     /** Returns native spec. */
-    fun build(): JavaFile = JavaFile.builder(packageName, checkNotNull(typeSpec) { "A main type must be initialized" })
-        .apply {
-            comments?.forEach { (format, args) -> addFileComment(format, *args) }
-            imports?.forEach { (type, names) ->
-                when (type) {
-                    is Enum<*> -> addStaticImport(type)
-                    is ClassName -> addStaticImport(type, *names.toTypedArray())
-                    is Class<*> -> addStaticImport(type, *names.toTypedArray())
+    fun build(): JavaFile {
+        check(isNotEmpty()) { "No type found in this JavaFile." }
+        check(size == 1) { "Only 1 type is expected in JavaFile." }
+        return JavaFile.builder(packageName, first())
+            .apply {
+                comments?.forEach { (format, args) -> addFileComment(format, *args) }
+                imports?.forEach { (type, names) ->
+                    when (type) {
+                        is Enum<*> -> addStaticImport(type)
+                        is ClassName -> addStaticImport(type, *names.toTypedArray())
+                        is Class<*> -> addStaticImport(type, *names.toTypedArray())
+                    }
                 }
+                isSkipJavaLangImports?.let { skipJavaLangImports(it) }
+                indentString?.let { indent(it) }
             }
-            isSkipJavaLangImports?.let { skipJavaLangImports(it) }
-            indentString?.let { indent(it) }
-        }
-        .build()
+            .build()
+    }
 }
