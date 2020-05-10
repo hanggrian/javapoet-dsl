@@ -1,20 +1,17 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.dsl.AnnotationSpecContainer
-import com.hendraanggrian.javapoet.dsl.AnnotationSpecContainerScope
-import com.hendraanggrian.javapoet.dsl.FieldSpecContainer
-import com.hendraanggrian.javapoet.dsl.FieldSpecContainerScope
-import com.hendraanggrian.javapoet.dsl.JavadocContainer
-import com.hendraanggrian.javapoet.dsl.JavadocContainerScope
-import com.hendraanggrian.javapoet.dsl.MethodSpecContainer
-import com.hendraanggrian.javapoet.dsl.MethodSpecContainerScope
-import com.hendraanggrian.javapoet.dsl.TypeSpecContainer
-import com.hendraanggrian.javapoet.dsl.TypeSpecContainerScope
-import com.squareup.javapoet.AnnotationSpec
+import com.hendraanggrian.javapoet.collections.AnnotationSpecList
+import com.hendraanggrian.javapoet.collections.AnnotationSpecListScope
+import com.hendraanggrian.javapoet.collections.FieldSpecList
+import com.hendraanggrian.javapoet.collections.FieldSpecListScope
+import com.hendraanggrian.javapoet.collections.JavadocContainer
+import com.hendraanggrian.javapoet.collections.JavadocContainerScope
+import com.hendraanggrian.javapoet.collections.MethodSpecList
+import com.hendraanggrian.javapoet.collections.MethodSpecListScope
+import com.hendraanggrian.javapoet.collections.TypeSpecList
+import com.hendraanggrian.javapoet.collections.TypeSpecListScope
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
-import com.squareup.javapoet.FieldSpec
-import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeSpec
 import com.squareup.javapoet.TypeVariableName
@@ -145,9 +142,6 @@ class TypeSpecBuilder(private val nativeBuilder: TypeSpec.Builder) {
     /** Enum constants of this type. */
     val enumConstants: MutableMap<String, TypeSpec> get() = nativeBuilder.enumConstants
 
-    /** Annotations of this type. */
-    val annotationSpecs: MutableList<AnnotationSpec> get() = nativeBuilder.annotations
-
     /** Modifiers of this type. */
     val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
 
@@ -156,15 +150,6 @@ class TypeSpecBuilder(private val nativeBuilder: TypeSpec.Builder) {
 
     /** Super interfaces of this type. */
     val superinterfaces: MutableList<TypeName> get() = nativeBuilder.superinterfaces
-
-    /** Fields of this type. */
-    val fieldSpecs: MutableList<FieldSpec> get() = nativeBuilder.fieldSpecs
-
-    /** Methods of this type. */
-    val methodSpecs: MutableList<MethodSpec> get() = nativeBuilder.methodSpecs
-
-    /** Types of this type. */
-    val typeSpecs: MutableList<TypeSpec> get() = nativeBuilder.typeSpecs
 
     /** Originating elements of this type. */
     val originatingElements: MutableList<Element> get() = nativeBuilder.originatingElements
@@ -187,16 +172,11 @@ class TypeSpecBuilder(private val nativeBuilder: TypeSpec.Builder) {
         JavadocContainerScope(javadoc).configuration()
 
     /** Configure annotations without DSL. */
-    val annotations: AnnotationSpecContainer = object : AnnotationSpecContainer() {
-        override fun addAll(specs: Iterable<AnnotationSpec>) = nativeBuilder.annotations.addAll(specs)
-        override fun add(spec: AnnotationSpec) {
-            nativeBuilder.addAnnotation(spec)
-        }
-    }
+    val annotations: AnnotationSpecList = AnnotationSpecList(nativeBuilder.annotations)
 
     /** Configure annotations with DSL. */
-    inline fun annotations(configuration: AnnotationSpecContainerScope.() -> Unit) =
-        AnnotationSpecContainerScope(annotations).configuration()
+    inline fun annotations(configuration: AnnotationSpecListScope.() -> Unit) =
+        AnnotationSpecListScope(annotations).configuration()
 
     /** Add type modifiers. */
     fun addModifiers(vararg modifiers: Modifier) {
@@ -258,16 +238,11 @@ class TypeSpecBuilder(private val nativeBuilder: TypeSpec.Builder) {
     }
 
     /** Configure fields without DSL. */
-    val fields: FieldSpecContainer = object : FieldSpecContainer() {
-        override fun addAll(specs: Iterable<FieldSpec>) = nativeBuilder.fieldSpecs.addAll(specs)
-        override fun add(spec: FieldSpec) {
-            nativeBuilder.addField(spec)
-        }
-    }
+    val fields: FieldSpecList = FieldSpecList(nativeBuilder.fieldSpecs)
 
     /** Configure fields with DSL. */
-    inline fun fields(configuration: FieldSpecContainerScope.() -> Unit) =
-        FieldSpecContainerScope(fields).configuration()
+    inline fun fields(configuration: FieldSpecListScope.() -> Unit) =
+        FieldSpecListScope(fields).configuration()
 
     /** Add static block containing [code]. */
     fun addStaticBlock(code: CodeBlock): CodeBlock = code.also { nativeBuilder.addStaticBlock(it) }
@@ -284,28 +259,18 @@ class TypeSpecBuilder(private val nativeBuilder: TypeSpec.Builder) {
         addInitializerBlock(buildCodeBlock(builderAction))
 
     /** Configure methods without DSL. */
-    val methods: MethodSpecContainer = object : MethodSpecContainer() {
-        override fun addAll(specs: Iterable<MethodSpec>) = nativeBuilder.methodSpecs.addAll(specs)
-        override fun add(spec: MethodSpec) {
-            nativeBuilder.addMethod(spec)
-        }
-    }
+    val methods: MethodSpecList = MethodSpecList(nativeBuilder.methodSpecs)
 
     /** Configure methods with DSL. */
-    inline fun methods(configuration: MethodSpecContainerScope.() -> Unit) =
-        MethodSpecContainerScope(methods).configuration()
+    inline fun methods(configuration: MethodSpecListScope.() -> Unit) =
+        MethodSpecListScope(methods).configuration()
 
     /** Configure types without DSL. */
-    val types: TypeSpecContainer = object : TypeSpecContainer() {
-        override fun addAll(specs: Iterable<TypeSpec>) = nativeBuilder.typeSpecs.addAll(specs)
-        override fun add(spec: TypeSpec) {
-            nativeBuilder.addType(spec)
-        }
-    }
+    val types: TypeSpecList = TypeSpecList(nativeBuilder.typeSpecs)
 
     /** Configure types with DSL. */
-    inline fun types(configuration: TypeSpecContainerScope.() -> Unit) =
-        TypeSpecContainerScope(types).configuration()
+    inline fun types(configuration: TypeSpecListScope.() -> Unit) =
+        TypeSpecListScope(types).configuration()
 
     /** Add originating element. */
     fun addOriginatingElement(originatingElement: Element) {

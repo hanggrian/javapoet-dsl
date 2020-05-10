@@ -1,4 +1,4 @@
-package com.hendraanggrian.javapoet.dsl
+package com.hendraanggrian.javapoet.collections
 
 import com.hendraanggrian.javapoet.JavapoetDslMarker
 import com.hendraanggrian.javapoet.TypeSpecBuilder
@@ -16,17 +16,8 @@ import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.TypeSpec
 
-private interface TypeSpecAddable {
-
-    /** Add type to this container. */
-    fun add(spec: TypeSpec)
-
-    /** Add collection of types to this container. */
-    fun addAll(specs: Iterable<TypeSpec>): Boolean
-}
-
-/** A [TypeSpecContainer] is responsible for managing a set of type instances. */
-abstract class TypeSpecContainer : TypeSpecAddable {
+/** A [TypeSpecList] is responsible for managing a set of type instances. */
+open class TypeSpecList internal constructor(specs: MutableList<TypeSpec>) : MutableList<TypeSpec> by specs {
 
     /** Add class type from [type], returning the type added. */
     fun addClass(type: String): TypeSpec =
@@ -110,20 +101,11 @@ abstract class TypeSpecContainer : TypeSpecAddable {
     /** Add annotation type from [type] with custom initialization [builderAction], returning the type added. */
     inline fun addAnnotation(type: ClassName, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
         buildAnnotationTypeSpec(type, builderAction).also { add(it) }
-
-    /** Convenient method to add type with operator function. */
-    operator fun plusAssign(spec: TypeSpec): Unit = add(spec)
-
-    /** Convenient method to add collection of types with operator function. */
-    operator fun plusAssign(specs: Iterable<TypeSpec>) {
-        addAll(specs)
-    }
 }
 
 /** Receiver for the `types` function type providing an extended set of operators for the configuration. */
 @JavapoetDslMarker
-class TypeSpecContainerScope(container: TypeSpecContainer) : TypeSpecContainer(),
-    TypeSpecAddable by container {
+class TypeSpecListScope(specs: MutableList<TypeSpec>) : TypeSpecList(specs) {
 
     /** Convenient method to add class with receiver type. */
     inline operator fun String.invoke(builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =

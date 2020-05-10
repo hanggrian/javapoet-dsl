@@ -1,4 +1,4 @@
-package com.hendraanggrian.javapoet.dsl
+package com.hendraanggrian.javapoet.collections
 
 import com.hendraanggrian.javapoet.JavapoetDslMarker
 import com.hendraanggrian.javapoet.ParameterSpecBuilder
@@ -10,17 +10,9 @@ import java.lang.reflect.Type
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
-private interface ParameterSpecAddable {
-
-    /** Add parameter to this container. */
-    fun add(spec: ParameterSpec)
-
-    /** Add collection of parameters to this container. */
-    fun addAll(specs: Iterable<ParameterSpec>): Boolean
-}
-
-/** A [ParameterSpecContainer] is responsible for managing a set of parameter instances. */
-abstract class ParameterSpecContainer : ParameterSpecAddable {
+/** A [ParameterSpecList] is responsible for managing a set of parameter instances. */
+open class ParameterSpecList internal constructor(specs: MutableList<ParameterSpec>) :
+    MutableList<ParameterSpec> by specs {
 
     /** Add parameter from [type] and [name], returning the parameter added. */
     fun add(type: TypeName, name: String, vararg modifiers: Modifier): ParameterSpec =
@@ -70,14 +62,6 @@ abstract class ParameterSpecContainer : ParameterSpecAddable {
     ): ParameterSpec = buildParameterSpec<T>(name, *modifiers, builderAction = builderAction).also { add(it) }
 
     /** Convenient method to add parameter with operator function. */
-    operator fun plusAssign(spec: ParameterSpec): Unit = add(spec)
-
-    /** Convenient method to add collection of parameters with operator function. */
-    operator fun plusAssign(specs: Iterable<ParameterSpec>) {
-        addAll(specs)
-    }
-
-    /** Convenient method to add parameter with operator function. */
     operator fun set(name: String, type: TypeName) {
         add(type, name)
     }
@@ -95,8 +79,7 @@ abstract class ParameterSpecContainer : ParameterSpecAddable {
 
 /** Receiver for the `parameters` function type providing an extended set of operators for the configuration. */
 @JavapoetDslMarker
-class ParameterSpecContainerScope(container: ParameterSpecContainer) : ParameterSpecContainer(),
-    ParameterSpecAddable by container {
+class ParameterSpecListScope(specs: MutableList<ParameterSpec>) : ParameterSpecList(specs) {
 
     /** Convenient method to add parameter with receiver type. */
     inline operator fun String.invoke(

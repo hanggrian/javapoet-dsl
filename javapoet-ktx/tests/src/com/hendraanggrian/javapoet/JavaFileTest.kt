@@ -10,12 +10,16 @@ class JavaFileTest {
     /** A java file may only have one type. */
     @Test fun invalidNumberOfType() {
         // multiple types
-        buildJavaFile("com.example") {
-            addClass("MyClass")
-            assertFails { addClass("MyOtherClass") }
+        assertFails {
+            buildJavaFile("com.example") {
+                addClass("MyClass")
+                addClass("MyOtherClass")
+            }
         }
         // no type
-        assertFails { buildJavaFile("com.example") { } }
+        assertFails {
+            buildJavaFile("com.example") { }
+        }
     }
 
     @Test fun comments() {

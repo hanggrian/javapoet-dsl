@@ -1,4 +1,4 @@
-package com.hendraanggrian.javapoet.dsl
+package com.hendraanggrian.javapoet.collections
 
 import com.hendraanggrian.javapoet.AnnotationSpecBuilder
 import com.hendraanggrian.javapoet.JavapoetDslMarker
@@ -8,17 +8,9 @@ import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
 import kotlin.reflect.KClass
 
-private interface AnnotationSpecAddable {
-
-    /** Add annotation to this container. */
-    fun add(spec: AnnotationSpec)
-
-    /** Add collection of annotations to this container. */
-    fun addAll(specs: Iterable<AnnotationSpec>): Boolean
-}
-
-/** An [AnnotationSpecContainer] is responsible for managing a set of annotation instances. */
-abstract class AnnotationSpecContainer : AnnotationSpecAddable {
+/** An [AnnotationSpecList] is responsible for managing a set of annotation instances. */
+open class AnnotationSpecList internal constructor(specs: MutableList<AnnotationSpec>) :
+    MutableList<AnnotationSpec> by specs {
 
     /** Add annotation from [type], returning the annotation added. */
     fun add(type: ClassName): AnnotationSpec =
@@ -53,14 +45,6 @@ abstract class AnnotationSpecContainer : AnnotationSpecAddable {
         buildAnnotationSpec<T>(builderAction).also { add(it) }
 
     /** Convenient method to add annotation with operator function. */
-    operator fun plusAssign(spec: AnnotationSpec): Unit = add(spec)
-
-    /** Convenient method to add collection of annotations with operator function. */
-    operator fun plusAssign(specs: Iterable<AnnotationSpec>) {
-        addAll(specs)
-    }
-
-    /** Convenient method to add annotation with operator function. */
     operator fun plusAssign(type: ClassName) {
         add(type)
     }
@@ -78,8 +62,7 @@ abstract class AnnotationSpecContainer : AnnotationSpecAddable {
 
 /** Receiver for the `annotations` function type providing an extended set of operators for the configuration. */
 @JavapoetDslMarker
-class AnnotationSpecContainerScope(container: AnnotationSpecContainer) : AnnotationSpecContainer(),
-    AnnotationSpecAddable by container {
+class AnnotationSpecListScope(specs: MutableList<AnnotationSpec>) : AnnotationSpecList(specs) {
 
     /** Convenient method to add annotation with receiver type. */
     inline operator fun ClassName.invoke(builderAction: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =

@@ -1,16 +1,14 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.dsl.AnnotationSpecContainer
-import com.hendraanggrian.javapoet.dsl.AnnotationSpecContainerScope
-import com.hendraanggrian.javapoet.dsl.CodeBlockContainer
-import com.hendraanggrian.javapoet.dsl.JavadocContainer
-import com.hendraanggrian.javapoet.dsl.JavadocContainerScope
-import com.hendraanggrian.javapoet.dsl.ParameterSpecContainer
-import com.hendraanggrian.javapoet.dsl.ParameterSpecContainerScope
-import com.squareup.javapoet.AnnotationSpec
+import com.hendraanggrian.javapoet.collections.AnnotationSpecList
+import com.hendraanggrian.javapoet.collections.AnnotationSpecListScope
+import com.hendraanggrian.javapoet.collections.CodeBlockContainer
+import com.hendraanggrian.javapoet.collections.JavadocContainer
+import com.hendraanggrian.javapoet.collections.JavadocContainerScope
+import com.hendraanggrian.javapoet.collections.ParameterSpecList
+import com.hendraanggrian.javapoet.collections.ParameterSpecListScope
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.MethodSpec
-import com.squareup.javapoet.ParameterSpec
 import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeVariableName
 import java.lang.reflect.Type
@@ -50,14 +48,8 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
     /** Type variables of this method. */
     val typeVariables: MutableList<TypeVariableName> get() = nativeBuilder.typeVariables
 
-    /** Annotations of this method. */
-    val annotationSpecs: MutableList<AnnotationSpec> get() = nativeBuilder.annotations
-
     /** Modifiers of this method. */
     val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
-
-    /** Parameters of this method. */
-    val parameterSpecs: MutableList<ParameterSpec> get() = nativeBuilder.parameters
 
     /** Configure javadoc without DSL. */
     val javadoc: JavadocContainer = object : JavadocContainer() {
@@ -74,16 +66,11 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
         JavadocContainerScope(javadoc).configuration()
 
     /** Configure annotations without DSL. */
-    val annotations: AnnotationSpecContainer = object : AnnotationSpecContainer() {
-        override fun addAll(specs: Iterable<AnnotationSpec>) = nativeBuilder.annotations.addAll(specs)
-        override fun add(spec: AnnotationSpec) {
-            nativeBuilder.addAnnotation(spec)
-        }
-    }
+    val annotations: AnnotationSpecList = AnnotationSpecList(nativeBuilder.annotations)
 
     /** Configure annotations with DSL. */
-    inline fun annotations(configuration: AnnotationSpecContainerScope.() -> Unit) =
-        AnnotationSpecContainerScope(annotations).configuration()
+    inline fun annotations(configuration: AnnotationSpecListScope.() -> Unit) =
+        AnnotationSpecListScope(annotations).configuration()
 
     /** Add field modifiers. */
     fun addModifiers(vararg modifiers: Modifier) {
@@ -124,16 +111,11 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
     inline fun <reified T> returns() = returns(T::class)
 
     /** Configure parameters without DSL. */
-    val parameters: ParameterSpecContainer = object : ParameterSpecContainer() {
-        override fun addAll(specs: Iterable<ParameterSpec>) = nativeBuilder.parameters.addAll(specs)
-        override fun add(spec: ParameterSpec) {
-            nativeBuilder.addParameter(spec)
-        }
-    }
+    val parameters: ParameterSpecList = ParameterSpecList(nativeBuilder.parameters)
 
     /** Configure parameters with DSL. */
-    inline fun parameters(configuration: ParameterSpecContainerScope.() -> Unit) =
-        ParameterSpecContainerScope(parameters).configuration()
+    inline fun parameters(configuration: ParameterSpecListScope.() -> Unit) =
+        ParameterSpecListScope(parameters).configuration()
 
     /** Add vararg keyword to array type parameter. */
     var varargs: Boolean

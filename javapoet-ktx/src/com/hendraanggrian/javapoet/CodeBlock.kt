@@ -1,6 +1,6 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.dsl.CodeBlockContainer
+import com.hendraanggrian.javapoet.collections.CodeBlockContainer
 import com.squareup.javapoet.CodeBlock
 
 /** Joins code blocks into a single [CodeBlock], each separated by [separator]. */
