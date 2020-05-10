@@ -8,8 +8,21 @@
 <a href="../../index.html">javapoet-ktx</a>&nbsp;/&nbsp;<a href="../index.html">com.hendraanggrian.javapoet</a>&nbsp;/&nbsp;<a href="./index.html">MethodSpecBuilder</a><br/>
 <br/>
 <h1>MethodSpecBuilder</h1>
-<code><span class="keyword">class </span><span class="identifier">MethodSpecBuilder</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../com.hendraanggrian.javapoet.dsl/-code-block-container/index.html"><span class="identifier">CodeBlockContainer</span></a></code>
+<code><span class="keyword">class </span><span class="identifier">MethodSpecBuilder</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="../../com.hendraanggrian.javapoet.collections/-code-block-container/index.html"><span class="identifier">CodeBlockContainer</span></a></code>
 <p>Wrapper of <a href="#">MethodSpec.Builder</a>, providing DSL support as a replacement to Java builder.</p>
+<h3>Constructors</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-init-.html">&lt;init&gt;</a></h4>
+</td>
+<td>
+<p>Wrapper of <a href="#">MethodSpec.Builder</a>, providing DSL support as a replacement to Java builder.</p>
+<code><span class="identifier">MethodSpecBuilder</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$<init>(com.squareup.javapoet.MethodSpec.Builder)/nativeBuilder">nativeBuilder</span><span class="symbol">:</span>&nbsp;<span class="identifier">Builder</span><span class="symbol">)</span></code></td>
+</tr>
+</tbody>
+</table>
 <h3>Properties</h3>
 <table>
 <tbody>
@@ -18,8 +31,8 @@
 <h4><a href="annotations.html">annotations</a></h4>
 </td>
 <td>
-<p>Configure annotations without DSL.</p>
-<code><span class="keyword">val </span><span class="identifier">annotations</span><span class="symbol">: </span><a href="../../com.hendraanggrian.javapoet.dsl/-annotation-spec-container/index.html"><span class="identifier">AnnotationSpecContainer</span></a></code></td>
+<p>Annotations of this method.</p>
+<code><span class="keyword">val </span><span class="identifier">annotations</span><span class="symbol">: </span><a href="../../com.hendraanggrian.javapoet.collections/-annotation-spec-list/index.html"><span class="identifier">AnnotationSpecList</span></a></code></td>
 </tr>
 <tr>
 <td>
@@ -34,16 +47,24 @@
 <h4><a href="javadoc.html">javadoc</a></h4>
 </td>
 <td>
-<p>Configure javadoc without DSL.</p>
-<code><span class="keyword">val </span><span class="identifier">javadoc</span><span class="symbol">: </span><a href="../../com.hendraanggrian.javapoet.dsl/-javadoc-container/index.html"><span class="identifier">JavadocContainer</span></a></code></td>
+<p>Javadoc of this method.</p>
+<code><span class="keyword">val </span><span class="identifier">javadoc</span><span class="symbol">: </span><a href="../../com.hendraanggrian.javapoet.collections/-javadoc-container/index.html"><span class="identifier">JavadocContainer</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="modifiers.html">modifiers</a></h4>
+</td>
+<td>
+<p>Modifiers of this method.</p>
+<code><span class="keyword">val </span><span class="identifier">modifiers</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html"><span class="identifier">MutableList</span></a><span class="symbol">&lt;</span><a href="https://docs.oracle.com/javase/6/docs/api/javax/lang/model/element/Modifier.html"><span class="identifier">Modifier</span></a><span class="symbol">&gt;</span></code></td>
 </tr>
 <tr>
 <td>
 <h4><a href="parameters.html">parameters</a></h4>
 </td>
 <td>
-<p>Configure parameters without DSL.</p>
-<code><span class="keyword">val </span><span class="identifier">parameters</span><span class="symbol">: </span><a href="../../com.hendraanggrian.javapoet.dsl/-parameter-spec-container/index.html"><span class="identifier">ParameterSpecContainer</span></a></code></td>
+<p>Parameters of this method.</p>
+<code><span class="keyword">val </span><span class="identifier">parameters</span><span class="symbol">: </span><a href="../../com.hendraanggrian.javapoet.collections/-parameter-spec-list/index.html"><span class="identifier">ParameterSpecList</span></a></code></td>
 </tr>
 <tr>
 <td>
@@ -52,6 +73,14 @@
 <td>
 <p>Add return line to type name.</p>
 <code><span class="keyword">var </span><span class="identifier">returns</span><span class="symbol">: </span><span class="identifier">TypeName</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="type-variables.html">typeVariables</a></h4>
+</td>
+<td>
+<p>Type variables of this method.</p>
+<code><span class="keyword">val </span><span class="identifier">typeVariables</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html"><span class="identifier">MutableList</span></a><span class="symbol">&lt;</span><span class="identifier">TypeVariableName</span><span class="symbol">&gt;</span></code></td>
 </tr>
 <tr>
 <td>
@@ -133,8 +162,8 @@
 <h4><a href="annotations.html">annotations</a></h4>
 </td>
 <td>
-<p>Configure annotations with DSL.</p>
-<code><span class="keyword">fun </span><span class="identifier">annotations</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$annotations(kotlin.Function1((com.hendraanggrian.javapoet.dsl.AnnotationSpecContainerScope, kotlin.Unit)))/configuration">configuration</span><span class="symbol">:</span>&nbsp;<a href="../../com.hendraanggrian.javapoet.dsl/-annotation-spec-container-scope/index.html"><span class="identifier">AnnotationSpecContainerScope</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<p>Configures annotations of this method.</p>
+<code><span class="keyword">fun </span><span class="identifier">annotations</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$annotations(kotlin.Function1((com.hendraanggrian.javapoet.collections.AnnotationSpecListScope, kotlin.Unit)))/configuration">configuration</span><span class="symbol">:</span>&nbsp;<a href="../../com.hendraanggrian.javapoet.collections/-annotation-spec-list-scope/index.html"><span class="identifier">AnnotationSpecListScope</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
 </tr>
 <tr>
 <td>
@@ -194,8 +223,8 @@
 <h4><a href="javadoc.html">javadoc</a></h4>
 </td>
 <td>
-<p>Configure javadoc with DSL.</p>
-<code><span class="keyword">fun </span><span class="identifier">javadoc</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$javadoc(kotlin.Function1((com.hendraanggrian.javapoet.dsl.JavadocContainerScope, kotlin.Unit)))/configuration">configuration</span><span class="symbol">:</span>&nbsp;<a href="../../com.hendraanggrian.javapoet.dsl/-javadoc-container-scope/index.html"><span class="identifier">JavadocContainerScope</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<p>Configures javadoc of this method.</p>
+<code><span class="keyword">fun </span><span class="identifier">javadoc</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$javadoc(kotlin.Function1((com.hendraanggrian.javapoet.collections.JavadocContainerScope, kotlin.Unit)))/configuration">configuration</span><span class="symbol">:</span>&nbsp;<a href="../../com.hendraanggrian.javapoet.collections/-javadoc-container-scope/index.html"><span class="identifier">JavadocContainerScope</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
 </tr>
 <tr>
 <td>
@@ -210,8 +239,8 @@
 <h4><a href="parameters.html">parameters</a></h4>
 </td>
 <td>
-<p>Configure parameters with DSL.</p>
-<code><span class="keyword">fun </span><span class="identifier">parameters</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$parameters(kotlin.Function1((com.hendraanggrian.javapoet.dsl.ParameterSpecContainerScope, kotlin.Unit)))/configuration">configuration</span><span class="symbol">:</span>&nbsp;<a href="../../com.hendraanggrian.javapoet.dsl/-parameter-spec-container-scope/index.html"><span class="identifier">ParameterSpecContainerScope</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
+<p>Configures parameters of this method.</p>
+<code><span class="keyword">fun </span><span class="identifier">parameters</span><span class="symbol">(</span><span class="identifier" id="com.hendraanggrian.javapoet.MethodSpecBuilder$parameters(kotlin.Function1((com.hendraanggrian.javapoet.collections.ParameterSpecListScope, kotlin.Unit)))/configuration">configuration</span><span class="symbol">:</span>&nbsp;<a href="../../com.hendraanggrian.javapoet.collections/-parameter-spec-list-scope/index.html"><span class="identifier">ParameterSpecListScope</span></a><span class="symbol">.</span><span class="symbol">(</span><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></td>
 </tr>
 <tr>
 <td>

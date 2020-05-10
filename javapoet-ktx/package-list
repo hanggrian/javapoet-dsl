@@ -52,4 +52,4 @@ $dokka.location:com.hendraanggrian.javapoet$wildcardSupertypeOf(com.squareup.jav
 $dokka.location:com.hendraanggrian.javapoet$wildcardSupertypeOf(java.lang.reflect.Type)com.hendraanggrian.javapoet/java.lang.reflect.-type/wildcard-supertype-of.html
 $dokka.location:com.hendraanggrian.javapoet$wildcardSupertypeOf(kotlin.reflect.KClass((kotlin.Any)))com.hendraanggrian.javapoet/kotlin.reflect.-k-class/wildcard-supertype-of.html
 com.hendraanggrian.javapoet
-com.hendraanggrian.javapoet.dsl
+com.hendraanggrian.javapoet.collections

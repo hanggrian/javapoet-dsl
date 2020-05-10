@@ -1,0 +1,120 @@
+<HTML>
+<HEAD>
+<meta charset="UTF-8">
+<title>com.hendraanggrian.javapoet.collections - javapoet-ktx</title>
+<link rel="stylesheet" href="../../style.css">
+</HEAD>
+<BODY>
+<a href="../index.html">javapoet-ktx</a>&nbsp;/&nbsp;<a href="./index.html">com.hendraanggrian.javapoet.collections</a><br/>
+<br/>
+<h2>Package com.hendraanggrian.javapoet.collections</h2>
+<h3>Types</h3>
+<table>
+<tbody>
+<tr>
+<td>
+<h4><a href="-annotation-spec-list/index.html">AnnotationSpecList</a></h4>
+</td>
+<td>
+<p>An <a href="-annotation-spec-list/index.html">AnnotationSpecList</a> is responsible for managing a set of annotation instances.</p>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">AnnotationSpecList</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html"><span class="identifier">MutableList</span></a><span class="symbol">&lt;</span><span class="identifier">AnnotationSpec</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-annotation-spec-list-scope/index.html">AnnotationSpecListScope</a></h4>
+</td>
+<td>
+<p>Receiver for the <code>annotations</code> function type providing an extended set of operators for the configuration.</p>
+<code><span class="keyword">class </span><span class="identifier">AnnotationSpecListScope</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-annotation-spec-list/index.html"><span class="identifier">AnnotationSpecList</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-code-block-container/index.html">CodeBlockContainer</a></h4>
+</td>
+<td>
+<code><span class="keyword">abstract</span> <span class="keyword">class </span><span class="identifier">CodeBlockContainer</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">CodeBlockAppendable</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-field-spec-list/index.html">FieldSpecList</a></h4>
+</td>
+<td>
+<p>A <a href="-field-spec-list/index.html">FieldSpecList</a> is responsible for managing a set of field instances.</p>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">FieldSpecList</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html"><span class="identifier">MutableList</span></a><span class="symbol">&lt;</span><span class="identifier">FieldSpec</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-field-spec-list-scope/index.html">FieldSpecListScope</a></h4>
+</td>
+<td>
+<p>Receiver for the <code>fields</code> function type providing an extended set of operators for the configuration.</p>
+<code><span class="keyword">class </span><span class="identifier">FieldSpecListScope</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-field-spec-list/index.html"><span class="identifier">FieldSpecList</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-javadoc-container/index.html">JavadocContainer</a></h4>
+</td>
+<td>
+<p>A <a href="-javadoc-container/index.html">JavadocContainer</a> is responsible for managing a set of code instances.</p>
+<code><span class="keyword">abstract</span> <span class="keyword">class </span><span class="identifier">JavadocContainer</span>&nbsp;<span class="symbol">:</span>&nbsp;<span class="identifier">CodeBlockAppendable</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-javadoc-container-scope/index.html">JavadocContainerScope</a></h4>
+</td>
+<td>
+<p>Receiver for the <code>javadoc</code> function type providing an extended set of operators for the configuration.</p>
+<code><span class="keyword">class </span><span class="identifier">JavadocContainerScope</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-javadoc-container/index.html"><span class="identifier">JavadocContainer</span></a><span class="symbol">, </span><span class="identifier">CodeBlockAppendable</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-method-spec-list/index.html">MethodSpecList</a></h4>
+</td>
+<td>
+<p>A <a href="-method-spec-list/index.html">MethodSpecList</a> is responsible for managing a set of method instances.</p>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">MethodSpecList</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html"><span class="identifier">MutableList</span></a><span class="symbol">&lt;</span><span class="identifier">MethodSpec</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-method-spec-list-scope/index.html">MethodSpecListScope</a></h4>
+</td>
+<td>
+<p>Receiver for the <code>methods</code> function type providing an extended set of operators for the configuration.</p>
+<code><span class="keyword">class </span><span class="identifier">MethodSpecListScope</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-method-spec-list/index.html"><span class="identifier">MethodSpecList</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-parameter-spec-list/index.html">ParameterSpecList</a></h4>
+</td>
+<td>
+<p>A <a href="-parameter-spec-list/index.html">ParameterSpecList</a> is responsible for managing a set of parameter instances.</p>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">ParameterSpecList</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html"><span class="identifier">MutableList</span></a><span class="symbol">&lt;</span><span class="identifier">ParameterSpec</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-parameter-spec-list-scope/index.html">ParameterSpecListScope</a></h4>
+</td>
+<td>
+<p>Receiver for the <code>parameters</code> function type providing an extended set of operators for the configuration.</p>
+<code><span class="keyword">class </span><span class="identifier">ParameterSpecListScope</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-parameter-spec-list/index.html"><span class="identifier">ParameterSpecList</span></a></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-type-spec-list/index.html">TypeSpecList</a></h4>
+</td>
+<td>
+<p>A <a href="-type-spec-list/index.html">TypeSpecList</a> is responsible for managing a set of type instances.</p>
+<code><span class="keyword">open</span> <span class="keyword">class </span><span class="identifier">TypeSpecList</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.collections/-mutable-list/index.html"><span class="identifier">MutableList</span></a><span class="symbol">&lt;</span><span class="identifier">TypeSpec</span><span class="symbol">&gt;</span></code></td>
+</tr>
+<tr>
+<td>
+<h4><a href="-type-spec-list-scope/index.html">TypeSpecListScope</a></h4>
+</td>
+<td>
+<p>Receiver for the <code>types</code> function type providing an extended set of operators for the configuration.</p>
+<code><span class="keyword">class </span><span class="identifier">TypeSpecListScope</span>&nbsp;<span class="symbol">:</span>&nbsp;<a href="-type-spec-list/index.html"><span class="identifier">TypeSpecList</span></a></code></td>
+</tr>
+</tbody>
+</table>
+</BODY>
+</HTML>
