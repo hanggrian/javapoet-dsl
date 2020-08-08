@@ -11,12 +11,24 @@ import java.lang.reflect.Type
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
-/** Builds a new [FieldSpec] from [type] supplying its [name] and [modifiers]. */
+/** Builds new [FieldSpec] from [TypeName] supplying its [name] and [modifiers]. */
 fun fieldSpecOf(type: TypeName, name: String, vararg modifiers: Modifier): FieldSpec =
     FieldSpec.builder(type, name, *modifiers).build()
 
+/** Builds new [FieldSpec] from [Type] supplying its [name] and [modifiers]. */
+fun fieldSpecOf(type: Type, name: String, vararg modifiers: Modifier): FieldSpec =
+    FieldSpec.builder(type, name, *modifiers).build()
+
+/** Builds new [FieldSpec] from [KClass] supplying its [name] and [modifiers]. */
+fun fieldSpecOf(type: KClass<*>, name: String, vararg modifiers: Modifier): FieldSpec =
+    FieldSpec.builder(type.java, name, *modifiers).build()
+
+/** Builds new [FieldSpec] from [T] supplying its [name] and [modifiers]. */
+inline fun <reified T> fieldSpecOf(name: String, vararg modifiers: Modifier): FieldSpec =
+    FieldSpec.builder(T::class.java, name, *modifiers).build()
+
 /**
- * Builds a new [FieldSpec] from [type] supplying its [name] and [modifiers],
+ * Builds new [FieldSpec] from [TypeName] supplying its [name] and [modifiers],
  * by populating newly created [FieldSpecBuilder] using provided [builderAction] and then building it.
  */
 inline fun buildFieldSpec(
@@ -26,20 +38,8 @@ inline fun buildFieldSpec(
     builderAction: FieldSpecBuilder.() -> Unit
 ): FieldSpec = FieldSpec.builder(type, name, *modifiers).build(builderAction)
 
-/** Builds a new [FieldSpec] from [type] supplying its [name] and [modifiers]. */
-fun fieldSpecOf(type: Type, name: String, vararg modifiers: Modifier): FieldSpec =
-    FieldSpec.builder(type, name, *modifiers).build()
-
-/** Builds a new [FieldSpec] from [type] supplying its [name] and [modifiers]. */
-fun fieldSpecOf(type: KClass<*>, name: String, vararg modifiers: Modifier): FieldSpec =
-    fieldSpecOf(type.java, name, *modifiers)
-
-/** Builds a new [FieldSpec] from [T] supplying its [name] and [modifiers]. */
-inline fun <reified T> fieldSpecOf(name: String, vararg modifiers: Modifier): FieldSpec =
-    fieldSpecOf(T::class, name, *modifiers)
-
 /**
- * Builds a new [FieldSpec] from [type] supplying its [name] and [modifiers],
+ * Builds new [FieldSpec] from [Type] supplying its [name] and [modifiers],
  * by populating newly created [FieldSpecBuilder] using provided [builderAction] and then building it.
  */
 inline fun buildFieldSpec(
@@ -50,7 +50,7 @@ inline fun buildFieldSpec(
 ): FieldSpec = FieldSpec.builder(type, name, *modifiers).build(builderAction)
 
 /**
- * Builds a new [FieldSpec] from [type] supplying its [name] and [modifiers],
+ * Builds new [FieldSpec] from [KClass] supplying its [name] and [modifiers],
  * by populating newly created [FieldSpecBuilder] using provided [builderAction] and then building it.
  */
 inline fun buildFieldSpec(
@@ -58,21 +58,22 @@ inline fun buildFieldSpec(
     name: String,
     vararg modifiers: Modifier,
     builderAction: FieldSpecBuilder.() -> Unit
-): FieldSpec = buildFieldSpec(type.java, name, *modifiers, builderAction = builderAction)
+): FieldSpec = FieldSpec.builder(type.java, name, *modifiers).build(builderAction)
 
 /**
- * Builds a new [FieldSpec] from [T] supplying its [name] and [modifiers],
+ * Builds new [FieldSpec] from [T] supplying its [name] and [modifiers],
  * by populating newly created [FieldSpecBuilder] using provided [builderAction] and then building it.
  */
 inline fun <reified T> buildFieldSpec(
     name: String,
     vararg modifiers: Modifier,
     builderAction: FieldSpecBuilder.() -> Unit
-): FieldSpec = buildFieldSpec(T::class, name, *modifiers, builderAction = builderAction)
+): FieldSpec = FieldSpec.builder(T::class.java, name, *modifiers).build(builderAction)
 
 /** Modify existing [FieldSpec.Builder] using provided [builderAction] and then building it. */
-inline fun FieldSpec.Builder.build(builderAction: FieldSpecBuilder.() -> Unit): FieldSpec =
-    FieldSpecBuilder(this).apply(builderAction).build()
+inline fun FieldSpec.Builder.build(
+    builderAction: FieldSpecBuilder.() -> Unit
+): FieldSpec = FieldSpecBuilder(this).apply(builderAction).build()
 
 /** Wrapper of [FieldSpec.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetDslMarker

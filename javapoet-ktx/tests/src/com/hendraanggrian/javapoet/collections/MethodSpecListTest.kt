@@ -1,7 +1,7 @@
 package com.hendraanggrian.javapoet.collections
 
 import com.google.common.truth.Truth.assertThat
-import com.hendraanggrian.javapoet.constructorMethodSpecOf
+import com.hendraanggrian.javapoet.emptyConstructorMethodSpec
 import com.hendraanggrian.javapoet.methodSpecOf
 import kotlin.test.Test
 
@@ -13,28 +13,26 @@ class MethodSpecListTest {
 
     @Test fun nativeSpec() {
         list += methodSpecOf("method")
-        list += listOf(constructorMethodSpecOf())
+        list += listOf(emptyConstructorMethodSpec())
         assertThat(list).containsExactly(
             methodSpecOf("method"),
-            constructorMethodSpecOf()
+            emptyConstructorMethodSpec()
         )
     }
 
     @Test fun string() {
         list.add("method1")
-        list += "method2"
-        container { "method3" { } }
+        container { "method2" { } }
         assertThat(list).containsExactly(
             methodSpecOf("method1"),
-            methodSpecOf("method2"),
-            methodSpecOf("method3")
+            methodSpecOf("method2")
         )
     }
 
     @Test fun others() {
         list.addConstructor()
         assertThat(list).containsExactly(
-            constructorMethodSpecOf()
+            emptyConstructorMethodSpec()
         )
     }
 }

@@ -21,120 +21,133 @@ import javax.lang.model.element.Element
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
-/** Builds a new class [TypeSpec] from [type]. */
-fun classTypeSpecOf(type: String): TypeSpec =
-    TypeSpec.classBuilder(type).build()
+/** Builds new class [TypeSpec] with [type]. */
+fun classTypeSpecOf(type: String): TypeSpec = TypeSpec.classBuilder(type).build()
 
-/**
- * Builds a new class [TypeSpec] from [type],
- * by populating newly created [TypeSpecBuilder] using provided [builderAction] and then building it.
- */
-inline fun buildClassTypeSpec(type: String, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
-    TypeSpec.classBuilder(type).build(builderAction)
+/** Builds new class [TypeSpec] from [type]. */
+fun classTypeSpecOf(type: ClassName): TypeSpec = TypeSpec.classBuilder(type).build()
 
-/** Builds a new class [TypeSpec] from [type]. */
-fun classTypeSpecOf(type: ClassName): TypeSpec =
-    TypeSpec.classBuilder(type).build()
+/** Builds new interface [TypeSpec] from [type]. */
+fun interfaceTypeSpecOf(type: String): TypeSpec = TypeSpec.interfaceBuilder(type).build()
 
-/**
- * Builds a new class [TypeSpec] from [type],
- * by populating newly created [TypeSpecBuilder] using provided [builderAction] and then building it.
- */
-inline fun buildClassTypeSpec(type: ClassName, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
-    TypeSpec.classBuilder(type).build(builderAction)
+/** Builds new interface [TypeSpec] from [type]. */
+fun interfaceTypeSpecOf(type: ClassName): TypeSpec = TypeSpec.interfaceBuilder(type).build()
 
-/** Builds a new interface [TypeSpec] from [type]. */
-fun interfaceTypeSpecOf(type: String): TypeSpec =
-    TypeSpec.interfaceBuilder(type).build()
+/** Builds new enum [TypeSpec] from [type]. */
+fun enumTypeSpecOf(type: String): TypeSpec = TypeSpec.enumBuilder(type).build()
 
-/**
- * Builds a new interface [TypeSpec] from [type],
- * by populating newly created [TypeSpecBuilder] using provided [builderAction] and then building it.
- */
-inline fun buildInterfaceTypeSpec(type: String, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
-    TypeSpec.interfaceBuilder(type).build(builderAction)
+/** Builds new enum [TypeSpec] from [type]. */
+fun enumTypeSpecOf(type: ClassName): TypeSpec = TypeSpec.enumBuilder(type).build()
 
-/** Builds a new interface [TypeSpec] from [type]. */
-fun interfaceTypeSpecOf(type: ClassName): TypeSpec =
-    TypeSpec.interfaceBuilder(type).build()
-
-/**
- * Builds a new interface [TypeSpec] from [type],
- * by populating newly created [TypeSpecBuilder] using provided [builderAction] and then building it.
- */
-inline fun buildInterfaceTypeSpec(type: ClassName, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
-    TypeSpec.interfaceBuilder(type).build(builderAction)
-
-/** Builds a new enum [TypeSpec] from [type]. */
-fun enumTypeSpecOf(type: String): TypeSpec =
-    TypeSpec.enumBuilder(type).build()
-
-/**
- * Builds a new enum [TypeSpec] from [type],
- * by populating newly created [TypeSpecBuilder] using provided [builderAction] and then building it.
- */
-inline fun buildEnumTypeSpec(type: String, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
-    TypeSpec.enumBuilder(type).build(builderAction)
-
-/** Builds a new enum [TypeSpec] from [type]. */
-fun enumTypeSpecOf(type: ClassName): TypeSpec =
-    TypeSpec.enumBuilder(type).build()
-
-/**
- * Builds a new enum [TypeSpec] from [type],
- * by populating newly created [TypeSpecBuilder] using provided [builderAction] and then building it.
- */
-inline fun buildEnumTypeSpec(type: ClassName, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
-    TypeSpec.enumBuilder(type).build(builderAction)
-
-/** Builds a new anonymous [TypeSpec] from [format] using formatted [args]. */
+/** Builds new anonymous [TypeSpec] from [format] using formatted [args]. */
 fun anonymousTypeSpecOf(format: String, vararg args: Any): TypeSpec =
     format.formatWith(args) { s, array -> TypeSpec.anonymousClassBuilder(s, *array).build() }
 
+/** Builds new anonymous [TypeSpec] from [code]. */
+fun anonymousTypeSpecOf(code: CodeBlock): TypeSpec = TypeSpec.anonymousClassBuilder(code).build()
+
+/** Builds new annotation [TypeSpec] from [type]. */
+fun annotationTypeSpecOf(type: String): TypeSpec = TypeSpec.annotationBuilder(type).build()
+
+/** Builds new annotation [TypeSpec] from [type]. */
+fun annotationTypeSpecOf(type: ClassName): TypeSpec = TypeSpec.annotationBuilder(type).build()
+
 /**
- * Builds a new anonymous [TypeSpec] from [format] using formatted [args],
+ * Builds new class [TypeSpec] from [type],
+ * by populating newly created [TypeSpecBuilder] using provided [builderAction] and then building it.
+ */
+inline fun buildClassTypeSpec(
+    type: String,
+    builderAction: TypeSpecBuilder.() -> Unit
+): TypeSpec = TypeSpec.classBuilder(type).build(builderAction)
+
+/**
+ * Builds new class [TypeSpec] from [type],
+ * by populating newly created [TypeSpecBuilder] using provided [builderAction] and then building it.
+ */
+inline fun buildClassTypeSpec(
+    type: ClassName,
+    builderAction: TypeSpecBuilder.() -> Unit
+): TypeSpec = TypeSpec.classBuilder(type).build(builderAction)
+
+/**
+ * Builds new interface [TypeSpec] from [type],
+ * by populating newly created [TypeSpecBuilder] using provided [builderAction] and then building it.
+ */
+inline fun buildInterfaceTypeSpec(
+    type: String,
+    builderAction: TypeSpecBuilder.() -> Unit
+): TypeSpec = TypeSpec.interfaceBuilder(type).build(builderAction)
+
+/**
+ * Builds new interface [TypeSpec] from [type],
+ * by populating newly created [TypeSpecBuilder] using provided [builderAction] and then building it.
+ */
+inline fun buildInterfaceTypeSpec(
+    type: ClassName,
+    builderAction: TypeSpecBuilder.() -> Unit
+): TypeSpec = TypeSpec.interfaceBuilder(type).build(builderAction)
+
+/**
+ * Builds new enum [TypeSpec] from [type],
+ * by populating newly created [TypeSpecBuilder] using provided [builderAction] and then building it.
+ */
+inline fun buildEnumTypeSpec(
+    type: String,
+    builderAction: TypeSpecBuilder.() -> Unit
+): TypeSpec = TypeSpec.enumBuilder(type).build(builderAction)
+
+/**
+ * Builds new enum [TypeSpec] from [type],
+ * by populating newly created [TypeSpecBuilder] using provided [builderAction] and then building it.
+ */
+inline fun buildEnumTypeSpec(
+    type: ClassName,
+    builderAction: TypeSpecBuilder.() -> Unit
+): TypeSpec = TypeSpec.enumBuilder(type).build(builderAction)
+
+/**
+ * Builds new anonymous [TypeSpec] from [format] using formatted [args],
  * by populating newly created [TypeSpecBuilder] using provided [builderAction] and then building it.
  * Not inlining this function since [formatWith] is not inlined.
  */
-fun buildAnonymousTypeSpec(format: String, vararg args: Any, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
-    format.formatWith(args) { s, array -> TypeSpec.anonymousClassBuilder(s, *array).build(builderAction) }
-
-/** Builds a new anonymous [TypeSpec] from [code]. */
-fun anonymousTypeSpecOf(code: CodeBlock): TypeSpec =
-    TypeSpec.anonymousClassBuilder(code).build()
-
-/**
- * Builds a new anonymous [TypeSpec] from [code],
- * by populating newly created [TypeSpecBuilder] using provided [builderAction] and then building it.
- */
-inline fun buildAnonymousTypeSpec(code: CodeBlock, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
-    TypeSpec.anonymousClassBuilder(code).build(builderAction)
-
-/** Builds a new annotation [TypeSpec] from [type]. */
-fun annotationTypeSpecOf(type: String): TypeSpec =
-    TypeSpec.annotationBuilder(type).build()
+fun buildAnonymousTypeSpec(
+    format: String,
+    vararg args: Any,
+    builderAction: TypeSpecBuilder.() -> Unit
+): TypeSpec = format.formatWith(args) { s, array -> TypeSpec.anonymousClassBuilder(s, *array).build(builderAction) }
 
 /**
- * Builds a new annotation [TypeSpec] from [type],
+ * Builds new anonymous [TypeSpec] from [code],
  * by populating newly created [TypeSpecBuilder] using provided [builderAction] and then building it.
  */
-inline fun buildAnnotationTypeSpec(type: String, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
-    TypeSpec.annotationBuilder(type).build(builderAction)
-
-/** Builds a new annotation [TypeSpec] from [type]. */
-fun annotationTypeSpecOf(type: ClassName): TypeSpec =
-    TypeSpec.annotationBuilder(type).build()
+inline fun buildAnonymousTypeSpec(
+    code: CodeBlock,
+    builderAction: TypeSpecBuilder.() -> Unit
+): TypeSpec = TypeSpec.anonymousClassBuilder(code).build(builderAction)
 
 /**
- * Builds a new annotation [TypeSpec] from [type],
+ * Builds new annotation [TypeSpec] from [type],
  * by populating newly created [TypeSpecBuilder] using provided [builderAction] and then building it.
  */
-inline fun buildAnnotationTypeSpec(type: ClassName, builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
-    TypeSpec.annotationBuilder(type).build(builderAction)
+inline fun buildAnnotationTypeSpec(
+    type: String,
+    builderAction: TypeSpecBuilder.() -> Unit
+): TypeSpec = TypeSpec.annotationBuilder(type).build(builderAction)
+
+/**
+ * Builds new annotation [TypeSpec] from [type],
+ * by populating newly created [TypeSpecBuilder] using provided [builderAction] and then building it.
+ */
+inline fun buildAnnotationTypeSpec(
+    type: ClassName,
+    builderAction: TypeSpecBuilder.() -> Unit
+): TypeSpec = TypeSpec.annotationBuilder(type).build(builderAction)
 
 /** Modify existing [TypeSpec.Builder] using provided [builderAction] and then building it. */
-inline fun TypeSpec.Builder.build(builderAction: TypeSpecBuilder.() -> Unit): TypeSpec =
-    TypeSpecBuilder(this).apply(builderAction).build()
+inline fun TypeSpec.Builder.build(
+    builderAction: TypeSpecBuilder.() -> Unit
+): TypeSpec = TypeSpecBuilder(this).apply(builderAction).build()
 
 /** Wrapper of [TypeSpec.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetDslMarker

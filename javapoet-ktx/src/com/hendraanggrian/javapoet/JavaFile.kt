@@ -6,11 +6,13 @@ import com.squareup.javapoet.JavaFile
 import kotlin.reflect.KClass
 
 /**
- * Builds a new [JavaFile],
+ * Builds new [JavaFile],
  * by populating newly created [JavaFileBuilder] using provided [builderAction] and then building it.
  */
-inline fun buildJavaFile(packageName: String, builderAction: JavaFileBuilder.() -> Unit): JavaFile =
-    JavaFileBuilder(packageName).apply(builderAction).build()
+inline fun buildJavaFile(
+    packageName: String,
+    builderAction: JavaFileBuilder.() -> Unit
+): JavaFile = JavaFileBuilder(packageName).apply(builderAction).build()
 
 /** Wrapper of [JavaFile.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetDslMarker

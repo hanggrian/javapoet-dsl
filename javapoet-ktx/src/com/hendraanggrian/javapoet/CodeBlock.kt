@@ -4,8 +4,7 @@ import com.hendraanggrian.javapoet.collections.CodeBlockContainer
 import com.squareup.javapoet.CodeBlock
 
 /** Joins code blocks into a single [CodeBlock], each separated by [separator]. */
-fun Iterable<CodeBlock>.join(separator: String): CodeBlock =
-    CodeBlock.join(this, separator)
+fun Iterable<CodeBlock>.join(separator: String): CodeBlock = CodeBlock.join(this, separator)
 
 /**
  * Converts string to [CodeBlock] using formatted [args].
@@ -16,15 +15,17 @@ fun codeBlockOf(format: String, vararg args: Any): CodeBlock =
     format.formatWith(args) { s, array -> CodeBlock.of(s, *array) }
 
 /**
- * Builds a new [CodeBlock],
+ * Builds new [CodeBlock],
  * by populating newly created [CodeBlockBuilder] using provided [builderAction] and then building it.
  */
-inline fun buildCodeBlock(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
-    CodeBlock.builder().build(builderAction)
+inline fun buildCodeBlock(
+    builderAction: CodeBlockBuilder.() -> Unit
+): CodeBlock = CodeBlock.builder().build(builderAction)
 
 /** Modify existing [CodeBlock.Builder] using provided [builderAction] and then building it. */
-inline fun CodeBlock.Builder.build(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
-    CodeBlockBuilder(this).apply(builderAction).build()
+inline fun CodeBlock.Builder.build(
+    builderAction: CodeBlockBuilder.() -> Unit
+): CodeBlock = CodeBlockBuilder(this).apply(builderAction).build()
 
 /** Wrapper of [CodeBlock.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetDslMarker
@@ -36,9 +37,8 @@ class CodeBlockBuilder(private val nativeBuilder: CodeBlock.Builder) : CodeBlock
     /** Returns true if this builder contains code. */
     fun isNotEmpty(): Boolean = !nativeBuilder.isEmpty
 
-    /** Adds code using named arguments. */
-    fun addNamed(format: String, arguments: Map<String, *>): Unit =
-        format.formatWith(arguments) { s, map -> nativeBuilder.addNamed(s, map) }
+    override fun appendNamed(format: String, args: Map<String, *>): Unit =
+        format.formatWith(args) { s, map -> nativeBuilder.addNamed(s, map) }
 
     override fun append(format: String, vararg args: Any): Unit =
         format.formatWith(args) { s, array -> nativeBuilder.add(s, *array) }
@@ -75,6 +75,11 @@ class CodeBlockBuilder(private val nativeBuilder: CodeBlock.Builder) : CodeBlock
     /** Unindent current code. */
     fun unindent() {
         nativeBuilder.unindent()
+    }
+
+    /** Clear current code. */
+    fun clear() {
+        nativeBuilder.clear()
     }
 
     /** Returns native spec. */

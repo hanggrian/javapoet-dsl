@@ -10,16 +10,13 @@ import javax.lang.model.type.TypeVariable
 import kotlin.reflect.KClass
 
 /** Returns a [TypeVariableName] without bounds. */
-inline fun String.typeVarOf(): TypeVariableName =
-    TypeVariableName.get(this)
+inline fun String.typeVarOf(): TypeVariableName = TypeVariableName.get(this)
 
 /** Returns a [TypeVariableName] with [TypeName] bounds. */
-inline fun String.typeVarBy(vararg bounds: TypeName): TypeVariableName =
-    TypeVariableName.get(this, *bounds)
+inline fun String.typeVarBy(vararg bounds: TypeName): TypeVariableName = TypeVariableName.get(this, *bounds)
 
 /** Returns a [TypeVariableName] with [Type] bounds. */
-inline fun String.typeVarBy(vararg bounds: Type): TypeVariableName =
-    TypeVariableName.get(this, *bounds)
+inline fun String.typeVarBy(vararg bounds: Type): TypeVariableName = TypeVariableName.get(this, *bounds)
 
 /** Returns a [TypeVariableName] with [KClass] bounds. */
 inline fun String.typeVarBy(vararg bounds: KClass<*>): TypeVariableName =

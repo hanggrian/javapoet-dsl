@@ -15,31 +15,33 @@ import java.lang.reflect.Type
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
-/** Builds a new [MethodSpec] from [name]. */
-fun methodSpecOf(name: String): MethodSpec =
-    MethodSpecBuilder(MethodSpec.methodBuilder(name)).build()
+/** Builds new [MethodSpec] with [name]. */
+fun methodSpecOf(name: String): MethodSpec = MethodSpecBuilder(MethodSpec.methodBuilder(name)).build()
+
+/** Builds new constructor [MethodSpec]. */
+fun emptyConstructorMethodSpec(): MethodSpec = MethodSpecBuilder(MethodSpec.constructorBuilder()).build()
 
 /**
- * Builds a new [MethodSpec] from [name],
+ * Builds new [MethodSpec] with [name],
  * by populating newly created [MethodSpecBuilder] using provided [builderAction] and then building it.
  */
-inline fun buildMethodSpec(name: String, builderAction: MethodSpecBuilder.() -> Unit): MethodSpec =
-    MethodSpec.methodBuilder(name).build(builderAction)
-
-/** Builds a new constructor [MethodSpec]. */
-fun constructorMethodSpecOf(): MethodSpec =
-    MethodSpecBuilder(MethodSpec.constructorBuilder()).build()
+inline fun buildMethodSpec(
+    name: String,
+    builderAction: MethodSpecBuilder.() -> Unit
+): MethodSpec = MethodSpec.methodBuilder(name).build(builderAction)
 
 /**
- * Builds a new constructor [MethodSpec],
+ * Builds new constructor [MethodSpec],
  * by populating newly created [MethodSpecBuilder] using provided [builderAction] and then building it.
  */
-inline fun buildConstructorMethodSpec(builderAction: MethodSpecBuilder.() -> Unit): MethodSpec =
-    MethodSpec.constructorBuilder().build(builderAction)
+inline fun buildConstructorMethodSpec(
+    builderAction: MethodSpecBuilder.() -> Unit
+): MethodSpec = MethodSpec.constructorBuilder().build(builderAction)
 
 /** Modify existing [MethodSpec.Builder] using provided [builderAction] and then building it. */
-inline fun MethodSpec.Builder.build(builderAction: MethodSpecBuilder.() -> Unit): MethodSpec =
-    MethodSpecBuilder(this).apply(builderAction).build()
+inline fun MethodSpec.Builder.build(
+    builderAction: MethodSpecBuilder.() -> Unit
+): MethodSpec = MethodSpecBuilder(this).apply(builderAction).build()
 
 /** Wrapper of [MethodSpec.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetDslMarker
@@ -135,6 +137,13 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
     /** Add exception throwing keyword with reified function. */
     inline fun <reified T> addException() = addException(T::class)
 
+    /** Add named code. */
+    fun addNamedCode(format: String, args: Map<String, *>): Unit =
+        format.formatWith(args) { s, map -> nativeBuilder.addNamedCode(s, map) }
+
+    override fun appendNamed(format: String, args: Map<String, *>): Unit =
+        format.formatWith(args) { s, map -> nativeBuilder.addNamedCode(s, map) }
+
     override fun append(format: String, vararg args: Any): Unit =
         format.formatWith(args) { s, array -> nativeBuilder.addCode(s, *array) }
 
@@ -161,10 +170,6 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
     override fun appendln(code: CodeBlock) {
         nativeBuilder.addStatement(code)
     }
-
-    /** Add named code. */
-    fun addNamedCode(format: String, args: Map<String, *>): Unit =
-        format.formatWith(args) { s, map -> nativeBuilder.addNamedCode(s, map) }
 
     /** Add comment like [String.format]. */
     fun addComment(format: String, vararg args: Any): Unit =
