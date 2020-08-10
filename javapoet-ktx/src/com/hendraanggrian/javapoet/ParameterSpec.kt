@@ -97,14 +97,14 @@ class ParameterSpecBuilder(private val nativeBuilder: ParameterSpec.Builder) {
     }
 
     /** Configures javadoc for this parameter. */
-    inline fun javadoc(configuration: JavadocContainerScope.() -> Unit) =
+    inline fun javadoc(configuration: JavadocContainerScope.() -> Unit): Unit =
         JavadocContainerScope(javadoc).configuration()
 
     /** Annotations of this parameter. */
     val annotations: AnnotationSpecList = AnnotationSpecList(nativeBuilder.annotations)
 
     /** Configures annotations of this parameter. */
-    inline fun annotations(configuration: AnnotationSpecListScope.() -> Unit) =
+    inline fun annotations(configuration: AnnotationSpecListScope.() -> Unit): Unit =
         AnnotationSpecListScope(annotations).configuration()
 
     /** Add parameter modifiers. */

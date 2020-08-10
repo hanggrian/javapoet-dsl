@@ -14,52 +14,52 @@ import kotlin.reflect.KClass
 open class FieldSpecList internal constructor(actualList: MutableList<FieldSpec>) :
     MutableList<FieldSpec> by actualList {
 
-    /** Add field from [type] and [name], returning the field added. */
-    fun add(type: TypeName, name: String, vararg modifiers: Modifier): FieldSpec =
-        fieldSpecOf(type, name, *modifiers).also(::plusAssign)
+    /** Add field from [TypeName]. */
+    fun add(type: TypeName, name: String, vararg modifiers: Modifier): Boolean =
+        add(fieldSpecOf(type, name, *modifiers))
 
-    /** Add field from [type] and [name], returning the field added. */
-    fun add(type: Type, name: String, vararg modifiers: Modifier): FieldSpec =
-        fieldSpecOf(type, name, *modifiers).also(::plusAssign)
+    /** Add field from [Type]. */
+    fun add(type: Type, name: String, vararg modifiers: Modifier): Boolean =
+        add(fieldSpecOf(type, name, *modifiers))
 
-    /** Add field from [type] and [name], returning the field added. */
-    fun add(type: KClass<*>, name: String, vararg modifiers: Modifier): FieldSpec =
-        fieldSpecOf(type, name, *modifiers).also(::plusAssign)
+    /** Add field from [KClass]. */
+    fun add(type: KClass<*>, name: String, vararg modifiers: Modifier): Boolean =
+        add(fieldSpecOf(type, name, *modifiers))
 
-    /** Add field from reified [T] and [name], returning the field added. */
-    inline fun <reified T> add(name: String, vararg modifiers: Modifier): FieldSpec =
-        fieldSpecOf<T>(name, *modifiers).also(::plusAssign)
+    /** Add field from [T]. */
+    inline fun <reified T> add(name: String, vararg modifiers: Modifier): Boolean =
+        add(fieldSpecOf<T>(name, *modifiers))
 
-    /** Add field from [type] and [name] with custom initialization [builderAction], returning the field added. */
+    /** Add field from [TypeName] with custom initialization [builderAction]. */
     inline fun add(
         type: TypeName,
         name: String,
         vararg modifiers: Modifier,
         builderAction: FieldSpecBuilder.() -> Unit
-    ): FieldSpec = buildFieldSpec(type, name, *modifiers, builderAction = builderAction).also(::plusAssign)
+    ): Boolean = add(buildFieldSpec(type, name, *modifiers, builderAction = builderAction))
 
-    /** Add field from [type] and [name] with custom initialization [builderAction], returning the field added. */
+    /** Add field from [Type] with custom initialization [builderAction]. */
     inline fun add(
         type: Type,
         name: String,
         vararg modifiers: Modifier,
         builderAction: FieldSpecBuilder.() -> Unit
-    ): FieldSpec = buildFieldSpec(type, name, *modifiers, builderAction = builderAction).also(::plusAssign)
+    ): Boolean = add(buildFieldSpec(type, name, *modifiers, builderAction = builderAction))
 
-    /** Add field from [type] and [name] with custom initialization [builderAction], returning the field added. */
+    /** Add field from [KClass] with custom initialization [builderAction]. */
     inline fun add(
         type: KClass<*>,
         name: String,
         vararg modifiers: Modifier,
         builderAction: FieldSpecBuilder.() -> Unit
-    ): FieldSpec = buildFieldSpec(type, name, *modifiers, builderAction = builderAction).also(::plusAssign)
+    ): Boolean = add(buildFieldSpec(type, name, *modifiers, builderAction = builderAction))
 
-    /** Add field from reified [T] and [name] with custom initialization [builderAction], returning the field added. */
+    /** Add field from [T] with custom initialization [builderAction]. */
     inline fun <reified T> add(
         name: String,
         vararg modifiers: Modifier,
         builderAction: FieldSpecBuilder.() -> Unit
-    ): FieldSpec = buildFieldSpec<T>(name, *modifiers, builderAction = builderAction).also(::plusAssign)
+    ): Boolean = add(buildFieldSpec<T>(name, *modifiers, builderAction = builderAction))
 
     /** Convenient method to add field with operator function. */
     operator fun set(name: String, type: TypeName): Unit = plusAssign(fieldSpecOf(type, name))
@@ -80,25 +80,25 @@ class FieldSpecListScope(actualList: MutableList<FieldSpec>) : FieldSpecList(act
         type: TypeName,
         vararg modifiers: Modifier,
         builderAction: FieldSpecBuilder.() -> Unit
-    ): FieldSpec = add(type, this, *modifiers, builderAction = builderAction)
+    ): Boolean = add(type, this, *modifiers, builderAction = builderAction)
 
     /** Convenient method to add field with receiver type. */
     inline operator fun String.invoke(
         type: Type,
         vararg modifiers: Modifier,
         builderAction: FieldSpecBuilder.() -> Unit
-    ): FieldSpec = add(type, this, *modifiers, builderAction = builderAction)
+    ): Boolean = add(type, this, *modifiers, builderAction = builderAction)
 
     /** Convenient method to add field with receiver type. */
     inline operator fun String.invoke(
         type: KClass<*>,
         vararg modifiers: Modifier,
         builderAction: FieldSpecBuilder.() -> Unit
-    ): FieldSpec = add(type, this, *modifiers, builderAction = builderAction)
+    ): Boolean = add(type, this, *modifiers, builderAction = builderAction)
 
     /** Convenient method to add field with receiver type. */
     inline operator fun <reified T> String.invoke(
         vararg modifiers: Modifier,
         builderAction: FieldSpecBuilder.() -> Unit
-    ): FieldSpec = add<T>(this, *modifiers, builderAction = builderAction)
+    ): Boolean = add<T>(this, *modifiers, builderAction = builderAction)
 }

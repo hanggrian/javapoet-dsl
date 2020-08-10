@@ -15,14 +15,14 @@ import java.lang.reflect.Type
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
-/** Builds new [MethodSpec] with [name]. */
+/** Builds new [MethodSpec] with name. */
 fun methodSpecOf(name: String): MethodSpec = MethodSpecBuilder(MethodSpec.methodBuilder(name)).build()
 
 /** Builds new constructor [MethodSpec]. */
 fun emptyConstructorMethodSpec(): MethodSpec = MethodSpecBuilder(MethodSpec.constructorBuilder()).build()
 
 /**
- * Builds new [MethodSpec] with [name],
+ * Builds new [MethodSpec] with name,
  * by populating newly created [MethodSpecBuilder] using provided [builderAction] and then building it.
  */
 inline fun buildMethodSpec(
@@ -50,6 +50,13 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
     /** Modifiers of this method. */
     val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
 
+    /** Name of this method. */
+    var name: String
+        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
+        set(value) {
+            nativeBuilder.setName(value)
+        }
+
     /** Javadoc of this method. */
     val javadoc: JavadocContainer = object : JavadocContainer() {
         override fun append(format: String, vararg args: Any): Unit =
@@ -61,14 +68,14 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
     }
 
     /** Configures javadoc of this method. */
-    inline fun javadoc(configuration: JavadocContainerScope.() -> Unit) =
+    inline fun javadoc(configuration: JavadocContainerScope.() -> Unit): Unit =
         JavadocContainerScope(javadoc).configuration()
 
     /** Annotations of this method. */
     val annotations: AnnotationSpecList = AnnotationSpecList(nativeBuilder.annotations)
 
     /** Configures annotations of this method. */
-    inline fun annotations(configuration: AnnotationSpecListScope.() -> Unit) =
+    inline fun annotations(configuration: AnnotationSpecListScope.() -> Unit): Unit =
         AnnotationSpecListScope(annotations).configuration()
 
     /** Add field modifiers. */
@@ -97,20 +104,22 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
     }
 
     /** Add return line to [type]. */
-    fun returns(type: KClass<*>) = returns(type.java)
+    fun returns(type: KClass<*>) {
+        nativeBuilder.returns(type.java)
+    }
 
     /** Add return line to [T]. */
-    inline fun <reified T> returns() = returns(T::class)
+    inline fun <reified T> returns(): Unit = returns(T::class)
 
     /** Parameters of this method. */
     val parameters: ParameterSpecList = ParameterSpecList(nativeBuilder.parameters)
 
     /** Configures parameters of this method. */
-    inline fun parameters(configuration: ParameterSpecListScope.() -> Unit) =
+    inline fun parameters(configuration: ParameterSpecListScope.() -> Unit): Unit =
         ParameterSpecListScope(parameters).configuration()
 
     /** Add vararg keyword to array type parameter. */
-    var varargs: Boolean
+    var isVarargs: Boolean
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
         set(value) {
             nativeBuilder.varargs(value)
@@ -132,43 +141,21 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
     }
 
     /** Add exception throwing keyword. */
-    fun addException(type: KClass<*>) = addException(type.java)
+    fun addException(type: KClass<*>) {
+        nativeBuilder.addException(type.java)
+    }
 
     /** Add exception throwing keyword with reified function. */
-    inline fun <reified T> addException() = addException(T::class)
-
-    /** Add named code. */
-    fun addNamedCode(format: String, args: Map<String, *>): Unit =
-        format.formatWith(args) { s, map -> nativeBuilder.addNamedCode(s, map) }
-
-    override fun appendNamed(format: String, args: Map<String, *>): Unit =
-        format.formatWith(args) { s, map -> nativeBuilder.addNamedCode(s, map) }
+    inline fun <reified T> addException(): Unit = addException(T::class)
 
     override fun append(format: String, vararg args: Any): Unit =
         format.formatWith(args) { s, array -> nativeBuilder.addCode(s, *array) }
 
+    override fun appendNamed(format: String, args: Map<String, *>): Unit =
+        format.formatWith(args) { s, map -> nativeBuilder.addNamedCode(s, map) }
+
     override fun append(code: CodeBlock) {
         nativeBuilder.addCode(code)
-    }
-
-    override fun beginFlow(flow: String, vararg args: Any): Unit =
-        flow.formatWith(args) { s, array -> nativeBuilder.beginControlFlow(s, *array) }
-
-    override fun nextFlow(flow: String, vararg args: Any): Unit =
-        flow.formatWith(args) { s, array -> nativeBuilder.nextControlFlow(s, *array) }
-
-    override fun endFlow() {
-        nativeBuilder.endControlFlow()
-    }
-
-    override fun endFlow(flow: String, vararg args: Any): Unit =
-        flow.formatWith(args) { s, array -> nativeBuilder.endControlFlow(s, *array) }
-
-    override fun appendln(format: String, vararg args: Any): Unit =
-        format.formatWith(args) { s, array -> nativeBuilder.addStatement(s, *array) }
-
-    override fun appendln(code: CodeBlock) {
-        nativeBuilder.addStatement(code)
     }
 
     /** Add comment like [String.format]. */
@@ -187,8 +174,47 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
         }
 
     /** Set default value to code with custom initialization [builderAction]. */
-    inline fun defaultValue(builderAction: CodeBlockBuilder.() -> Unit): CodeBlock =
-        buildCodeBlock(builderAction).also { defaultValue = it }
+    inline fun defaultValue(builderAction: CodeBlockBuilder.() -> Unit) {
+        defaultValue = buildCodeBlock(builderAction)
+    }
+
+    override fun beginFlow(flow: String, vararg args: Any): Unit =
+        flow.formatWith(args) { s, array -> nativeBuilder.beginControlFlow(s, *array) }
+
+    fun beginFlow(code: CodeBlock) {
+        nativeBuilder.beginControlFlow(code)
+    }
+
+    inline fun beginFlow(builderAction: CodeBlockBuilder.() -> Unit): Unit = beginFlow(buildCodeBlock(builderAction))
+
+    override fun nextFlow(flow: String, vararg args: Any): Unit =
+        flow.formatWith(args) { s, array -> nativeBuilder.nextControlFlow(s, *array) }
+
+    fun nextFlow(code: CodeBlock) {
+        nativeBuilder.nextControlFlow(code)
+    }
+
+    inline fun nextFlow(builderAction: CodeBlockBuilder.() -> Unit): Unit = nextFlow(buildCodeBlock(builderAction))
+
+    override fun endFlow() {
+        nativeBuilder.endControlFlow()
+    }
+
+    override fun endFlow(flow: String, vararg args: Any): Unit =
+        flow.formatWith(args) { s, array -> nativeBuilder.endControlFlow(s, *array) }
+
+    fun endFlow(code: CodeBlock) {
+        nativeBuilder.endControlFlow(code)
+    }
+
+    inline fun endFlow(builderAction: CodeBlockBuilder.() -> Unit): Unit = endFlow(buildCodeBlock(builderAction))
+
+    override fun appendln(format: String, vararg args: Any): Unit =
+        format.formatWith(args) { s, array -> nativeBuilder.addStatement(s, *array) }
+
+    override fun appendln(code: CodeBlock) {
+        nativeBuilder.addStatement(code)
+    }
 
     /** Returns native spec. */
     fun build(): MethodSpec = nativeBuilder.build()

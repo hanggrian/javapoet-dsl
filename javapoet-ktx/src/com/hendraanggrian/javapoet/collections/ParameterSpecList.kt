@@ -14,52 +14,52 @@ import kotlin.reflect.KClass
 open class ParameterSpecList internal constructor(actualList: MutableList<ParameterSpec>) :
     MutableList<ParameterSpec> by actualList {
 
-    /** Add parameter from [type] and [name], returning the parameter added. */
-    fun add(type: TypeName, name: String, vararg modifiers: Modifier): ParameterSpec =
-        parameterSpecOf(type, name, *modifiers).also(::plusAssign)
+    /** Add parameter from [TypeName]. */
+    fun add(type: TypeName, name: String, vararg modifiers: Modifier): Boolean =
+        add(parameterSpecOf(type, name, *modifiers))
 
-    /** Add parameter from [type] and [name], returning the parameter added. */
-    fun add(type: Type, name: String, vararg modifiers: Modifier): ParameterSpec =
-        parameterSpecOf(type, name, *modifiers).also(::plusAssign)
+    /** Add parameter from [Type]. */
+    fun add(type: Type, name: String, vararg modifiers: Modifier): Boolean =
+        add(parameterSpecOf(type, name, *modifiers))
 
-    /** Add parameter from [type] and [name], returning the parameter added. */
-    fun add(type: KClass<*>, name: String, vararg modifiers: Modifier): ParameterSpec =
-        parameterSpecOf(type, name, *modifiers).also(::plusAssign)
+    /** Add parameter from [KClass]. */
+    fun add(type: KClass<*>, name: String, vararg modifiers: Modifier): Boolean =
+        add(parameterSpecOf(type, name, *modifiers))
 
-    /** Add parameter from reified [T] and [name], returning the parameter added. */
-    inline fun <reified T> add(name: String, vararg modifiers: Modifier): ParameterSpec =
-        parameterSpecOf<T>(name, *modifiers).also(::plusAssign)
+    /** Add parameter from [T]. */
+    inline fun <reified T> add(name: String, vararg modifiers: Modifier): Boolean =
+        add(parameterSpecOf<T>(name, *modifiers))
 
-    /** Add parameter from [type] and [name] with custom initialization [builderAction], returning the parameter added. */
+    /** Add parameter from [TypeName] with custom initialization [builderAction]. */
     inline fun add(
         type: TypeName,
         name: String,
         vararg modifiers: Modifier,
         builderAction: ParameterSpecBuilder.() -> Unit
-    ): ParameterSpec = buildParameterSpec(type, name, *modifiers, builderAction = builderAction).also(::plusAssign)
+    ): Boolean = add(buildParameterSpec(type, name, *modifiers, builderAction = builderAction))
 
-    /** Add parameter from [type] and [name] with custom initialization [builderAction], returning the parameter added. */
+    /** Add parameter from [Type] with custom initialization [builderAction]. */
     inline fun add(
         type: Type,
         name: String,
         vararg modifiers: Modifier,
         builderAction: ParameterSpecBuilder.() -> Unit
-    ): ParameterSpec = buildParameterSpec(type, name, *modifiers, builderAction = builderAction).also(::plusAssign)
+    ): Boolean = add(buildParameterSpec(type, name, *modifiers, builderAction = builderAction))
 
-    /** Add parameter from [type] and [name] with custom initialization [builderAction], returning the parameter added. */
+    /** Add parameter from [KClass] with custom initialization [builderAction]. */
     inline fun add(
         type: KClass<*>,
         name: String,
         vararg modifiers: Modifier,
         builderAction: ParameterSpecBuilder.() -> Unit
-    ): ParameterSpec = buildParameterSpec(type, name, *modifiers, builderAction = builderAction).also(::plusAssign)
+    ): Boolean = add(buildParameterSpec(type, name, *modifiers, builderAction = builderAction))
 
-    /** Add parameter from reified [T] and [name] with custom initialization [builderAction], returning the parameter added. */
+    /** Add parameter from [T] with custom initialization [builderAction]. */
     inline fun <reified T> add(
         name: String,
         vararg modifiers: Modifier,
         builderAction: ParameterSpecBuilder.() -> Unit
-    ): ParameterSpec = buildParameterSpec<T>(name, *modifiers, builderAction = builderAction).also(::plusAssign)
+    ): Boolean = add(buildParameterSpec<T>(name, *modifiers, builderAction = builderAction))
 
     /** Convenient method to add parameter with operator function. */
     operator fun set(name: String, type: TypeName): Unit = plusAssign(parameterSpecOf(type, name))
@@ -80,25 +80,25 @@ class ParameterSpecListScope(actualList: MutableList<ParameterSpec>) : Parameter
         type: TypeName,
         vararg modifiers: Modifier,
         builderAction: ParameterSpecBuilder.() -> Unit
-    ): ParameterSpec = add(type, this, *modifiers, builderAction = builderAction)
+    ): Boolean = add(type, this, *modifiers, builderAction = builderAction)
 
     /** Convenient method to add parameter with receiver type. */
     inline operator fun String.invoke(
         type: Type,
         vararg modifiers: Modifier,
         builderAction: ParameterSpecBuilder.() -> Unit
-    ): ParameterSpec = add(type, this, *modifiers, builderAction = builderAction)
+    ): Boolean = add(type, this, *modifiers, builderAction = builderAction)
 
     /** Convenient method to add parameter with receiver type. */
     inline operator fun String.invoke(
         type: KClass<*>,
         vararg modifiers: Modifier,
         builderAction: ParameterSpecBuilder.() -> Unit
-    ): ParameterSpec = add(type, this, *modifiers, builderAction = builderAction)
+    ): Boolean = add(type, this, *modifiers, builderAction = builderAction)
 
     /** Convenient method to add parameter with receiver type. */
     inline operator fun <reified T> String.invoke(
         vararg modifiers: Modifier,
         builderAction: ParameterSpecBuilder.() -> Unit
-    ): ParameterSpec = add<T>(this, *modifiers, builderAction = builderAction)
+    ): Boolean = add<T>(this, *modifiers, builderAction = builderAction)
 }

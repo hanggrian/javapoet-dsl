@@ -2,7 +2,6 @@ package com.hendraanggrian.javapoet
 
 import com.hendraanggrian.javapoet.collections.MethodSpecListScope
 import com.squareup.javapoet.CodeBlock
-import com.squareup.javapoet.MethodSpec
 import java.util.Collections
 import java.util.Date
 import javax.lang.model.element.Modifier
@@ -520,24 +519,21 @@ class ReadmeTest {
     }
 
     @Test fun anonymousInnerClasses() {
-        lateinit var sortByLength: MethodSpec
-        buildClassTypeSpec("HelloWorld") {
-            sortByLength = methods.add("sortByLength") {
-                parameters.add(List::class.parameterizedBy(String::class), "strings")
-                appendln("%T.sort(%N, %L)", Collections::class, "strings", buildAnonymousTypeSpec("") {
-                    superinterfaces += Comparator::class.parameterizedBy(String::class)
-                    methods.add("compare") {
-                        annotations.add<Override>()
-                        addModifiers(Modifier.PUBLIC)
-                        parameters {
-                            add<String>("a")
-                            add<String>("b")
-                        }
-                        returns = INT
-                        appendln("return %N.length() - %N.length()", "a", "b")
+        val sortByLength = buildMethodSpec("sortByLength") {
+            parameters.add(List::class.parameterizedBy(String::class), "strings")
+            appendln("%T.sort(%N, %L)", Collections::class, "strings", buildAnonymousTypeSpec("") {
+                superinterfaces += Comparator::class.parameterizedBy(String::class)
+                methods.add("compare") {
+                    annotations.add<Override>()
+                    addModifiers(Modifier.PUBLIC)
+                    parameters {
+                        add<String>("a")
+                        add<String>("b")
                     }
-                })
-            }
+                    returns = INT
+                    appendln("return %N.length() - %N.length()", "a", "b")
+                }
+            })
         }
         assertEquals(
             """

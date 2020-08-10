@@ -37,7 +37,7 @@ class MethodSpecBuilderTest {
             addModifiers(Modifier.PUBLIC, Modifier.STATIC)
             returns = VOID
             parameters.add<Array<String>>("param")
-            varargs = true
+            isVarargs = true
             addException<IOException>()
             addComment("Some comment")
             append("doSomething()")
@@ -60,7 +60,7 @@ class MethodSpecBuilderTest {
             parameters {
                 add<Array<String>>("param")
             }
-            varargs = true
+            isVarargs = true
             addException<IOException>()
             addComment("Some comment")
             append("doSomething()")

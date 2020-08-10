@@ -12,22 +12,22 @@ import com.squareup.javapoet.MethodSpec
 open class MethodSpecList internal constructor(actualList: MutableList<MethodSpec>) :
     MutableList<MethodSpec> by actualList {
 
-    /** Add method from [name], returning the method added. */
-    fun add(name: String): MethodSpec = methodSpecOf(name).also(::plusAssign)
+    /** Add method from name. */
+    fun add(name: String): Boolean = add(methodSpecOf(name))
 
-    /** Add constructor method, returning the method added. */
-    fun addConstructor(): MethodSpec = emptyConstructorMethodSpec().also(::plusAssign)
+    /** Add constructor method. */
+    fun addConstructor(): Boolean = add(emptyConstructorMethodSpec())
 
-    /** Add method from [name] with custom initialization [builderAction], returning the method added. */
+    /** Add method from name with custom initialization [builderAction]. */
     inline fun add(
         name: String,
         builderAction: MethodSpecBuilder.() -> Unit
-    ): MethodSpec = buildMethodSpec(name, builderAction).also(::plusAssign)
+    ): Boolean = add(buildMethodSpec(name, builderAction))
 
-    /** Add constructor method with custom initialization [builderAction], returning the method added. */
+    /** Add constructor method with custom initialization [builderAction]. */
     inline fun addConstructor(
         builderAction: MethodSpecBuilder.() -> Unit
-    ): MethodSpec = buildConstructorMethodSpec(builderAction).also(::plusAssign)
+    ): Boolean = add(buildConstructorMethodSpec(builderAction))
 }
 
 /** Receiver for the `methods` function type providing an extended set of operators for the configuration. */
@@ -37,5 +37,5 @@ class MethodSpecListScope(actualList: MutableList<MethodSpec>) : MethodSpecList(
     /** Convenient method to add method with receiver type. */
     inline operator fun String.invoke(
         builderAction: MethodSpecBuilder.() -> Unit
-    ): MethodSpec = add(this, builderAction)
+    ): Boolean = add(this, builderAction)
 }

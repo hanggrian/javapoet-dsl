@@ -68,10 +68,10 @@ class JavaFileBuilder(private val packageName: String) : TypeSpecList(ArrayList(
     }
 
     /** Add static import. */
-    fun addStaticImport(type: KClass<*>, vararg names: String) = addStaticImport(type.java, *names)
+    fun addStaticImport(type: KClass<*>, vararg names: String): Unit = addStaticImport(type.java, *names)
 
     /** Add static import with reified function. */
-    inline fun <reified T> addStaticImport(vararg names: String) = addStaticImport(T::class, *names)
+    inline fun <reified T> addStaticImport(vararg names: String): Unit = addStaticImport(T::class.java, *names)
 
     /** Set to true to skip java imports. */
     var skipJavaLangImports: Boolean
@@ -96,8 +96,8 @@ class JavaFileBuilder(private val packageName: String) : TypeSpecList(ArrayList(
 
     /** Returns native spec. */
     fun build(): JavaFile {
-        check(isNotEmpty()) { "No type found in this JavaFile." }
-        check(size == 1) { "Only 1 type is expected in JavaFile." }
+        check(isNotEmpty()) { "No type found in this JavaFile" }
+        check(size == 1) { "Only 1 type is expected in JavaFile" }
         return JavaFile.builder(packageName, first())
             .apply {
                 comments?.forEach { (format, args) -> addFileComment(format, *args) }
