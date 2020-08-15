@@ -1,7 +1,7 @@
 package com.hendraanggrian.javapoet.collections
 
-import com.hendraanggrian.javapoet.JavapoetDslMarker
 import com.hendraanggrian.javapoet.ParameterSpecBuilder
+import com.hendraanggrian.javapoet.SpecDslMarker
 import com.hendraanggrian.javapoet.buildParameterSpec
 import com.hendraanggrian.javapoet.parameterSpecOf
 import com.squareup.javapoet.ParameterSpec
@@ -72,7 +72,7 @@ open class ParameterSpecList internal constructor(actualList: MutableList<Parame
 }
 
 /** Receiver for the `parameters` function type providing an extended set of operators for the configuration. */
-@JavapoetDslMarker
+@SpecDslMarker
 class ParameterSpecListScope(actualList: MutableList<ParameterSpec>) : ParameterSpecList(actualList) {
 
     /** Convenient method to add parameter with receiver type. */

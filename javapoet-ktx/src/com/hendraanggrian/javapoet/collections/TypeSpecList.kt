@@ -1,6 +1,6 @@
 package com.hendraanggrian.javapoet.collections
 
-import com.hendraanggrian.javapoet.JavapoetDslMarker
+import com.hendraanggrian.javapoet.SpecDslMarker
 import com.hendraanggrian.javapoet.TypeSpecBuilder
 import com.hendraanggrian.javapoet.annotationTypeSpecOf
 import com.hendraanggrian.javapoet.anonymousTypeSpecOf
@@ -116,7 +116,7 @@ open class TypeSpecList internal constructor(actualList: MutableList<TypeSpec>) 
 }
 
 /** Receiver for the `types` function type providing an extended set of operators for the configuration. */
-@JavapoetDslMarker
+@SpecDslMarker
 class TypeSpecListScope(actualList: TypeSpecList) : TypeSpecList(actualList) {
 
     /** Convenient method to add class with receiver type. */

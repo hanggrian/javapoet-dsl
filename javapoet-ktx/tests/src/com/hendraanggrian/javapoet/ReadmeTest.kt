@@ -33,7 +33,7 @@ class ReadmeTest {
                         addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                         returns = VOID
                         parameters.add<Array<String>>("args")
-                        appendln("%T.out.println(%S)", System::class, "Hello, JavaPoet!")
+                        appendLine("%T.out.println(%S)", System::class, "Hello, JavaPoet!")
                     }
                 }
             }.toString()
@@ -70,9 +70,9 @@ class ReadmeTest {
             expected,
             buildMethodSpec("main") {
                 returns = VOID
-                appendln("int total = 0")
+                appendLine("int total = 0")
                 beginFlow("for (int i = 0; i < 10; i++)")
-                appendln("total += i")
+                appendLine("total += i")
                 endFlow()
             }.toString()
         )
@@ -89,11 +89,11 @@ class ReadmeTest {
             """.trimIndent(),
             buildMethodSpec("multiply10to20") {
                 returns = INT
-                appendln("int result = 1")
+                appendLine("int result = 1")
                 beginFlow("for (int i = 10; i < 20; i++)")
-                appendln("result = result * i")
+                appendLine("result = result * i")
                 endFlow()
-                appendln("return result")
+                appendLine("return result")
             }.toString()
         )
         assertEquals(
@@ -111,13 +111,13 @@ class ReadmeTest {
 
             """.trimIndent(),
             buildMethodSpec("main") {
-                appendln("long now = %T.currentTimeMillis()", System::class)
+                appendLine("long now = %T.currentTimeMillis()", System::class)
                 beginFlow("if (%T.currentTimeMillis() < now)", System::class)
-                appendln("%T.out.println(%S)", System::class, "Time travelling, woo hoo!")
+                appendLine("%T.out.println(%S)", System::class, "Time travelling, woo hoo!")
                 nextFlow("else if (%T.currentTimeMillis() == now)", System::class)
-                appendln("%T.out.println(%S)", System::class, "Time stood still!")
+                appendLine("%T.out.println(%S)", System::class, "Time stood still!")
                 nextFlow("else")
-                appendln("%T.out.println(%S)", System::class, "Ok, time still moving forward")
+                appendLine("%T.out.println(%S)", System::class, "Ok, time still moving forward")
                 endFlow()
             }.toString()
         )
@@ -134,9 +134,9 @@ class ReadmeTest {
             """.trimIndent(),
             buildMethodSpec("main") {
                 beginFlow("try")
-                appendln("throw new Exception(%S)", "Failed")
+                appendLine("throw new Exception(%S)", "Failed")
                 nextFlow("catch (%T e)", Exception::class)
-                appendln("throw new %T(e)", RuntimeException::class)
+                appendLine("throw new %T(e)", RuntimeException::class)
                 endFlow()
             }.toString()
         )
@@ -156,11 +156,11 @@ class ReadmeTest {
             """.trimIndent(),
             buildMethodSpec("computeRange") {
                 returns = INT
-                appendln("int result = 0")
+                appendLine("int result = 0")
                 beginFlow("for (int i = %L; i < %L; i++)", 0, 10)
-                appendln("result = result %L i", "+=")
+                appendLine("result = result %L i", "+=")
                 endFlow()
-                appendln("return result")
+                appendLine("return result")
             }.toString()
         )
     }
@@ -208,7 +208,7 @@ class ReadmeTest {
                 addModifiers(Modifier.PUBLIC, Modifier.FINAL)
                 methods.add("today") {
                     returns<Date>()
-                    appendln("return new %T()", Date::class)
+                    appendLine("return new %T()", Date::class)
                 }
             }.toString()
         )
@@ -226,7 +226,7 @@ class ReadmeTest {
                 methods.add("tomorrow") {
                     val hoverboard = "com.mattel".classOf("Hoverboard")
                     returns = hoverboard
-                    appendln("return new %T()", hoverboard)
+                    appendLine("return new %T()", hoverboard)
                 }
             }.toString()
         )
@@ -250,11 +250,11 @@ class ReadmeTest {
                     val arrayList = "java.util".classOf("ArrayList")
                     val listOfHoverboards = "java.util".classOf("List").parameterizedBy(hoverboard)
                     returns = listOfHoverboards
-                    appendln("%T result = new %T<>()", listOfHoverboards, arrayList)
-                    appendln("result.add(new %T())", hoverboard)
-                    appendln("result.add(new %T())", hoverboard)
-                    appendln("result.add(new %T())", hoverboard)
-                    appendln("return result")
+                    appendLine("%T result = new %T<>()", listOfHoverboards, arrayList)
+                    appendLine("result.add(new %T())", hoverboard)
+                    appendLine("result.add(new %T())", hoverboard)
+                    appendLine("result.add(new %T())", hoverboard)
+                    appendLine("return result")
                 }
             }.toString()
         )
@@ -294,12 +294,12 @@ class ReadmeTest {
                         val arrayList = "java.util".classOf("ArrayList")
                         val listOfHoverboards = "java.util".classOf("List").parameterizedBy(hoverboard)
                         returns = listOfHoverboards
-                        appendln("%T result = new %T<>()", listOfHoverboards, arrayList)
-                        appendln("result.add(%T.createNimbus(2000))", hoverboard)
-                        appendln("result.add(%T.createNimbus(\"2001\"))", hoverboard)
-                        appendln("result.add(%T.createNimbus(%T.THUNDERBOLT))", hoverboard, namedBoards)
-                        appendln("%T.sort(result)", Collections::class)
-                        appendln("return result.isEmpty() ? %T.emptyList() : result", Collections::class)
+                        appendLine("%T result = new %T<>()", listOfHoverboards, arrayList)
+                        appendLine("result.add(%T.createNimbus(2000))", hoverboard)
+                        appendLine("result.add(%T.createNimbus(\"2001\"))", hoverboard)
+                        appendLine("result.add(%T.createNimbus(%T.THUNDERBOLT))", hoverboard, namedBoards)
+                        appendLine("%T.sort(result)", Collections::class)
+                        appendLine("return result.isEmpty() ? %T.emptyList() : result", Collections::class)
                     }
                 }
             }.toString()
@@ -311,16 +311,16 @@ class ReadmeTest {
             addModifiers(Modifier.PUBLIC)
             parameters.add(INT, "i")
             returns = CHAR
-            appendln("return (char) (i < 10 ? i + '0' : i - 10 + 'a')")
+            appendLine("return (char) (i < 10 ? i + '0' : i - 10 + 'a')")
         }
         val byteToHex = buildMethodSpec("byteToHex") {
             addModifiers(Modifier.PUBLIC)
             parameters.add(INT, "b")
             returns<String>()
-            appendln("char[] result = new char[2]")
-            appendln("result[0] = %N((b >>> 4) & 0xf)", hexDigit)
-            appendln("result[1] = %N(b & 0xf)", hexDigit)
-            appendln("return new String(result)")
+            appendLine("char[] result = new char[2]")
+            appendLine("result[0] = %N((b >>> 4) & 0xf)", hexDigit)
+            appendLine("result[1] = %N(b & 0xf)", hexDigit)
+            appendLine("return new String(result)")
         }
         assertEquals(
             """
@@ -386,7 +386,7 @@ class ReadmeTest {
                 methods.addConstructor {
                     addModifiers(Modifier.PUBLIC)
                     parameters.add<String>("greeting")
-                    appendln("this.%N = %N", "greeting", "greeting")
+                    appendLine("this.%N = %N", "greeting", "greeting")
                 }
             }.toString()
         )
@@ -503,7 +503,7 @@ class ReadmeTest {
                     methods.add("toString") {
                         annotations.add<Override>()
                         addModifiers(Modifier.PUBLIC)
-                        appendln("return %S", "avalanche!")
+                        appendLine("return %S", "avalanche!")
                         returns<String>()
                     }
                 })
@@ -512,7 +512,7 @@ class ReadmeTest {
                 fields.add<String>("handsign", Modifier.PRIVATE, Modifier.FINAL)
                 methods.addConstructor {
                     parameters.add<String>("handsign")
-                    appendln("this.%N = %N", "handsign", "handsign")
+                    appendLine("this.%N = %N", "handsign", "handsign")
                 }
             }.toString()
         )
@@ -521,7 +521,7 @@ class ReadmeTest {
     @Test fun anonymousInnerClasses() {
         val sortByLength = buildMethodSpec("sortByLength") {
             parameters.add(List::class.parameterizedBy(String::class), "strings")
-            appendln("%T.sort(%N, %L)", Collections::class, "strings", buildAnonymousTypeSpec("") {
+            appendLine("%T.sort(%N, %L)", Collections::class, "strings", buildAnonymousTypeSpec("") {
                 superinterfaces += Comparator::class.parameterizedBy(String::class)
                 methods.add("compare") {
                     annotations.add<Override>()
@@ -531,7 +531,7 @@ class ReadmeTest {
                         add<String>("b")
                     }
                     returns = INT
-                    appendln("return %N.length() - %N.length()", "a", "b")
+                    appendLine("return %N.length() - %N.length()", "a", "b")
                 }
             })
         }
@@ -564,7 +564,7 @@ class ReadmeTest {
                 annotations.add<Override>()
                 returns<String>()
                 addModifiers(Modifier.PUBLIC)
-                appendln("return %S", "Hoverboard")
+                appendLine("return %S", "Hoverboard")
             }.toString()
         )
         assertEquals(
@@ -631,10 +631,10 @@ class ReadmeTest {
             """.trimIndent(),
             buildMethodSpec("dismiss") {
                 javadoc {
-                    appendln("Hides {@code message} from the caller's history. Other")
-                    appendln("participants in the conversation will continue to see the")
-                    appendln("message in their own history unless they also delete it.")
-                    appendln()
+                    appendLine("Hides {@code message} from the caller's history. Other")
+                    appendLine("participants in the conversation will continue to see the")
+                    appendLine("message in their own history unless they also delete it.")
+                    appendLine()
                     append(
                         "<p>Use {@link #delete(%T)} to delete the entire\n"
                             + "conversation for all participants.\n", Conversation::class
@@ -649,7 +649,7 @@ class ReadmeTest {
     private fun MethodSpecListScope.whatsMyName(name: String) {
         name {
             returns<String>()
-            appendln("return %S", name)
+            appendLine("return %S", name)
         }
     }
 

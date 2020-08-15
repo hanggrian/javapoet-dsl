@@ -101,7 +101,7 @@ class JavaFileTest {
             buildJavaFile("com.example") {
                 addClass("MyClass") {
                     methods.addConstructor {
-                        appendln("%T s = new %T", String::class, String::class)
+                        appendLine("%T s = new %T", String::class, String::class)
                     }
                 }
                 skipJavaLangImports = true

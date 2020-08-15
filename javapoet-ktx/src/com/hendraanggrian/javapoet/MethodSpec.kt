@@ -44,7 +44,7 @@ inline fun MethodSpec.Builder.build(
 ): MethodSpec = MethodSpecBuilder(this).apply(builderAction).build()
 
 /** Wrapper of [MethodSpec.Builder], providing DSL support as a replacement to Java builder. */
-@JavapoetDslMarker
+@SpecDslMarker
 class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlockContainer() {
 
     /** Modifiers of this method. */
@@ -68,15 +68,15 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
     }
 
     /** Configures javadoc of this method. */
-    inline fun javadoc(configuration: JavadocContainerScope.() -> Unit): Unit =
-        JavadocContainerScope(javadoc).configuration()
+    inline fun javadoc(builderAction: JavadocContainerScope.() -> Unit): Unit =
+        JavadocContainerScope(javadoc).builderAction()
 
     /** Annotations of this method. */
     val annotations: AnnotationSpecList = AnnotationSpecList(nativeBuilder.annotations)
 
     /** Configures annotations of this method. */
-    inline fun annotations(configuration: AnnotationSpecListScope.() -> Unit): Unit =
-        AnnotationSpecListScope(annotations).configuration()
+    inline fun annotations(builderAction: AnnotationSpecListScope.() -> Unit): Unit =
+        AnnotationSpecListScope(annotations).builderAction()
 
     /** Add field modifiers. */
     fun addModifiers(vararg modifiers: Modifier) {
@@ -115,8 +115,8 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
     val parameters: ParameterSpecList = ParameterSpecList(nativeBuilder.parameters)
 
     /** Configures parameters of this method. */
-    inline fun parameters(configuration: ParameterSpecListScope.() -> Unit): Unit =
-        ParameterSpecListScope(parameters).configuration()
+    inline fun parameters(builderAction: ParameterSpecListScope.() -> Unit): Unit =
+        ParameterSpecListScope(parameters).builderAction()
 
     /** Add vararg keyword to array type parameter. */
     var isVarargs: Boolean
@@ -185,7 +185,8 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
         nativeBuilder.beginControlFlow(code)
     }
 
-    inline fun beginFlow(builderAction: CodeBlockBuilder.() -> Unit): Unit = beginFlow(buildCodeBlock(builderAction))
+    inline fun beginFlow(builderAction: CodeBlockBuilder.() -> Unit): Unit =
+        beginFlow(buildCodeBlock(builderAction))
 
     override fun nextFlow(flow: String, vararg args: Any): Unit =
         flow.formatWith(args) { s, array -> nativeBuilder.nextControlFlow(s, *array) }
@@ -194,7 +195,8 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
         nativeBuilder.nextControlFlow(code)
     }
 
-    inline fun nextFlow(builderAction: CodeBlockBuilder.() -> Unit): Unit = nextFlow(buildCodeBlock(builderAction))
+    inline fun nextFlow(builderAction: CodeBlockBuilder.() -> Unit): Unit =
+        nextFlow(buildCodeBlock(builderAction))
 
     override fun endFlow() {
         nativeBuilder.endControlFlow()
@@ -207,12 +209,13 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
         nativeBuilder.endControlFlow(code)
     }
 
-    inline fun endFlow(builderAction: CodeBlockBuilder.() -> Unit): Unit = endFlow(buildCodeBlock(builderAction))
+    inline fun endFlow(builderAction: CodeBlockBuilder.() -> Unit): Unit =
+        endFlow(buildCodeBlock(builderAction))
 
-    override fun appendln(format: String, vararg args: Any): Unit =
+    override fun appendLine(format: String, vararg args: Any): Unit =
         format.formatWith(args) { s, array -> nativeBuilder.addStatement(s, *array) }
 
-    override fun appendln(code: CodeBlock) {
+    override fun appendLine(code: CodeBlock) {
         nativeBuilder.addStatement(code)
     }
 

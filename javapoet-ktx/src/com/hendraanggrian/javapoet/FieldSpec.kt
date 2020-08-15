@@ -76,7 +76,7 @@ inline fun FieldSpec.Builder.build(
 ): FieldSpec = FieldSpecBuilder(this).apply(builderAction).build()
 
 /** Wrapper of [FieldSpec.Builder], providing DSL support as a replacement to Java builder. */
-@JavapoetDslMarker
+@SpecDslMarker
 class FieldSpecBuilder(private val nativeBuilder: FieldSpec.Builder) {
 
     /** Modifiers of this field. */
@@ -93,15 +93,15 @@ class FieldSpecBuilder(private val nativeBuilder: FieldSpec.Builder) {
     }
 
     /** Configures javadoc for this field. */
-    inline fun javadoc(configuration: JavadocContainerScope.() -> Unit): Unit =
-        JavadocContainerScope(javadoc).configuration()
+    inline fun javadoc(builderAction: JavadocContainerScope.() -> Unit): Unit =
+        JavadocContainerScope(javadoc).builderAction()
 
     /** Annotations of this field. */
     val annotations: AnnotationSpecList = AnnotationSpecList(nativeBuilder.annotations)
 
     /** Configures annotations for this field. */
-    inline fun annotations(configuration: AnnotationSpecListScope.() -> Unit): Unit =
-        AnnotationSpecListScope(annotations).configuration()
+    inline fun annotations(builderAction: AnnotationSpecListScope.() -> Unit): Unit =
+        AnnotationSpecListScope(annotations).builderAction()
 
     /** Add field modifiers. */
     fun addModifiers(vararg modifiers: Modifier) {

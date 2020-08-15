@@ -80,7 +80,7 @@ inline fun ParameterSpec.Builder.build(
 ): ParameterSpec = ParameterSpecBuilder(this).apply(builderAction).build()
 
 /** Wrapper of [ParameterSpec.Builder], providing DSL support as a replacement to Java builder. */
-@JavapoetDslMarker
+@SpecDslMarker
 class ParameterSpecBuilder(private val nativeBuilder: ParameterSpec.Builder) {
 
     /** Modifiers of this parameter. */
@@ -97,15 +97,15 @@ class ParameterSpecBuilder(private val nativeBuilder: ParameterSpec.Builder) {
     }
 
     /** Configures javadoc for this parameter. */
-    inline fun javadoc(configuration: JavadocContainerScope.() -> Unit): Unit =
-        JavadocContainerScope(javadoc).configuration()
+    inline fun javadoc(builderAction: JavadocContainerScope.() -> Unit): Unit =
+        JavadocContainerScope(javadoc).builderAction()
 
     /** Annotations of this parameter. */
     val annotations: AnnotationSpecList = AnnotationSpecList(nativeBuilder.annotations)
 
     /** Configures annotations of this parameter. */
-    inline fun annotations(configuration: AnnotationSpecListScope.() -> Unit): Unit =
-        AnnotationSpecListScope(annotations).configuration()
+    inline fun annotations(builderAction: AnnotationSpecListScope.() -> Unit): Unit =
+        AnnotationSpecListScope(annotations).builderAction()
 
     /** Add parameter modifiers. */
     fun addModifiers(vararg modifiers: Modifier) {

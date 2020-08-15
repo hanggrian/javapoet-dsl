@@ -1,7 +1,7 @@
 package com.hendraanggrian.javapoet.collections
 
 import com.hendraanggrian.javapoet.AnnotationSpecBuilder
-import com.hendraanggrian.javapoet.JavapoetDslMarker
+import com.hendraanggrian.javapoet.SpecDslMarker
 import com.hendraanggrian.javapoet.annotationSpecOf
 import com.hendraanggrian.javapoet.buildAnnotationSpec
 import com.squareup.javapoet.AnnotationSpec
@@ -58,7 +58,7 @@ open class AnnotationSpecList internal constructor(actualList: MutableList<Annot
 }
 
 /** Receiver for the `annotations` function type providing an extended set of operators for the configuration. */
-@JavapoetDslMarker
+@SpecDslMarker
 class AnnotationSpecListScope(actualList: MutableList<AnnotationSpec>) : AnnotationSpecList(actualList) {
 
     /** Convenient method to add annotation with receiver type. */
