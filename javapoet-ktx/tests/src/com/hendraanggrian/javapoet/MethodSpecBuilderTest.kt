@@ -18,7 +18,7 @@ class MethodSpecBuilderTest {
                 .build()
         )
         .addAnnotation(AnnotationSpec.builder(Deprecated::class.java).build())
-        .addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+        .addModifiers(PUBLIC, STATIC)
         .returns(VOID)
         .addParameter(ParameterSpec.builder(Array<String>::class.java, "param").build())
         .varargs(true)
@@ -34,7 +34,7 @@ class MethodSpecBuilderTest {
                 append("secondJavadoc")
             }
             annotations.add<Deprecated>()
-            addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+            addModifiers(PUBLIC, STATIC)
             returns = VOID
             parameters.add<Array<String>>("param")
             isVarargs = true
@@ -55,7 +55,7 @@ class MethodSpecBuilderTest {
             annotations {
                 add<Deprecated>()
             }
-            addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+            addModifiers(PUBLIC, STATIC)
             returns = VOID
             parameters {
                 add<Array<String>>("param")

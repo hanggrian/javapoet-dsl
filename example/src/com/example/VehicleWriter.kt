@@ -1,10 +1,11 @@
 package com.example
 
+import com.hendraanggrian.javapoet.ABSTRACT
 import com.hendraanggrian.javapoet.INT
+import com.hendraanggrian.javapoet.PUBLIC
 import com.hendraanggrian.javapoet.buildJavaFile
 import com.hendraanggrian.javapoet.classOf
 import java.nio.file.Paths
-import javax.lang.model.element.Modifier
 
 class VehicleWriter {
 
@@ -25,11 +26,11 @@ class VehicleWriter {
             addInterface("Vehicle") {
                 methods {
                     "getName" {
-                        addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
+                        addModifiers(PUBLIC, ABSTRACT)
                         returns<String>()
                     }
                     "getWheelCount" {
-                        addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
+                        addModifiers(PUBLIC, ABSTRACT)
                         returns = INT
                     }
                 }
@@ -43,13 +44,13 @@ class VehicleWriter {
                 superinterfaces += VEHICLE_NAME
                 methods {
                     "getName" {
-                        addModifiers(Modifier.PUBLIC)
+                        addModifiers(PUBLIC)
                         returns<String>()
                         annotations.add<Override>()
                         appendLine("return %S", name)
                     }
                     "getWheelCount" {
-                        addModifiers(Modifier.PUBLIC)
+                        addModifiers(PUBLIC)
                         returns = INT
                         annotations.add<Override>()
                         appendLine("return %L", wheelCount)

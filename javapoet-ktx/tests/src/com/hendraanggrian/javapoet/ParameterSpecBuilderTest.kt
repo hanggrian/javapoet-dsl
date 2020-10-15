@@ -9,13 +9,13 @@ import kotlin.test.assertEquals
 class ParameterSpecBuilderTest {
     private val expected = ParameterSpec.builder(String::class.java, "name")
         .addAnnotation(AnnotationSpec.builder(Deprecated::class.java).build())
-        .addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+        .addModifiers(PUBLIC, FINAL)
         .build()
 
     @Test fun simple() {
         assertEquals(expected, buildParameterSpec<String>("name") {
             annotations.add<Deprecated>()
-            addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+            addModifiers(PUBLIC, FINAL)
         })
     }
 
@@ -24,7 +24,7 @@ class ParameterSpecBuilderTest {
             annotations {
                 add<Deprecated>()
             }
-            addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+            addModifiers(PUBLIC, FINAL)
         })
     }
 }

@@ -4,7 +4,6 @@ import com.hendraanggrian.javapoet.collections.MethodSpecListScope
 import com.squareup.javapoet.CodeBlock
 import java.util.Collections
 import java.util.Date
-import javax.lang.model.element.Modifier
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -28,9 +27,9 @@ class ReadmeTest {
             """.trimIndent(),
             buildJavaFile("com.example.helloworld") {
                 addClass("HelloWorld") {
-                    addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                    addModifiers(PUBLIC, FINAL)
                     methods.add("main") {
-                        addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                        addModifiers(PUBLIC, STATIC)
                         returns = VOID
                         parameters.add<Array<String>>("args")
                         appendLine("%T.out.println(%S)", System::class, "Hello, JavaPoet!")
@@ -71,9 +70,9 @@ class ReadmeTest {
             buildMethodSpec("main") {
                 returns = VOID
                 appendLine("int total = 0")
-                beginFlow("for (int i = 0; i < 10; i++)")
-                appendLine("total += i")
-                endFlow()
+                appendFlow("for (int i = 0; i < 10; i++)") {
+                    appendLine("total += i")
+                }
             }.toString()
         )
         assertEquals(
@@ -90,9 +89,9 @@ class ReadmeTest {
             buildMethodSpec("multiply10to20") {
                 returns = INT
                 appendLine("int result = 1")
-                beginFlow("for (int i = 10; i < 20; i++)")
-                appendLine("result = result * i")
-                endFlow()
+                appendFlow("for (int i = 10; i < 20; i++)") {
+                    appendLine("result = result * i")
+                }
                 appendLine("return result")
             }.toString()
         )
@@ -112,13 +111,13 @@ class ReadmeTest {
             """.trimIndent(),
             buildMethodSpec("main") {
                 appendLine("long now = %T.currentTimeMillis()", System::class)
-                beginFlow("if (%T.currentTimeMillis() < now)", System::class)
-                appendLine("%T.out.println(%S)", System::class, "Time travelling, woo hoo!")
-                nextFlow("else if (%T.currentTimeMillis() == now)", System::class)
-                appendLine("%T.out.println(%S)", System::class, "Time stood still!")
-                nextFlow("else")
-                appendLine("%T.out.println(%S)", System::class, "Ok, time still moving forward")
-                endFlow()
+                appendFlow("if (%T.currentTimeMillis() < now)", System::class) {
+                    appendLine("%T.out.println(%S)", System::class, "Time travelling, woo hoo!")
+                    nextFlow("else if (%T.currentTimeMillis() == now)", System::class)
+                    appendLine("%T.out.println(%S)", System::class, "Time stood still!")
+                    nextFlow("else")
+                    appendLine("%T.out.println(%S)", System::class, "Ok, time still moving forward")
+                }
             }.toString()
         )
         assertEquals(
@@ -133,11 +132,11 @@ class ReadmeTest {
                 
             """.trimIndent(),
             buildMethodSpec("main") {
-                beginFlow("try")
-                appendLine("throw new Exception(%S)", "Failed")
-                nextFlow("catch (%T e)", Exception::class)
-                appendLine("throw new %T(e)", RuntimeException::class)
-                endFlow()
+                appendFlow("try") {
+                    appendLine("throw new Exception(%S)", "Failed")
+                    nextFlow("catch (%T e)", Exception::class)
+                    appendLine("throw new %T(e)", RuntimeException::class)
+                }
             }.toString()
         )
     }
@@ -157,9 +156,9 @@ class ReadmeTest {
             buildMethodSpec("computeRange") {
                 returns = INT
                 appendLine("int result = 0")
-                beginFlow("for (int i = %L; i < %L; i++)", 0, 10)
-                appendLine("result = result %L i", "+=")
-                endFlow()
+                appendFlow("for (int i = %L; i < %L; i++)", 0, 10) {
+                    appendLine("result = result %L i", "+=")
+                }
                 appendLine("return result")
             }.toString()
         )
@@ -184,7 +183,7 @@ class ReadmeTest {
 
             """.trimIndent(),
             buildClassTypeSpec("HelloWorld") {
-                addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                addModifiers(PUBLIC, FINAL)
                 methods {
                     whatsMyName("slimShady")
                     whatsMyName("eminem")
@@ -205,7 +204,7 @@ class ReadmeTest {
 
             """.trimIndent(),
             buildClassTypeSpec("HelloWorld") {
-                addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                addModifiers(PUBLIC, FINAL)
                 methods.add("today") {
                     returns<Date>()
                     appendLine("return new %T()", Date::class)
@@ -222,7 +221,7 @@ class ReadmeTest {
 
             """.trimIndent(),
             buildClassTypeSpec("HelloWorld") {
-                addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                addModifiers(PUBLIC, FINAL)
                 methods.add("tomorrow") {
                     val hoverboard = "com.mattel".classOf("Hoverboard")
                     returns = hoverboard
@@ -244,7 +243,7 @@ class ReadmeTest {
 
             """.trimIndent(),
             buildClassTypeSpec("HelloWorld") {
-                addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                addModifiers(PUBLIC, FINAL)
                 methods.add("beyond") {
                     val hoverboard = "com.mattel".classOf("Hoverboard")
                     val arrayList = "java.util".classOf("ArrayList")
@@ -289,7 +288,7 @@ class ReadmeTest {
                 addStaticImport(namedBoards, "*")
                 addStaticImport<Collections>("*")
                 addClass("HelloWorld") {
-                    addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+                    addModifiers(PUBLIC, FINAL)
                     methods.add("beyond") {
                         val arrayList = "java.util".classOf("ArrayList")
                         val listOfHoverboards = "java.util".classOf("List").parameterizedBy(hoverboard)
@@ -308,13 +307,13 @@ class ReadmeTest {
 
     @Test fun `$NForNames`() {
         val hexDigit = buildMethodSpec("hexDigit") {
-            addModifiers(Modifier.PUBLIC)
+            addModifiers(PUBLIC)
             parameters.add(INT, "i")
             returns = CHAR
             appendLine("return (char) (i < 10 ? i + '0' : i - 10 + 'a')")
         }
         val byteToHex = buildMethodSpec("byteToHex") {
-            addModifiers(Modifier.PUBLIC)
+            addModifiers(PUBLIC)
             parameters.add(INT, "b")
             returns<String>()
             appendLine("char[] result = new char[2]")
@@ -360,9 +359,9 @@ class ReadmeTest {
                 
             """.trimIndent(),
             buildClassTypeSpec("HelloWorld") {
-                addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
+                addModifiers(PUBLIC, ABSTRACT)
                 methods.add("flux") {
-                    addModifiers(Modifier.PROTECTED, Modifier.ABSTRACT)
+                    addModifiers(PROTECTED, ABSTRACT)
                 }
             }.toString()
         )
@@ -381,10 +380,10 @@ class ReadmeTest {
                 
             """.trimIndent(),
             buildClassTypeSpec("HelloWorld") {
-                addModifiers(Modifier.PUBLIC)
-                fields.add<String>("greeting", Modifier.PRIVATE, Modifier.FINAL)
+                addModifiers(PUBLIC)
+                fields.add<String>("greeting", PRIVATE, FINAL)
                 methods.addConstructor {
-                    addModifiers(Modifier.PUBLIC)
+                    addModifiers(PUBLIC)
                     parameters.add<String>("greeting")
                     appendLine("this.%N = %N", "greeting", "greeting")
                 }
@@ -401,8 +400,8 @@ class ReadmeTest {
             """.trimIndent(),
             buildMethodSpec("welcomeOverlords") {
                 parameters {
-                    add<String>("android", Modifier.FINAL)
-                    add<String>("robot", Modifier.FINAL)
+                    add<String>("android", FINAL)
+                    add<String>("robot", FINAL)
                 }
             }.toString()
         )
@@ -419,16 +418,16 @@ class ReadmeTest {
                 
             """.trimIndent(),
             buildClassTypeSpec("HelloWorld") {
-                addModifiers(Modifier.PUBLIC)
+                addModifiers(PUBLIC)
                 fields {
-                    add<String>("android", Modifier.PRIVATE, Modifier.FINAL)
-                    add<String>("robot", Modifier.PRIVATE, Modifier.FINAL)
+                    add<String>("android", PRIVATE, FINAL)
+                    add<String>("robot", PRIVATE, FINAL)
                 }
             }.toString()
         )
         assertEquals(
             "private final java.lang.String android = \"Lollipop v.\" + 5.0;\n",
-            buildFieldSpec<String>("android", Modifier.PRIVATE, Modifier.FINAL) {
+            buildFieldSpec<String>("android", PRIVATE, FINAL) {
                 initializer("\"Lollipop v.\" + 5.0")
             }.toString()
         )
@@ -445,12 +444,12 @@ class ReadmeTest {
                 
             """.trimIndent(),
             buildInterfaceTypeSpec("HelloWorld") {
-                addModifiers(Modifier.PUBLIC)
-                fields.add<String>("ONLY_THING_THAT_IS_CONSTANT", Modifier.PUBLIC, Modifier.STATIC, Modifier.FINAL) {
+                addModifiers(PUBLIC)
+                fields.add<String>("ONLY_THING_THAT_IS_CONSTANT", PUBLIC, STATIC, FINAL) {
                     initializer("%S", "change")
                 }
                 methods.add("beep") {
-                    addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
+                    addModifiers(PUBLIC, ABSTRACT)
                 }
             }.toString()
         )
@@ -469,7 +468,7 @@ class ReadmeTest {
                 
             """.trimIndent(),
             buildEnumTypeSpec("Roshambo") {
-                addModifiers(Modifier.PUBLIC)
+                addModifiers(PUBLIC)
                 addEnumConstant("ROCK")
                 addEnumConstant("SCISSORS")
                 addEnumConstant("PAPER")
@@ -498,18 +497,18 @@ class ReadmeTest {
                 
             """.trimIndent(),
             buildEnumTypeSpec("Roshambo") {
-                addModifiers(Modifier.PUBLIC)
+                addModifiers(PUBLIC)
                 addEnumConstant("ROCK", buildAnonymousTypeSpec("%S", "fist") {
                     methods.add("toString") {
                         annotations.add<Override>()
-                        addModifiers(Modifier.PUBLIC)
+                        addModifiers(PUBLIC)
                         appendLine("return %S", "avalanche!")
                         returns<String>()
                     }
                 })
                 addEnumConstant("SCISSORS", anonymousTypeSpecOf("%S", "peace"))
                 addEnumConstant("PAPER", anonymousTypeSpecOf("%S", "flat"))
-                fields.add<String>("handsign", Modifier.PRIVATE, Modifier.FINAL)
+                fields.add<String>("handsign", PRIVATE, FINAL)
                 methods.addConstructor {
                     parameters.add<String>("handsign")
                     appendLine("this.%N = %N", "handsign", "handsign")
@@ -525,7 +524,7 @@ class ReadmeTest {
                 superinterfaces += Comparator::class.parameterizedBy(String::class)
                 methods.add("compare") {
                     annotations.add<Override>()
-                    addModifiers(Modifier.PUBLIC)
+                    addModifiers(PUBLIC)
                     parameters {
                         add<String>("a")
                         add<String>("b")
@@ -563,7 +562,7 @@ class ReadmeTest {
             buildMethodSpec("toString") {
                 annotations.add<Override>()
                 returns<String>()
-                addModifiers(Modifier.PUBLIC)
+                addModifiers(PUBLIC)
                 appendLine("return %S", "Hoverboard")
             }.toString()
         )
@@ -578,7 +577,7 @@ class ReadmeTest {
                 
             """.trimIndent(),
             buildMethodSpec("recordEvent") {
-                addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
+                addModifiers(PUBLIC, ABSTRACT)
                 annotations.add<Headers> {
                     addMember("accept", "%S", "application/json; charset=utf-8")
                     addMember("userAgent", "%S", "Square Cash")
@@ -598,7 +597,7 @@ class ReadmeTest {
                 
             """.trimIndent(),
             buildMethodSpec("recordEvent") {
-                addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
+                addModifiers(PUBLIC, ABSTRACT)
                 annotations.add<HeaderList> {
                     addMember("value", "%L", buildAnnotationSpec<Header> {
                         addMember("name", "%S", "Accept")
@@ -640,7 +639,7 @@ class ReadmeTest {
                             + "conversation for all participants.\n", Conversation::class
                     )
                 }
-                addModifiers(Modifier.PUBLIC, Modifier.ABSTRACT)
+                addModifiers(PUBLIC, ABSTRACT)
                 parameters.add<Message>("message")
             }.toString()
         )
