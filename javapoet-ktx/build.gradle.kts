@@ -1,6 +1,8 @@
+import java.net.URL
+
 plugins {
     kotlin("jvm")
-    dokka()
+    dokka
     `bintray-release`
 }
 
@@ -15,12 +17,10 @@ sourceSets {
 val ktlint by configurations.registering
 
 dependencies {
-    compile(kotlin("stdlib", VERSION_KOTLIN))
-    compile(squareup("javapoet", VERSION_JAVAPOET))
-
+    api(kotlin("stdlib", VERSION_KOTLIN))
+    api(squareup("javapoet", VERSION_JAVAPOET))
     testImplementation(kotlin("test-junit", VERSION_KOTLIN))
     testImplementation(google("truth", "truth", VERSION_TRUTH))
-
     ktlint {
         invoke(ktlint())
     }
@@ -49,8 +49,17 @@ tasks {
         args("-F", "src/**/*.kt")
     }
 
-    "dokka"(org.jetbrains.dokka.gradle.DokkaTask::class) {
-        outputDirectory = "$buildDir/docs"
+    dokkaHtml.configure {
+        dokkaSourceSets {
+            named("main") {
+                displayName.set(RELEASE_ARTIFACT)
+                sourceLink {
+                    localDirectory.set(file("src"))
+                    remoteUrl.set(URL("$RELEASE_WEB/blob/master/$RELEASE_ARTIFACT"))
+                    remoteLineSuffix.set("#L")
+                }
+            }
+        }
         doFirst {
             file(outputDirectory).deleteRecursively()
             buildDir.resolve("gitPublish").deleteRecursively()
