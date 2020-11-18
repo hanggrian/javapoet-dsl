@@ -12,23 +12,26 @@ fun Iterable<CodeBlock>.join(separator: String): CodeBlock = CodeBlock.join(this
  * @see kotlin.text.format
  */
 fun codeBlockOf(format: String, vararg args: Any): CodeBlock =
-    format.formatWith(args) { s, array -> CodeBlock.of(s, *array) }
+    format.internalFormat(args) { s, array -> CodeBlock.of(s, *array) }
 
 /**
  * Builds new [CodeBlock],
- * by populating newly created [CodeBlockBuilder] using provided [builderAction] and then building it.
+ * by populating newly created [CodeBlockBuilder] using provided [builderAction].
  */
 inline fun buildCodeBlock(
     builderAction: CodeBlockBuilder.() -> Unit
-): CodeBlock = CodeBlock.builder().build(builderAction)
+): CodeBlock = CodeBlockBuilder(CodeBlock.builder()).apply(builderAction).build()
 
-/** Modify existing [CodeBlock.Builder] using provided [builderAction] and then building it. */
-inline fun CodeBlock.Builder.build(
+/** Modify existing [CodeBlock.Builder] using provided [builderAction]. */
+inline fun CodeBlock.Builder.edit(
     builderAction: CodeBlockBuilder.() -> Unit
-): CodeBlock = CodeBlockBuilder(this).apply(builderAction).build()
+): CodeBlock.Builder = CodeBlockBuilder(this).apply(builderAction).nativeBuilder
 
-/** Wrapper of [CodeBlock.Builder], providing DSL support as a replacement to Java builder. */
-class CodeBlockBuilder(private val nativeBuilder: CodeBlock.Builder) : CodeBlockContainer() {
+/**
+ * Wrapper of [CodeBlock.Builder], providing DSL support as a replacement to Java builder.
+ * @param nativeBuilder source builder.
+ */
+class CodeBlockBuilder(val nativeBuilder: CodeBlock.Builder) : CodeBlockContainer() {
 
     /** Returns true if this builder contains no code. */
     fun isEmpty(): Boolean = nativeBuilder.isEmpty
@@ -37,26 +40,26 @@ class CodeBlockBuilder(private val nativeBuilder: CodeBlock.Builder) : CodeBlock
     fun isNotEmpty(): Boolean = !nativeBuilder.isEmpty
 
     override fun appendNamed(format: String, args: Map<String, *>): Unit =
-        format.formatWith(args) { s, map -> nativeBuilder.addNamed(s, map) }
+        format.internalFormat(args) { s, map -> nativeBuilder.addNamed(s, map) }
 
     override fun append(format: String, vararg args: Any): Unit =
-        format.formatWith(args) { s, array -> nativeBuilder.add(s, *array) }
+        format.internalFormat(args) { s, array -> nativeBuilder.add(s, *array) }
 
     override fun beginFlow(flow: String, vararg args: Any): Unit =
-        flow.formatWith(args) { s, array -> nativeBuilder.beginControlFlow(s, *array) }
+        flow.internalFormat(args) { s, array -> nativeBuilder.beginControlFlow(s, *array) }
 
     override fun nextFlow(flow: String, vararg args: Any): Unit =
-        flow.formatWith(args) { s, array -> nativeBuilder.nextControlFlow(s, *array) }
+        flow.internalFormat(args) { s, array -> nativeBuilder.nextControlFlow(s, *array) }
 
     override fun endFlow() {
         nativeBuilder.endControlFlow()
     }
 
     override fun endFlow(flow: String, vararg args: Any): Unit =
-        flow.formatWith(args) { s, array -> nativeBuilder.endControlFlow(s, *array) }
+        flow.internalFormat(args) { s, array -> nativeBuilder.endControlFlow(s, *array) }
 
     override fun appendLine(format: String, vararg args: Any): Unit =
-        format.formatWith(args) { s, array -> nativeBuilder.addStatement(s, *array) }
+        format.internalFormat(args) { s, array -> nativeBuilder.addStatement(s, *array) }
 
     override fun appendLine(code: CodeBlock) {
         nativeBuilder.addStatement(code)

@@ -23,29 +23,32 @@ fun emptyConstructorMethodSpec(): MethodSpec = MethodSpecBuilder(MethodSpec.cons
 
 /**
  * Builds new [MethodSpec] with name,
- * by populating newly created [MethodSpecBuilder] using provided [builderAction] and then building it.
+ * by populating newly created [MethodSpecBuilder] using provided [builderAction].
  */
 inline fun buildMethodSpec(
     name: String,
     builderAction: MethodSpecBuilder.() -> Unit
-): MethodSpec = MethodSpec.methodBuilder(name).build(builderAction)
+): MethodSpec = MethodSpecBuilder(MethodSpec.methodBuilder(name)).apply(builderAction).build()
 
 /**
  * Builds new constructor [MethodSpec],
- * by populating newly created [MethodSpecBuilder] using provided [builderAction] and then building it.
+ * by populating newly created [MethodSpecBuilder] using provided [builderAction].
  */
 inline fun buildConstructorMethodSpec(
     builderAction: MethodSpecBuilder.() -> Unit
-): MethodSpec = MethodSpec.constructorBuilder().build(builderAction)
+): MethodSpec = MethodSpecBuilder(MethodSpec.constructorBuilder()).apply(builderAction).build()
 
-/** Modify existing [MethodSpec.Builder] using provided [builderAction] and then building it. */
-inline fun MethodSpec.Builder.build(
+/** Modify existing [MethodSpec.Builder] using provided [builderAction]. */
+inline fun MethodSpec.Builder.edit(
     builderAction: MethodSpecBuilder.() -> Unit
-): MethodSpec = MethodSpecBuilder(this).apply(builderAction).build()
+): MethodSpec.Builder = MethodSpecBuilder(this).apply(builderAction).nativeBuilder
 
-/** Wrapper of [MethodSpec.Builder], providing DSL support as a replacement to Java builder. */
+/**
+ * Wrapper of [MethodSpec.Builder], providing DSL support as a replacement to Java builder.
+ * @param nativeBuilder source builder.
+ */
 @SpecDslMarker
-class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlockContainer() {
+class MethodSpecBuilder(val nativeBuilder: MethodSpec.Builder) : CodeBlockContainer() {
 
     /** Modifiers of this method. */
     val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
@@ -60,7 +63,7 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
     /** Javadoc of this method. */
     val javadoc: JavadocContainer = object : JavadocContainer() {
         override fun append(format: String, vararg args: Any): Unit =
-            format.formatWith(args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
+            format.internalFormat(args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
 
         override fun append(code: CodeBlock) {
             nativeBuilder.addJavadoc(code)
@@ -149,10 +152,10 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
     inline fun <reified T> addException(): Unit = addException(T::class)
 
     override fun append(format: String, vararg args: Any): Unit =
-        format.formatWith(args) { s, array -> nativeBuilder.addCode(s, *array) }
+        format.internalFormat(args) { s, array -> nativeBuilder.addCode(s, *array) }
 
     override fun appendNamed(format: String, args: Map<String, *>): Unit =
-        format.formatWith(args) { s, map -> nativeBuilder.addNamedCode(s, map) }
+        format.internalFormat(args) { s, map -> nativeBuilder.addNamedCode(s, map) }
 
     override fun append(code: CodeBlock) {
         nativeBuilder.addCode(code)
@@ -160,11 +163,11 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
 
     /** Add comment like [String.format]. */
     fun addComment(format: String, vararg args: Any): Unit =
-        format.formatWith(args) { s, array -> nativeBuilder.addComment(s, *array) }
+        format.internalFormat(args) { s, array -> nativeBuilder.addComment(s, *array) }
 
     /** Set default value like [String.format]. */
     fun defaultValue(format: String, vararg args: Any): Unit =
-        format.formatWith(args) { s, array -> nativeBuilder.defaultValue(s, *array) }
+        format.internalFormat(args) { s, array -> nativeBuilder.defaultValue(s, *array) }
 
     /** Set default value to code. */
     var defaultValue: CodeBlock
@@ -179,7 +182,7 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
     }
 
     override fun beginFlow(flow: String, vararg args: Any): Unit =
-        flow.formatWith(args) { s, array -> nativeBuilder.beginControlFlow(s, *array) }
+        flow.internalFormat(args) { s, array -> nativeBuilder.beginControlFlow(s, *array) }
 
     fun beginFlow(code: CodeBlock) {
         nativeBuilder.beginControlFlow(code)
@@ -189,7 +192,7 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
         beginFlow(buildCodeBlock(builderAction))
 
     override fun nextFlow(flow: String, vararg args: Any): Unit =
-        flow.formatWith(args) { s, array -> nativeBuilder.nextControlFlow(s, *array) }
+        flow.internalFormat(args) { s, array -> nativeBuilder.nextControlFlow(s, *array) }
 
     fun nextFlow(code: CodeBlock) {
         nativeBuilder.nextControlFlow(code)
@@ -203,7 +206,7 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
     }
 
     override fun endFlow(flow: String, vararg args: Any): Unit =
-        flow.formatWith(args) { s, array -> nativeBuilder.endControlFlow(s, *array) }
+        flow.internalFormat(args) { s, array -> nativeBuilder.endControlFlow(s, *array) }
 
     fun endFlow(code: CodeBlock) {
         nativeBuilder.endControlFlow(code)
@@ -213,7 +216,7 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
         endFlow(buildCodeBlock(builderAction))
 
     override fun appendLine(format: String, vararg args: Any): Unit =
-        format.formatWith(args) { s, array -> nativeBuilder.addStatement(s, *array) }
+        format.internalFormat(args) { s, array -> nativeBuilder.addStatement(s, *array) }
 
     override fun appendLine(code: CodeBlock) {
         nativeBuilder.addStatement(code)

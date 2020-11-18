@@ -7,7 +7,7 @@ import kotlin.reflect.KClass
 
 /**
  * Builds new [JavaFile],
- * by populating newly created [JavaFileBuilder] using provided [builderAction] and then building it.
+ * by populating newly created [JavaFileBuilder] using provided [builderAction].
  */
 inline fun buildJavaFile(
     packageName: String,

@@ -33,55 +33,62 @@ inline fun <reified T> parameterSpecOf(name: String, vararg modifiers: Modifier)
 
 /**
  * Builds new [ParameterSpec] from [TypeName],
- * by populating newly created [ParameterSpecBuilder] using provided [builderAction] and then building it.
+ * by populating newly created [ParameterSpecBuilder] using provided [builderAction].
  */
 inline fun buildParameterSpec(
     type: TypeName,
     name: String,
     vararg modifiers: Modifier,
     builderAction: ParameterSpecBuilder.() -> Unit
-): ParameterSpec = ParameterSpec.builder(type, name, *modifiers).build(builderAction)
+): ParameterSpec = ParameterSpecBuilder(ParameterSpec.builder(type, name, *modifiers))
+    .apply(builderAction).build()
 
 /**
  * Builds new [ParameterSpec] from [Type],
- * by populating newly created [ParameterSpecBuilder] using provided [builderAction] and then building it.
+ * by populating newly created [ParameterSpecBuilder] using provided [builderAction].
  */
 inline fun buildParameterSpec(
     type: Type,
     name: String,
     vararg modifiers: Modifier,
     builderAction: ParameterSpecBuilder.() -> Unit
-): ParameterSpec = ParameterSpec.builder(type, name, *modifiers).build(builderAction)
+): ParameterSpec = ParameterSpecBuilder(ParameterSpec.builder(type, name, *modifiers))
+    .apply(builderAction).build()
 
 /**
  * Builds new [ParameterSpec] from [KClass],
- * by populating newly created [ParameterSpecBuilder] using provided [builderAction] and then building it.
+ * by populating newly created [ParameterSpecBuilder] using provided [builderAction].
  */
 inline fun buildParameterSpec(
     type: KClass<*>,
     name: String,
     vararg modifiers: Modifier,
     builderAction: ParameterSpecBuilder.() -> Unit
-): ParameterSpec = ParameterSpec.builder(type.java, name, *modifiers).build(builderAction)
+): ParameterSpec = ParameterSpecBuilder(ParameterSpec.builder(type.java, name, *modifiers))
+    .apply(builderAction).build()
 
 /**
  * Builds new [ParameterSpec] from [T],
- * by populating newly created [ParameterSpecBuilder] using provided [builderAction] and then building it.
+ * by populating newly created [ParameterSpecBuilder] using provided [builderAction].
  */
 inline fun <reified T> buildParameterSpec(
     name: String,
     vararg modifiers: Modifier,
     builderAction: ParameterSpecBuilder.() -> Unit
-): ParameterSpec = ParameterSpec.builder(T::class.java, name, *modifiers).build(builderAction)
+): ParameterSpec = ParameterSpecBuilder(ParameterSpec.builder(T::class.java, name, *modifiers))
+    .apply(builderAction).build()
 
-/** Modify existing [ParameterSpec.Builder] using provided [builderAction] and then building it. */
-inline fun ParameterSpec.Builder.build(
+/** Modify existing [ParameterSpec.Builder] using provided [builderAction]. */
+inline fun ParameterSpec.Builder.edit(
     builderAction: ParameterSpecBuilder.() -> Unit
-): ParameterSpec = ParameterSpecBuilder(this).apply(builderAction).build()
+): ParameterSpec.Builder = ParameterSpecBuilder(this).apply(builderAction).nativeBuilder
 
-/** Wrapper of [ParameterSpec.Builder], providing DSL support as a replacement to Java builder. */
+/**
+ * Wrapper of [ParameterSpec.Builder], providing DSL support as a replacement to Java builder.
+ * @param nativeBuilder source builder.
+ */
 @SpecDslMarker
-class ParameterSpecBuilder(private val nativeBuilder: ParameterSpec.Builder) {
+class ParameterSpecBuilder(val nativeBuilder: ParameterSpec.Builder) {
 
     /** Modifiers of this parameter. */
     val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
@@ -89,7 +96,7 @@ class ParameterSpecBuilder(private val nativeBuilder: ParameterSpec.Builder) {
     /** Javadoc of this parameter. */
     val javadoc: JavadocContainer = object : JavadocContainer() {
         override fun append(format: String, vararg args: Any): Unit =
-            format.formatWith(args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
+            format.internalFormat(args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
 
         override fun append(code: CodeBlock) {
             nativeBuilder.addJavadoc(code)

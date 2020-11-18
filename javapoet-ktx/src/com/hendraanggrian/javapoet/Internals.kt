@@ -11,7 +11,7 @@ internal const val NO_GETTER: String = "Property does not have a getter"
 @PublishedApi internal fun noGetter(): Nothing = throw UnsupportedOperationException(NO_GETTER)
 
 /** Converts JavaPoet standard [format] and [args] to KotlinPoet. */
-internal fun <T> String.formatWith(args: Array<*>, action: (String, Array<*>) -> T): T {
+internal fun <T> String.internalFormat(args: Array<*>, action: (String, Array<*>) -> T): T {
     var s = ""
     var isTemplate = false
     forEachIndexed { index, c ->
@@ -34,8 +34,8 @@ internal fun <T> String.formatWith(args: Array<*>, action: (String, Array<*>) ->
 }
 
 /** Converts JavaPoet standard [format] and [args] to KotlinPoet. */
-internal fun <T> String.formatWith(args: Map<String, *>, action: (String, Map<String, *>) -> T): T =
-    formatWith(args.values.toTypedArray()) { s, array -> action(s, args.keys.zip(array).toMap()) }
+internal fun <T> String.internalFormat(args: Map<String, *>, action: (String, Map<String, *>) -> T): T =
+    internalFormat(args.values.toTypedArray()) { s, array -> action(s, args.keys.zip(array).toMap()) }
 
 /** Converts array of Kotlin classes to Java classes. */
 @PublishedApi

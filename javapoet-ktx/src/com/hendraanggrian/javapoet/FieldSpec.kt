@@ -29,55 +29,58 @@ inline fun <reified T> fieldSpecOf(name: String, vararg modifiers: Modifier): Fi
 
 /**
  * Builds new [FieldSpec] from [TypeName] supplying its name and modifiers,
- * by populating newly created [FieldSpecBuilder] using provided [builderAction] and then building it.
+ * by populating newly created [FieldSpecBuilder] using provided [builderAction].
  */
 inline fun buildFieldSpec(
     type: TypeName,
     name: String,
     vararg modifiers: Modifier,
     builderAction: FieldSpecBuilder.() -> Unit
-): FieldSpec = FieldSpec.builder(type, name, *modifiers).build(builderAction)
+): FieldSpec = FieldSpecBuilder(FieldSpec.builder(type, name, *modifiers)).apply(builderAction).build()
 
 /**
  * Builds new [FieldSpec] from [Type] supplying its name and modifiers,
- * by populating newly created [FieldSpecBuilder] using provided [builderAction] and then building it.
+ * by populating newly created [FieldSpecBuilder] using provided [builderAction].
  */
 inline fun buildFieldSpec(
     type: Type,
     name: String,
     vararg modifiers: Modifier,
     builderAction: FieldSpecBuilder.() -> Unit
-): FieldSpec = FieldSpec.builder(type, name, *modifiers).build(builderAction)
+): FieldSpec = FieldSpecBuilder(FieldSpec.builder(type, name, *modifiers)).apply(builderAction).build()
 
 /**
  * Builds new [FieldSpec] from [KClass] supplying its name and modifiers,
- * by populating newly created [FieldSpecBuilder] using provided [builderAction] and then building it.
+ * by populating newly created [FieldSpecBuilder] using provided [builderAction].
  */
 inline fun buildFieldSpec(
     type: KClass<*>,
     name: String,
     vararg modifiers: Modifier,
     builderAction: FieldSpecBuilder.() -> Unit
-): FieldSpec = FieldSpec.builder(type.java, name, *modifiers).build(builderAction)
+): FieldSpec = FieldSpecBuilder(FieldSpec.builder(type.java, name, *modifiers)).apply(builderAction).build()
 
 /**
  * Builds new [FieldSpec] from [T] supplying its name and modifiers,
- * by populating newly created [FieldSpecBuilder] using provided [builderAction] and then building it.
+ * by populating newly created [FieldSpecBuilder] using provided [builderAction].
  */
 inline fun <reified T> buildFieldSpec(
     name: String,
     vararg modifiers: Modifier,
     builderAction: FieldSpecBuilder.() -> Unit
-): FieldSpec = FieldSpec.builder(T::class.java, name, *modifiers).build(builderAction)
+): FieldSpec = FieldSpecBuilder(FieldSpec.builder(T::class.java, name, *modifiers)).apply(builderAction).build()
 
-/** Modify existing [FieldSpec.Builder] using provided [builderAction] and then building it. */
-inline fun FieldSpec.Builder.build(
+/** Modify existing [FieldSpec.Builder] using provided [builderAction]. */
+inline fun FieldSpec.Builder.edit(
     builderAction: FieldSpecBuilder.() -> Unit
-): FieldSpec = FieldSpecBuilder(this).apply(builderAction).build()
+): FieldSpec.Builder = FieldSpecBuilder(this).apply(builderAction).nativeBuilder
 
-/** Wrapper of [FieldSpec.Builder], providing DSL support as a replacement to Java builder. */
+/**
+ * Wrapper of [FieldSpec.Builder], providing DSL support as a replacement to Java builder.
+ * @param nativeBuilder source builder.
+ */
 @SpecDslMarker
-class FieldSpecBuilder(private val nativeBuilder: FieldSpec.Builder) {
+class FieldSpecBuilder(val nativeBuilder: FieldSpec.Builder) {
 
     /** Modifiers of this field. */
     val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
@@ -85,7 +88,7 @@ class FieldSpecBuilder(private val nativeBuilder: FieldSpec.Builder) {
     /** Javadoc of this field. */
     val javadoc: JavadocContainer = object : JavadocContainer() {
         override fun append(format: String, vararg args: Any): Unit =
-            format.formatWith(args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
+            format.internalFormat(args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
 
         override fun append(code: CodeBlock) {
             nativeBuilder.addJavadoc(code)
@@ -110,7 +113,7 @@ class FieldSpecBuilder(private val nativeBuilder: FieldSpec.Builder) {
 
     /** Initialize field value like [String.format]. */
     fun initializer(format: String, vararg args: Any): Unit =
-        format.formatWith(args) { s, array -> nativeBuilder.initializer(s, *array) }
+        format.internalFormat(args) { s, array -> nativeBuilder.initializer(s, *array) }
 
     /** Initialize field value with code. */
     var initializer: CodeBlock
