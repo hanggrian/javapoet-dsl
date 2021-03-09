@@ -1,10 +1,10 @@
 package com.example
 
-import com.hendraanggrian.javapoet.ABSTRACT
-import com.hendraanggrian.javapoet.INT
-import com.hendraanggrian.javapoet.PUBLIC
-import com.hendraanggrian.javapoet.buildJavaFile
-import com.hendraanggrian.javapoet.classOf
+import io.github.hendraanggrian.javapoet.ABSTRACT
+import io.github.hendraanggrian.javapoet.INT
+import io.github.hendraanggrian.javapoet.PUBLIC
+import io.github.hendraanggrian.javapoet.buildJavaFile
+import io.github.hendraanggrian.javapoet.classOf
 import java.nio.file.Paths
 
 class VehicleWriter {

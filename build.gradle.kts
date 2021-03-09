@@ -1,7 +1,6 @@
 buildscript {
     repositories {
-        mavenCentral()
-        maven("https://ajoberstar.github.io/bintray-backup/")
+        jcenter()
     }
     dependencies {
         classpath(kotlin("gradle-plugin", VERSION_KOTLIN))
@@ -12,7 +11,7 @@ buildscript {
 
 allprojects {
     repositories {
-        mavenCentral()
+        jcenter()
     }
     tasks.withType<Delete> {
         delete(projectDir.resolve("out"))
