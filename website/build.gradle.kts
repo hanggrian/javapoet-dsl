@@ -11,6 +11,6 @@ gitPublish {
     )
 }
 
-tasks.named("gitPublishCopy") {
+tasks.gitPublishCopy {
     dependsOn(":$RELEASE_ARTIFACT:dokkaHtml")
 }
