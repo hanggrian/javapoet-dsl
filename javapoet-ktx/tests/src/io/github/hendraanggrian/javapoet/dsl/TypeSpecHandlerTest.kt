@@ -1,4 +1,4 @@
-package io.github.hendraanggrian.javapoet.collections
+package io.github.hendraanggrian.javapoet.dsl
 
 import com.google.common.truth.Truth.assertThat
 import io.github.hendraanggrian.javapoet.annotationTypeSpecOf
@@ -9,11 +9,11 @@ import io.github.hendraanggrian.javapoet.classTypeSpecOf
 import io.github.hendraanggrian.javapoet.interfaceTypeSpecOf
 import kotlin.test.Test
 
-class TypeSpecListTest {
-    private val list = TypeSpecList(mutableListOf())
+class TypeSpecHandlerTest {
+    private val list = TypeSpecHandler(mutableListOf())
 
-    private inline fun container(configuration: TypeSpecListScope.() -> Unit) =
-        TypeSpecListScope(list).configuration()
+    private inline fun container(configuration: TypeSpecHandlerScope.() -> Unit) =
+        TypeSpecHandlerScope(list).configuration()
 
     @Test fun nativeSpec() {
         list += classTypeSpecOf("Class1")

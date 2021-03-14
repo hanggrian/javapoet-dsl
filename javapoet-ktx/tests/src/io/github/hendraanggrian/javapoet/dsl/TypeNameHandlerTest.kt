@@ -1,12 +1,12 @@
-package io.github.hendraanggrian.javapoet.collections
+package io.github.hendraanggrian.javapoet.dsl
 
 import com.google.common.truth.Truth
 import io.github.hendraanggrian.javapoet.asTypeName
 import com.squareup.javapoet.TypeName
 import kotlin.test.Test
 
-class TypeNameListTest {
-    private val list = TypeNameList(mutableListOf())
+class TypeNameHandlerTest {
+    private val list = TypeNameHandler(mutableListOf())
 
     @Test fun test() {
         list += TypeName.CHAR

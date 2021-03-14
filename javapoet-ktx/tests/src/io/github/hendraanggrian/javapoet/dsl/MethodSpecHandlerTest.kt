@@ -1,15 +1,15 @@
-package io.github.hendraanggrian.javapoet.collections
+package io.github.hendraanggrian.javapoet.dsl
 
 import com.google.common.truth.Truth.assertThat
 import io.github.hendraanggrian.javapoet.emptyConstructorMethodSpec
 import io.github.hendraanggrian.javapoet.methodSpecOf
 import kotlin.test.Test
 
-class MethodSpecListTest {
-    private val list = MethodSpecList(mutableListOf())
+class MethodSpecHandlerTest {
+    private val list = MethodSpecHandler(mutableListOf())
 
-    private inline fun container(configuration: MethodSpecListScope.() -> Unit) =
-        MethodSpecListScope(list).configuration()
+    private inline fun container(configuration: MethodSpecHandlerScope.() -> Unit) =
+        MethodSpecHandlerScope(list).configuration()
 
     @Test fun nativeSpec() {
         list += methodSpecOf("method")

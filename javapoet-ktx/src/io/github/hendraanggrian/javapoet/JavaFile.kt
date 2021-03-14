@@ -2,21 +2,21 @@ package io.github.hendraanggrian.javapoet
 
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.JavaFile
-import io.github.hendraanggrian.javapoet.collections.TypeSpecList
+import io.github.hendraanggrian.javapoet.dsl.TypeSpecHandler
 import kotlin.reflect.KClass
 
 /**
  * Builds new [JavaFile],
- * by populating newly created [JavaFileBuilder] using provided [builderAction].
+ * by populating newly created [JavaFileBuilder] using provided [configuration].
  */
 inline fun buildJavaFile(
     packageName: String,
-    builderAction: JavaFileBuilder.() -> Unit
-): JavaFile = JavaFileBuilder(packageName).apply(builderAction).build()
+    configuration: JavaFileBuilder.() -> Unit
+): JavaFile = JavaFileBuilder(packageName).apply(configuration).build()
 
 /** Wrapper of [JavaFile.Builder], providing DSL support as a replacement to Java builder. */
 @SpecDslMarker
-class JavaFileBuilder(private val packageName: String) : TypeSpecList(ArrayList()) {
+class JavaFileBuilder(private val packageName: String) : TypeSpecHandler(ArrayList()) {
     private var comments: MutableList<Pair<String, Array<*>>>? = null
     private var imports: MutableMap<Any, MutableSet<String>>? = null
     private var isSkipJavaLangImports: Boolean? = null

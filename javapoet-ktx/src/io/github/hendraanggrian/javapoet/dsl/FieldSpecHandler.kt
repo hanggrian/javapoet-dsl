@@ -1,4 +1,4 @@
-package io.github.hendraanggrian.javapoet.collections
+package io.github.hendraanggrian.javapoet.dsl
 
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.TypeName
@@ -10,8 +10,8 @@ import java.lang.reflect.Type
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
-/** A [FieldSpecList] is responsible for managing a set of field instances. */
-open class FieldSpecList internal constructor(actualList: MutableList<FieldSpec>) :
+/** A [FieldSpecHandler] is responsible for managing a set of field instances. */
+open class FieldSpecHandler internal constructor(actualList: MutableList<FieldSpec>) :
     MutableList<FieldSpec> by actualList {
 
     /** Add field from [TypeName]. */
@@ -30,36 +30,36 @@ open class FieldSpecList internal constructor(actualList: MutableList<FieldSpec>
     inline fun <reified T> add(name: String, vararg modifiers: Modifier): Boolean =
         add(fieldSpecOf<T>(name, *modifiers))
 
-    /** Add field from [TypeName] with custom initialization [builderAction]. */
+    /** Add field from [TypeName] with custom initialization [configuration]. */
     inline fun add(
         type: TypeName,
         name: String,
         vararg modifiers: Modifier,
-        builderAction: FieldSpecBuilder.() -> Unit
-    ): Boolean = add(buildFieldSpec(type, name, *modifiers, builderAction = builderAction))
+        configuration: FieldSpecBuilder.() -> Unit
+    ): Boolean = add(buildFieldSpec(type, name, *modifiers, configuration = configuration))
 
-    /** Add field from [Type] with custom initialization [builderAction]. */
+    /** Add field from [Type] with custom initialization [configuration]. */
     inline fun add(
         type: Type,
         name: String,
         vararg modifiers: Modifier,
-        builderAction: FieldSpecBuilder.() -> Unit
-    ): Boolean = add(buildFieldSpec(type, name, *modifiers, builderAction = builderAction))
+        configuration: FieldSpecBuilder.() -> Unit
+    ): Boolean = add(buildFieldSpec(type, name, *modifiers, configuration = configuration))
 
-    /** Add field from [KClass] with custom initialization [builderAction]. */
+    /** Add field from [KClass] with custom initialization [configuration]. */
     inline fun add(
         type: KClass<*>,
         name: String,
         vararg modifiers: Modifier,
-        builderAction: FieldSpecBuilder.() -> Unit
-    ): Boolean = add(buildFieldSpec(type, name, *modifiers, builderAction = builderAction))
+        configuration: FieldSpecBuilder.() -> Unit
+    ): Boolean = add(buildFieldSpec(type, name, *modifiers, configuration = configuration))
 
-    /** Add field from [T] with custom initialization [builderAction]. */
+    /** Add field from [T] with custom initialization [configuration]. */
     inline fun <reified T> add(
         name: String,
         vararg modifiers: Modifier,
-        builderAction: FieldSpecBuilder.() -> Unit
-    ): Boolean = add(buildFieldSpec<T>(name, *modifiers, builderAction = builderAction))
+        configuration: FieldSpecBuilder.() -> Unit
+    ): Boolean = add(buildFieldSpec<T>(name, *modifiers, configuration = configuration))
 
     /** Convenient method to add field with operator function. */
     operator fun set(name: String, type: TypeName): Unit = plusAssign(fieldSpecOf(type, name))
@@ -73,32 +73,32 @@ open class FieldSpecList internal constructor(actualList: MutableList<FieldSpec>
 
 /** Receiver for the `fields` function type providing an extended set of operators for the configuration. */
 @SpecDslMarker
-class FieldSpecListScope(actualList: MutableList<FieldSpec>) : FieldSpecList(actualList) {
+class FieldSpecHandlerScope(actualList: MutableList<FieldSpec>) : FieldSpecHandler(actualList) {
 
     /** Convenient method to add field with receiver type. */
     inline operator fun String.invoke(
         type: TypeName,
         vararg modifiers: Modifier,
-        builderAction: FieldSpecBuilder.() -> Unit
-    ): Boolean = add(type, this, *modifiers, builderAction = builderAction)
+        configuration: FieldSpecBuilder.() -> Unit
+    ): Boolean = add(type, this, *modifiers, configuration = configuration)
 
     /** Convenient method to add field with receiver type. */
     inline operator fun String.invoke(
         type: Type,
         vararg modifiers: Modifier,
-        builderAction: FieldSpecBuilder.() -> Unit
-    ): Boolean = add(type, this, *modifiers, builderAction = builderAction)
+        configuration: FieldSpecBuilder.() -> Unit
+    ): Boolean = add(type, this, *modifiers, configuration = configuration)
 
     /** Convenient method to add field with receiver type. */
     inline operator fun String.invoke(
         type: KClass<*>,
         vararg modifiers: Modifier,
-        builderAction: FieldSpecBuilder.() -> Unit
-    ): Boolean = add(type, this, *modifiers, builderAction = builderAction)
+        configuration: FieldSpecBuilder.() -> Unit
+    ): Boolean = add(type, this, *modifiers, configuration = configuration)
 
     /** Convenient method to add field with receiver type. */
     inline operator fun <reified T> String.invoke(
         vararg modifiers: Modifier,
-        builderAction: FieldSpecBuilder.() -> Unit
-    ): Boolean = add<T>(this, *modifiers, builderAction = builderAction)
+        configuration: FieldSpecBuilder.() -> Unit
+    ): Boolean = add<T>(this, *modifiers, configuration = configuration)
 }

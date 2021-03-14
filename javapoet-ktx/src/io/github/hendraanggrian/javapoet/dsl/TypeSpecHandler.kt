@@ -1,4 +1,4 @@
-package io.github.hendraanggrian.javapoet.collections
+package io.github.hendraanggrian.javapoet.dsl
 
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
@@ -16,8 +16,8 @@ import io.github.hendraanggrian.javapoet.classTypeSpecOf
 import io.github.hendraanggrian.javapoet.enumTypeSpecOf
 import io.github.hendraanggrian.javapoet.interfaceTypeSpecOf
 
-/** A [TypeSpecList] is responsible for managing a set of type instances. */
-open class TypeSpecList internal constructor(actualList: MutableList<TypeSpec>) :
+/** A [TypeSpecHandler] is responsible for managing a set of type instances. */
+open class TypeSpecHandler internal constructor(actualList: MutableList<TypeSpec>) :
     MutableList<TypeSpec> by actualList {
 
     /** Add class type from name. */
@@ -50,82 +50,82 @@ open class TypeSpecList internal constructor(actualList: MutableList<TypeSpec>) 
     /** Add annotation type from [ClassName]. */
     fun addAnnotation(type: ClassName): Boolean = add(annotationTypeSpecOf(type))
 
-    /** Add class type from name with custom initialization [builderAction]. */
+    /** Add class type from name with custom initialization [configuration]. */
     inline fun addClass(
         type: String,
-        builderAction: TypeSpecBuilder.() -> Unit
-    ): Boolean = add(buildClassTypeSpec(type, builderAction))
+        configuration: TypeSpecBuilder.() -> Unit
+    ): Boolean = add(buildClassTypeSpec(type, configuration))
 
-    /** Add class type from [ClassName] with custom initialization [builderAction]. */
+    /** Add class type from [ClassName] with custom initialization [configuration]. */
     inline fun addClass(
         type: ClassName,
-        builderAction: TypeSpecBuilder.() -> Unit
-    ): Boolean = add(buildClassTypeSpec(type, builderAction))
+        configuration: TypeSpecBuilder.() -> Unit
+    ): Boolean = add(buildClassTypeSpec(type, configuration))
 
-    /** Add interface type from name with custom initialization [builderAction]. */
+    /** Add interface type from name with custom initialization [configuration]. */
     inline fun addInterface(
         type: String,
-        builderAction: TypeSpecBuilder.() -> Unit
-    ): Boolean = add(buildInterfaceTypeSpec(type, builderAction))
+        configuration: TypeSpecBuilder.() -> Unit
+    ): Boolean = add(buildInterfaceTypeSpec(type, configuration))
 
-    /** Add interface type from [ClassName] with custom initialization [builderAction]. */
+    /** Add interface type from [ClassName] with custom initialization [configuration]. */
     inline fun addInterface(
         type: ClassName,
-        builderAction: TypeSpecBuilder.() -> Unit
-    ): Boolean = add(buildInterfaceTypeSpec(type, builderAction))
+        configuration: TypeSpecBuilder.() -> Unit
+    ): Boolean = add(buildInterfaceTypeSpec(type, configuration))
 
-    /** Add enum type from name with custom initialization [builderAction]. */
+    /** Add enum type from name with custom initialization [configuration]. */
     inline fun addEnum(
         type: String,
-        builderAction: TypeSpecBuilder.() -> Unit
-    ): Boolean = add(buildEnumTypeSpec(type, builderAction))
+        configuration: TypeSpecBuilder.() -> Unit
+    ): Boolean = add(buildEnumTypeSpec(type, configuration))
 
-    /** Add enum type from [ClassName] with custom initialization [builderAction]. */
+    /** Add enum type from [ClassName] with custom initialization [configuration]. */
     inline fun addEnum(
         type: ClassName,
-        builderAction: TypeSpecBuilder.() -> Unit
-    ): Boolean = add(buildEnumTypeSpec(type, builderAction))
+        configuration: TypeSpecBuilder.() -> Unit
+    ): Boolean = add(buildEnumTypeSpec(type, configuration))
 
     /**
-     * Add anonymous type from formatting with custom initialization [builderAction].
+     * Add anonymous type from formatting with custom initialization [configuration].
      * Not inlining this function since `buildAnonymousType` is not inlined.
      */
     fun addAnonymous(
         format: String,
         vararg args: Any,
-        builderAction: TypeSpecBuilder.() -> Unit
-    ): Boolean = add(buildAnonymousTypeSpec(format, *args, builderAction = builderAction))
+        configuration: TypeSpecBuilder.() -> Unit
+    ): Boolean = add(buildAnonymousTypeSpec(format, *args, configuration = configuration))
 
-    /** Add anonymous type from [CodeBlock] with custom initialization [builderAction]. */
+    /** Add anonymous type from [CodeBlock] with custom initialization [configuration]. */
     inline fun addAnonymous(
         code: CodeBlock,
-        builderAction: TypeSpecBuilder.() -> Unit
-    ): Boolean = add(buildAnonymousTypeSpec(code, builderAction = builderAction))
+        configuration: TypeSpecBuilder.() -> Unit
+    ): Boolean = add(buildAnonymousTypeSpec(code, configuration = configuration))
 
-    /** Add annotation type from name with custom initialization [builderAction]. */
+    /** Add annotation type from name with custom initialization [configuration]. */
     inline fun addAnnotation(
         type: String,
-        builderAction: TypeSpecBuilder.() -> Unit
-    ): Boolean = add(buildAnnotationTypeSpec(type, builderAction))
+        configuration: TypeSpecBuilder.() -> Unit
+    ): Boolean = add(buildAnnotationTypeSpec(type, configuration))
 
-    /** Add annotation type from [ClassName] with custom initialization [builderAction]. */
+    /** Add annotation type from [ClassName] with custom initialization [configuration]. */
     inline fun addAnnotation(
         type: ClassName,
-        builderAction: TypeSpecBuilder.() -> Unit
-    ): Boolean = add(buildAnnotationTypeSpec(type, builderAction))
+        configuration: TypeSpecBuilder.() -> Unit
+    ): Boolean = add(buildAnnotationTypeSpec(type, configuration))
 }
 
 /** Receiver for the `types` function type providing an extended set of operators for the configuration. */
 @SpecDslMarker
-class TypeSpecListScope(actualList: TypeSpecList) : TypeSpecList(actualList) {
+class TypeSpecHandlerScope(actualList: TypeSpecHandler) : TypeSpecHandler(actualList) {
 
     /** Convenient method to add class with receiver type. */
     inline operator fun String.invoke(
-        builderAction: TypeSpecBuilder.() -> Unit
-    ): Boolean = addClass(this, builderAction)
+        configuration: TypeSpecBuilder.() -> Unit
+    ): Boolean = addClass(this, configuration)
 
     /** Convenient method to add class with receiver type. */
     inline operator fun ClassName.invoke(
-        builderAction: TypeSpecBuilder.() -> Unit
-    ): Boolean = addClass(this, builderAction)
+        configuration: TypeSpecBuilder.() -> Unit
+    ): Boolean = addClass(this, configuration)
 }

@@ -3,10 +3,10 @@ package io.github.hendraanggrian.javapoet
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.TypeName
-import io.github.hendraanggrian.javapoet.collections.AnnotationSpecList
-import io.github.hendraanggrian.javapoet.collections.AnnotationSpecListScope
-import io.github.hendraanggrian.javapoet.collections.JavadocContainer
-import io.github.hendraanggrian.javapoet.collections.JavadocContainerScope
+import io.github.hendraanggrian.javapoet.dsl.AnnotationSpecHandler
+import io.github.hendraanggrian.javapoet.dsl.AnnotationSpecHandlerScope
+import io.github.hendraanggrian.javapoet.dsl.JavadocHandler
+import io.github.hendraanggrian.javapoet.dsl.JavadocHandlerScope
 import java.lang.reflect.Type
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
@@ -29,51 +29,51 @@ inline fun <reified T> fieldSpecOf(name: String, vararg modifiers: Modifier): Fi
 
 /**
  * Builds new [FieldSpec] from [TypeName] supplying its name and modifiers,
- * by populating newly created [FieldSpecBuilder] using provided [builderAction].
+ * by populating newly created [FieldSpecBuilder] using provided [configuration].
  */
 inline fun buildFieldSpec(
     type: TypeName,
     name: String,
     vararg modifiers: Modifier,
-    builderAction: FieldSpecBuilder.() -> Unit
-): FieldSpec = FieldSpecBuilder(FieldSpec.builder(type, name, *modifiers)).apply(builderAction).build()
+    configuration: FieldSpecBuilder.() -> Unit
+): FieldSpec = FieldSpecBuilder(FieldSpec.builder(type, name, *modifiers)).apply(configuration).build()
 
 /**
  * Builds new [FieldSpec] from [Type] supplying its name and modifiers,
- * by populating newly created [FieldSpecBuilder] using provided [builderAction].
+ * by populating newly created [FieldSpecBuilder] using provided [configuration].
  */
 inline fun buildFieldSpec(
     type: Type,
     name: String,
     vararg modifiers: Modifier,
-    builderAction: FieldSpecBuilder.() -> Unit
-): FieldSpec = FieldSpecBuilder(FieldSpec.builder(type, name, *modifiers)).apply(builderAction).build()
+    configuration: FieldSpecBuilder.() -> Unit
+): FieldSpec = FieldSpecBuilder(FieldSpec.builder(type, name, *modifiers)).apply(configuration).build()
 
 /**
  * Builds new [FieldSpec] from [KClass] supplying its name and modifiers,
- * by populating newly created [FieldSpecBuilder] using provided [builderAction].
+ * by populating newly created [FieldSpecBuilder] using provided [configuration].
  */
 inline fun buildFieldSpec(
     type: KClass<*>,
     name: String,
     vararg modifiers: Modifier,
-    builderAction: FieldSpecBuilder.() -> Unit
-): FieldSpec = FieldSpecBuilder(FieldSpec.builder(type.java, name, *modifiers)).apply(builderAction).build()
+    configuration: FieldSpecBuilder.() -> Unit
+): FieldSpec = FieldSpecBuilder(FieldSpec.builder(type.java, name, *modifiers)).apply(configuration).build()
 
 /**
  * Builds new [FieldSpec] from [T] supplying its name and modifiers,
- * by populating newly created [FieldSpecBuilder] using provided [builderAction].
+ * by populating newly created [FieldSpecBuilder] using provided [configuration].
  */
 inline fun <reified T> buildFieldSpec(
     name: String,
     vararg modifiers: Modifier,
-    builderAction: FieldSpecBuilder.() -> Unit
-): FieldSpec = FieldSpecBuilder(FieldSpec.builder(T::class.java, name, *modifiers)).apply(builderAction).build()
+    configuration: FieldSpecBuilder.() -> Unit
+): FieldSpec = FieldSpecBuilder(FieldSpec.builder(T::class.java, name, *modifiers)).apply(configuration).build()
 
-/** Modify existing [FieldSpec.Builder] using provided [builderAction]. */
+/** Modify existing [FieldSpec.Builder] using provided [configuration]. */
 inline fun FieldSpec.Builder.edit(
-    builderAction: FieldSpecBuilder.() -> Unit
-): FieldSpec.Builder = FieldSpecBuilder(this).apply(builderAction).nativeBuilder
+    configuration: FieldSpecBuilder.() -> Unit
+): FieldSpec.Builder = FieldSpecBuilder(this).apply(configuration).nativeBuilder
 
 /**
  * Wrapper of [FieldSpec.Builder], providing DSL support as a replacement to Java builder.
@@ -86,7 +86,7 @@ class FieldSpecBuilder(val nativeBuilder: FieldSpec.Builder) {
     val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
 
     /** Javadoc of this field. */
-    val javadoc: JavadocContainer = object : JavadocContainer() {
+    val javadoc: JavadocHandler = object : JavadocHandler() {
         override fun append(format: String, vararg args: Any): Unit =
             format.internalFormat(args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
 
@@ -96,15 +96,15 @@ class FieldSpecBuilder(val nativeBuilder: FieldSpec.Builder) {
     }
 
     /** Configures javadoc for this field. */
-    inline fun javadoc(builderAction: JavadocContainerScope.() -> Unit): Unit =
-        JavadocContainerScope(javadoc).builderAction()
+    inline fun javadoc(configuration: JavadocHandlerScope.() -> Unit): Unit =
+        JavadocHandlerScope(javadoc).configuration()
 
     /** Annotations of this field. */
-    val annotations: AnnotationSpecList = AnnotationSpecList(nativeBuilder.annotations)
+    val annotations: AnnotationSpecHandler = AnnotationSpecHandler(nativeBuilder.annotations)
 
     /** Configures annotations for this field. */
-    inline fun annotations(builderAction: AnnotationSpecListScope.() -> Unit): Unit =
-        AnnotationSpecListScope(annotations).builderAction()
+    inline fun annotations(configuration: AnnotationSpecHandlerScope.() -> Unit): Unit =
+        AnnotationSpecHandlerScope(annotations).configuration()
 
     /** Add field modifiers. */
     fun addModifiers(vararg modifiers: Modifier) {
@@ -122,9 +122,9 @@ class FieldSpecBuilder(val nativeBuilder: FieldSpec.Builder) {
             nativeBuilder.initializer(value)
         }
 
-    /** Initialize field value with custom initialization [builderAction]. */
-    inline fun initializer(builderAction: CodeBlockBuilder.() -> Unit) {
-        initializer = buildCodeBlock(builderAction)
+    /** Initialize field value with custom initialization [configuration]. */
+    inline fun initializer(configuration: CodeBlockBuilder.() -> Unit) {
+        initializer = buildCodeBlock(configuration)
     }
 
     /** Returns native spec. */

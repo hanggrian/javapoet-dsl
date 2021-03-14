@@ -1,4 +1,4 @@
-package io.github.hendraanggrian.javapoet.collections
+package io.github.hendraanggrian.javapoet.dsl
 
 import com.squareup.javapoet.MethodSpec
 import io.github.hendraanggrian.javapoet.MethodSpecBuilder
@@ -8,8 +8,8 @@ import io.github.hendraanggrian.javapoet.buildMethodSpec
 import io.github.hendraanggrian.javapoet.emptyConstructorMethodSpec
 import io.github.hendraanggrian.javapoet.methodSpecOf
 
-/** A [MethodSpecList] is responsible for managing a set of method instances. */
-open class MethodSpecList internal constructor(actualList: MutableList<MethodSpec>) :
+/** A [MethodSpecHandler] is responsible for managing a set of method instances. */
+open class MethodSpecHandler internal constructor(actualList: MutableList<MethodSpec>) :
     MutableList<MethodSpec> by actualList {
 
     /** Add method from name. */
@@ -18,24 +18,24 @@ open class MethodSpecList internal constructor(actualList: MutableList<MethodSpe
     /** Add constructor method. */
     fun addConstructor(): Boolean = add(emptyConstructorMethodSpec())
 
-    /** Add method from name with custom initialization [builderAction]. */
+    /** Add method from name with custom initialization [configuration]. */
     inline fun add(
         name: String,
-        builderAction: MethodSpecBuilder.() -> Unit
-    ): Boolean = add(buildMethodSpec(name, builderAction))
+        configuration: MethodSpecBuilder.() -> Unit
+    ): Boolean = add(buildMethodSpec(name, configuration))
 
-    /** Add constructor method with custom initialization [builderAction]. */
+    /** Add constructor method with custom initialization [configuration]. */
     inline fun addConstructor(
-        builderAction: MethodSpecBuilder.() -> Unit
-    ): Boolean = add(buildConstructorMethodSpec(builderAction))
+        configuration: MethodSpecBuilder.() -> Unit
+    ): Boolean = add(buildConstructorMethodSpec(configuration))
 }
 
 /** Receiver for the `methods` function type providing an extended set of operators for the configuration. */
 @SpecDslMarker
-class MethodSpecListScope(actualList: MutableList<MethodSpec>) : MethodSpecList(actualList) {
+class MethodSpecHandlerScope(actualList: MutableList<MethodSpec>) : MethodSpecHandler(actualList) {
 
     /** Convenient method to add method with receiver type. */
     inline operator fun String.invoke(
-        builderAction: MethodSpecBuilder.() -> Unit
-    ): Boolean = add(this, builderAction)
+        configuration: MethodSpecBuilder.() -> Unit
+    ): Boolean = add(this, configuration)
 }

@@ -1,7 +1,7 @@
 package io.github.hendraanggrian.javapoet
 
 import com.squareup.javapoet.CodeBlock
-import io.github.hendraanggrian.javapoet.collections.CodeBlockContainer
+import io.github.hendraanggrian.javapoet.dsl.CodeBlockHandler
 
 /** Joins code blocks into a single [CodeBlock], each separated by [separator]. */
 fun Iterable<CodeBlock>.join(separator: String): CodeBlock = CodeBlock.join(this, separator)
@@ -16,22 +16,22 @@ fun codeBlockOf(format: String, vararg args: Any): CodeBlock =
 
 /**
  * Builds new [CodeBlock],
- * by populating newly created [CodeBlockBuilder] using provided [builderAction].
+ * by populating newly created [CodeBlockBuilder] using provided [configuration].
  */
 inline fun buildCodeBlock(
-    builderAction: CodeBlockBuilder.() -> Unit
-): CodeBlock = CodeBlockBuilder(CodeBlock.builder()).apply(builderAction).build()
+    configuration: CodeBlockBuilder.() -> Unit
+): CodeBlock = CodeBlockBuilder(CodeBlock.builder()).apply(configuration).build()
 
-/** Modify existing [CodeBlock.Builder] using provided [builderAction]. */
+/** Modify existing [CodeBlock.Builder] using provided [configuration]. */
 inline fun CodeBlock.Builder.edit(
-    builderAction: CodeBlockBuilder.() -> Unit
-): CodeBlock.Builder = CodeBlockBuilder(this).apply(builderAction).nativeBuilder
+    configuration: CodeBlockBuilder.() -> Unit
+): CodeBlock.Builder = CodeBlockBuilder(this).apply(configuration).nativeBuilder
 
 /**
  * Wrapper of [CodeBlock.Builder], providing DSL support as a replacement to Java builder.
  * @param nativeBuilder source builder.
  */
-class CodeBlockBuilder(val nativeBuilder: CodeBlock.Builder) : CodeBlockContainer() {
+class CodeBlockBuilder(val nativeBuilder: CodeBlock.Builder) : CodeBlockHandler() {
 
     /** Returns true if this builder contains no code. */
     fun isEmpty(): Boolean = nativeBuilder.isEmpty

@@ -1,15 +1,15 @@
-package io.github.hendraanggrian.javapoet.collections
+package io.github.hendraanggrian.javapoet.dsl
 
 import com.google.common.truth.Truth.assertThat
 import io.github.hendraanggrian.javapoet.annotationSpecOf
 import io.github.hendraanggrian.javapoet.classOf
 import kotlin.test.Test
 
-class AnnotationSpecListTest {
-    private val list = AnnotationSpecList(mutableListOf())
+class AnnotationSpecHandlerTest {
+    private val list = AnnotationSpecHandler(mutableListOf())
 
-    private inline fun container(configuration: AnnotationSpecListScope.() -> Unit) =
-        AnnotationSpecListScope(list).configuration()
+    private inline fun container(configuration: AnnotationSpecHandlerScope.() -> Unit) =
+        AnnotationSpecHandlerScope(list).configuration()
 
     @Test fun nativeSpec() {
         list += annotationSpecOf<Annotation1>()
@@ -21,7 +21,7 @@ class AnnotationSpecListTest {
     }
 
     @Test fun className() {
-        val packageName = "io.github.hendraanggrian.javapoet.collections.AnnotationSpecListTest"
+        val packageName = "io.github.hendraanggrian.javapoet.dsl.AnnotationSpecHandlerTest"
         list.add(packageName.classOf("Annotation1"))
         list += packageName.classOf("Annotation2")
         container { (packageName.classOf("Annotation3")) { } }

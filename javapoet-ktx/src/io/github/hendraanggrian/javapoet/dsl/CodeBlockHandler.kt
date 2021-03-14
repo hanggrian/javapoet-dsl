@@ -1,4 +1,4 @@
-package io.github.hendraanggrian.javapoet.collections
+package io.github.hendraanggrian.javapoet.dsl
 
 import com.squareup.javapoet.CodeBlock
 import io.github.hendraanggrian.javapoet.CodeBlockBuilder
@@ -22,20 +22,20 @@ private interface CodeBlockAppendable {
     fun appendLine(code: CodeBlock)
 }
 
-abstract class CodeBlockContainer internal constructor() : CodeBlockAppendable {
+abstract class CodeBlockHandler internal constructor() : CodeBlockAppendable {
 
     /** Add named code to this container. */
     abstract fun appendNamed(format: String, args: Map<String, *>)
 
-    /** Add code block with custom initialization [builderAction]. */
-    inline fun append(builderAction: CodeBlockBuilder.() -> Unit): Unit =
-        append(buildCodeBlock(builderAction))
+    /** Add code block with custom initialization [configuration]. */
+    inline fun append(configuration: CodeBlockBuilder.() -> Unit): Unit =
+        append(buildCodeBlock(configuration))
 
     override fun appendLine(): Unit = appendLine("")
 
-    /** Add code block with custom initialization [builderAction] and a new line to this container. */
-    inline fun appendLine(builderAction: CodeBlockBuilder.() -> Unit): Unit =
-        appendLine(buildCodeBlock(builderAction))
+    /** Add code block with custom initialization [configuration] and a new line to this container. */
+    inline fun appendLine(configuration: CodeBlockBuilder.() -> Unit): Unit =
+        appendLine(buildCodeBlock(configuration))
 
     /** Insert code flow with custom initialization [configuration]. */
     fun appendFlow(flow: String, vararg args: Any, configuration: () -> Unit) {
@@ -82,12 +82,12 @@ abstract class CodeBlockContainer internal constructor() : CodeBlockAppendable {
     internal abstract fun endFlow(flow: String, vararg args: Any)
 }
 
-/** A [JavadocContainer] is responsible for managing a set of code instances. */
-abstract class JavadocContainer internal constructor() : CodeBlockAppendable {
+/** A [JavadocHandler] is responsible for managing a set of code instances. */
+abstract class JavadocHandler internal constructor() : CodeBlockAppendable {
 
-    /** Add code block with custom initialization [builderAction]. */
-    inline fun append(builderAction: CodeBlockBuilder.() -> Unit): Unit =
-        append(buildCodeBlock(builderAction))
+    /** Add code block with custom initialization [configuration]. */
+    inline fun append(configuration: CodeBlockBuilder.() -> Unit): Unit =
+        append(buildCodeBlock(configuration))
 
     override fun appendLine(): Unit = append(SystemProperties.LINE_SEPARATOR)
 
@@ -101,9 +101,9 @@ abstract class JavadocContainer internal constructor() : CodeBlockAppendable {
         appendLine()
     }
 
-    /** Add code block with custom initialization [builderAction] and a new line to this container. */
-    inline fun appendLine(builderAction: CodeBlockBuilder.() -> Unit): Unit =
-        appendLine(buildCodeBlock(builderAction))
+    /** Add code block with custom initialization [configuration] and a new line to this container. */
+    inline fun appendLine(configuration: CodeBlockBuilder.() -> Unit): Unit =
+        appendLine(buildCodeBlock(configuration))
 
     /** Convenient method to add code block with operator function. */
     operator fun plusAssign(value: String): Unit = append(value)
@@ -122,11 +122,11 @@ abstract class JavadocContainer internal constructor() : CodeBlockAppendable {
 }
 
 /** Receiver for the `javadoc` function type providing an extended set of operators for the configuration. */
-class JavadocContainerScope(private val container: JavadocContainer) :
-    JavadocContainer(),
-    CodeBlockAppendable by container {
+class JavadocHandlerScope(private val handler: JavadocHandler) :
+    JavadocHandler(),
+    CodeBlockAppendable by handler {
 
-    override fun appendLine(): Unit = container.appendLine()
-    override fun appendLine(code: CodeBlock): Unit = container.appendLine(code)
-    override fun appendLine(format: String, vararg args: Any): Unit = container.appendLine(format, *args)
+    override fun appendLine(): Unit = handler.appendLine()
+    override fun appendLine(code: CodeBlock): Unit = handler.appendLine(code)
+    override fun appendLine(format: String, vararg args: Any): Unit = handler.appendLine(format, *args)
 }

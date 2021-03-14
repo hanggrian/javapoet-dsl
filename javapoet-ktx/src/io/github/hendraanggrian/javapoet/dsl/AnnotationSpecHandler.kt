@@ -1,4 +1,4 @@
-package io.github.hendraanggrian.javapoet.collections
+package io.github.hendraanggrian.javapoet.dsl
 
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
@@ -8,8 +8,8 @@ import io.github.hendraanggrian.javapoet.annotationSpecOf
 import io.github.hendraanggrian.javapoet.buildAnnotationSpec
 import kotlin.reflect.KClass
 
-/** An [AnnotationSpecList] is responsible for managing a set of annotation instances. */
-open class AnnotationSpecList internal constructor(actualList: MutableList<AnnotationSpec>) :
+/** An [AnnotationSpecHandler] is responsible for managing a set of annotation instances. */
+open class AnnotationSpecHandler internal constructor(actualList: MutableList<AnnotationSpec>) :
     MutableList<AnnotationSpec> by actualList {
 
     /** Add annotation from [ClassName]. */
@@ -24,28 +24,28 @@ open class AnnotationSpecList internal constructor(actualList: MutableList<Annot
     /** Add annotation from [T]. */
     inline fun <reified T> add(): Boolean = add(annotationSpecOf<T>())
 
-    /** Add annotation from [ClassName] with custom initialization [builderAction]. */
+    /** Add annotation from [ClassName] with custom initialization [configuration]. */
     inline fun add(
         type: ClassName,
-        builderAction: AnnotationSpecBuilder.() -> Unit
-    ): Boolean = add(buildAnnotationSpec(type, builderAction))
+        configuration: AnnotationSpecBuilder.() -> Unit
+    ): Boolean = add(buildAnnotationSpec(type, configuration))
 
-    /** Add annotation from [Class] with custom initialization [builderAction]. */
+    /** Add annotation from [Class] with custom initialization [configuration]. */
     inline fun add(
         type: Class<*>,
-        builderAction: AnnotationSpecBuilder.() -> Unit
-    ): Boolean = add(buildAnnotationSpec(type, builderAction))
+        configuration: AnnotationSpecBuilder.() -> Unit
+    ): Boolean = add(buildAnnotationSpec(type, configuration))
 
-    /** Add annotation from [KClass] with custom initialization [builderAction]. */
+    /** Add annotation from [KClass] with custom initialization [configuration]. */
     inline fun add(
         type: KClass<*>,
-        builderAction: AnnotationSpecBuilder.() -> Unit
-    ): Boolean = add(buildAnnotationSpec(type, builderAction))
+        configuration: AnnotationSpecBuilder.() -> Unit
+    ): Boolean = add(buildAnnotationSpec(type, configuration))
 
-    /** Add annotation from [T] with custom initialization [builderAction]. */
+    /** Add annotation from [T] with custom initialization [configuration]. */
     inline fun <reified T> add(
-        builderAction: AnnotationSpecBuilder.() -> Unit
-    ): Boolean = add(buildAnnotationSpec<T>(builderAction))
+        configuration: AnnotationSpecBuilder.() -> Unit
+    ): Boolean = add(buildAnnotationSpec<T>(configuration))
 
     /** Convenient method to add annotation with operator function. */
     operator fun plusAssign(type: ClassName): Unit = plusAssign(annotationSpecOf(type))
@@ -59,20 +59,20 @@ open class AnnotationSpecList internal constructor(actualList: MutableList<Annot
 
 /** Receiver for the `annotations` function type providing an extended set of operators for the configuration. */
 @SpecDslMarker
-class AnnotationSpecListScope(actualList: MutableList<AnnotationSpec>) : AnnotationSpecList(actualList) {
+class AnnotationSpecHandlerScope(actualList: MutableList<AnnotationSpec>) : AnnotationSpecHandler(actualList) {
 
     /** Convenient method to add annotation with receiver type. */
     inline operator fun ClassName.invoke(
-        builderAction: AnnotationSpecBuilder.() -> Unit
-    ): Boolean = add(this, builderAction)
+        configuration: AnnotationSpecBuilder.() -> Unit
+    ): Boolean = add(this, configuration)
 
     /** Convenient method to add annotation with receiver type. */
     inline operator fun Class<*>.invoke(
-        builderAction: AnnotationSpecBuilder.() -> Unit
-    ): Boolean = add(this, builderAction)
+        configuration: AnnotationSpecBuilder.() -> Unit
+    ): Boolean = add(this, configuration)
 
     /** Convenient method to add annotation with receiver type. */
     inline operator fun KClass<*>.invoke(
-        builderAction: AnnotationSpecBuilder.() -> Unit
-    ): Boolean = add(this, builderAction)
+        configuration: AnnotationSpecBuilder.() -> Unit
+    ): Boolean = add(this, configuration)
 }

@@ -1,6 +1,6 @@
 package io.github.hendraanggrian.javapoet
 
-import io.github.hendraanggrian.javapoet.collections.MethodSpecListScope
+import io.github.hendraanggrian.javapoet.dsl.MethodSpecHandlerScope
 import com.squareup.javapoet.CodeBlock
 import java.util.Collections
 import java.util.Date
@@ -645,7 +645,7 @@ class ReadmeTest {
         )
     }
 
-    private fun MethodSpecListScope.whatsMyName(name: String) {
+    private fun MethodSpecHandlerScope.whatsMyName(name: String) {
         name {
             returns<String>()
             appendLine("return %S", name)

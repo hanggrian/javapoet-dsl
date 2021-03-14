@@ -1,4 +1,4 @@
-package io.github.hendraanggrian.javapoet.collections
+package io.github.hendraanggrian.javapoet.dsl
 
 import com.google.common.truth.Truth
 import io.github.hendraanggrian.javapoet.asTypeName
@@ -6,8 +6,8 @@ import io.github.hendraanggrian.javapoet.typeVarBy
 import io.github.hendraanggrian.javapoet.typeVarOf
 import kotlin.test.Test
 
-class TypeVariableNameListTest {
-    private val list = TypeVariableNameList(mutableListOf())
+class TypeVariableNameHandlerTest {
+    private val list = TypeVariableNameHandler(mutableListOf())
 
     @Test fun test() {
         list += "Q"
