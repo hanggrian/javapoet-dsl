@@ -15,27 +15,25 @@ open class MethodSpecHandler internal constructor(actualList: MutableList<Method
     /** Add method from name. */
     fun add(name: String): Boolean = add(methodSpecOf(name))
 
+    /** Add method from name with custom initialization [configuration]. */
+    fun add(name: String, configuration: MethodSpecBuilder.() -> Unit): Boolean =
+        add(buildMethodSpec(name, configuration))
+
     /** Add constructor method. */
     fun addConstructor(): Boolean = add(emptyConstructorMethodSpec())
 
-    /** Add method from name with custom initialization [configuration]. */
-    inline fun add(
-        name: String,
-        configuration: MethodSpecBuilder.() -> Unit
-    ): Boolean = add(buildMethodSpec(name, configuration))
-
     /** Add constructor method with custom initialization [configuration]. */
-    inline fun addConstructor(
-        configuration: MethodSpecBuilder.() -> Unit
-    ): Boolean = add(buildConstructorMethodSpec(configuration))
+    fun addConstructor(configuration: MethodSpecBuilder.() -> Unit): Boolean =
+        add(buildConstructorMethodSpec(configuration))
 }
 
-/** Receiver for the `methods` function type providing an extended set of operators for the configuration. */
+/** Receiver for the `methods` block providing an extended set of operators for the configuration. */
 @SpecDslMarker
-class MethodSpecHandlerScope(actualList: MutableList<MethodSpec>) : MethodSpecHandler(actualList) {
+class MethodSpecHandlerScope internal constructor(actualList: MutableList<MethodSpec>) : MethodSpecHandler(actualList) {
 
-    /** Convenient method to add method with receiver type. */
-    inline operator fun String.invoke(
-        configuration: MethodSpecBuilder.() -> Unit
-    ): Boolean = add(this, configuration)
+    /** @see MethodSpecHandler.add */
+    operator fun String.invoke(configuration: MethodSpecBuilder.() -> Unit): Boolean = add(this, configuration)
+
+    /** @see MethodSpecHandler.addConstructor */
+    fun constructor(configuration: MethodSpecBuilder.() -> Unit): Boolean = addConstructor(configuration)
 }

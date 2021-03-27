@@ -184,14 +184,14 @@ class TypeSpecBuilder(val nativeBuilder: TypeSpec.Builder) {
     }
 
     /** Configures javadoc of this type. */
-    inline fun javadoc(configuration: JavadocHandlerScope.() -> Unit): Unit =
+    fun javadoc(configuration: JavadocHandlerScope.() -> Unit): Unit =
         JavadocHandlerScope(javadoc).configuration()
 
     /** Annotations of this type. */
     val annotations: AnnotationSpecHandler = AnnotationSpecHandler(nativeBuilder.annotations)
 
     /** Configures annotations of this type. */
-    inline fun annotations(configuration: AnnotationSpecHandlerScope.() -> Unit): Unit =
+    fun annotations(configuration: AnnotationSpecHandlerScope.() -> Unit): Unit =
         AnnotationSpecHandlerScope(annotations).configuration()
 
     /** Add type modifiers. */
@@ -203,7 +203,7 @@ class TypeSpecBuilder(val nativeBuilder: TypeSpec.Builder) {
     val typeVariables: TypeVariableNameHandler = TypeVariableNameHandler(nativeBuilder.typeVariables)
 
     /** Configures type variables of this method. */
-    inline fun typeVariables(configuration: TypeVariableNameHandlerScope.() -> Unit): Unit =
+    fun typeVariables(configuration: TypeVariableNameHandlerScope.() -> Unit): Unit =
         TypeVariableNameHandlerScope(typeVariables).configuration()
 
     /** Set superclass to type. */
@@ -230,7 +230,7 @@ class TypeSpecBuilder(val nativeBuilder: TypeSpec.Builder) {
     val superinterfaces: TypeNameHandler = TypeNameHandler(nativeBuilder.superinterfaces)
 
     /** Configures super interfaces of this type. */
-    inline fun superinterfaces(configuration: TypeNameHandlerScope.() -> Unit): Unit =
+    fun superinterfaces(configuration: TypeNameHandlerScope.() -> Unit): Unit =
         TypeNameHandlerScope(superinterfaces).configuration()
 
     /** Add enum constant with name. */
@@ -247,7 +247,7 @@ class TypeSpecBuilder(val nativeBuilder: TypeSpec.Builder) {
     val fields: FieldSpecHandler = FieldSpecHandler(nativeBuilder.fieldSpecs)
 
     /** Configures fields of this type. */
-    inline fun fields(configuration: FieldSpecHandlerScope.() -> Unit): Unit =
+    fun fields(configuration: FieldSpecHandlerScope.() -> Unit): Unit =
         FieldSpecHandlerScope(fields).configuration()
 
     /** Add static block containing [code]. */
@@ -272,14 +272,14 @@ class TypeSpecBuilder(val nativeBuilder: TypeSpec.Builder) {
     val methods: MethodSpecHandler = MethodSpecHandler(nativeBuilder.methodSpecs)
 
     /** Configures methods of this type. */
-    inline fun methods(configuration: MethodSpecHandlerScope.() -> Unit): Unit =
+    fun methods(configuration: MethodSpecHandlerScope.() -> Unit): Unit =
         MethodSpecHandlerScope(methods).configuration()
 
     /** Types of this type. */
     val types: TypeSpecHandler = TypeSpecHandler(nativeBuilder.typeSpecs)
 
     /** Configures types of this type. */
-    inline fun types(configuration: TypeSpecHandlerScope.() -> Unit): Unit =
+    fun types(configuration: TypeSpecHandlerScope.() -> Unit): Unit =
         TypeSpecHandlerScope(types).configuration()
 
     /** Add originating element. */

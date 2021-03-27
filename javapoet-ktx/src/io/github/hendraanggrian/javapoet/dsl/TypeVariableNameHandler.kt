@@ -25,9 +25,23 @@ open class TypeVariableNameHandler internal constructor(actualList: MutableList<
     fun add(name: String, vararg bounds: KClass<*>): Boolean = add(name.typeVarBy(*bounds))
 
     /** Convenient method to add type name with operator function. */
-    operator fun plusAssign(name: String): Unit = plusAssign(name.typeVarOf())
+    @Suppress("NOTHING_TO_INLINE")
+    inline operator fun plusAssign(name: String) {
+        add(name)
+    }
 }
 
-/** Receiver for the `typeVariables` function type providing an extended set of operators for the configuration. */
+/** Receiver for the `typeVariables` block providing an extended set of operators for the configuration. */
 @SpecDslMarker
-class TypeVariableNameHandlerScope(actualList: MutableList<TypeVariableName>) : TypeVariableNameHandler(actualList)
+class TypeVariableNameHandlerScope internal constructor(actualList: MutableList<TypeVariableName>) :
+    TypeVariableNameHandler(actualList) {
+
+    /** @see TypeVariableNameHandler.add */
+    operator fun String.invoke(vararg bounds: TypeName): Boolean = add(this, *bounds)
+
+    /** @see TypeVariableNameHandler.add */
+    operator fun String.invoke(vararg bounds: Type): Boolean = add(this, *bounds)
+
+    /** @see TypeVariableNameHandler.add */
+    operator fun String.invoke(vararg bounds: KClass<*>): Boolean = add(this, *bounds)
+}

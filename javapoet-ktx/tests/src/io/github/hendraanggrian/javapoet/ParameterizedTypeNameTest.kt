@@ -9,7 +9,8 @@ class ParameterizedTypeNameTest {
     private val `class` = Pair::class.java
     private val kclass = Pair::class
 
-    @Test fun vararg() {
+    @Test
+    fun vararg() {
         assertEqualsAll(
             "kotlin.Pair<java.lang.Integer, java.lang.String>",
             "${className.parameterizedBy(INT.box(), String::class.asTypeName())}",
@@ -32,7 +33,8 @@ class ParameterizedTypeNameTest {
         )
     }
 
-    @Test fun list() {
+    @Test
+    fun list() {
         assertEquals(
             "kotlin.Pair<java.lang.Integer, java.lang.String>",
             "${className.parameterizedBy(listOf(INT.box(), String::class.asTypeName()))}"

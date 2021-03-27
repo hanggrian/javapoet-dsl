@@ -9,7 +9,8 @@ import kotlin.test.Test
 class TypeVariableNameHandlerTest {
     private val list = TypeVariableNameHandler(mutableListOf())
 
-    @Test fun test() {
+    @Test
+    fun test() {
         list += "Q"
         list.add("R", String::class.asTypeName())
         list.add("S", String::class.java)

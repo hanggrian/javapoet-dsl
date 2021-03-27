@@ -20,12 +20,18 @@ open class TypeNameHandler internal constructor(actualList: MutableList<TypeName
     inline fun <reified T> add(): Boolean = add(T::class.asTypeName())
 
     /** Convenient method to add type name with operator function. */
-    operator fun plusAssign(type: Type): Unit = plusAssign(type.asTypeName())
+    @Suppress("NOTHING_TO_INLINE")
+    inline operator fun plusAssign(type: Type) {
+        add(type)
+    }
 
     /** Convenient method to add type name with operator function. */
-    operator fun plusAssign(type: KClass<*>): Unit = plusAssign(type.asTypeName())
+    @Suppress("NOTHING_TO_INLINE")
+    inline operator fun plusAssign(type: KClass<*>) {
+        add(type)
+    }
 }
 
-/** Receiver for the `superinterfaces` function type providing an extended set of operators for the configuration. */
+/** Receiver for the `superinterfaces` block providing an extended set of operators for the configuration. */
 @SpecDslMarker
-class TypeNameHandlerScope(actualList: MutableList<TypeName>) : TypeNameHandler(actualList)
+class TypeNameHandlerScope internal constructor(actualList: MutableList<TypeName>) : TypeNameHandler(actualList)

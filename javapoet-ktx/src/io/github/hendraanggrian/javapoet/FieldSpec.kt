@@ -96,14 +96,14 @@ class FieldSpecBuilder(val nativeBuilder: FieldSpec.Builder) {
     }
 
     /** Configures javadoc for this field. */
-    inline fun javadoc(configuration: JavadocHandlerScope.() -> Unit): Unit =
+    fun javadoc(configuration: JavadocHandlerScope.() -> Unit): Unit =
         JavadocHandlerScope(javadoc).configuration()
 
     /** Annotations of this field. */
     val annotations: AnnotationSpecHandler = AnnotationSpecHandler(nativeBuilder.annotations)
 
     /** Configures annotations for this field. */
-    inline fun annotations(configuration: AnnotationSpecHandlerScope.() -> Unit): Unit =
+    fun annotations(configuration: AnnotationSpecHandlerScope.() -> Unit): Unit =
         AnnotationSpecHandlerScope(annotations).configuration()
 
     /** Add field modifiers. */

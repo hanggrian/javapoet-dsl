@@ -11,7 +11,8 @@ class MethodSpecHandlerTest {
     private inline fun container(configuration: MethodSpecHandlerScope.() -> Unit) =
         MethodSpecHandlerScope(list).configuration()
 
-    @Test fun nativeSpec() {
+    @Test
+    fun nativeSpec() {
         list += methodSpecOf("method")
         list += listOf(emptyConstructorMethodSpec())
         assertThat(list).containsExactly(
@@ -20,7 +21,8 @@ class MethodSpecHandlerTest {
         )
     }
 
-    @Test fun string() {
+    @Test
+    fun string() {
         list.add("method1")
         container { "method2" { } }
         assertThat(list).containsExactly(
@@ -29,7 +31,8 @@ class MethodSpecHandlerTest {
         )
     }
 
-    @Test fun others() {
+    @Test
+    fun others() {
         list.addConstructor()
         assertThat(list).containsExactly(
             emptyConstructorMethodSpec()

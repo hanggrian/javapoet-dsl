@@ -8,7 +8,8 @@ import kotlin.test.assertFails
 class JavaFileTest {
 
     /** A java file may only have one type. */
-    @Test fun invalidNumberOfType() {
+    @Test
+    fun invalidNumberOfType() {
         // multiple types
         assertFails {
             buildJavaFile("com.example") {
@@ -22,7 +23,8 @@ class JavaFileTest {
         }
     }
 
-    @Test fun comments() {
+    @Test
+    fun comments() {
         // stacking addComment
         assertEquals(
             JavaFile.builder("com.example", classTypeSpecOf("MyClass"))
@@ -54,7 +56,8 @@ class JavaFileTest {
         )
     }
 
-    @Test fun staticImports() {
+    @Test
+    fun staticImports() {
         // names array cannot be empty
         assertFails {
             buildJavaFile("com.example") {
@@ -86,7 +89,8 @@ class JavaFileTest {
         )
     }
 
-    @Test fun skipJavaLangImports() {
+    @Test
+    fun skipJavaLangImports() {
         assertEquals(
             """
                 package com.example;
@@ -109,7 +113,8 @@ class JavaFileTest {
         )
     }
 
-    @Test fun indent() {
+    @Test
+    fun indent() {
         // custom string
         assertEquals(
             """

@@ -10,13 +10,15 @@ class WildcardTypeNameTest {
         const val EXPECTED_SUPERTYPE = "? super com.example.MyClass"
     }
 
-    @Test fun subtype() {
+    @Test
+    fun subtype() {
         assertEquals(EXPECTED_SUBTYPE, "${MyClass::class.asTypeName().wildcardSubtypeOf()}")
         assertEquals(EXPECTED_SUBTYPE, "${MyClass::class.java.wildcardSubtypeOf()}")
         assertEquals(EXPECTED_SUBTYPE, "${MyClass::class.wildcardSubtypeOf()}")
     }
 
-    @Test fun supertype() {
+    @Test
+    fun supertype() {
         assertEquals(EXPECTED_SUPERTYPE, "${MyClass::class.asTypeName().wildcardSupertypeOf()}")
         assertEquals(EXPECTED_SUPERTYPE, "${MyClass::class.java.wildcardSupertypeOf()}")
         assertEquals(EXPECTED_SUPERTYPE, "${MyClass::class.wildcardSupertypeOf()}")

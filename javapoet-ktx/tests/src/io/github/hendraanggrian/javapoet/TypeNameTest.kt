@@ -6,7 +6,8 @@ import kotlin.test.assertEquals
 
 class TypeNameTest {
 
-    @Test fun staticFields() {
+    @Test
+    fun staticFields() {
         assertEquals(TypeName.VOID, VOID)
         assertEquals(TypeName.BOOLEAN, BOOLEAN)
         assertEquals(TypeName.BYTE, BYTE)
@@ -19,7 +20,8 @@ class TypeNameTest {
         assertEquals(TypeName.OBJECT, OBJECT)
     }
 
-    @Test fun asTypeName() {
+    @Test
+    fun asTypeName() {
         assertEquals("java.lang.String", "${String::class.java.asTypeName()}")
         assertEquals("java.lang.String", "${String::class.asTypeName()}")
         assertEquals("java.lang.String", "${typeNameOf<String>()}")

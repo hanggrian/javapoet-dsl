@@ -11,7 +11,8 @@ class FieldSpecHandlerTest {
     private inline fun container(configuration: FieldSpecHandlerScope.() -> Unit) =
         FieldSpecHandlerScope(list).configuration()
 
-    @Test fun nativeSpec() {
+    @Test
+    fun nativeSpec() {
         list += fieldSpecOf<Field1>("field1")
         list += listOf(fieldSpecOf<Field2>("field2"))
         assertThat(list).containsExactly(
@@ -20,7 +21,8 @@ class FieldSpecHandlerTest {
         )
     }
 
-    @Test fun className() {
+    @Test
+    fun className() {
         val packageName = "io.github.hendraanggrian.javapoet.dsl.FieldSpecHandlerTest"
         list.add(packageName.classOf("Field1"), "field1")
         list["field2"] = packageName.classOf("Field2")
@@ -32,7 +34,8 @@ class FieldSpecHandlerTest {
         )
     }
 
-    @Test fun javaClass() {
+    @Test
+    fun javaClass() {
         list.add(Field1::class.java, "field1")
         list["field2"] = Field2::class.java
         container { "field3"(Field3::class.java) { } }
@@ -43,7 +46,8 @@ class FieldSpecHandlerTest {
         )
     }
 
-    @Test fun kotlinClass() {
+    @Test
+    fun kotlinClass() {
         list.add(Field1::class, "field1")
         list["field2"] = Field2::class
         container { "field3"(Field3::class) { } }
@@ -54,7 +58,8 @@ class FieldSpecHandlerTest {
         )
     }
 
-    @Test fun reifiedType() {
+    @Test
+    fun reifiedType() {
         list.add<Field1>("field1")
         container { "field2"<Field2> { } }
         assertThat(list).containsExactly(

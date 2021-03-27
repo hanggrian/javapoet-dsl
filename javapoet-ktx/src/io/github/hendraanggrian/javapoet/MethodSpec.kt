@@ -72,14 +72,14 @@ class MethodSpecBuilder(val nativeBuilder: MethodSpec.Builder) : CodeBlockHandle
     }
 
     /** Configures javadoc of this method. */
-    inline fun javadoc(configuration: JavadocHandlerScope.() -> Unit): Unit =
+    fun javadoc(configuration: JavadocHandlerScope.() -> Unit): Unit =
         JavadocHandlerScope(javadoc).configuration()
 
     /** Annotations of this method. */
     val annotations: AnnotationSpecHandler = AnnotationSpecHandler(nativeBuilder.annotations)
 
     /** Configures annotations of this method. */
-    inline fun annotations(configuration: AnnotationSpecHandlerScope.() -> Unit): Unit =
+    fun annotations(configuration: AnnotationSpecHandlerScope.() -> Unit): Unit =
         AnnotationSpecHandlerScope(annotations).configuration()
 
     /** Add field modifiers. */
@@ -96,7 +96,7 @@ class MethodSpecBuilder(val nativeBuilder: MethodSpec.Builder) : CodeBlockHandle
     val typeVariables: TypeVariableNameHandler = TypeVariableNameHandler(nativeBuilder.typeVariables)
 
     /** Configures type variables of this method. */
-    inline fun typeVariables(configuration: TypeVariableNameHandlerScope.() -> Unit): Unit =
+    fun typeVariables(configuration: TypeVariableNameHandlerScope.() -> Unit): Unit =
         TypeVariableNameHandlerScope(typeVariables).configuration()
 
     /** Add return line to type name. */
@@ -123,7 +123,7 @@ class MethodSpecBuilder(val nativeBuilder: MethodSpec.Builder) : CodeBlockHandle
     val parameters: ParameterSpecHandler = ParameterSpecHandler(nativeBuilder.parameters)
 
     /** Configures parameters of this method. */
-    inline fun parameters(configuration: ParameterSpecHandlerScope.() -> Unit): Unit =
+    fun parameters(configuration: ParameterSpecHandlerScope.() -> Unit): Unit =
         ParameterSpecHandlerScope(parameters).configuration()
 
     /** Add vararg keyword to array type parameter. */

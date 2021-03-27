@@ -1,14 +1,15 @@
 package io.github.hendraanggrian.javapoet.dsl
 
 import com.google.common.truth.Truth
-import io.github.hendraanggrian.javapoet.asTypeName
 import com.squareup.javapoet.TypeName
+import io.github.hendraanggrian.javapoet.asTypeName
 import kotlin.test.Test
 
 class TypeNameHandlerTest {
     private val list = TypeNameHandler(mutableListOf())
 
-    @Test fun test() {
+    @Test
+    fun test() {
         list += TypeName.CHAR
         list += Double::class.java
         list += Boolean::class
