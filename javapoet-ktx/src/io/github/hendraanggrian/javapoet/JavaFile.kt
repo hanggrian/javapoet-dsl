@@ -9,14 +9,12 @@ import kotlin.reflect.KClass
  * Builds new [JavaFile],
  * by populating newly created [JavaFileBuilder] using provided [configuration].
  */
-inline fun buildJavaFile(
-    packageName: String,
-    configuration: JavaFileBuilder.() -> Unit
-): JavaFile = JavaFileBuilder(packageName).apply(configuration).build()
+fun buildJavaFile(packageName: String, configuration: JavaFileBuilder.() -> Unit): JavaFile =
+    JavaFileBuilder(packageName).apply(configuration).build()
 
 /** Wrapper of [JavaFile.Builder], providing DSL support as a replacement to Java builder. */
 @SpecDslMarker
-class JavaFileBuilder(private val packageName: String) : TypeSpecHandler(ArrayList()) {
+class JavaFileBuilder internal constructor(private val packageName: String) : TypeSpecHandler(ArrayList()) {
     private var comments: MutableList<Pair<String, Array<*>>>? = null
     private var imports: MutableMap<Any, MutableSet<String>>? = null
     private var isSkipJavaLangImports: Boolean? = null
@@ -88,7 +86,7 @@ class JavaFileBuilder(private val packageName: String) : TypeSpecHandler(ArrayLi
         }
 
     /** Convenient method to set [indent] with space the length of [indentSize]. */
-    inline var indentSize: Int
+    var indentSize: Int
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
         set(value) {
             indent = buildString { repeat(value) { append(' ') } }

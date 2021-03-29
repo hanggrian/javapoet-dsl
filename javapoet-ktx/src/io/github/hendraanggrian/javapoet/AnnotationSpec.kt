@@ -29,48 +29,40 @@ inline fun <reified T> annotationSpecOf(): AnnotationSpec = AnnotationSpec.build
  * Builds new [AnnotationSpec] from [ClassName],
  * by populating newly created [AnnotationSpecBuilder] using provided [configuration].
  */
-inline fun buildAnnotationSpec(
-    type: ClassName,
-    configuration: AnnotationSpecBuilder.() -> Unit
-): AnnotationSpec = AnnotationSpecBuilder(AnnotationSpec.builder(type)).apply(configuration).build()
+fun buildAnnotationSpec(type: ClassName, configuration: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+    AnnotationSpecBuilder(AnnotationSpec.builder(type)).apply(configuration).build()
 
 /**
  * Builds new [AnnotationSpec] from [Class],
  * by populating newly created [AnnotationSpecBuilder] using provided [configuration].
  */
-inline fun buildAnnotationSpec(
-    type: Class<*>,
-    configuration: AnnotationSpecBuilder.() -> Unit
-): AnnotationSpec = AnnotationSpecBuilder(AnnotationSpec.builder(type)).apply(configuration).build()
+fun buildAnnotationSpec(type: Class<*>, configuration: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+    AnnotationSpecBuilder(AnnotationSpec.builder(type)).apply(configuration).build()
 
 /**
  * Builds new [AnnotationSpec] from [KClass],
  * by populating newly created [AnnotationSpecBuilder] using provided [configuration].
  */
-inline fun buildAnnotationSpec(
-    type: KClass<*>,
-    configuration: AnnotationSpecBuilder.() -> Unit
-): AnnotationSpec = AnnotationSpecBuilder(AnnotationSpec.builder(type.java)).apply(configuration).build()
+fun buildAnnotationSpec(type: KClass<*>, configuration: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+    AnnotationSpecBuilder(AnnotationSpec.builder(type.java)).apply(configuration).build()
 
 /**
  * Builds new [AnnotationSpec] from [T],
  * by populating newly created [AnnotationSpecBuilder] using provided [configuration].
  */
-inline fun <reified T> buildAnnotationSpec(
-    configuration: AnnotationSpecBuilder.() -> Unit
-): AnnotationSpec = AnnotationSpecBuilder(AnnotationSpec.builder(T::class.java)).apply(configuration).build()
+inline fun <reified T> buildAnnotationSpec(noinline configuration: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+    buildAnnotationSpec(T::class, configuration)
 
 /** Modify existing [AnnotationSpec.Builder] using provided [configuration]. */
-inline fun AnnotationSpec.Builder.edit(
-    configuration: AnnotationSpecBuilder.() -> Unit
-): AnnotationSpec.Builder = AnnotationSpecBuilder(this).apply(configuration).nativeBuilder
+fun AnnotationSpec.Builder.edit(configuration: AnnotationSpecBuilder.() -> Unit): AnnotationSpec.Builder =
+    AnnotationSpecBuilder(this).apply(configuration).nativeBuilder
 
 /**
  * Wrapper of [AnnotationSpec.Builder], providing DSL support as a replacement to Java builder.
  * @param nativeBuilder source builder.
  */
 @SpecDslMarker
-class AnnotationSpecBuilder(val nativeBuilder: AnnotationSpec.Builder) {
+class AnnotationSpecBuilder internal constructor(val nativeBuilder: AnnotationSpec.Builder) {
 
     /** Members of this annotation. */
     val members: Map<String, List<CodeBlock>> get() = nativeBuilder.members
@@ -85,7 +77,7 @@ class AnnotationSpecBuilder(val nativeBuilder: AnnotationSpec.Builder) {
     }
 
     /** Add code as a member of this annotation with custom initialization [configuration]. */
-    inline fun addMember(name: String, configuration: CodeBlockBuilder.() -> Unit): Unit =
+    fun addMember(name: String, configuration: CodeBlockBuilder.() -> Unit): Unit =
         addMember(name, buildCodeBlock(configuration))
 
     /** Convenient method to add member with operator function. */

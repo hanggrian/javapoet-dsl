@@ -35,7 +35,7 @@ inline fun <reified T> parameterSpecOf(name: String, vararg modifiers: Modifier)
  * Builds new [ParameterSpec] from [TypeName],
  * by populating newly created [ParameterSpecBuilder] using provided [configuration].
  */
-inline fun buildParameterSpec(
+fun buildParameterSpec(
     type: TypeName,
     name: String,
     vararg modifiers: Modifier,
@@ -47,7 +47,7 @@ inline fun buildParameterSpec(
  * Builds new [ParameterSpec] from [Type],
  * by populating newly created [ParameterSpecBuilder] using provided [configuration].
  */
-inline fun buildParameterSpec(
+fun buildParameterSpec(
     type: Type,
     name: String,
     vararg modifiers: Modifier,
@@ -59,7 +59,7 @@ inline fun buildParameterSpec(
  * Builds new [ParameterSpec] from [KClass],
  * by populating newly created [ParameterSpecBuilder] using provided [configuration].
  */
-inline fun buildParameterSpec(
+fun buildParameterSpec(
     type: KClass<*>,
     name: String,
     vararg modifiers: Modifier,
@@ -74,21 +74,19 @@ inline fun buildParameterSpec(
 inline fun <reified T> buildParameterSpec(
     name: String,
     vararg modifiers: Modifier,
-    configuration: ParameterSpecBuilder.() -> Unit
-): ParameterSpec = ParameterSpecBuilder(ParameterSpec.builder(T::class.java, name, *modifiers))
-    .apply(configuration).build()
+    noinline configuration: ParameterSpecBuilder.() -> Unit
+): ParameterSpec = buildParameterSpec(T::class, name, *modifiers, configuration = configuration)
 
 /** Modify existing [ParameterSpec.Builder] using provided [configuration]. */
-inline fun ParameterSpec.Builder.edit(
-    configuration: ParameterSpecBuilder.() -> Unit
-): ParameterSpec.Builder = ParameterSpecBuilder(this).apply(configuration).nativeBuilder
+fun ParameterSpec.Builder.edit(configuration: ParameterSpecBuilder.() -> Unit): ParameterSpec.Builder =
+    ParameterSpecBuilder(this).apply(configuration).nativeBuilder
 
 /**
  * Wrapper of [ParameterSpec.Builder], providing DSL support as a replacement to Java builder.
  * @param nativeBuilder source builder.
  */
 @SpecDslMarker
-class ParameterSpecBuilder(val nativeBuilder: ParameterSpec.Builder) {
+class ParameterSpecBuilder internal constructor(val nativeBuilder: ParameterSpec.Builder) {
 
     /** Modifiers of this parameter. */
     val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers

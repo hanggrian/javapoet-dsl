@@ -31,7 +31,7 @@ inline fun <reified T> fieldSpecOf(name: String, vararg modifiers: Modifier): Fi
  * Builds new [FieldSpec] from [TypeName] supplying its name and modifiers,
  * by populating newly created [FieldSpecBuilder] using provided [configuration].
  */
-inline fun buildFieldSpec(
+fun buildFieldSpec(
     type: TypeName,
     name: String,
     vararg modifiers: Modifier,
@@ -42,7 +42,7 @@ inline fun buildFieldSpec(
  * Builds new [FieldSpec] from [Type] supplying its name and modifiers,
  * by populating newly created [FieldSpecBuilder] using provided [configuration].
  */
-inline fun buildFieldSpec(
+fun buildFieldSpec(
     type: Type,
     name: String,
     vararg modifiers: Modifier,
@@ -53,7 +53,7 @@ inline fun buildFieldSpec(
  * Builds new [FieldSpec] from [KClass] supplying its name and modifiers,
  * by populating newly created [FieldSpecBuilder] using provided [configuration].
  */
-inline fun buildFieldSpec(
+fun buildFieldSpec(
     type: KClass<*>,
     name: String,
     vararg modifiers: Modifier,
@@ -67,11 +67,11 @@ inline fun buildFieldSpec(
 inline fun <reified T> buildFieldSpec(
     name: String,
     vararg modifiers: Modifier,
-    configuration: FieldSpecBuilder.() -> Unit
-): FieldSpec = FieldSpecBuilder(FieldSpec.builder(T::class.java, name, *modifiers)).apply(configuration).build()
+    noinline configuration: FieldSpecBuilder.() -> Unit
+): FieldSpec = buildFieldSpec(T::class, name, *modifiers, configuration = configuration)
 
 /** Modify existing [FieldSpec.Builder] using provided [configuration]. */
-inline fun FieldSpec.Builder.edit(
+fun FieldSpec.Builder.edit(
     configuration: FieldSpecBuilder.() -> Unit
 ): FieldSpec.Builder = FieldSpecBuilder(this).apply(configuration).nativeBuilder
 
@@ -80,7 +80,7 @@ inline fun FieldSpec.Builder.edit(
  * @param nativeBuilder source builder.
  */
 @SpecDslMarker
-class FieldSpecBuilder(val nativeBuilder: FieldSpec.Builder) {
+class FieldSpecBuilder internal constructor(val nativeBuilder: FieldSpec.Builder) {
 
     /** Modifiers of this field. */
     val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
@@ -123,7 +123,7 @@ class FieldSpecBuilder(val nativeBuilder: FieldSpec.Builder) {
         }
 
     /** Initialize field value with custom initialization [configuration]. */
-    inline fun initializer(configuration: CodeBlockBuilder.() -> Unit) {
+    fun initializer(configuration: CodeBlockBuilder.() -> Unit) {
         initializer = buildCodeBlock(configuration)
     }
 

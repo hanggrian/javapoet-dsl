@@ -26,30 +26,26 @@ fun emptyConstructorMethodSpec(): MethodSpec = MethodSpecBuilder(MethodSpec.cons
  * Builds new [MethodSpec] with name,
  * by populating newly created [MethodSpecBuilder] using provided [configuration].
  */
-inline fun buildMethodSpec(
-    name: String,
-    configuration: MethodSpecBuilder.() -> Unit
-): MethodSpec = MethodSpecBuilder(MethodSpec.methodBuilder(name)).apply(configuration).build()
+fun buildMethodSpec(name: String, configuration: MethodSpecBuilder.() -> Unit): MethodSpec =
+    MethodSpecBuilder(MethodSpec.methodBuilder(name)).apply(configuration).build()
 
 /**
  * Builds new constructor [MethodSpec],
  * by populating newly created [MethodSpecBuilder] using provided [configuration].
  */
-inline fun buildConstructorMethodSpec(
-    configuration: MethodSpecBuilder.() -> Unit
-): MethodSpec = MethodSpecBuilder(MethodSpec.constructorBuilder()).apply(configuration).build()
+fun buildConstructorMethodSpec(configuration: MethodSpecBuilder.() -> Unit): MethodSpec =
+    MethodSpecBuilder(MethodSpec.constructorBuilder()).apply(configuration).build()
 
 /** Modify existing [MethodSpec.Builder] using provided [configuration]. */
-inline fun MethodSpec.Builder.edit(
-    configuration: MethodSpecBuilder.() -> Unit
-): MethodSpec.Builder = MethodSpecBuilder(this).apply(configuration).nativeBuilder
+fun MethodSpec.Builder.edit(configuration: MethodSpecBuilder.() -> Unit): MethodSpec.Builder =
+    MethodSpecBuilder(this).apply(configuration).nativeBuilder
 
 /**
  * Wrapper of [MethodSpec.Builder], providing DSL support as a replacement to Java builder.
  * @param nativeBuilder source builder.
  */
 @SpecDslMarker
-class MethodSpecBuilder(val nativeBuilder: MethodSpec.Builder) : CodeBlockHandler() {
+class MethodSpecBuilder internal constructor(val nativeBuilder: MethodSpec.Builder) : CodeBlockHandler() {
 
     /** Modifiers of this method. */
     val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
@@ -182,7 +178,7 @@ class MethodSpecBuilder(val nativeBuilder: MethodSpec.Builder) : CodeBlockHandle
         }
 
     /** Set default value to code with custom initialization [configuration]. */
-    inline fun defaultValue(configuration: CodeBlockBuilder.() -> Unit) {
+    fun defaultValue(configuration: CodeBlockBuilder.() -> Unit) {
         defaultValue = buildCodeBlock(configuration)
     }
 
@@ -193,8 +189,7 @@ class MethodSpecBuilder(val nativeBuilder: MethodSpec.Builder) : CodeBlockHandle
         nativeBuilder.beginControlFlow(code)
     }
 
-    inline fun beginFlow(configuration: CodeBlockBuilder.() -> Unit): Unit =
-        beginFlow(buildCodeBlock(configuration))
+    fun beginFlow(configuration: CodeBlockBuilder.() -> Unit): Unit = beginFlow(buildCodeBlock(configuration))
 
     override fun nextFlow(flow: String, vararg args: Any): Unit =
         flow.internalFormat(args) { s, array -> nativeBuilder.nextControlFlow(s, *array) }
@@ -203,7 +198,7 @@ class MethodSpecBuilder(val nativeBuilder: MethodSpec.Builder) : CodeBlockHandle
         nativeBuilder.nextControlFlow(code)
     }
 
-    inline fun nextFlow(configuration: CodeBlockBuilder.() -> Unit): Unit =
+    fun nextFlow(configuration: CodeBlockBuilder.() -> Unit): Unit =
         nextFlow(buildCodeBlock(configuration))
 
     override fun endFlow() {
@@ -217,7 +212,7 @@ class MethodSpecBuilder(val nativeBuilder: MethodSpec.Builder) : CodeBlockHandle
         nativeBuilder.endControlFlow(code)
     }
 
-    inline fun endFlow(configuration: CodeBlockBuilder.() -> Unit): Unit =
+    fun endFlow(configuration: CodeBlockBuilder.() -> Unit): Unit =
         endFlow(buildCodeBlock(configuration))
 
     override fun appendLine(format: String, vararg args: Any): Unit =

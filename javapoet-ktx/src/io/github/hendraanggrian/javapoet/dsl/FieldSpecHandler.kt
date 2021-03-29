@@ -58,7 +58,7 @@ open class FieldSpecHandler internal constructor(actualList: MutableList<FieldSp
     inline fun <reified T> add(
         name: String,
         vararg modifiers: Modifier,
-        configuration: FieldSpecBuilder.() -> Unit
+        noinline configuration: FieldSpecBuilder.() -> Unit
     ): Boolean = add(buildFieldSpec<T>(name, *modifiers, configuration = configuration))
 
     /** Convenient method to add field with operator function. */
@@ -124,6 +124,6 @@ class FieldSpecHandlerScope internal constructor(actualList: MutableList<FieldSp
     /** @see FieldSpecHandler.add */
     inline operator fun <reified T> String.invoke(
         vararg modifiers: Modifier,
-        configuration: FieldSpecBuilder.() -> Unit
+        noinline configuration: FieldSpecBuilder.() -> Unit
     ): Boolean = add<T>(this, *modifiers, configuration = configuration)
 }

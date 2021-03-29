@@ -59,107 +59,85 @@ fun annotationTypeSpecOf(type: ClassName): TypeSpec = TypeSpec.annotationBuilder
  * Builds new class [TypeSpec] from name,
  * by populating newly created [TypeSpecBuilder] using provided [configuration].
  */
-inline fun buildClassTypeSpec(
-    type: String,
-    configuration: TypeSpecBuilder.() -> Unit
-): TypeSpec = TypeSpecBuilder(TypeSpec.classBuilder(type)).apply(configuration).build()
+fun buildClassTypeSpec(type: String, configuration: TypeSpecBuilder.() -> Unit): TypeSpec =
+    TypeSpecBuilder(TypeSpec.classBuilder(type)).apply(configuration).build()
 
 /**
  * Builds new class [TypeSpec] from [ClassName],
  * by populating newly created [TypeSpecBuilder] using provided [configuration].
  */
-inline fun buildClassTypeSpec(
-    type: ClassName,
-    configuration: TypeSpecBuilder.() -> Unit
-): TypeSpec = TypeSpecBuilder(TypeSpec.classBuilder(type)).apply(configuration).build()
+fun buildClassTypeSpec(type: ClassName, configuration: TypeSpecBuilder.() -> Unit): TypeSpec =
+    TypeSpecBuilder(TypeSpec.classBuilder(type)).apply(configuration).build()
 
 /**
  * Builds new interface [TypeSpec] from name,
  * by populating newly created [TypeSpecBuilder] using provided [configuration].
  */
-inline fun buildInterfaceTypeSpec(
-    type: String,
-    configuration: TypeSpecBuilder.() -> Unit
-): TypeSpec = TypeSpecBuilder(TypeSpec.interfaceBuilder(type)).apply(configuration).build()
+fun buildInterfaceTypeSpec(type: String, configuration: TypeSpecBuilder.() -> Unit): TypeSpec =
+    TypeSpecBuilder(TypeSpec.interfaceBuilder(type)).apply(configuration).build()
 
 /**
  * Builds new interface [TypeSpec] from [ClassName],
  * by populating newly created [TypeSpecBuilder] using provided [configuration].
  */
-inline fun buildInterfaceTypeSpec(
-    type: ClassName,
-    configuration: TypeSpecBuilder.() -> Unit
-): TypeSpec = TypeSpecBuilder(TypeSpec.interfaceBuilder(type)).apply(configuration).build()
+fun buildInterfaceTypeSpec(type: ClassName, configuration: TypeSpecBuilder.() -> Unit): TypeSpec =
+    TypeSpecBuilder(TypeSpec.interfaceBuilder(type)).apply(configuration).build()
 
 /**
  * Builds new enum [TypeSpec] from name,
  * by populating newly created [TypeSpecBuilder] using provided [configuration].
  */
-inline fun buildEnumTypeSpec(
-    type: String,
-    configuration: TypeSpecBuilder.() -> Unit
-): TypeSpec = TypeSpecBuilder(TypeSpec.enumBuilder(type)).apply(configuration).build()
+fun buildEnumTypeSpec(type: String, configuration: TypeSpecBuilder.() -> Unit): TypeSpec =
+    TypeSpecBuilder(TypeSpec.enumBuilder(type)).apply(configuration).build()
 
 /**
  * Builds new enum [TypeSpec] from [ClassName],
  * by populating newly created [TypeSpecBuilder] using provided [configuration].
  */
-inline fun buildEnumTypeSpec(
-    type: ClassName,
-    configuration: TypeSpecBuilder.() -> Unit
-): TypeSpec = TypeSpecBuilder(TypeSpec.enumBuilder(type)).apply(configuration).build()
+fun buildEnumTypeSpec(type: ClassName, configuration: TypeSpecBuilder.() -> Unit): TypeSpec =
+    TypeSpecBuilder(TypeSpec.enumBuilder(type)).apply(configuration).build()
 
 /**
  * Builds new anonymous [TypeSpec] from formatting,
  * by populating newly created [TypeSpecBuilder] using provided [configuration].
  * Not inlining this function since [internalFormat] is not inlined.
  */
-fun buildAnonymousTypeSpec(
-    format: String,
-    vararg args: Any,
-    configuration: TypeSpecBuilder.() -> Unit
-): TypeSpec = format.internalFormat(args) { s, array ->
-    TypeSpecBuilder(TypeSpec.anonymousClassBuilder(s, *array)).apply(configuration).build()
-}
+fun buildAnonymousTypeSpec(format: String, vararg args: Any, configuration: TypeSpecBuilder.() -> Unit): TypeSpec =
+    format.internalFormat(args) { s, array ->
+        TypeSpecBuilder(TypeSpec.anonymousClassBuilder(s, *array)).apply(configuration).build()
+    }
 
 /**
  * Builds new anonymous [TypeSpec] from [CodeBlock],
  * by populating newly created [TypeSpecBuilder] using provided [configuration].
  */
-inline fun buildAnonymousTypeSpec(
-    code: CodeBlock,
-    configuration: TypeSpecBuilder.() -> Unit
-): TypeSpec = TypeSpecBuilder(TypeSpec.anonymousClassBuilder(code)).apply(configuration).build()
+fun buildAnonymousTypeSpec(code: CodeBlock, configuration: TypeSpecBuilder.() -> Unit): TypeSpec =
+    TypeSpecBuilder(TypeSpec.anonymousClassBuilder(code)).apply(configuration).build()
 
 /**
  * Builds new annotation [TypeSpec] from name,
  * by populating newly created [TypeSpecBuilder] using provided [configuration].
  */
-inline fun buildAnnotationTypeSpec(
-    type: String,
-    configuration: TypeSpecBuilder.() -> Unit
-): TypeSpec = TypeSpecBuilder(TypeSpec.annotationBuilder(type)).apply(configuration).build()
+fun buildAnnotationTypeSpec(type: String, configuration: TypeSpecBuilder.() -> Unit): TypeSpec =
+    TypeSpecBuilder(TypeSpec.annotationBuilder(type)).apply(configuration).build()
 
 /**
  * Builds new annotation [TypeSpec] from [ClassName],
  * by populating newly created [TypeSpecBuilder] using provided [configuration].
  */
-inline fun buildAnnotationTypeSpec(
-    type: ClassName,
-    configuration: TypeSpecBuilder.() -> Unit
-): TypeSpec = TypeSpecBuilder(TypeSpec.annotationBuilder(type)).apply(configuration).build()
+fun buildAnnotationTypeSpec(type: ClassName, configuration: TypeSpecBuilder.() -> Unit): TypeSpec =
+    TypeSpecBuilder(TypeSpec.annotationBuilder(type)).apply(configuration).build()
 
 /** Modify existing [TypeSpec.Builder] using provided [configuration]. */
-inline fun TypeSpec.Builder.edit(
-    configuration: TypeSpecBuilder.() -> Unit
-): TypeSpec.Builder = TypeSpecBuilder(this).apply(configuration).nativeBuilder
+fun TypeSpec.Builder.edit(configuration: TypeSpecBuilder.() -> Unit): TypeSpec.Builder =
+    TypeSpecBuilder(this).apply(configuration).nativeBuilder
 
 /**
  * Wrapper of [TypeSpec.Builder], providing DSL support as a replacement to Java builder.
  * @param nativeBuilder source builder.
  */
 @SpecDslMarker
-class TypeSpecBuilder(val nativeBuilder: TypeSpec.Builder) {
+class TypeSpecBuilder internal constructor(val nativeBuilder: TypeSpec.Builder) {
 
     /** Enum constants of this type. */
     val enumConstants: MutableMap<String, TypeSpec> get() = nativeBuilder.enumConstants
@@ -256,7 +234,7 @@ class TypeSpecBuilder(val nativeBuilder: TypeSpec.Builder) {
     }
 
     /** Add static block containing code with custom initialization [configuration]. */
-    inline fun addStaticBlock(configuration: CodeBlockBuilder.() -> Unit): Unit =
+    fun addStaticBlock(configuration: CodeBlockBuilder.() -> Unit): Unit =
         addStaticBlock(buildCodeBlock(configuration))
 
     /** Add initializer block containing [code]. */
@@ -265,7 +243,7 @@ class TypeSpecBuilder(val nativeBuilder: TypeSpec.Builder) {
     }
 
     /** Add initializer block containing code with custom initialization [configuration]. */
-    inline fun addInitializerBlock(configuration: CodeBlockBuilder.() -> Unit): Unit =
+    fun addInitializerBlock(configuration: CodeBlockBuilder.() -> Unit): Unit =
         addInitializerBlock(buildCodeBlock(configuration))
 
     /** Methods of this type. */
