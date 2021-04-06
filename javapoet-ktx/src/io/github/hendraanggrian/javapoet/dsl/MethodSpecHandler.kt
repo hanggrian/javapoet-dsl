@@ -9,8 +9,7 @@ import io.github.hendraanggrian.javapoet.emptyConstructorMethodSpec
 import io.github.hendraanggrian.javapoet.methodSpecOf
 
 /** A [MethodSpecHandler] is responsible for managing a set of method instances. */
-open class MethodSpecHandler internal constructor(actualList: MutableList<MethodSpec>) :
-    MutableList<MethodSpec> by actualList {
+open class MethodSpecHandler(actualList: MutableList<MethodSpec>) : MutableList<MethodSpec> by actualList {
 
     /** Add method from name. */
     fun add(name: String): Boolean = add(methodSpecOf(name))
@@ -29,7 +28,7 @@ open class MethodSpecHandler internal constructor(actualList: MutableList<Method
 
 /** Receiver for the `methods` block providing an extended set of operators for the configuration. */
 @SpecDslMarker
-class MethodSpecHandlerScope internal constructor(actualList: MutableList<MethodSpec>) : MethodSpecHandler(actualList) {
+class MethodSpecHandlerScope(actualList: MutableList<MethodSpec>) : MethodSpecHandler(actualList) {
 
     /** @see MethodSpecHandler.add */
     operator fun String.invoke(configuration: MethodSpecBuilder.() -> Unit): Boolean = add(this, configuration)

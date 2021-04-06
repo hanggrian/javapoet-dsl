@@ -30,7 +30,7 @@ private interface CodeBlockAppendable {
         appendLine(buildCodeBlock(configuration))
 }
 
-abstract class CodeBlockHandler internal constructor() : CodeBlockAppendable {
+abstract class CodeBlockHandler : CodeBlockAppendable {
 
     /** Add named code to this container. */
     abstract fun appendNamed(format: String, args: Map<String, *>)
@@ -83,7 +83,7 @@ abstract class CodeBlockHandler internal constructor() : CodeBlockAppendable {
 }
 
 /** A [JavadocHandler] is responsible for managing a set of code instances. */
-abstract class JavadocHandler internal constructor() : CodeBlockAppendable {
+abstract class JavadocHandler : CodeBlockAppendable {
 
     override fun appendLine(): Unit = append(SystemProperties.LINE_SEPARATOR)
 
@@ -114,9 +114,7 @@ abstract class JavadocHandler internal constructor() : CodeBlockAppendable {
 }
 
 /** Receiver for the `javadoc` block providing an extended set of operators for the configuration. */
-class JavadocHandlerScope internal constructor(private val handler: JavadocHandler) :
-    JavadocHandler(),
-    CodeBlockAppendable by handler {
+class JavadocHandlerScope(private val handler: JavadocHandler) : JavadocHandler(), CodeBlockAppendable by handler {
 
     override fun appendLine(): Unit = handler.appendLine()
     override fun appendLine(code: CodeBlock): Unit = handler.appendLine(code)

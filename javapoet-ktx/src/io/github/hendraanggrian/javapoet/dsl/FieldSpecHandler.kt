@@ -11,8 +11,7 @@ import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
 /** A [FieldSpecHandler] is responsible for managing a set of field instances. */
-open class FieldSpecHandler internal constructor(actualList: MutableList<FieldSpec>) :
-    MutableList<FieldSpec> by actualList {
+open class FieldSpecHandler(actualList: MutableList<FieldSpec>) : MutableList<FieldSpec> by actualList {
 
     /** Add field from [TypeName]. */
     fun add(type: TypeName, name: String, vararg modifiers: Modifier): Boolean =
@@ -82,7 +81,7 @@ open class FieldSpecHandler internal constructor(actualList: MutableList<FieldSp
 
 /** Receiver for the `fields` block providing an extended set of operators for the configuration. */
 @SpecDslMarker
-class FieldSpecHandlerScope internal constructor(actualList: MutableList<FieldSpec>) : FieldSpecHandler(actualList) {
+class FieldSpecHandlerScope(actualList: MutableList<FieldSpec>) : FieldSpecHandler(actualList) {
 
     /** @see FieldSpecHandler.add */
     operator fun String.invoke(type: TypeName, vararg modifiers: Modifier): Boolean =

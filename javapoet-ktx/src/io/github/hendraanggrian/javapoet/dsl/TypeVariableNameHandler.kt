@@ -9,7 +9,7 @@ import java.lang.reflect.Type
 import kotlin.reflect.KClass
 
 /** A [TypeVariableNameHandler] is responsible for managing a set of type variable name instances. */
-open class TypeVariableNameHandler internal constructor(actualList: MutableList<TypeVariableName>) :
+open class TypeVariableNameHandler(actualList: MutableList<TypeVariableName>) :
     MutableList<TypeVariableName> by actualList {
 
     /** Add a [TypeVariableName] without bounds. */
@@ -33,8 +33,7 @@ open class TypeVariableNameHandler internal constructor(actualList: MutableList<
 
 /** Receiver for the `typeVariables` block providing an extended set of operators for the configuration. */
 @SpecDslMarker
-class TypeVariableNameHandlerScope internal constructor(actualList: MutableList<TypeVariableName>) :
-    TypeVariableNameHandler(actualList) {
+class TypeVariableNameHandlerScope(actualList: MutableList<TypeVariableName>) : TypeVariableNameHandler(actualList) {
 
     /** @see TypeVariableNameHandler.add */
     operator fun String.invoke(vararg bounds: TypeName): Boolean = add(this, *bounds)

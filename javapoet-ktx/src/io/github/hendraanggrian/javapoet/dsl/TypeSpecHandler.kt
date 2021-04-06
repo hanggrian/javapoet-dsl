@@ -17,8 +17,7 @@ import io.github.hendraanggrian.javapoet.enumTypeSpecOf
 import io.github.hendraanggrian.javapoet.interfaceTypeSpecOf
 
 /** A [TypeSpecHandler] is responsible for managing a set of type instances. */
-open class TypeSpecHandler internal constructor(actualList: MutableList<TypeSpec>) :
-    MutableList<TypeSpec> by actualList {
+open class TypeSpecHandler(actualList: MutableList<TypeSpec>) : MutableList<TypeSpec> by actualList {
 
     /** Add class type from name. */
     fun addClass(type: String): Boolean = add(classTypeSpecOf(type))
@@ -96,7 +95,7 @@ open class TypeSpecHandler internal constructor(actualList: MutableList<TypeSpec
 
 /** Receiver for the `types` block providing an extended set of operators for the configuration. */
 @SpecDslMarker
-class TypeSpecHandlerScope internal constructor(actualList: TypeSpecHandler) : TypeSpecHandler(actualList) {
+class TypeSpecHandlerScope(actualList: TypeSpecHandler) : TypeSpecHandler(actualList) {
 
     /** @see TypeSpecHandler.addClass */
     fun `class`(type: String): Boolean = addClass(type)

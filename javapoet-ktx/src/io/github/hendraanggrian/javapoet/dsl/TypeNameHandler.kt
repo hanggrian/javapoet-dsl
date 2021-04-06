@@ -7,8 +7,7 @@ import java.lang.reflect.Type
 import kotlin.reflect.KClass
 
 /** A [TypeNameHandler] is responsible for managing a set of type name instances. */
-open class TypeNameHandler internal constructor(actualList: MutableList<TypeName>) :
-    MutableList<TypeName> by actualList {
+open class TypeNameHandler(actualList: MutableList<TypeName>) : MutableList<TypeName> by actualList {
 
     /** Add type name from [Class]. */
     fun add(type: Type): Boolean = add(type.asTypeName())
@@ -34,4 +33,4 @@ open class TypeNameHandler internal constructor(actualList: MutableList<TypeName
 
 /** Receiver for the `superinterfaces` block providing an extended set of operators for the configuration. */
 @SpecDslMarker
-class TypeNameHandlerScope internal constructor(actualList: MutableList<TypeName>) : TypeNameHandler(actualList)
+class TypeNameHandlerScope(actualList: MutableList<TypeName>) : TypeNameHandler(actualList)
