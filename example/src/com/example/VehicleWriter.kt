@@ -1,10 +1,10 @@
 package com.example
 
-import io.github.hendraanggrian.javapoet.ABSTRACT
-import io.github.hendraanggrian.javapoet.INT
-import io.github.hendraanggrian.javapoet.PUBLIC
-import io.github.hendraanggrian.javapoet.buildJavaFile
-import io.github.hendraanggrian.javapoet.classOf
+import com.hendraanggrian.javapoet.ABSTRACT
+import com.hendraanggrian.javapoet.INT
+import com.hendraanggrian.javapoet.PUBLIC
+import com.hendraanggrian.javapoet.buildJavaFile
+import com.hendraanggrian.javapoet.classOf
 import java.nio.file.Paths
 
 class VehicleWriter {
@@ -13,7 +13,8 @@ class VehicleWriter {
         private const val PACKAGE_NAME = "com.example.output"
         private val VEHICLE_NAME = PACKAGE_NAME.classOf("Vehicle")
 
-        @JvmStatic fun main(args: Array<String>) {
+        @JvmStatic
+        fun main(args: Array<String>) {
             val writer = VehicleWriter()
             writer.prepare()
             writer.write("Bike", 2)
