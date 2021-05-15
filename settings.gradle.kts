@@ -1,3 +1,3 @@
 include("javapoet-ktx")
-include("example")
+include("sample")
 include("website")

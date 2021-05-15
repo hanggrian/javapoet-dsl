@@ -36,7 +36,7 @@ class VehicleWriter {
                     }
                 }
             }
-        }.writeTo(Paths.get("demo/src"))
+        }.writeTo(Paths.get("sample/src"))
     }
 
     fun write(name: String, wheelCount: Int) {
@@ -58,6 +58,6 @@ class VehicleWriter {
                     }
                 }
             }
-        }.writeTo(Paths.get("demo/src"))
+        }.writeTo(Paths.get("sample/src"))
     }
 }
