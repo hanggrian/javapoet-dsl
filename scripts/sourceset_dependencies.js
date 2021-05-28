@@ -1,1 +1,1 @@
-sourceset_dependencies = '{":javapoet-ktx:dokkaHtml/main": []}'
+sourceset_dependencies='{":javapoet-ktx:dokkaHtml/main":[]}'
