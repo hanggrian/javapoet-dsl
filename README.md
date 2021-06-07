@@ -1,11 +1,13 @@
-[![version](https://api.bintray.com/packages/hendraanggrian/maven/javapoet-ktx/images/download.svg)](https://bintray.com/hendraanggrian/maven/javapoet-ktx/_latestVersion)
-[![build](https://travis-ci.com/hendraanggrian/javapoet-ktx.svg)](https://travis-ci.com/hendraanggrian/javapoet-ktx)
-[![analysis](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081.svg)](https://ktlint.github.io/)
-[![license](https://img.shields.io/github/license/hendraanggrian/javapoet-ktx)](http://www.apache.org/licenses/LICENSE-2.0)
+[![version](https://img.shields.io/maven-central/v/com.hendraanggrian/javapoet-ktx)](https://search.maven.org/artifact/com.hendraanggrian/javapoet-ktx)
+[![build](https://img.shields.io/travis/com/hendraanggrian/javapoet-ktx)](https://travis-ci.com/hendraanggrian/javapoet-ktx)
+[![analysis](https://img.shields.io/badge/code%20style-%E2%9D%A4-FF4081)](https://ktlint.github.io)
+[![license](https://img.shields.io/github/license/hendraanggrian/javapoet-ktx)](https://github.com/hendraanggrian/javapoet-ktx/blob/main/LICENSE)
 
 JavaPoet KTX
 ============
-Lightweight Kotlin extension of [JavaPoet], providing Kotlin DSL functionality and other convenient solutions.
+
+Lightweight Kotlin extension of [JavaPoet](https://github.com/square/javapoet),
+providing Kotlin DSL functionality and other convenient solutions.
 * Full of convenient methods to achieve minimum code writing possible.
 * Options to invoke DSL. For example, `methods.add("main") { ... }` is as good as `methods { "main" { ... } }`. Scroll down for more information.
 * Smooth transition, existing JavaPoet native specs can still be configured with DSL.
@@ -28,22 +30,25 @@ buildJavaFile("com.example.helloworld") {
 
 Download
 --------
+
 ```gradle
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
-    implementation "com.hendraanggrian:javapoet-ktx:$version"
+    implementation "com.hendraanggrian:javapoet-ktx:${version}"
 }
 ```
+
+Snapshots of the development version are available in [Sonatype's snapshots repository](https://s01.oss.sonatype.org/content/repositories/snapshots/).
 
 Usage
 -----
 
 ### Use `%` in string formatter
-[JavaPoet] uses char prefix `$` when formatting literals (`$L`), strings (`$S`), types (`$T`), an names (`$N`) within strings.
-However in Kotlin, `$` in strings is reserved for variable referral. Avoid using `\$` and instead use `%` as the prefix, this is also the approach taken by [KotlinPoet].
+JavaPoet uses char prefix `$` when formatting literals (`$L`), strings (`$S`), types (`$T`), an names (`$N`) within strings.
+However in Kotlin, `$` in strings is reserved for variable referral. Avoid using `\$` and instead use `%` as the prefix, this is also the approach taken by [KotlinPoet](https://github.com/square/kotlinpoet).
 
 ```kotlin
 buildMethodSpec("getName") {
@@ -152,6 +157,3 @@ val arrayOfString = arrayTypeNameOf<java.lang.String>()
 val pairOfInteger = parameterizedTypeNameOf<android.util.Pair>(Integer::class, Integer::class)
 val subtypeOfCharSequence = wildcardTypeNameSubtypeOf<java.lang.CharSequence>()
 ```
-
-[JavaPoet]: https://github.com/square/javapoet
-[KotlinPoet]: https://github.com/square/kotlinpoet
