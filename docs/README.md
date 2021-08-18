@@ -36,7 +36,7 @@ repositories {
 }
 
 dependencies {
-    implementation "com.hendraanggrian:javapoet-ktx:${version}"
+    implementation "com.hendraanggrian:javapoet-ktx:$version"
 }
 ```
 
