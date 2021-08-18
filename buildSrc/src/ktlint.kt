@@ -11,7 +11,7 @@ import org.gradle.kotlin.dsl.registering
 import org.gradle.language.base.plugins.LifecycleBasePlugin
 
 fun Dependencies.ktlint(module: String? = null) = when (module) {
-    null -> "com.pinterest:ktlint:0.42.0"
+    null -> "com.pinterest:ktlint:0.42.1"
     else -> "com.pinterest.ktlint:ktlint-$module:0.42.1"
 }
 
