@@ -1,6 +1,7 @@
-package com.hendraanggrian.javapoet.dsl
+package com.hendraanggrian.javapoet.collections
 
 import com.hendraanggrian.javapoet.CodeBlockBuilder
+import com.hendraanggrian.javapoet.SpecMarker
 import com.hendraanggrian.javapoet.buildCodeBlock
 import com.squareup.javapoet.CodeBlock
 
@@ -30,7 +31,7 @@ private interface CodeBlockAppendable {
         appendLine(buildCodeBlock(configuration))
 }
 
-abstract class CodeBlockHandler : CodeBlockAppendable {
+abstract class CodeBlockCollection : CodeBlockAppendable {
 
     /** Add named code to this container. */
     abstract fun appendNamed(format: String, args: Map<String, *>)
@@ -82,8 +83,8 @@ abstract class CodeBlockHandler : CodeBlockAppendable {
     internal abstract fun endFlow(flow: String, vararg args: Any)
 }
 
-/** A [JavadocHandler] is responsible for managing a set of code instances. */
-abstract class JavadocHandler : CodeBlockAppendable {
+/** A [JavadocCollection] is responsible for managing a set of code instances. */
+abstract class JavadocCollection : CodeBlockAppendable {
 
     override fun appendLine(): Unit = append(SystemProperties.LINE_SEPARATOR)
 
@@ -113,8 +114,11 @@ abstract class JavadocHandler : CodeBlockAppendable {
     }
 }
 
-/** Receiver for the `javadoc` block providing an extended set of operators for the configuration. */
-class JavadocHandlerScope(private val handler: JavadocHandler) : JavadocHandler(), CodeBlockAppendable by handler {
+/** Receiver for the `kdoc` block providing an extended set of operators for the configuration. */
+@SpecMarker
+class JavadocCollectionScope(private val handler: JavadocCollection) :
+    JavadocCollection(),
+    CodeBlockAppendable by handler {
 
     override fun appendLine(): Unit = handler.appendLine()
     override fun appendLine(code: CodeBlock): Unit = handler.appendLine(code)

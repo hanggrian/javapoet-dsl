@@ -1,31 +1,15 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.dsl.AnnotationSpecHandler
-import com.hendraanggrian.javapoet.dsl.AnnotationSpecHandlerScope
-import com.hendraanggrian.javapoet.dsl.JavadocHandler
-import com.hendraanggrian.javapoet.dsl.JavadocHandlerScope
+import com.hendraanggrian.javapoet.collections.AnnotationSpecCollection
+import com.hendraanggrian.javapoet.collections.AnnotationSpecCollectionScope
+import com.hendraanggrian.javapoet.collections.JavadocCollection
+import com.hendraanggrian.javapoet.collections.JavadocCollectionScope
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.TypeName
 import java.lang.reflect.Type
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
-
-/** Builds new [FieldSpec] from [TypeName] supplying its name and modifiers. */
-fun fieldSpecOf(type: TypeName, name: String, vararg modifiers: Modifier): FieldSpec =
-    FieldSpec.builder(type, name, *modifiers).build()
-
-/** Builds new [FieldSpec] from [Type] supplying its name and modifiers. */
-fun fieldSpecOf(type: Type, name: String, vararg modifiers: Modifier): FieldSpec =
-    FieldSpec.builder(type, name, *modifiers).build()
-
-/** Builds new [FieldSpec] from [KClass] supplying its name and modifiers. */
-fun fieldSpecOf(type: KClass<*>, name: String, vararg modifiers: Modifier): FieldSpec =
-    FieldSpec.builder(type.java, name, *modifiers).build()
-
-/** Builds new [FieldSpec] from [T] supplying its name and modifiers. */
-inline fun <reified T> fieldSpecOf(name: String, vararg modifiers: Modifier): FieldSpec =
-    FieldSpec.builder(T::class.java, name, *modifiers).build()
 
 /**
  * Builds new [FieldSpec] from [TypeName] supplying its name and modifiers,
@@ -79,14 +63,14 @@ fun FieldSpec.Builder.edit(
  * Wrapper of [FieldSpec.Builder], providing DSL support as a replacement to Java builder.
  * @param nativeBuilder source builder.
  */
-@SpecDslMarker
+@SpecMarker
 class FieldSpecBuilder internal constructor(val nativeBuilder: FieldSpec.Builder) {
 
     /** Modifiers of this field. */
     val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
 
     /** Javadoc of this field. */
-    val javadoc: JavadocHandler = object : JavadocHandler() {
+    val javadoc: JavadocCollection = object : JavadocCollection() {
         override fun append(format: String, vararg args: Any): Unit =
             format.internalFormat(args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
 
@@ -96,15 +80,15 @@ class FieldSpecBuilder internal constructor(val nativeBuilder: FieldSpec.Builder
     }
 
     /** Configures javadoc for this field. */
-    fun javadoc(configuration: JavadocHandlerScope.() -> Unit): Unit =
-        JavadocHandlerScope(javadoc).configuration()
+    fun javadoc(configuration: JavadocCollectionScope.() -> Unit): Unit =
+        JavadocCollectionScope(javadoc).configuration()
 
     /** Annotations of this field. */
-    val annotations: AnnotationSpecHandler = AnnotationSpecHandler(nativeBuilder.annotations)
+    val annotations: AnnotationSpecCollection = AnnotationSpecCollection(nativeBuilder.annotations)
 
     /** Configures annotations for this field. */
-    fun annotations(configuration: AnnotationSpecHandlerScope.() -> Unit): Unit =
-        AnnotationSpecHandlerScope(annotations).configuration()
+    fun annotations(configuration: AnnotationSpecCollectionScope.() -> Unit): Unit =
+        AnnotationSpecCollectionScope(annotations).configuration()
 
     /** Add field modifiers. */
     fun addModifiers(vararg modifiers: Modifier) {

@@ -1,9 +1,11 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.dsl.AnnotationSpecHandler
-import com.hendraanggrian.javapoet.dsl.AnnotationSpecHandlerScope
-import com.hendraanggrian.javapoet.dsl.JavadocHandler
-import com.hendraanggrian.javapoet.dsl.JavadocHandlerScope
+import com.hendraanggrian.javapoet.collections.AnnotationSpecCollection
+import com.hendraanggrian.javapoet.collections.AnnotationSpecCollectionScope
+import com.hendraanggrian.javapoet.collections.JavadocCollection
+import com.hendraanggrian.javapoet.collections.JavadocCollectionScope
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.ParameterSpec
 import com.squareup.javapoet.TypeName
@@ -13,23 +15,7 @@ import javax.lang.model.element.VariableElement
 import kotlin.reflect.KClass
 
 /** Converts element to [ParameterSpec]. */
-fun VariableElement.asParameterSpec(): ParameterSpec = ParameterSpec.get(this)
-
-/** Builds new [ParameterSpec] from [TypeName]. */
-fun parameterSpecOf(type: TypeName, name: String, vararg modifiers: Modifier): ParameterSpec =
-    ParameterSpec.builder(type, name, *modifiers).build()
-
-/** Builds new [ParameterSpec] from [Type]. */
-fun parameterSpecOf(type: Type, name: String, vararg modifiers: Modifier): ParameterSpec =
-    ParameterSpec.builder(type, name, *modifiers).build()
-
-/** Builds new [ParameterSpec] from [KClass]. */
-fun parameterSpecOf(type: KClass<*>, name: String, vararg modifiers: Modifier): ParameterSpec =
-    ParameterSpec.builder(type.java, name, *modifiers).build()
-
-/** Builds new [ParameterSpec] from [T]. */
-inline fun <reified T> parameterSpecOf(name: String, vararg modifiers: Modifier): ParameterSpec =
-    ParameterSpec.builder(T::class.java, name, *modifiers).build()
+inline fun VariableElement.asParameterSpec(): ParameterSpec = ParameterSpec.get(this)
 
 /**
  * Builds new [ParameterSpec] from [TypeName],
@@ -85,14 +71,14 @@ fun ParameterSpec.Builder.edit(configuration: ParameterSpecBuilder.() -> Unit): 
  * Wrapper of [ParameterSpec.Builder], providing DSL support as a replacement to Java builder.
  * @param nativeBuilder source builder.
  */
-@SpecDslMarker
+@SpecMarker
 class ParameterSpecBuilder internal constructor(val nativeBuilder: ParameterSpec.Builder) {
 
     /** Modifiers of this parameter. */
     val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
 
     /** Javadoc of this parameter. */
-    val javadoc: JavadocHandler = object : JavadocHandler() {
+    val javadoc: JavadocCollection = object : JavadocCollection() {
         override fun append(format: String, vararg args: Any): Unit =
             format.internalFormat(args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
 
@@ -102,15 +88,15 @@ class ParameterSpecBuilder internal constructor(val nativeBuilder: ParameterSpec
     }
 
     /** Configures javadoc for this parameter. */
-    fun javadoc(configuration: JavadocHandlerScope.() -> Unit): Unit =
-        JavadocHandlerScope(javadoc).configuration()
+    fun javadoc(configuration: JavadocCollectionScope.() -> Unit): Unit =
+        JavadocCollectionScope(javadoc).configuration()
 
     /** Annotations of this parameter. */
-    val annotations: AnnotationSpecHandler = AnnotationSpecHandler(nativeBuilder.annotations)
+    val annotations: AnnotationSpecCollection = AnnotationSpecCollection(nativeBuilder.annotations)
 
     /** Configures annotations of this parameter. */
-    fun annotations(configuration: AnnotationSpecHandlerScope.() -> Unit): Unit =
-        AnnotationSpecHandlerScope(annotations).configuration()
+    fun annotations(configuration: AnnotationSpecCollectionScope.() -> Unit): Unit =
+        AnnotationSpecCollectionScope(annotations).configuration()
 
     /** Add parameter modifiers. */
     fun addModifiers(vararg modifiers: Modifier) {

@@ -1,3 +1,5 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package com.hendraanggrian.javapoet
 
 import com.squareup.javapoet.AnnotationSpec
@@ -7,23 +9,11 @@ import javax.lang.model.element.AnnotationMirror
 import kotlin.reflect.KClass
 
 /** Converts [Annotation] to [AnnotationSpec]. */
-fun Annotation.asAnnotationSpec(includeDefaultValues: Boolean = false): AnnotationSpec =
+inline fun Annotation.asAnnotationSpec(includeDefaultValues: Boolean = false): AnnotationSpec =
     AnnotationSpec.get(this, includeDefaultValues)
 
 /** Converts [AnnotationMirror] to [AnnotationSpec]. */
-fun AnnotationMirror.asAnnotationSpec(): AnnotationSpec = AnnotationSpec.get(this)
-
-/** Builds new [AnnotationSpec] from [ClassName]. */
-fun annotationSpecOf(type: ClassName): AnnotationSpec = AnnotationSpec.builder(type).build()
-
-/** Builds new [AnnotationSpec] from [Class]. */
-fun annotationSpecOf(type: Class<*>): AnnotationSpec = AnnotationSpec.builder(type).build()
-
-/** Builds new [AnnotationSpec] from [KClass]. */
-fun annotationSpecOf(type: KClass<*>): AnnotationSpec = AnnotationSpec.builder(type.java).build()
-
-/** Builds new [AnnotationSpec] from [T]. */
-inline fun <reified T> annotationSpecOf(): AnnotationSpec = AnnotationSpec.builder(T::class.java).build()
+inline fun AnnotationMirror.asAnnotationSpec(): AnnotationSpec = AnnotationSpec.get(this)
 
 /**
  * Builds new [AnnotationSpec] from [ClassName],
@@ -61,7 +51,7 @@ fun AnnotationSpec.Builder.edit(configuration: AnnotationSpecBuilder.() -> Unit)
  * Wrapper of [AnnotationSpec.Builder], providing DSL support as a replacement to Java builder.
  * @param nativeBuilder source builder.
  */
-@SpecDslMarker
+@SpecMarker
 class AnnotationSpecBuilder internal constructor(val nativeBuilder: AnnotationSpec.Builder) {
 
     /** Members of this annotation. */

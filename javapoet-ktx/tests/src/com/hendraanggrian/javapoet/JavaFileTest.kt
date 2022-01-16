@@ -1,6 +1,7 @@
 package com.hendraanggrian.javapoet
 
 import com.squareup.javapoet.JavaFile
+import com.squareup.javapoet.TypeSpec
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
@@ -27,7 +28,7 @@ class JavaFileTest {
     fun comments() {
         // stacking addComment
         assertEquals(
-            JavaFile.builder("com.example", classTypeSpecOf("MyClass"))
+            JavaFile.builder("com.example", TypeSpec.classBuilder("MyClass").build())
                 .addFileComment("A ")
                 .addFileComment("very ")
                 .addFileComment("long ")
@@ -43,7 +44,7 @@ class JavaFileTest {
         )
         // single-line comment
         assertEquals(
-            JavaFile.builder("com.example", classTypeSpecOf("MyOtherClass"))
+            JavaFile.builder("com.example", TypeSpec.classBuilder("MyOtherClass").build())
                 .addFileComment("A ")
                 .addFileComment("simple ")
                 .addFileComment("comment")

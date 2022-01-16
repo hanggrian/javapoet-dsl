@@ -1,10 +1,12 @@
+@file:Suppress("NOTHING_TO_INLINE")
+
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.dsl.CodeBlockHandler
+import com.hendraanggrian.javapoet.collections.CodeBlockCollection
 import com.squareup.javapoet.CodeBlock
 
 /** Joins code blocks into a single [CodeBlock], each separated by [separator]. */
-fun Iterable<CodeBlock>.join(separator: String): CodeBlock = CodeBlock.join(this, separator)
+inline fun Iterable<CodeBlock>.join(separator: String = ", "): CodeBlock = CodeBlock.join(this, separator)
 
 /**
  * Converts string to [CodeBlock] using formatted [args].
@@ -29,7 +31,7 @@ fun CodeBlock.Builder.edit(configuration: CodeBlockBuilder.() -> Unit): CodeBloc
  * Wrapper of [CodeBlock.Builder], providing DSL support as a replacement to Java builder.
  * @param nativeBuilder source builder.
  */
-class CodeBlockBuilder internal constructor(val nativeBuilder: CodeBlock.Builder) : CodeBlockHandler() {
+class CodeBlockBuilder internal constructor(val nativeBuilder: CodeBlock.Builder) : CodeBlockCollection() {
 
     /** Returns true if this builder contains no code. */
     fun isEmpty(): Boolean = nativeBuilder.isEmpty

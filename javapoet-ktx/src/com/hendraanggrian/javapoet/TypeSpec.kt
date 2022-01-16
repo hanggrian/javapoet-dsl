@@ -1,19 +1,17 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.dsl.AnnotationSpecHandler
-import com.hendraanggrian.javapoet.dsl.AnnotationSpecHandlerScope
-import com.hendraanggrian.javapoet.dsl.FieldSpecHandler
-import com.hendraanggrian.javapoet.dsl.FieldSpecHandlerScope
-import com.hendraanggrian.javapoet.dsl.JavadocHandler
-import com.hendraanggrian.javapoet.dsl.JavadocHandlerScope
-import com.hendraanggrian.javapoet.dsl.MethodSpecHandler
-import com.hendraanggrian.javapoet.dsl.MethodSpecHandlerScope
-import com.hendraanggrian.javapoet.dsl.TypeNameHandler
-import com.hendraanggrian.javapoet.dsl.TypeNameHandlerScope
-import com.hendraanggrian.javapoet.dsl.TypeSpecHandler
-import com.hendraanggrian.javapoet.dsl.TypeSpecHandlerScope
-import com.hendraanggrian.javapoet.dsl.TypeVariableNameHandler
-import com.hendraanggrian.javapoet.dsl.TypeVariableNameHandlerScope
+import com.hendraanggrian.javapoet.collections.AnnotationSpecCollection
+import com.hendraanggrian.javapoet.collections.AnnotationSpecCollectionScope
+import com.hendraanggrian.javapoet.collections.FieldSpecCollection
+import com.hendraanggrian.javapoet.collections.FieldSpecCollectionScope
+import com.hendraanggrian.javapoet.collections.JavadocCollection
+import com.hendraanggrian.javapoet.collections.JavadocCollectionScope
+import com.hendraanggrian.javapoet.collections.MethodSpecCollection
+import com.hendraanggrian.javapoet.collections.MethodSpecCollectionScope
+import com.hendraanggrian.javapoet.collections.TypeNameCollection
+import com.hendraanggrian.javapoet.collections.TypeSpecCollection
+import com.hendraanggrian.javapoet.collections.TypeSpecCollectionScope
+import com.hendraanggrian.javapoet.collections.TypeVariableNameCollection
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.TypeName
@@ -23,37 +21,6 @@ import javax.lang.model.element.Element
 import javax.lang.model.element.Modifier
 import javax.lang.model.element.TypeElement
 import kotlin.reflect.KClass
-
-/** Builds new class [TypeSpec] with name. */
-fun classTypeSpecOf(type: String): TypeSpec = TypeSpec.classBuilder(type).build()
-
-/** Builds new class [TypeSpec] from [ClassName]. */
-fun classTypeSpecOf(type: ClassName): TypeSpec = TypeSpec.classBuilder(type).build()
-
-/** Builds new interface [TypeSpec] from name. */
-fun interfaceTypeSpecOf(type: String): TypeSpec = TypeSpec.interfaceBuilder(type).build()
-
-/** Builds new interface [TypeSpec] from [ClassName]. */
-fun interfaceTypeSpecOf(type: ClassName): TypeSpec = TypeSpec.interfaceBuilder(type).build()
-
-/** Builds new enum [TypeSpec] from name. */
-fun enumTypeSpecOf(type: String): TypeSpec = TypeSpec.enumBuilder(type).build()
-
-/** Builds new enum [TypeSpec] from [ClassName]. */
-fun enumTypeSpecOf(type: ClassName): TypeSpec = TypeSpec.enumBuilder(type).build()
-
-/** Builds new anonymous [TypeSpec] from formatting. */
-fun anonymousTypeSpecOf(format: String, vararg args: Any): TypeSpec =
-    format.internalFormat(args) { s, array -> TypeSpec.anonymousClassBuilder(s, *array).build() }
-
-/** Builds new anonymous [TypeSpec] from [CodeBlock]. */
-fun anonymousTypeSpecOf(code: CodeBlock): TypeSpec = TypeSpec.anonymousClassBuilder(code).build()
-
-/** Builds new annotation [TypeSpec] from name. */
-fun annotationTypeSpecOf(type: String): TypeSpec = TypeSpec.annotationBuilder(type).build()
-
-/** Builds new annotation [TypeSpec] from [ClassName]. */
-fun annotationTypeSpecOf(type: ClassName): TypeSpec = TypeSpec.annotationBuilder(type).build()
 
 /**
  * Builds new class [TypeSpec] from name,
@@ -136,7 +103,7 @@ fun TypeSpec.Builder.edit(configuration: TypeSpecBuilder.() -> Unit): TypeSpec.B
  * Wrapper of [TypeSpec.Builder], providing DSL support as a replacement to Java builder.
  * @param nativeBuilder source builder.
  */
-@SpecDslMarker
+@SpecMarker
 class TypeSpecBuilder internal constructor(val nativeBuilder: TypeSpec.Builder) {
 
     /** Enum constants of this type. */
@@ -152,7 +119,7 @@ class TypeSpecBuilder internal constructor(val nativeBuilder: TypeSpec.Builder) 
     val alwaysQualifiedNames: MutableSet<String> get() = nativeBuilder.alwaysQualifiedNames
 
     /** Javadoc of this type. */
-    val javadoc: JavadocHandler = object : JavadocHandler() {
+    val javadoc: JavadocCollection = object : JavadocCollection() {
         override fun append(format: String, vararg args: Any): Unit =
             format.internalFormat(args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
 
@@ -162,15 +129,15 @@ class TypeSpecBuilder internal constructor(val nativeBuilder: TypeSpec.Builder) 
     }
 
     /** Configures javadoc of this type. */
-    fun javadoc(configuration: JavadocHandlerScope.() -> Unit): Unit =
-        JavadocHandlerScope(javadoc).configuration()
+    fun javadoc(configuration: JavadocCollectionScope.() -> Unit): Unit =
+        JavadocCollectionScope(javadoc).configuration()
 
     /** Annotations of this type. */
-    val annotations: AnnotationSpecHandler = AnnotationSpecHandler(nativeBuilder.annotations)
+    val annotations: AnnotationSpecCollection = AnnotationSpecCollection(nativeBuilder.annotations)
 
     /** Configures annotations of this type. */
-    fun annotations(configuration: AnnotationSpecHandlerScope.() -> Unit): Unit =
-        AnnotationSpecHandlerScope(annotations).configuration()
+    fun annotations(configuration: AnnotationSpecCollectionScope.() -> Unit): Unit =
+        AnnotationSpecCollectionScope(annotations).configuration()
 
     /** Add type modifiers. */
     fun addModifiers(vararg modifiers: Modifier) {
@@ -178,11 +145,10 @@ class TypeSpecBuilder internal constructor(val nativeBuilder: TypeSpec.Builder) 
     }
 
     /** Type variables of this type. */
-    val typeVariables: TypeVariableNameHandler = TypeVariableNameHandler(nativeBuilder.typeVariables)
+    val typeVariables: TypeVariableNameCollection = TypeVariableNameCollection(nativeBuilder.typeVariables)
 
     /** Configures type variables of this method. */
-    fun typeVariables(configuration: TypeVariableNameHandlerScope.() -> Unit): Unit =
-        TypeVariableNameHandlerScope(typeVariables).configuration()
+    fun typeVariables(configuration: TypeVariableNameCollection.() -> Unit): Unit = typeVariables.configuration()
 
     /** Set superclass to type. */
     var superclass: TypeName
@@ -205,11 +171,10 @@ class TypeSpecBuilder internal constructor(val nativeBuilder: TypeSpec.Builder) 
     inline fun <reified T> superclass(): Unit = superclass(T::class)
 
     /** Super interfaces of this type. */
-    val superinterfaces: TypeNameHandler = TypeNameHandler(nativeBuilder.superinterfaces)
+    val superinterfaces: TypeNameCollection = TypeNameCollection(nativeBuilder.superinterfaces)
 
     /** Configures super interfaces of this type. */
-    fun superinterfaces(configuration: TypeNameHandlerScope.() -> Unit): Unit =
-        TypeNameHandlerScope(superinterfaces).configuration()
+    fun superinterfaces(configuration: TypeNameCollection.() -> Unit): Unit = superinterfaces.configuration()
 
     /** Add enum constant with name. */
     fun addEnumConstant(name: String) {
@@ -222,11 +187,11 @@ class TypeSpecBuilder internal constructor(val nativeBuilder: TypeSpec.Builder) 
     }
 
     /** Fields of this type. */
-    val fields: FieldSpecHandler = FieldSpecHandler(nativeBuilder.fieldSpecs)
+    val fields: FieldSpecCollection = FieldSpecCollection(nativeBuilder.fieldSpecs)
 
     /** Configures fields of this type. */
-    fun fields(configuration: FieldSpecHandlerScope.() -> Unit): Unit =
-        FieldSpecHandlerScope(fields).configuration()
+    fun fields(configuration: FieldSpecCollectionScope.() -> Unit): Unit =
+        FieldSpecCollectionScope(fields).configuration()
 
     /** Add static block containing [code]. */
     fun addStaticBlock(code: CodeBlock) {
@@ -247,18 +212,18 @@ class TypeSpecBuilder internal constructor(val nativeBuilder: TypeSpec.Builder) 
         addInitializerBlock(buildCodeBlock(configuration))
 
     /** Methods of this type. */
-    val methods: MethodSpecHandler = MethodSpecHandler(nativeBuilder.methodSpecs)
+    val methods: MethodSpecCollection = MethodSpecCollection(nativeBuilder.methodSpecs)
 
     /** Configures methods of this type. */
-    fun methods(configuration: MethodSpecHandlerScope.() -> Unit): Unit =
-        MethodSpecHandlerScope(methods).configuration()
+    fun methods(configuration: MethodSpecCollectionScope.() -> Unit): Unit =
+        MethodSpecCollectionScope(methods).configuration()
 
     /** Types of this type. */
-    val types: TypeSpecHandler = TypeSpecHandler(nativeBuilder.typeSpecs)
+    val types: TypeSpecCollection = TypeSpecCollection(nativeBuilder.typeSpecs)
 
     /** Configures types of this type. */
-    fun types(configuration: TypeSpecHandlerScope.() -> Unit): Unit =
-        TypeSpecHandlerScope(types).configuration()
+    fun types(configuration: TypeSpecCollectionScope.() -> Unit): Unit =
+        TypeSpecCollectionScope(types).configuration()
 
     /** Add originating element. */
     fun addOriginatingElement(originatingElement: Element) {

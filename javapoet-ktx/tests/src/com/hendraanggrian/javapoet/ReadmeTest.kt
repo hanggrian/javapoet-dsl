@@ -1,7 +1,8 @@
 package com.hendraanggrian.javapoet
 
 import com.squareup.javapoet.CodeBlock
-import com.hendraanggrian.javapoet.dsl.MethodSpecHandlerScope
+import com.hendraanggrian.javapoet.collections.MethodSpecCollectionScope
+import com.squareup.javapoet.TypeSpec
 import java.util.Collections
 import java.util.Date
 import kotlin.test.Test
@@ -519,8 +520,8 @@ class ReadmeTest {
                         returns<String>()
                     }
                 })
-                addEnumConstant("SCISSORS", anonymousTypeSpecOf("%S", "peace"))
-                addEnumConstant("PAPER", anonymousTypeSpecOf("%S", "flat"))
+                addEnumConstant("SCISSORS", TypeSpec.anonymousClassBuilder(codeBlockOf("%S", "peace")).build())
+                addEnumConstant("PAPER", TypeSpec.anonymousClassBuilder(codeBlockOf("%S", "flat")).build())
                 fields.add<String>("handsign", PRIVATE, FINAL)
                 methods.addConstructor {
                     parameters.add<String>("handsign")
@@ -661,7 +662,7 @@ class ReadmeTest {
         )
     }
 
-    private fun MethodSpecHandlerScope.whatsMyName(name: String) {
+    private fun MethodSpecCollectionScope.whatsMyName(name: String) {
         name {
             returns<String>()
             appendLine("return %S", name)

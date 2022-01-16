@@ -1,26 +1,19 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.dsl.AnnotationSpecHandler
-import com.hendraanggrian.javapoet.dsl.AnnotationSpecHandlerScope
-import com.hendraanggrian.javapoet.dsl.CodeBlockHandler
-import com.hendraanggrian.javapoet.dsl.JavadocHandler
-import com.hendraanggrian.javapoet.dsl.JavadocHandlerScope
-import com.hendraanggrian.javapoet.dsl.ParameterSpecHandler
-import com.hendraanggrian.javapoet.dsl.ParameterSpecHandlerScope
-import com.hendraanggrian.javapoet.dsl.TypeVariableNameHandler
-import com.hendraanggrian.javapoet.dsl.TypeVariableNameHandlerScope
+import com.hendraanggrian.javapoet.collections.AnnotationSpecCollection
+import com.hendraanggrian.javapoet.collections.AnnotationSpecCollectionScope
+import com.hendraanggrian.javapoet.collections.CodeBlockCollection
+import com.hendraanggrian.javapoet.collections.JavadocCollection
+import com.hendraanggrian.javapoet.collections.JavadocCollectionScope
+import com.hendraanggrian.javapoet.collections.ParameterSpecCollection
+import com.hendraanggrian.javapoet.collections.ParameterSpecCollectionScope
+import com.hendraanggrian.javapoet.collections.TypeVariableNameCollection
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeName
 import java.lang.reflect.Type
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
-
-/** Builds new [MethodSpec] with name. */
-fun methodSpecOf(name: String): MethodSpec = MethodSpecBuilder(MethodSpec.methodBuilder(name)).build()
-
-/** Builds new constructor [MethodSpec]. */
-fun emptyConstructorMethodSpec(): MethodSpec = MethodSpecBuilder(MethodSpec.constructorBuilder()).build()
 
 /**
  * Builds new [MethodSpec] with name,
@@ -44,8 +37,8 @@ fun MethodSpec.Builder.edit(configuration: MethodSpecBuilder.() -> Unit): Method
  * Wrapper of [MethodSpec.Builder], providing DSL support as a replacement to Java builder.
  * @param nativeBuilder source builder.
  */
-@SpecDslMarker
-class MethodSpecBuilder internal constructor(val nativeBuilder: MethodSpec.Builder) : CodeBlockHandler() {
+@SpecMarker
+class MethodSpecBuilder internal constructor(val nativeBuilder: MethodSpec.Builder) : CodeBlockCollection() {
 
     /** Modifiers of this method. */
     val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
@@ -58,7 +51,7 @@ class MethodSpecBuilder internal constructor(val nativeBuilder: MethodSpec.Build
         }
 
     /** Javadoc of this method. */
-    val javadoc: JavadocHandler = object : JavadocHandler() {
+    val javadoc: JavadocCollection = object : JavadocCollection() {
         override fun append(format: String, vararg args: Any): Unit =
             format.internalFormat(args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
 
@@ -68,15 +61,15 @@ class MethodSpecBuilder internal constructor(val nativeBuilder: MethodSpec.Build
     }
 
     /** Configures javadoc of this method. */
-    fun javadoc(configuration: JavadocHandlerScope.() -> Unit): Unit =
-        JavadocHandlerScope(javadoc).configuration()
+    fun javadoc(configuration: JavadocCollectionScope.() -> Unit): Unit =
+        JavadocCollectionScope(javadoc).configuration()
 
     /** Annotations of this method. */
-    val annotations: AnnotationSpecHandler = AnnotationSpecHandler(nativeBuilder.annotations)
+    val annotations: AnnotationSpecCollection = AnnotationSpecCollection(nativeBuilder.annotations)
 
     /** Configures annotations of this method. */
-    fun annotations(configuration: AnnotationSpecHandlerScope.() -> Unit): Unit =
-        AnnotationSpecHandlerScope(annotations).configuration()
+    fun annotations(configuration: AnnotationSpecCollectionScope.() -> Unit): Unit =
+        AnnotationSpecCollectionScope(annotations).configuration()
 
     /** Add field modifiers. */
     fun addModifiers(vararg modifiers: Modifier) {
@@ -89,11 +82,10 @@ class MethodSpecBuilder internal constructor(val nativeBuilder: MethodSpec.Build
     }
 
     /** Type variables of this method. */
-    val typeVariables: TypeVariableNameHandler = TypeVariableNameHandler(nativeBuilder.typeVariables)
+    val typeVariables: TypeVariableNameCollection = TypeVariableNameCollection(nativeBuilder.typeVariables)
 
     /** Configures type variables of this method. */
-    fun typeVariables(configuration: TypeVariableNameHandlerScope.() -> Unit): Unit =
-        TypeVariableNameHandlerScope(typeVariables).configuration()
+    fun typeVariables(configuration: TypeVariableNameCollection.() -> Unit): Unit = typeVariables.configuration()
 
     /** Add return line to type name. */
     var returns: TypeName
@@ -116,11 +108,11 @@ class MethodSpecBuilder internal constructor(val nativeBuilder: MethodSpec.Build
     inline fun <reified T> returns(): Unit = returns(T::class)
 
     /** Parameters of this method. */
-    val parameters: ParameterSpecHandler = ParameterSpecHandler(nativeBuilder.parameters)
+    val parameters: ParameterSpecCollection = ParameterSpecCollection(nativeBuilder.parameters)
 
     /** Configures parameters of this method. */
-    fun parameters(configuration: ParameterSpecHandlerScope.() -> Unit): Unit =
-        ParameterSpecHandlerScope(parameters).configuration()
+    fun parameters(configuration: ParameterSpecCollectionScope.() -> Unit): Unit =
+        ParameterSpecCollectionScope(parameters).configuration()
 
     /** Add vararg keyword to array type parameter. */
     var isVarargs: Boolean
