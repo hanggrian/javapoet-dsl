@@ -1,51 +1,60 @@
 package com.hendraanggrian.javapoet
 
-import com.squareup.javapoet.AnnotationSpec
+import com.hendraanggrian.javapoet.internal.Annotation1
+import com.hendraanggrian.javapoet.internal.Annotation2
+import com.hendraanggrian.javapoet.internal.Field1
+import com.hendraanggrian.javapoet.internal.Field2
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.FieldSpec
+import javax.lang.model.element.Modifier
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class FieldSpecBuilderTest {
-    private val expected = FieldSpec.builder(String::class.java, "name")
-        .addJavadoc("firstJavadoc")
-        .addJavadoc(
-            CodeBlock.builder()
-                .add("secondJavadoc")
-                .build()
-        )
-        .addAnnotation(AnnotationSpec.builder(Deprecated::class.java).build())
-        .addModifiers(PUBLIC, FINAL)
-        .initializer("value")
-        .build()
 
     @Test
-    fun simple() {
-        assertEquals(expected, buildFieldSpec<String>("name") {
-            javadoc.append("firstJavadoc")
-            javadoc.append {
-                append("secondJavadoc")
-            }
-            annotations.add<Deprecated>()
-            addModifiers(PUBLIC, FINAL)
-            initializer("value")
-        })
+    fun javadoc() {
+        assertEquals(
+            buildFieldSpec<Field1>("field1") {
+                javadoc {
+                    append("javadoc1")
+                    append(codeBlockOf("javadoc2"))
+                }
+            },
+            FieldSpec.builder(Field1::class.java, "field1")
+                .addJavadoc("javadoc1")
+                .addJavadoc(CodeBlock.of("javadoc2"))
+                .build()
+        )
     }
 
     @Test
-    fun invocation() {
-        assertEquals(expected, buildFieldSpec<String>("name") {
-            javadoc {
-                append("firstJavadoc")
-                append {
-                    append("secondJavadoc")
-                }
-            }
-            annotations {
-                add<Deprecated>()
-            }
-            addModifiers(PUBLIC, FINAL)
-            initializer("value")
-        })
+    fun annotations() {
+        assertEquals(
+            buildFieldSpec<Field1>("field1") { annotations.add<Annotation1>() },
+            FieldSpec.builder(Field1::class.java, "field1").addAnnotation(Annotation1::class.java).build()
+        )
+    }
+
+    @Test
+    fun addModifiers() {
+        assertEquals(
+            buildFieldSpec<Field1>("field1") { addModifiers(PUBLIC, FINAL, STATIC) },
+            FieldSpec.builder(Field1::class.java, "field1")
+                .addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
+                .build()
+        )
+    }
+
+    @Test
+    fun initializer() {
+        assertEquals(
+            buildFieldSpec<Field1>("field1") { initializer("value1") },
+            FieldSpec.builder(Field1::class.java, "field1").initializer("value1").build()
+        )
+        assertEquals(
+            buildFieldSpec<Field2>("field2") { initializer = codeBlockOf("value2") },
+            FieldSpec.builder(Field2::class.java, "field2").initializer(CodeBlock.of("value2")).build()
+        )
     }
 }

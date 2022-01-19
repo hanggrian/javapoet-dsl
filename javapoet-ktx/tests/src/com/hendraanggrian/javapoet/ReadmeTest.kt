@@ -73,7 +73,7 @@ class ReadmeTest {
             buildMethodSpec("main") {
                 returns = VOID
                 appendLine("int total = 0")
-                appendFlow("for (int i = 0; i < 10; i++)") {
+                appendControlFlow("for (int i = 0; i < 10; i++)") {
                     appendLine("total += i")
                 }
             }.toString()
@@ -92,7 +92,7 @@ class ReadmeTest {
             buildMethodSpec("multiply10to20") {
                 returns = INT
                 appendLine("int result = 1")
-                appendFlow("for (int i = 10; i < 20; i++)") {
+                appendControlFlow("for (int i = 10; i < 20; i++)") {
                     appendLine("result = result * i")
                 }
                 appendLine("return result")
@@ -114,11 +114,11 @@ class ReadmeTest {
             """.trimIndent(),
             buildMethodSpec("main") {
                 appendLine("long now = %T.currentTimeMillis()", System::class)
-                appendFlow("if (%T.currentTimeMillis() < now)", System::class) {
+                appendControlFlow("if (%T.currentTimeMillis() < now)", System::class) {
                     appendLine("%T.out.println(%S)", System::class, "Time travelling, woo hoo!")
-                    nextFlow("else if (%T.currentTimeMillis() == now)", System::class)
+                    nextControlFlow("else if (%T.currentTimeMillis() == now)", System::class)
                     appendLine("%T.out.println(%S)", System::class, "Time stood still!")
-                    nextFlow("else")
+                    nextControlFlow("else")
                     appendLine("%T.out.println(%S)", System::class, "Ok, time still moving forward")
                 }
             }.toString()
@@ -135,9 +135,9 @@ class ReadmeTest {
                 
             """.trimIndent(),
             buildMethodSpec("main") {
-                appendFlow("try") {
+                appendControlFlow("try") {
                     appendLine("throw new Exception(%S)", "Failed")
-                    nextFlow("catch (%T e)", Exception::class)
+                    nextControlFlow("catch (%T e)", Exception::class)
                     appendLine("throw new %T(e)", RuntimeException::class)
                 }
             }.toString()
@@ -160,7 +160,7 @@ class ReadmeTest {
             buildMethodSpec("computeRange") {
                 returns = INT
                 appendLine("int result = 0")
-                appendFlow("for (int i = %L; i < %L; i++)", 0, 10) {
+                appendControlFlow("for (int i = %L; i < %L; i++)", 0, 10) {
                     appendLine("result = result %L i", "+=")
                 }
                 appendLine("return result")

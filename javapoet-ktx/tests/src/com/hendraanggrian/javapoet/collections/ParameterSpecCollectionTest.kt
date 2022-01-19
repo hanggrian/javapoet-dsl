@@ -2,6 +2,10 @@ package com.hendraanggrian.javapoet.collections
 
 import com.google.common.truth.Truth.assertThat
 import com.hendraanggrian.javapoet.asTypeName
+import com.hendraanggrian.javapoet.internal.Parameter1
+import com.hendraanggrian.javapoet.internal.Parameter2
+import com.hendraanggrian.javapoet.internal.Parameter3
+import com.hendraanggrian.javapoet.internal.Parameter4
 import com.squareup.javapoet.ParameterSpec
 import kotlin.test.Test
 
@@ -10,11 +14,6 @@ class ParameterSpecCollectionTest {
     private val list = ParameterSpecCollection(mutableListOf())
     private fun list(configuration: ParameterSpecCollectionScope.() -> Unit) =
         ParameterSpecCollectionScope(list).configuration()
-
-    private class Parameter1
-    private class Parameter2
-    private class Parameter3
-    private class Parameter4
 
     @Test
     fun add() {

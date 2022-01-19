@@ -13,7 +13,8 @@ import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.TypeSpec
 
 /** A [TypeSpecCollection] is responsible for managing a set of type instances. */
-open class TypeSpecCollection(actualList: MutableList<TypeSpec>) : MutableList<TypeSpec> by actualList {
+open class TypeSpecCollection internal constructor(actualList: MutableList<TypeSpec>) :
+    MutableList<TypeSpec> by actualList {
 
     /** Add class type from name. */
     fun addClass(type: String): Boolean = add(TypeSpec.classBuilder(type).build())
@@ -59,7 +60,7 @@ open class TypeSpecCollection(actualList: MutableList<TypeSpec>) : MutableList<T
 
     /** Add anonymous type from formatting. */
     fun addAnonymous(format: String, vararg args: Any): Boolean =
-        add(format.internalFormat(args) { s, array -> TypeSpec.anonymousClassBuilder(s, *array).build() })
+        add(format.internalFormat(args) { format2, args2 -> TypeSpec.anonymousClassBuilder(format2, *args2).build() })
 
     /**
      * Add anonymous type from formatting with custom initialization [configuration].
@@ -92,4 +93,4 @@ open class TypeSpecCollection(actualList: MutableList<TypeSpec>) : MutableList<T
 
 /** Receiver for the `types` block providing an extended set of operators for the configuration. */
 @SpecMarker
-class TypeSpecCollectionScope(actualList: MutableList<TypeSpec>) : TypeSpecCollection(actualList)
+class TypeSpecCollectionScope internal constructor(actualList: MutableList<TypeSpec>) : TypeSpecCollection(actualList)

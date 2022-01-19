@@ -9,11 +9,11 @@ import javax.lang.model.element.AnnotationMirror
 import kotlin.reflect.KClass
 
 /** Converts [Annotation] to [AnnotationSpec]. */
-inline fun Annotation.asAnnotationSpec(includeDefaultValues: Boolean = false): AnnotationSpec =
+inline fun Annotation.toAnnotationSpec(includeDefaultValues: Boolean = false): AnnotationSpec =
     AnnotationSpec.get(this, includeDefaultValues)
 
 /** Converts [AnnotationMirror] to [AnnotationSpec]. */
-inline fun AnnotationMirror.asAnnotationSpec(): AnnotationSpec = AnnotationSpec.get(this)
+inline fun AnnotationMirror.toAnnotationSpec(): AnnotationSpec = AnnotationSpec.get(this)
 
 /**
  * Builds new [AnnotationSpec] from [ClassName],
@@ -58,21 +58,16 @@ class AnnotationSpecBuilder internal constructor(val nativeBuilder: AnnotationSp
     val members: Map<String, List<CodeBlock>> get() = nativeBuilder.members
 
     /** Add code as a member of this annotation. */
-    fun addMember(name: String, format: String, vararg args: Any): Unit =
-        format.internalFormat(args) { s, array -> nativeBuilder.addMember(name, s, *array) }
+    fun addMember(name: String, format: String, vararg args: Any): Unit = addMember(name, codeBlockOf(format, *args))
 
     /** Add code as a member of this annotation. */
     fun addMember(name: String, code: CodeBlock) {
         nativeBuilder.addMember(name, code)
     }
 
-    /** Add code as a member of this annotation with custom initialization [configuration]. */
-    fun addMember(name: String, configuration: CodeBlockBuilder.() -> Unit): Unit =
-        addMember(name, buildCodeBlock(configuration))
-
     /** Convenient method to add member with operator function. */
     operator fun String.invoke(configuration: CodeBlockBuilder.() -> Unit): Unit =
-        addMember(this, configuration)
+        addMember(this, buildCodeBlock(configuration))
 
     /** Returns native spec. */
     fun build(): AnnotationSpec = nativeBuilder.build()

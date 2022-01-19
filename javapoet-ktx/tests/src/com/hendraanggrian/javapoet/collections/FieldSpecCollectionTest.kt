@@ -2,6 +2,10 @@ package com.hendraanggrian.javapoet.collections
 
 import com.google.common.truth.Truth.assertThat
 import com.hendraanggrian.javapoet.asTypeName
+import com.hendraanggrian.javapoet.internal.Field1
+import com.hendraanggrian.javapoet.internal.Field2
+import com.hendraanggrian.javapoet.internal.Field3
+import com.hendraanggrian.javapoet.internal.Field4
 import com.squareup.javapoet.FieldSpec
 import kotlin.test.Test
 
@@ -10,11 +14,6 @@ class FieldSpecCollectionTest {
     private val list = FieldSpecCollection(mutableListOf())
     private fun list(configuration: FieldSpecCollectionScope.() -> Unit) =
         FieldSpecCollectionScope(list).configuration()
-
-    private class Field1
-    private class Field2
-    private class Field3
-    private class Field4
 
     @Test
     fun add() {

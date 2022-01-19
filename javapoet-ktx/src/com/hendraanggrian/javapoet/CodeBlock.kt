@@ -14,7 +14,7 @@ inline fun Iterable<CodeBlock>.join(separator: String = ", "): CodeBlock = CodeB
  * @see kotlin.text.format
  */
 fun codeBlockOf(format: String, vararg args: Any): CodeBlock =
-    format.internalFormat(args) { s, array -> CodeBlock.of(s, *array) }
+    format.internalFormat(args) { format2, args2 -> CodeBlock.of(format2, *args2) }
 
 /**
  * Builds new [CodeBlock],
@@ -31,6 +31,7 @@ fun CodeBlock.Builder.edit(configuration: CodeBlockBuilder.() -> Unit): CodeBloc
  * Wrapper of [CodeBlock.Builder], providing DSL support as a replacement to Java builder.
  * @param nativeBuilder source builder.
  */
+@SpecMarker
 class CodeBlockBuilder internal constructor(val nativeBuilder: CodeBlock.Builder) : CodeBlockCollection() {
 
     /** Returns true if this builder contains no code. */
@@ -40,26 +41,26 @@ class CodeBlockBuilder internal constructor(val nativeBuilder: CodeBlock.Builder
     fun isNotEmpty(): Boolean = !nativeBuilder.isEmpty
 
     override fun appendNamed(format: String, args: Map<String, *>): Unit =
-        format.internalFormat(args) { s, map -> nativeBuilder.addNamed(s, map) }
+        format.internalFormat(args) { format2, args2 -> nativeBuilder.addNamed(format2, args2) }
 
     override fun append(format: String, vararg args: Any): Unit =
-        format.internalFormat(args) { s, array -> nativeBuilder.add(s, *array) }
+        format.internalFormat(args) { format2, args2 -> nativeBuilder.add(format2, *args2) }
 
-    override fun beginFlow(flow: String, vararg args: Any): Unit =
-        flow.internalFormat(args) { s, array -> nativeBuilder.beginControlFlow(s, *array) }
+    override fun beginControlFlow(format: String, vararg args: Any): Unit =
+        format.internalFormat(args) { format2, args2 -> nativeBuilder.beginControlFlow(format2, *args2) }
 
-    override fun nextFlow(flow: String, vararg args: Any): Unit =
-        flow.internalFormat(args) { s, array -> nativeBuilder.nextControlFlow(s, *array) }
+    override fun nextControlFlow(format: String, vararg args: Any): Unit =
+        format.internalFormat(args) { format2, args2 -> nativeBuilder.nextControlFlow(format2, *args2) }
 
-    override fun endFlow() {
+    override fun endControlFlow() {
         nativeBuilder.endControlFlow()
     }
 
-    override fun endFlow(flow: String, vararg args: Any): Unit =
-        flow.internalFormat(args) { s, array -> nativeBuilder.endControlFlow(s, *array) }
+    override fun endControlFlow(format: String, vararg args: Any): Unit =
+        format.internalFormat(args) { format2, args2 -> nativeBuilder.endControlFlow(format2, *args2) }
 
     override fun appendLine(format: String, vararg args: Any): Unit =
-        format.internalFormat(args) { s, array -> nativeBuilder.addStatement(s, *array) }
+        format.internalFormat(args) { format2, args2 -> nativeBuilder.addStatement(format2, *args2) }
 
     override fun appendLine(code: CodeBlock) {
         nativeBuilder.addStatement(code)

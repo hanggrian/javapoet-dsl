@@ -70,8 +70,8 @@ fun buildEnumTypeSpec(type: ClassName, configuration: TypeSpecBuilder.() -> Unit
  * Not inlining this function since [internalFormat] is not inlined.
  */
 fun buildAnonymousTypeSpec(format: String, vararg args: Any, configuration: TypeSpecBuilder.() -> Unit): TypeSpec =
-    format.internalFormat(args) { s, array ->
-        TypeSpecBuilder(TypeSpec.anonymousClassBuilder(s, *array)).apply(configuration).build()
+    format.internalFormat(args) { format2, args2 ->
+        TypeSpecBuilder(TypeSpec.anonymousClassBuilder(format2, *args2)).apply(configuration).build()
     }
 
 /**
@@ -121,7 +121,7 @@ class TypeSpecBuilder internal constructor(val nativeBuilder: TypeSpec.Builder) 
     /** Javadoc of this type. */
     val javadoc: JavadocCollection = object : JavadocCollection() {
         override fun append(format: String, vararg args: Any): Unit =
-            format.internalFormat(args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
+            format.internalFormat(args) { format2, args2 -> nativeBuilder.addJavadoc(format2, *args2) }
 
         override fun append(code: CodeBlock) {
             nativeBuilder.addJavadoc(code)
@@ -176,13 +176,8 @@ class TypeSpecBuilder internal constructor(val nativeBuilder: TypeSpec.Builder) 
     /** Configures super interfaces of this type. */
     fun superinterfaces(configuration: TypeNameCollection.() -> Unit): Unit = superinterfaces.configuration()
 
-    /** Add enum constant with name. */
-    fun addEnumConstant(name: String) {
-        nativeBuilder.addEnumConstant(name)
-    }
-
     /** Add enum constant with name and specified [TypeSpec]. */
-    fun addEnumConstant(name: String, spec: TypeSpec) {
+    fun addEnumConstant(name: String, spec: TypeSpec = TypeSpec.anonymousClassBuilder("").build()) {
         nativeBuilder.addEnumConstant(name, spec)
     }
 
@@ -198,18 +193,10 @@ class TypeSpecBuilder internal constructor(val nativeBuilder: TypeSpec.Builder) 
         nativeBuilder.addStaticBlock(code)
     }
 
-    /** Add static block containing code with custom initialization [configuration]. */
-    fun addStaticBlock(configuration: CodeBlockBuilder.() -> Unit): Unit =
-        addStaticBlock(buildCodeBlock(configuration))
-
     /** Add initializer block containing [code]. */
     fun addInitializerBlock(code: CodeBlock) {
         nativeBuilder.addInitializerBlock(code)
     }
-
-    /** Add initializer block containing code with custom initialization [configuration]. */
-    fun addInitializerBlock(configuration: CodeBlockBuilder.() -> Unit): Unit =
-        addInitializerBlock(buildCodeBlock(configuration))
 
     /** Methods of this type. */
     val methods: MethodSpecCollection = MethodSpecCollection(nativeBuilder.methodSpecs)
@@ -224,11 +211,6 @@ class TypeSpecBuilder internal constructor(val nativeBuilder: TypeSpec.Builder) 
     /** Configures types of this type. */
     fun types(configuration: TypeSpecCollectionScope.() -> Unit): Unit =
         TypeSpecCollectionScope(types).configuration()
-
-    /** Add originating element. */
-    fun addOriginatingElement(originatingElement: Element) {
-        nativeBuilder.addOriginatingElement(originatingElement)
-    }
 
     fun alwaysQualify(vararg simpleNames: String) {
         nativeBuilder.alwaysQualify(*simpleNames)

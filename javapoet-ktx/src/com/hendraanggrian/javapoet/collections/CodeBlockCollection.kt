@@ -1,8 +1,6 @@
 package com.hendraanggrian.javapoet.collections
 
-import com.hendraanggrian.javapoet.CodeBlockBuilder
 import com.hendraanggrian.javapoet.SpecMarker
-import com.hendraanggrian.javapoet.buildCodeBlock
 import com.squareup.javapoet.CodeBlock
 
 private interface CodeBlockAppendable {
@@ -13,10 +11,6 @@ private interface CodeBlockAppendable {
     /** Add code block to this container. */
     fun append(code: CodeBlock)
 
-    /** Add code block with custom initialization [configuration]. */
-    fun append(configuration: CodeBlockBuilder.() -> Unit): Unit =
-        append(buildCodeBlock(configuration))
-
     /** Add empty new line to this container. */
     fun appendLine()
 
@@ -25,10 +19,6 @@ private interface CodeBlockAppendable {
 
     /** Add code block with a new line to this container. */
     fun appendLine(code: CodeBlock)
-
-    /** Add code block with custom initialization [configuration] and a new line to this container. */
-    fun appendLine(configuration: CodeBlockBuilder.() -> Unit): Unit =
-        appendLine(buildCodeBlock(configuration))
 }
 
 abstract class CodeBlockCollection : CodeBlockAppendable {
@@ -39,48 +29,48 @@ abstract class CodeBlockCollection : CodeBlockAppendable {
     override fun appendLine(): Unit = appendLine("")
 
     /** Insert code flow with custom initialization [configuration]. */
-    fun appendFlow(flow: String, vararg args: Any, configuration: () -> Unit) {
-        beginFlow(flow, *args)
+    fun appendControlFlow(format: String, vararg args: Any, configuration: () -> Unit) {
+        beginControlFlow(format, *args)
         configuration()
-        endFlow()
+        endControlFlow()
     }
 
     /** Insert do/while code flow with custom initialization [configuration]. */
-    fun appendFlow(
-        startFlow: String,
+    fun appendControlFlow(
+        startFormat: String,
         startArgs: Array<Any>,
         endFlow: String,
-        endArgs: Array<Any>,
+        endFormat: Array<Any>,
         configuration: () -> Unit
     ) {
-        beginFlow(startFlow, *startArgs)
+        beginControlFlow(startFormat, *startArgs)
         configuration()
-        endFlow(endFlow, *endArgs)
+        endControlFlow(endFlow, *endFormat)
     }
+
+    /**
+     * Manually starts the control flow, as opposed to [appendControlFlow].
+     * @see CodeBlock.Builder.beginControlFlow
+     */
+    abstract fun beginControlFlow(format: String, vararg args: Any)
 
     /**
      * Continues the control flow.
      * @see CodeBlock.Builder.nextControlFlow
      */
-    abstract fun nextFlow(flow: String, vararg args: Any)
-
-    /**
-     * Manually starts the control flow, as opposed to [appendFlow].
-     * @see CodeBlock.Builder.beginControlFlow
-     */
-    internal abstract fun beginFlow(flow: String, vararg args: Any)
+    abstract fun nextControlFlow(format: String, vararg args: Any)
 
     /**
      * Manually stops the control flow.
      * @see CodeBlock.Builder.endControlFlow
      */
-    internal abstract fun endFlow()
+    abstract fun endControlFlow()
 
     /**
      * Manually stops the control flow, only used in do/while.
      * @see CodeBlock.Builder.endControlFlow
      */
-    internal abstract fun endFlow(flow: String, vararg args: Any)
+    abstract fun endControlFlow(format: String, vararg args: Any)
 }
 
 /** A [JavadocCollection] is responsible for managing a set of code instances. */
@@ -116,7 +106,7 @@ abstract class JavadocCollection : CodeBlockAppendable {
 
 /** Receiver for the `kdoc` block providing an extended set of operators for the configuration. */
 @SpecMarker
-class JavadocCollectionScope(private val handler: JavadocCollection) :
+class JavadocCollectionScope internal constructor(private val handler: JavadocCollection) :
     JavadocCollection(),
     CodeBlockAppendable by handler {
 

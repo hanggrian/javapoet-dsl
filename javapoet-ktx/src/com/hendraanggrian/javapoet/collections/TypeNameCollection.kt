@@ -8,7 +8,7 @@ import java.lang.reflect.Type
 import kotlin.reflect.KClass
 
 /** A [TypeNameCollection] is responsible for managing a set of type name instances. */
-class TypeNameCollection(actualList: MutableList<TypeName>) : MutableList<TypeName> by actualList {
+class TypeNameCollection internal constructor(actualList: MutableList<TypeName>) : MutableList<TypeName> by actualList {
 
     /** Add type name from [Class]. */
     fun add(type: Type): Boolean = add(type.asTypeName())

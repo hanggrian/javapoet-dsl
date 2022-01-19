@@ -53,7 +53,7 @@ class MethodSpecBuilder internal constructor(val nativeBuilder: MethodSpec.Build
     /** Javadoc of this method. */
     val javadoc: JavadocCollection = object : JavadocCollection() {
         override fun append(format: String, vararg args: Any): Unit =
-            format.internalFormat(args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
+            format.internalFormat(args) { format2, args2 -> nativeBuilder.addJavadoc(format2, *args2) }
 
         override fun append(code: CodeBlock) {
             nativeBuilder.addJavadoc(code)
@@ -74,11 +74,6 @@ class MethodSpecBuilder internal constructor(val nativeBuilder: MethodSpec.Build
     /** Add field modifiers. */
     fun addModifiers(vararg modifiers: Modifier) {
         nativeBuilder.addModifiers(*modifiers)
-    }
-
-    /** Add method modifiers. */
-    fun addModifiers(modifiers: Iterable<Modifier>) {
-        nativeBuilder.addModifiers(modifiers)
     }
 
     /** Type variables of this method. */
@@ -121,34 +116,34 @@ class MethodSpecBuilder internal constructor(val nativeBuilder: MethodSpec.Build
             nativeBuilder.varargs(value)
         }
 
-    /** Add exceptions throwing keyword. */
+    /** Add exceptions using [TypeName]. */
     fun addExceptions(types: Iterable<TypeName>) {
         nativeBuilder.addExceptions(types)
     }
 
-    /** Add exception throwing keyword. */
+    /** Add exception using [TypeName]. */
     fun addException(type: TypeName) {
         nativeBuilder.addException(type)
     }
 
-    /** Add exception throwing keyword. */
+    /** Add exception using [Type]. */
     fun addException(type: Type) {
         nativeBuilder.addException(type)
     }
 
-    /** Add exception throwing keyword. */
+    /** Add exception using [KClass]. */
     fun addException(type: KClass<*>) {
         nativeBuilder.addException(type.java)
     }
 
-    /** Add exception throwing keyword with reified function. */
+    /** Add exception using reified [T]. */
     inline fun <reified T> addException(): Unit = addException(T::class)
 
     override fun append(format: String, vararg args: Any): Unit =
-        format.internalFormat(args) { s, array -> nativeBuilder.addCode(s, *array) }
+        format.internalFormat(args) { format2, args2 -> nativeBuilder.addCode(format2, *args2) }
 
     override fun appendNamed(format: String, args: Map<String, *>): Unit =
-        format.internalFormat(args) { s, map -> nativeBuilder.addNamedCode(s, map) }
+        format.internalFormat(args) { format2, args2 -> nativeBuilder.addNamedCode(format2, args2) }
 
     override fun append(code: CodeBlock) {
         nativeBuilder.addCode(code)
@@ -156,11 +151,12 @@ class MethodSpecBuilder internal constructor(val nativeBuilder: MethodSpec.Build
 
     /** Add comment like [String.format]. */
     fun addComment(format: String, vararg args: Any): Unit =
-        format.internalFormat(args) { s, array -> nativeBuilder.addComment(s, *array) }
+        format.internalFormat(args) { format2, args2 -> nativeBuilder.addComment(format2, *args2) }
 
     /** Set default value like [String.format]. */
-    fun defaultValue(format: String, vararg args: Any): Unit =
-        format.internalFormat(args) { s, array -> nativeBuilder.defaultValue(s, *array) }
+    fun defaultValue(format: String, vararg args: Any) {
+        defaultValue = codeBlockOf(format, *args)
+    }
 
     /** Set default value to code. */
     var defaultValue: CodeBlock
@@ -169,46 +165,33 @@ class MethodSpecBuilder internal constructor(val nativeBuilder: MethodSpec.Build
             nativeBuilder.defaultValue(value)
         }
 
-    /** Set default value to code with custom initialization [configuration]. */
-    fun defaultValue(configuration: CodeBlockBuilder.() -> Unit) {
-        defaultValue = buildCodeBlock(configuration)
-    }
+    override fun beginControlFlow(format: String, vararg args: Any): Unit =
+        format.internalFormat(args) { format2, args2 -> nativeBuilder.beginControlFlow(format2, *args2) }
 
-    override fun beginFlow(flow: String, vararg args: Any): Unit =
-        flow.internalFormat(args) { s, array -> nativeBuilder.beginControlFlow(s, *array) }
-
-    fun beginFlow(code: CodeBlock) {
+    fun beginControlFlow(code: CodeBlock) {
         nativeBuilder.beginControlFlow(code)
     }
 
-    fun beginFlow(configuration: CodeBlockBuilder.() -> Unit): Unit = beginFlow(buildCodeBlock(configuration))
+    override fun nextControlFlow(format: String, vararg args: Any): Unit =
+        format.internalFormat(args) { format2, args2 -> nativeBuilder.nextControlFlow(format2, *args2) }
 
-    override fun nextFlow(flow: String, vararg args: Any): Unit =
-        flow.internalFormat(args) { s, array -> nativeBuilder.nextControlFlow(s, *array) }
-
-    fun nextFlow(code: CodeBlock) {
+    fun nextControlFlow(code: CodeBlock) {
         nativeBuilder.nextControlFlow(code)
     }
 
-    fun nextFlow(configuration: CodeBlockBuilder.() -> Unit): Unit =
-        nextFlow(buildCodeBlock(configuration))
-
-    override fun endFlow() {
+    override fun endControlFlow() {
         nativeBuilder.endControlFlow()
     }
 
-    override fun endFlow(flow: String, vararg args: Any): Unit =
-        flow.internalFormat(args) { s, array -> nativeBuilder.endControlFlow(s, *array) }
+    override fun endControlFlow(format: String, vararg args: Any): Unit =
+        format.internalFormat(args) { format2, args2 -> nativeBuilder.endControlFlow(format2, *args2) }
 
-    fun endFlow(code: CodeBlock) {
+    fun endControlFlow(code: CodeBlock) {
         nativeBuilder.endControlFlow(code)
     }
 
-    fun endFlow(configuration: CodeBlockBuilder.() -> Unit): Unit =
-        endFlow(buildCodeBlock(configuration))
-
     override fun appendLine(format: String, vararg args: Any): Unit =
-        format.internalFormat(args) { s, array -> nativeBuilder.addStatement(s, *array) }
+        format.internalFormat(args) { format2, args2 -> nativeBuilder.addStatement(format2, *args2) }
 
     override fun appendLine(code: CodeBlock) {
         nativeBuilder.addStatement(code)

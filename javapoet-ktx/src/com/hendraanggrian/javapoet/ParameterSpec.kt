@@ -15,7 +15,7 @@ import javax.lang.model.element.VariableElement
 import kotlin.reflect.KClass
 
 /** Converts element to [ParameterSpec]. */
-inline fun VariableElement.asParameterSpec(): ParameterSpec = ParameterSpec.get(this)
+inline fun VariableElement.toParameterSpec(): ParameterSpec = ParameterSpec.get(this)
 
 /**
  * Builds new [ParameterSpec] from [TypeName],
@@ -26,8 +26,7 @@ fun buildParameterSpec(
     name: String,
     vararg modifiers: Modifier,
     configuration: ParameterSpecBuilder.() -> Unit
-): ParameterSpec = ParameterSpecBuilder(ParameterSpec.builder(type, name, *modifiers))
-    .apply(configuration).build()
+): ParameterSpec = ParameterSpecBuilder(ParameterSpec.builder(type, name, *modifiers)).apply(configuration).build()
 
 /**
  * Builds new [ParameterSpec] from [Type],
@@ -38,8 +37,7 @@ fun buildParameterSpec(
     name: String,
     vararg modifiers: Modifier,
     configuration: ParameterSpecBuilder.() -> Unit
-): ParameterSpec = ParameterSpecBuilder(ParameterSpec.builder(type, name, *modifiers))
-    .apply(configuration).build()
+): ParameterSpec = ParameterSpecBuilder(ParameterSpec.builder(type, name, *modifiers)).apply(configuration).build()
 
 /**
  * Builds new [ParameterSpec] from [KClass],
@@ -50,8 +48,7 @@ fun buildParameterSpec(
     name: String,
     vararg modifiers: Modifier,
     configuration: ParameterSpecBuilder.() -> Unit
-): ParameterSpec = ParameterSpecBuilder(ParameterSpec.builder(type.java, name, *modifiers))
-    .apply(configuration).build()
+): ParameterSpec = ParameterSpecBuilder(ParameterSpec.builder(type.java, name, *modifiers)).apply(configuration).build()
 
 /**
  * Builds new [ParameterSpec] from [T],
@@ -80,7 +77,7 @@ class ParameterSpecBuilder internal constructor(val nativeBuilder: ParameterSpec
     /** Javadoc of this parameter. */
     val javadoc: JavadocCollection = object : JavadocCollection() {
         override fun append(format: String, vararg args: Any): Unit =
-            format.internalFormat(args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
+            format.internalFormat(args) { format2, args2 -> nativeBuilder.addJavadoc(format2, *args2) }
 
         override fun append(code: CodeBlock) {
             nativeBuilder.addJavadoc(code)

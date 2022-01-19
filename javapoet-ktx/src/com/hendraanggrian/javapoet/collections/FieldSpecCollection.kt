@@ -12,7 +12,8 @@ import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
 /** A [FieldSpecCollection] is responsible for managing a set of field instances. */
-open class FieldSpecCollection(actualList: MutableList<FieldSpec>) : MutableList<FieldSpec> by actualList {
+open class FieldSpecCollection internal constructor(actualList: MutableList<FieldSpec>) :
+    MutableList<FieldSpec> by actualList {
 
     /** Add field from [TypeName]. */
     fun add(type: TypeName, name: String, vararg modifiers: Modifier): Boolean =
@@ -79,7 +80,8 @@ open class FieldSpecCollection(actualList: MutableList<FieldSpec>) : MutableList
 
 /** Receiver for the `fields` block providing an extended set of operators for the configuration. */
 @SpecMarker
-class FieldSpecCollectionScope(actualList: MutableList<FieldSpec>) : FieldSpecCollection(actualList) {
+class FieldSpecCollectionScope internal constructor(actualList: MutableList<FieldSpec>) :
+    FieldSpecCollection(actualList) {
 
     /** @see FieldSpecCollection.add */
     operator fun String.invoke(

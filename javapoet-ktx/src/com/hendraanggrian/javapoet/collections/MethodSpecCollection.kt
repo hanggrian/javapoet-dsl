@@ -9,7 +9,8 @@ import com.hendraanggrian.javapoet.buildMethodSpec
 import com.squareup.javapoet.MethodSpec
 
 /** A [MethodSpecCollection] is responsible for managing a set of method instances. */
-open class MethodSpecCollection(actualList: MutableList<MethodSpec>) : MutableList<MethodSpec> by actualList {
+open class MethodSpecCollection internal constructor(actualList: MutableList<MethodSpec>) :
+    MutableList<MethodSpec> by actualList {
 
     /** Add method from name. */
     fun add(name: String): Boolean = add(MethodSpec.methodBuilder(name).build())
@@ -33,7 +34,8 @@ open class MethodSpecCollection(actualList: MutableList<MethodSpec>) : MutableLi
 
 /** Receiver for the `methods` block providing an extended set of operators for the configuration. */
 @SpecMarker
-class MethodSpecCollectionScope(actualList: MutableList<MethodSpec>) : MethodSpecCollection(actualList) {
+class MethodSpecCollectionScope internal constructor(actualList: MutableList<MethodSpec>) :
+    MethodSpecCollection(actualList) {
 
     /** @see MethodSpecCollection.add */
     operator fun String.invoke(configuration: MethodSpecBuilder.() -> Unit): Boolean = add(this, configuration)

@@ -1,31 +1,46 @@
 package com.hendraanggrian.javapoet
 
-import com.squareup.javapoet.AnnotationSpec
+import com.hendraanggrian.javapoet.internal.Annotation1
+import com.hendraanggrian.javapoet.internal.Field1
+import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.ParameterSpec
+import javax.lang.model.element.Modifier
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ParameterSpecBuilderTest {
-    private val expected = ParameterSpec.builder(String::class.java, "name")
-        .addAnnotation(AnnotationSpec.builder(Deprecated::class.java).build())
-        .addModifiers(PUBLIC, FINAL)
-        .build()
 
     @Test
-    fun simple() {
-        assertEquals(expected, buildParameterSpec<String>("name") {
-            annotations.add<Deprecated>()
-            addModifiers(PUBLIC, FINAL)
-        })
+    fun javadoc() {
+        assertEquals(
+            buildParameterSpec<Field1>("parameter1") {
+                javadoc {
+                    append("javadoc1")
+                    append(codeBlockOf("javadoc2"))
+                }
+            },
+            ParameterSpec.builder(Field1::class.java, "parameter1")
+                .addJavadoc("javadoc1")
+                .addJavadoc(CodeBlock.of("javadoc2"))
+                .build()
+        )
     }
 
     @Test
-    fun invocation() {
-        assertEquals(expected, buildParameterSpec<String>("name") {
-            annotations {
-                add<Deprecated>()
-            }
-            addModifiers(PUBLIC, FINAL)
-        })
+    fun annotations() {
+        assertEquals(
+            buildParameterSpec<Field1>("parameter1") { annotations.add<Annotation1>() },
+            ParameterSpec.builder(Field1::class.java, "parameter1").addAnnotation(Annotation1::class.java).build()
+        )
+    }
+
+    @Test
+    fun addModifiers() {
+        assertEquals(
+            buildParameterSpec<Field1>("parameter1") { addModifiers(PUBLIC, FINAL, STATIC) },
+            ParameterSpec.builder(Field1::class.java, "parameter1")
+                .addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
+                .build()
+        )
     }
 }

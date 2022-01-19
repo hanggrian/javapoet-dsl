@@ -55,9 +55,8 @@ inline fun <reified T> buildFieldSpec(
 ): FieldSpec = buildFieldSpec(T::class, name, *modifiers, configuration = configuration)
 
 /** Modify existing [FieldSpec.Builder] using provided [configuration]. */
-fun FieldSpec.Builder.edit(
-    configuration: FieldSpecBuilder.() -> Unit
-): FieldSpec.Builder = FieldSpecBuilder(this).apply(configuration).nativeBuilder
+fun FieldSpec.Builder.edit(configuration: FieldSpecBuilder.() -> Unit): FieldSpec.Builder =
+    FieldSpecBuilder(this).apply(configuration).nativeBuilder
 
 /**
  * Wrapper of [FieldSpec.Builder], providing DSL support as a replacement to Java builder.
@@ -72,7 +71,7 @@ class FieldSpecBuilder internal constructor(val nativeBuilder: FieldSpec.Builder
     /** Javadoc of this field. */
     val javadoc: JavadocCollection = object : JavadocCollection() {
         override fun append(format: String, vararg args: Any): Unit =
-            format.internalFormat(args) { s, array -> nativeBuilder.addJavadoc(s, *array) }
+            format.internalFormat(args) { format2, args2 -> nativeBuilder.addJavadoc(format2, *args2) }
 
         override fun append(code: CodeBlock) {
             nativeBuilder.addJavadoc(code)
@@ -96,8 +95,9 @@ class FieldSpecBuilder internal constructor(val nativeBuilder: FieldSpec.Builder
     }
 
     /** Initialize field value like [String.format]. */
-    fun initializer(format: String, vararg args: Any): Unit =
-        format.internalFormat(args) { s, array -> nativeBuilder.initializer(s, *array) }
+    fun initializer(format: String, vararg args: Any) {
+        initializer = codeBlockOf(format, *args)
+    }
 
     /** Initialize field value with code. */
     var initializer: CodeBlock
@@ -105,11 +105,6 @@ class FieldSpecBuilder internal constructor(val nativeBuilder: FieldSpec.Builder
         set(value) {
             nativeBuilder.initializer(value)
         }
-
-    /** Initialize field value with custom initialization [configuration]. */
-    fun initializer(configuration: CodeBlockBuilder.() -> Unit) {
-        initializer = buildCodeBlock(configuration)
-    }
 
     /** Returns native spec. */
     fun build(): FieldSpec = nativeBuilder.build()

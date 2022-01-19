@@ -10,7 +10,7 @@ import java.lang.reflect.Type
 import kotlin.reflect.KClass
 
 /** A [TypeVariableNameCollection] is responsible for managing a set of type variable name instances. */
-class TypeVariableNameCollection(actualList: MutableList<TypeVariableName>) :
+class TypeVariableNameCollection internal constructor(actualList: MutableList<TypeVariableName>) :
     MutableList<TypeVariableName> by actualList {
 
     /** Add a [TypeVariableName] without bounds. */
