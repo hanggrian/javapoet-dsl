@@ -90,9 +90,9 @@ class TypeSpecBuilderTest {
     }
 
     @Test
-    fun addEnumConstant() {
+    fun enumConstants() {
         assertEquals(
-            buildEnumTypeSpec("class1") { addEnumConstant("VALUE") },
+            buildEnumTypeSpec("class1") { enumConstants.put("VALUE") },
             TypeSpec.enumBuilder("class1").addEnumConstant("VALUE").build()
         )
     }

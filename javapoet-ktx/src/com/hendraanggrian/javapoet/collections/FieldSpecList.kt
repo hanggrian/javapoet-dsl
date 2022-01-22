@@ -1,5 +1,3 @@
-@file:Suppress("NOTHING_TO_INLINE")
-
 package com.hendraanggrian.javapoet.collections
 
 import com.hendraanggrian.javapoet.FieldSpecBuilder
@@ -11,8 +9,8 @@ import java.lang.reflect.Type
 import javax.lang.model.element.Modifier
 import kotlin.reflect.KClass
 
-/** A [FieldSpecCollection] is responsible for managing a set of field instances. */
-open class FieldSpecCollection internal constructor(actualList: MutableList<FieldSpec>) :
+/** A [FieldSpecList] is responsible for managing a set of field instances. */
+open class FieldSpecList internal constructor(actualList: MutableList<FieldSpec>) :
     MutableList<FieldSpec> by actualList {
 
     /** Add field from [TypeName]. */
@@ -80,31 +78,30 @@ open class FieldSpecCollection internal constructor(actualList: MutableList<Fiel
 
 /** Receiver for the `fields` block providing an extended set of operators for the configuration. */
 @SpecMarker
-class FieldSpecCollectionScope internal constructor(actualList: MutableList<FieldSpec>) :
-    FieldSpecCollection(actualList) {
+class FieldSpecListScope internal constructor(actualList: MutableList<FieldSpec>) : FieldSpecList(actualList) {
 
-    /** @see FieldSpecCollection.add */
+    /** @see FieldSpecList.add */
     operator fun String.invoke(
         type: TypeName,
         vararg modifiers: Modifier,
         configuration: FieldSpecBuilder.() -> Unit
     ): Boolean = add(type, this, *modifiers, configuration = configuration)
 
-    /** @see FieldSpecCollection.add */
+    /** @see FieldSpecList.add */
     operator fun String.invoke(
         type: Type,
         vararg modifiers: Modifier,
         configuration: FieldSpecBuilder.() -> Unit
     ): Boolean = add(type, this, *modifiers, configuration = configuration)
 
-    /** @see FieldSpecCollection.add */
+    /** @see FieldSpecList.add */
     operator fun String.invoke(
         type: KClass<*>,
         vararg modifiers: Modifier,
         configuration: FieldSpecBuilder.() -> Unit
     ): Boolean = add(type, this, *modifiers, configuration = configuration)
 
-    /** @see FieldSpecCollection.add */
+    /** @see FieldSpecList.add */
     inline operator fun <reified T> String.invoke(
         vararg modifiers: Modifier,
         noinline configuration: FieldSpecBuilder.() -> Unit

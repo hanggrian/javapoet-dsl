@@ -1,8 +1,7 @@
 package com.hendraanggrian.javapoet
 
+import com.hendraanggrian.javapoet.collections.MethodSpecListScope
 import com.squareup.javapoet.CodeBlock
-import com.hendraanggrian.javapoet.collections.MethodSpecCollectionScope
-import com.squareup.javapoet.TypeSpec
 import java.util.Collections
 import java.util.Date
 import kotlin.test.Test
@@ -483,9 +482,11 @@ class ReadmeTest {
             """.trimIndent(),
             buildEnumTypeSpec("Roshambo") {
                 addModifiers(PUBLIC)
-                addEnumConstant("ROCK")
-                addEnumConstant("SCISSORS")
-                addEnumConstant("PAPER")
+                enumConstants {
+                    put("ROCK")
+                    put("SCISSORS")
+                    put("PAPER")
+                }
             }.toString()
         )
         assertEquals(
@@ -512,16 +513,18 @@ class ReadmeTest {
             """.trimIndent(),
             buildEnumTypeSpec("Roshambo") {
                 addModifiers(PUBLIC)
-                addEnumConstant("ROCK", buildAnonymousTypeSpec("%S", "fist") {
-                    methods.add("toString") {
-                        annotations.add<Override>()
-                        addModifiers(PUBLIC)
-                        appendLine("return %S", "avalanche!")
-                        returns<String>()
+                enumConstants {
+                    "ROCK"("%S", "fist") {
+                        methods.add("toString") {
+                            annotations.add<Override>()
+                            addModifiers(PUBLIC)
+                            appendLine("return %S", "avalanche!")
+                            returns<String>()
+                        }
                     }
-                })
-                addEnumConstant("SCISSORS", TypeSpec.anonymousClassBuilder(codeBlockOf("%S", "peace")).build())
-                addEnumConstant("PAPER", TypeSpec.anonymousClassBuilder(codeBlockOf("%S", "flat")).build())
+                    put("SCISSORS", "%S", "peace")
+                    put("PAPER", "%S", "flat")
+                }
                 fields.add<String>("handsign", PRIVATE, FINAL)
                 methods.addConstructor {
                     parameters.add<String>("handsign")
@@ -662,7 +665,7 @@ class ReadmeTest {
         )
     }
 
-    private fun MethodSpecCollectionScope.whatsMyName(name: String) {
+    private fun MethodSpecListScope.whatsMyName(name: String) {
         name {
             returns<String>()
             appendLine("return %S", name)

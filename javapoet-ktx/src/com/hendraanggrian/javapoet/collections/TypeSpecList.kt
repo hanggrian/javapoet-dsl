@@ -12,9 +12,8 @@ import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.TypeSpec
 
-/** A [TypeSpecCollection] is responsible for managing a set of type instances. */
-open class TypeSpecCollection internal constructor(actualList: MutableList<TypeSpec>) :
-    MutableList<TypeSpec> by actualList {
+/** A [TypeSpecList] is responsible for managing a set of type instances. */
+open class TypeSpecList internal constructor(actualList: MutableList<TypeSpec>) : MutableList<TypeSpec> by actualList {
 
     /** Add class type from name. */
     fun addClass(type: String): Boolean = add(TypeSpec.classBuilder(type).build())
@@ -93,4 +92,4 @@ open class TypeSpecCollection internal constructor(actualList: MutableList<TypeS
 
 /** Receiver for the `types` block providing an extended set of operators for the configuration. */
 @SpecMarker
-class TypeSpecCollectionScope internal constructor(actualList: MutableList<TypeSpec>) : TypeSpecCollection(actualList)
+class TypeSpecListScope internal constructor(actualList: MutableList<TypeSpec>) : TypeSpecList(actualList)

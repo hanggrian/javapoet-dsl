@@ -1,5 +1,3 @@
-@file:Suppress("NOTHING_TO_INLINE")
-
 package com.hendraanggrian.javapoet.collections
 
 import com.hendraanggrian.javapoet.asTypeName
@@ -7,8 +5,8 @@ import com.squareup.javapoet.TypeName
 import java.lang.reflect.Type
 import kotlin.reflect.KClass
 
-/** A [TypeNameCollection] is responsible for managing a set of type name instances. */
-class TypeNameCollection internal constructor(actualList: MutableList<TypeName>) : MutableList<TypeName> by actualList {
+/** A [TypeNameList] is responsible for managing a set of type name instances. */
+class TypeNameList internal constructor(actualList: MutableList<TypeName>) : MutableList<TypeName> by actualList {
 
     /** Add type name from [Class]. */
     fun add(type: Type): Boolean = add(type.asTypeName())

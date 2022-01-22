@@ -3,7 +3,8 @@ package com.hendraanggrian.javapoet.collections
 import com.hendraanggrian.javapoet.SpecMarker
 import com.squareup.javapoet.CodeBlock
 
-private interface CodeBlockAppendable {
+/**  */
+interface CodeBlockAppendable {
 
     /** Add code with arguments to this container. */
     fun append(format: String, vararg args: Any)
@@ -21,10 +22,10 @@ private interface CodeBlockAppendable {
     fun appendLine(code: CodeBlock)
 }
 
-abstract class CodeBlockCollection : CodeBlockAppendable {
+interface CodeBlockContainer : CodeBlockAppendable {
 
     /** Add named code to this container. */
-    abstract fun appendNamed(format: String, args: Map<String, *>)
+    fun appendNamed(format: String, args: Map<String, *>)
 
     override fun appendLine(): Unit = appendLine("")
 
@@ -52,29 +53,29 @@ abstract class CodeBlockCollection : CodeBlockAppendable {
      * Manually starts the control flow, as opposed to [appendControlFlow].
      * @see CodeBlock.Builder.beginControlFlow
      */
-    abstract fun beginControlFlow(format: String, vararg args: Any)
+    fun beginControlFlow(format: String, vararg args: Any)
 
     /**
      * Continues the control flow.
      * @see CodeBlock.Builder.nextControlFlow
      */
-    abstract fun nextControlFlow(format: String, vararg args: Any)
+    fun nextControlFlow(format: String, vararg args: Any)
 
     /**
      * Manually stops the control flow.
      * @see CodeBlock.Builder.endControlFlow
      */
-    abstract fun endControlFlow()
+    fun endControlFlow()
 
     /**
      * Manually stops the control flow, only used in do/while.
      * @see CodeBlock.Builder.endControlFlow
      */
-    abstract fun endControlFlow(format: String, vararg args: Any)
+    fun endControlFlow(format: String, vararg args: Any)
 }
 
-/** A [JavadocCollection] is responsible for managing a set of code instances. */
-abstract class JavadocCollection : CodeBlockAppendable {
+/** A [JavadocContainer] is responsible for managing a set of code instances. */
+interface JavadocContainer : CodeBlockAppendable {
 
     override fun appendLine(): Unit = append(SystemProperties.LINE_SEPARATOR)
 
@@ -106,11 +107,4 @@ abstract class JavadocCollection : CodeBlockAppendable {
 
 /** Receiver for the `kdoc` block providing an extended set of operators for the configuration. */
 @SpecMarker
-class JavadocCollectionScope internal constructor(private val handler: JavadocCollection) :
-    JavadocCollection(),
-    CodeBlockAppendable by handler {
-
-    override fun appendLine(): Unit = handler.appendLine()
-    override fun appendLine(code: CodeBlock): Unit = handler.appendLine(code)
-    override fun appendLine(format: String, vararg args: Any): Unit = handler.appendLine(format, *args)
-}
+class JavadocContainerScope internal constructor(container: JavadocContainer) : JavadocContainer by container

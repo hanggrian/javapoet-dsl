@@ -6,7 +6,9 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
 
-class JavaFileTest {
+class JavaFileBuilderTest {
+
+    enum class MyEnum { A }
 
     /** A java file may only have one type. */
     @Test
@@ -71,7 +73,7 @@ class JavaFileTest {
             """
                 package com.example;
 
-                import static com.hendraanggrian.javapoet.JavaFileTest.MyEnum.A;
+                import static com.hendraanggrian.javapoet.JavaFileBuilderTest.MyEnum.A;
                 import static java.lang.String.toDouble;
                 import static java.lang.String.toFloat;
                 import static java.lang.String.toInt;
@@ -153,6 +155,4 @@ class JavaFileTest {
             }.toString()
         )
     }
-
-    enum class MyEnum { A }
 }

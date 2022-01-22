@@ -9,11 +9,10 @@ import com.hendraanggrian.javapoet.internal.Field4
 import com.squareup.javapoet.FieldSpec
 import kotlin.test.Test
 
-class FieldSpecCollectionTest {
+class FieldSpecListTest {
 
-    private val list = FieldSpecCollection(mutableListOf())
-    private fun list(configuration: FieldSpecCollectionScope.() -> Unit) =
-        FieldSpecCollectionScope(list).configuration()
+    private val list = FieldSpecList(mutableListOf())
+    private fun list(configuration: FieldSpecListScope.() -> Unit) = FieldSpecListScope(list).configuration()
 
     @Test
     fun add() {

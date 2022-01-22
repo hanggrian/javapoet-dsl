@@ -6,9 +6,9 @@ import com.hendraanggrian.javapoet.codeBlockOf
 import com.squareup.javapoet.TypeSpec
 import kotlin.test.Test
 
-class TypeSpecCollectionTest {
+class TypeSpecListTest {
 
-    private val list = TypeSpecCollection(mutableListOf())
+    private val list = TypeSpecList(mutableListOf())
 
     private class Class2
     private interface Interface2
@@ -21,8 +21,8 @@ class TypeSpecCollectionTest {
         list.addClass(Class2::class.asClassName())
         list.addInterface("Interface1")
         list.addInterface(Interface2::class.asClassName())
-        list.addEnum("Enum1") { addEnumConstant("A") }
-        list.addEnum(Enum2::class.asClassName()) { addEnumConstant("B") }
+        list.addEnum("Enum1") { enumConstants.put("A") }
+        list.addEnum(Enum2::class.asClassName()) { enumConstants.put("B") }
         list.addAnonymous("Anonymous1")
         list.addAnonymous(codeBlockOf("Anonymous2"))
         list.addAnnotation("Annotation1")

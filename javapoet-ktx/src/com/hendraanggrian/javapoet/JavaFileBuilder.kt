@@ -1,6 +1,6 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.collections.TypeSpecCollection
+import com.hendraanggrian.javapoet.collections.TypeSpecList
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.JavaFile
 import kotlin.reflect.KClass
@@ -14,18 +14,15 @@ fun buildJavaFile(packageName: String, configuration: JavaFileBuilder.() -> Unit
 
 /** Wrapper of [JavaFile.Builder], providing DSL support as a replacement to Java builder. */
 @SpecMarker
-class JavaFileBuilder internal constructor(private val packageName: String) : TypeSpecCollection(ArrayList()) {
-    private var comments: MutableList<Pair<String, Array<*>>>? = null
-    private var imports: MutableMap<Any, MutableSet<String>>? = null
-    private var isSkipJavaLangImports: Boolean? = null
-    private var indentString: String? = null
+class JavaFileBuilder internal constructor(private val packageName: String) : TypeSpecList(ArrayList()) {
+    private var comments: MutableList<Pair<String, Array<*>>> = mutableListOf()
+    private var imports: MutableMap<Any, MutableSet<String>> = mutableMapOf()
+    private var isSkipJavaLangImports: Boolean = false
+    private var indentString: String = "  "
 
     /** Add comment like [String.format]. */
     fun addComment(format: String, vararg args: Any) {
-        if (comments == null) {
-            comments = mutableListOf()
-        }
-        comments!! += format to arrayOf(*args)
+        comments += format to arrayOf(*args)
     }
 
     /** Set comment with simple string, cancelling all changes made with [addComment]. */
@@ -35,41 +32,27 @@ class JavaFileBuilder internal constructor(private val packageName: String) : Ty
             comments = mutableListOf(value to emptyArray<Any>())
         }
 
-    /** Add static import. */
+    /** Add static import from [Enum]. */
     fun addStaticImport(constant: Enum<*>) {
-        if (imports == null) {
-            imports = mutableMapOf()
-        }
-        imports!![constant] = mutableSetOf()
+        imports[constant] = mutableSetOf()
     }
 
-    /** Add static import. */
+    /** Add static import from [ClassName]. */
     fun addStaticImport(type: ClassName, vararg names: String) {
-        if (imports == null) {
-            imports = mutableMapOf()
-        }
         when (type) {
-            in imports!! -> imports!![type]!! += names
-            else -> imports!![type] = mutableSetOf(*names)
+            in imports -> imports[type]!! += names
+            else -> imports[type] = mutableSetOf(*names)
         }
     }
 
-    /** Add static import. */
-    fun addStaticImport(type: Class<*>, vararg names: String) {
-        if (imports == null) {
-            imports = mutableMapOf()
-        }
-        when (type) {
-            in imports!! -> imports!![type]!! += names
-            else -> imports!![type] = mutableSetOf(*names)
-        }
-    }
+    /** Add static import from [Class]. */
+    fun addStaticImport(type: Class<*>, vararg names: String): Unit = addStaticImport(type.asClassName(), *names)
 
-    /** Add static import. */
-    fun addStaticImport(type: KClass<*>, vararg names: String): Unit = addStaticImport(type.java, *names)
+    /** Add static import from [KClass]. */
+    fun addStaticImport(type: KClass<*>, vararg names: String): Unit = addStaticImport(type.asClassName(), *names)
 
-    /** Add static import with reified function. */
-    inline fun <reified T> addStaticImport(vararg names: String): Unit = addStaticImport(T::class.java, *names)
+    /** Add static import with reified [T]. */
+    inline fun <reified T> addStaticImport(vararg names: String): Unit = addStaticImport(T::class.asClassName(), *names)
 
     /** Set to true to skip java imports. */
     var skipJavaLangImports: Boolean
@@ -94,20 +77,18 @@ class JavaFileBuilder internal constructor(private val packageName: String) : Ty
 
     /** Returns native spec. */
     fun build(): JavaFile {
-        check(isNotEmpty()) { "No type found in this JavaFile" }
-        check(size == 1) { "Only 1 type is expected in JavaFile" }
+        check(size == 1) { "JavaFile must have exactly 1 type." }
         return JavaFile.builder(packageName, first())
             .apply {
-                comments?.forEach { (format, args) -> addFileComment(format, *args) }
-                imports?.forEach { (type, names) ->
+                comments.forEach { (format, args) -> addFileComment(format, *args) }
+                imports.forEach { (type, names) ->
                     when (type) {
                         is Enum<*> -> addStaticImport(type)
                         is ClassName -> addStaticImport(type, *names.toTypedArray())
-                        is Class<*> -> addStaticImport(type, *names.toTypedArray())
                     }
                 }
-                isSkipJavaLangImports?.let { skipJavaLangImports(it) }
-                indentString?.let { indent(it) }
+                skipJavaLangImports(isSkipJavaLangImports)
+                indent(indentString)
             }
             .build()
     }

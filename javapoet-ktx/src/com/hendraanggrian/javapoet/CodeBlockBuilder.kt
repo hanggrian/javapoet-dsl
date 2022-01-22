@@ -1,19 +1,14 @@
-@file:Suppress("NOTHING_TO_INLINE")
-
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.collections.CodeBlockCollection
+import com.hendraanggrian.javapoet.collections.CodeBlockContainer
 import com.squareup.javapoet.CodeBlock
-
-/** Joins code blocks into a single [CodeBlock], each separated by [separator]. */
-inline fun Iterable<CodeBlock>.join(separator: String = ", "): CodeBlock = CodeBlock.join(this, separator)
 
 /**
  * Converts string to [CodeBlock] using formatted [args].
  *
  * @see kotlin.text.format
  */
-fun codeBlockOf(format: String, vararg args: Any): CodeBlock =
+fun codeBlockOf(format: String, vararg args: Any?): CodeBlock =
     format.internalFormat(args) { format2, args2 -> CodeBlock.of(format2, *args2) }
 
 /**
@@ -32,7 +27,7 @@ fun CodeBlock.Builder.edit(configuration: CodeBlockBuilder.() -> Unit): CodeBloc
  * @param nativeBuilder source builder.
  */
 @SpecMarker
-class CodeBlockBuilder internal constructor(val nativeBuilder: CodeBlock.Builder) : CodeBlockCollection() {
+class CodeBlockBuilder internal constructor(val nativeBuilder: CodeBlock.Builder) : CodeBlockContainer {
 
     /** Returns true if this builder contains no code. */
     fun isEmpty(): Boolean = nativeBuilder.isEmpty

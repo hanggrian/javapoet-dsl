@@ -1,5 +1,3 @@
-@file:Suppress("NOTHING_TO_INLINE")
-
 package com.hendraanggrian.javapoet
 
 import com.squareup.javapoet.AnnotationSpec
@@ -64,10 +62,6 @@ class AnnotationSpecBuilder internal constructor(val nativeBuilder: AnnotationSp
     fun addMember(name: String, code: CodeBlock) {
         nativeBuilder.addMember(name, code)
     }
-
-    /** Convenient method to add member with operator function. */
-    operator fun String.invoke(configuration: CodeBlockBuilder.() -> Unit): Unit =
-        addMember(this, buildCodeBlock(configuration))
 
     /** Returns native spec. */
     fun build(): AnnotationSpec = nativeBuilder.build()

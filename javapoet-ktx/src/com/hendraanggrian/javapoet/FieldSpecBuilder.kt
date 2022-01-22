@@ -1,9 +1,9 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.collections.AnnotationSpecCollection
-import com.hendraanggrian.javapoet.collections.AnnotationSpecCollectionScope
-import com.hendraanggrian.javapoet.collections.JavadocCollection
-import com.hendraanggrian.javapoet.collections.JavadocCollectionScope
+import com.hendraanggrian.javapoet.collections.AnnotationSpecList
+import com.hendraanggrian.javapoet.collections.AnnotationSpecListScope
+import com.hendraanggrian.javapoet.collections.JavadocContainer
+import com.hendraanggrian.javapoet.collections.JavadocContainerScope
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.TypeName
@@ -69,7 +69,7 @@ class FieldSpecBuilder internal constructor(val nativeBuilder: FieldSpec.Builder
     val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
 
     /** Javadoc of this field. */
-    val javadoc: JavadocCollection = object : JavadocCollection() {
+    val javadoc: JavadocContainer = object : JavadocContainer {
         override fun append(format: String, vararg args: Any): Unit =
             format.internalFormat(args) { format2, args2 -> nativeBuilder.addJavadoc(format2, *args2) }
 
@@ -79,15 +79,15 @@ class FieldSpecBuilder internal constructor(val nativeBuilder: FieldSpec.Builder
     }
 
     /** Configures javadoc for this field. */
-    fun javadoc(configuration: JavadocCollectionScope.() -> Unit): Unit =
-        JavadocCollectionScope(javadoc).configuration()
+    fun javadoc(configuration: JavadocContainerScope.() -> Unit): Unit =
+        JavadocContainerScope(javadoc).configuration()
 
     /** Annotations of this field. */
-    val annotations: AnnotationSpecCollection = AnnotationSpecCollection(nativeBuilder.annotations)
+    val annotations: AnnotationSpecList = AnnotationSpecList(nativeBuilder.annotations)
 
     /** Configures annotations for this field. */
-    fun annotations(configuration: AnnotationSpecCollectionScope.() -> Unit): Unit =
-        AnnotationSpecCollectionScope(annotations).configuration()
+    fun annotations(configuration: AnnotationSpecListScope.() -> Unit): Unit =
+        AnnotationSpecListScope(annotations).configuration()
 
     /** Add field modifiers. */
     fun addModifiers(vararg modifiers: Modifier) {

@@ -5,9 +5,9 @@ import com.squareup.javapoet.TypeName
 import com.hendraanggrian.javapoet.asTypeName
 import kotlin.test.Test
 
-class TypeNameCollectionTest {
+class TypeNameListTest {
 
-    private val list = TypeNameCollection(mutableListOf())
+    private val list = TypeNameList(mutableListOf())
 
     @Test
     fun test() {

@@ -1,5 +1,3 @@
-@file:Suppress("NOTHING_TO_INLINE")
-
 package com.hendraanggrian.javapoet.collections
 
 import com.hendraanggrian.javapoet.MethodSpecBuilder
@@ -8,8 +6,8 @@ import com.hendraanggrian.javapoet.buildConstructorMethodSpec
 import com.hendraanggrian.javapoet.buildMethodSpec
 import com.squareup.javapoet.MethodSpec
 
-/** A [MethodSpecCollection] is responsible for managing a set of method instances. */
-open class MethodSpecCollection internal constructor(actualList: MutableList<MethodSpec>) :
+/** A [MethodSpecList] is responsible for managing a set of method instances. */
+open class MethodSpecList internal constructor(actualList: MutableList<MethodSpec>) :
     MutableList<MethodSpec> by actualList {
 
     /** Add method from name. */
@@ -34,9 +32,8 @@ open class MethodSpecCollection internal constructor(actualList: MutableList<Met
 
 /** Receiver for the `methods` block providing an extended set of operators for the configuration. */
 @SpecMarker
-class MethodSpecCollectionScope internal constructor(actualList: MutableList<MethodSpec>) :
-    MethodSpecCollection(actualList) {
+class MethodSpecListScope internal constructor(actualList: MutableList<MethodSpec>) : MethodSpecList(actualList) {
 
-    /** @see MethodSpecCollection.add */
+    /** @see MethodSpecList.add */
     operator fun String.invoke(configuration: MethodSpecBuilder.() -> Unit): Boolean = add(this, configuration)
 }

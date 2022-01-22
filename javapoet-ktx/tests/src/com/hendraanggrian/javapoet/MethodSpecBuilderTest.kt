@@ -99,41 +99,10 @@ class MethodSpecBuilderTest {
     }
 
     @Test
-    fun addExceptions() {
+    fun exceptions() {
         assertEquals(
-            buildMethodSpec("method1") {
-                addExceptions(
-                    listOf(
-                        Field1::class.asClassName(), Field2::class.asClassName(),
-                        Field3::class.asClassName(), Field4::class.asClassName(),
-                    )
-                )
-            },
-            MethodSpec.methodBuilder("method1")
-                .addExceptions(
-                    listOf(
-                        Field1::class.asClassName(), Field2::class.asClassName(),
-                        Field3::class.asClassName(), Field4::class.asClassName(),
-                    )
-                ).build()
-        )
-    }
-
-    @Test
-    fun addException() {
-        assertEquals(
-            buildMethodSpec("method1") {
-                addException(Field1::class.asClassName())
-                addException(Field2::class.java)
-                addException(Field3::class)
-                addException<Field4>()
-            },
-            MethodSpec.methodBuilder("method1")
-                .addException(Field1::class.java)
-                .addException(Field2::class.java)
-                .addException(Field3::class.java)
-                .addException(Field4::class.java)
-                .build()
+            buildMethodSpec("method1") { exceptions.add<Field1>() },
+            MethodSpec.methodBuilder("method1").addException(Field1::class.java).build()
         )
     }
 

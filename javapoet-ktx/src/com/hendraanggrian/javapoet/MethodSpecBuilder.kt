@@ -1,13 +1,14 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.collections.AnnotationSpecCollection
-import com.hendraanggrian.javapoet.collections.AnnotationSpecCollectionScope
-import com.hendraanggrian.javapoet.collections.CodeBlockCollection
-import com.hendraanggrian.javapoet.collections.JavadocCollection
-import com.hendraanggrian.javapoet.collections.JavadocCollectionScope
-import com.hendraanggrian.javapoet.collections.ParameterSpecCollection
-import com.hendraanggrian.javapoet.collections.ParameterSpecCollectionScope
-import com.hendraanggrian.javapoet.collections.TypeVariableNameCollection
+import com.hendraanggrian.javapoet.collections.AnnotationSpecList
+import com.hendraanggrian.javapoet.collections.AnnotationSpecListScope
+import com.hendraanggrian.javapoet.collections.CodeBlockContainer
+import com.hendraanggrian.javapoet.collections.JavadocContainer
+import com.hendraanggrian.javapoet.collections.JavadocContainerScope
+import com.hendraanggrian.javapoet.collections.ParameterSpecList
+import com.hendraanggrian.javapoet.collections.ParameterSpecListScope
+import com.hendraanggrian.javapoet.collections.TypeNameList
+import com.hendraanggrian.javapoet.collections.TypeVariableNameList
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeName
@@ -38,7 +39,7 @@ fun MethodSpec.Builder.edit(configuration: MethodSpecBuilder.() -> Unit): Method
  * @param nativeBuilder source builder.
  */
 @SpecMarker
-class MethodSpecBuilder internal constructor(val nativeBuilder: MethodSpec.Builder) : CodeBlockCollection() {
+class MethodSpecBuilder internal constructor(val nativeBuilder: MethodSpec.Builder) : CodeBlockContainer {
 
     /** Modifiers of this method. */
     val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
@@ -51,7 +52,7 @@ class MethodSpecBuilder internal constructor(val nativeBuilder: MethodSpec.Build
         }
 
     /** Javadoc of this method. */
-    val javadoc: JavadocCollection = object : JavadocCollection() {
+    val javadoc: JavadocContainer = object : JavadocContainer {
         override fun append(format: String, vararg args: Any): Unit =
             format.internalFormat(args) { format2, args2 -> nativeBuilder.addJavadoc(format2, *args2) }
 
@@ -61,15 +62,15 @@ class MethodSpecBuilder internal constructor(val nativeBuilder: MethodSpec.Build
     }
 
     /** Configures javadoc of this method. */
-    fun javadoc(configuration: JavadocCollectionScope.() -> Unit): Unit =
-        JavadocCollectionScope(javadoc).configuration()
+    fun javadoc(configuration: JavadocContainerScope.() -> Unit): Unit =
+        JavadocContainerScope(javadoc).configuration()
 
     /** Annotations of this method. */
-    val annotations: AnnotationSpecCollection = AnnotationSpecCollection(nativeBuilder.annotations)
+    val annotations: AnnotationSpecList = AnnotationSpecList(nativeBuilder.annotations)
 
     /** Configures annotations of this method. */
-    fun annotations(configuration: AnnotationSpecCollectionScope.() -> Unit): Unit =
-        AnnotationSpecCollectionScope(annotations).configuration()
+    fun annotations(configuration: AnnotationSpecListScope.() -> Unit): Unit =
+        AnnotationSpecListScope(annotations).configuration()
 
     /** Add field modifiers. */
     fun addModifiers(vararg modifiers: Modifier) {
@@ -77,10 +78,10 @@ class MethodSpecBuilder internal constructor(val nativeBuilder: MethodSpec.Build
     }
 
     /** Type variables of this method. */
-    val typeVariables: TypeVariableNameCollection = TypeVariableNameCollection(nativeBuilder.typeVariables)
+    val typeVariables: TypeVariableNameList = TypeVariableNameList(nativeBuilder.typeVariables)
 
     /** Configures type variables of this method. */
-    fun typeVariables(configuration: TypeVariableNameCollection.() -> Unit): Unit = typeVariables.configuration()
+    fun typeVariables(configuration: TypeVariableNameList.() -> Unit): Unit = typeVariables.configuration()
 
     /** Add return line to type name. */
     var returns: TypeName
@@ -103,11 +104,11 @@ class MethodSpecBuilder internal constructor(val nativeBuilder: MethodSpec.Build
     inline fun <reified T> returns(): Unit = returns(T::class)
 
     /** Parameters of this method. */
-    val parameters: ParameterSpecCollection = ParameterSpecCollection(nativeBuilder.parameters)
+    val parameters: ParameterSpecList = ParameterSpecList(nativeBuilder.parameters)
 
     /** Configures parameters of this method. */
-    fun parameters(configuration: ParameterSpecCollectionScope.() -> Unit): Unit =
-        ParameterSpecCollectionScope(parameters).configuration()
+    fun parameters(configuration: ParameterSpecListScope.() -> Unit): Unit =
+        ParameterSpecListScope(parameters).configuration()
 
     /** Add vararg keyword to array type parameter. */
     var isVarargs: Boolean
@@ -116,28 +117,11 @@ class MethodSpecBuilder internal constructor(val nativeBuilder: MethodSpec.Build
             nativeBuilder.varargs(value)
         }
 
-    /** Add exceptions using [TypeName]. */
-    fun addExceptions(types: Iterable<TypeName>) {
-        nativeBuilder.addExceptions(types)
-    }
+    /** Exceptions of this method. */
+    val exceptions: TypeNameList = TypeNameList(mutableListOf())
 
-    /** Add exception using [TypeName]. */
-    fun addException(type: TypeName) {
-        nativeBuilder.addException(type)
-    }
-
-    /** Add exception using [Type]. */
-    fun addException(type: Type) {
-        nativeBuilder.addException(type)
-    }
-
-    /** Add exception using [KClass]. */
-    fun addException(type: KClass<*>) {
-        nativeBuilder.addException(type.java)
-    }
-
-    /** Add exception using reified [T]. */
-    inline fun <reified T> addException(): Unit = addException(T::class)
+    /** Configures exceptions of this method. */
+    fun exceptions(configuration: TypeNameList.() -> Unit): Unit = exceptions.configuration()
 
     override fun append(format: String, vararg args: Any): Unit =
         format.internalFormat(args) { format2, args2 -> nativeBuilder.addCode(format2, *args2) }
@@ -198,5 +182,8 @@ class MethodSpecBuilder internal constructor(val nativeBuilder: MethodSpec.Build
     }
 
     /** Returns native spec. */
-    fun build(): MethodSpec = nativeBuilder.build()
+    fun build(): MethodSpec {
+        nativeBuilder.addExceptions(exceptions)
+        return nativeBuilder.build()
+    }
 }

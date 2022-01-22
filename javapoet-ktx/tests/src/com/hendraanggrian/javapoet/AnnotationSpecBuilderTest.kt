@@ -21,12 +21,4 @@ class AnnotationSpecBuilderTest {
                 .build()
         )
     }
-
-    @Test
-    fun invoke() {
-        assertEquals(
-            buildAnnotationSpec<Annotation1> { "member1" { append("value1") } },
-            AnnotationSpec.builder(Annotation1::class.java).addMember("member1", CodeBlock.of("value1")).build()
-        )
-    }
 }

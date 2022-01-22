@@ -1,17 +1,19 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.collections.AnnotationSpecCollection
-import com.hendraanggrian.javapoet.collections.AnnotationSpecCollectionScope
-import com.hendraanggrian.javapoet.collections.FieldSpecCollection
-import com.hendraanggrian.javapoet.collections.FieldSpecCollectionScope
-import com.hendraanggrian.javapoet.collections.JavadocCollection
-import com.hendraanggrian.javapoet.collections.JavadocCollectionScope
-import com.hendraanggrian.javapoet.collections.MethodSpecCollection
-import com.hendraanggrian.javapoet.collections.MethodSpecCollectionScope
-import com.hendraanggrian.javapoet.collections.TypeNameCollection
-import com.hendraanggrian.javapoet.collections.TypeSpecCollection
-import com.hendraanggrian.javapoet.collections.TypeSpecCollectionScope
-import com.hendraanggrian.javapoet.collections.TypeVariableNameCollection
+import com.hendraanggrian.javapoet.collections.AnnotationSpecList
+import com.hendraanggrian.javapoet.collections.AnnotationSpecListScope
+import com.hendraanggrian.javapoet.collections.EnumConstantMap
+import com.hendraanggrian.javapoet.collections.EnumConstantMapScope
+import com.hendraanggrian.javapoet.collections.FieldSpecList
+import com.hendraanggrian.javapoet.collections.FieldSpecListScope
+import com.hendraanggrian.javapoet.collections.JavadocContainer
+import com.hendraanggrian.javapoet.collections.JavadocContainerScope
+import com.hendraanggrian.javapoet.collections.MethodSpecList
+import com.hendraanggrian.javapoet.collections.MethodSpecListScope
+import com.hendraanggrian.javapoet.collections.TypeNameList
+import com.hendraanggrian.javapoet.collections.TypeSpecList
+import com.hendraanggrian.javapoet.collections.TypeSpecListScope
+import com.hendraanggrian.javapoet.collections.TypeVariableNameList
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.TypeName
@@ -106,9 +108,6 @@ fun TypeSpec.Builder.edit(configuration: TypeSpecBuilder.() -> Unit): TypeSpec.B
 @SpecMarker
 class TypeSpecBuilder internal constructor(val nativeBuilder: TypeSpec.Builder) {
 
-    /** Enum constants of this type. */
-    val enumConstants: MutableMap<String, TypeSpec> get() = nativeBuilder.enumConstants
-
     /** Modifiers of this type. */
     val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
 
@@ -119,7 +118,7 @@ class TypeSpecBuilder internal constructor(val nativeBuilder: TypeSpec.Builder) 
     val alwaysQualifiedNames: MutableSet<String> get() = nativeBuilder.alwaysQualifiedNames
 
     /** Javadoc of this type. */
-    val javadoc: JavadocCollection = object : JavadocCollection() {
+    val javadoc: JavadocContainer = object : JavadocContainer {
         override fun append(format: String, vararg args: Any): Unit =
             format.internalFormat(args) { format2, args2 -> nativeBuilder.addJavadoc(format2, *args2) }
 
@@ -129,15 +128,15 @@ class TypeSpecBuilder internal constructor(val nativeBuilder: TypeSpec.Builder) 
     }
 
     /** Configures javadoc of this type. */
-    fun javadoc(configuration: JavadocCollectionScope.() -> Unit): Unit =
-        JavadocCollectionScope(javadoc).configuration()
+    fun javadoc(configuration: JavadocContainerScope.() -> Unit): Unit =
+        JavadocContainerScope(javadoc).configuration()
 
     /** Annotations of this type. */
-    val annotations: AnnotationSpecCollection = AnnotationSpecCollection(nativeBuilder.annotations)
+    val annotations: AnnotationSpecList = AnnotationSpecList(nativeBuilder.annotations)
 
     /** Configures annotations of this type. */
-    fun annotations(configuration: AnnotationSpecCollectionScope.() -> Unit): Unit =
-        AnnotationSpecCollectionScope(annotations).configuration()
+    fun annotations(configuration: AnnotationSpecListScope.() -> Unit): Unit =
+        AnnotationSpecListScope(annotations).configuration()
 
     /** Add type modifiers. */
     fun addModifiers(vararg modifiers: Modifier) {
@@ -145,10 +144,10 @@ class TypeSpecBuilder internal constructor(val nativeBuilder: TypeSpec.Builder) 
     }
 
     /** Type variables of this type. */
-    val typeVariables: TypeVariableNameCollection = TypeVariableNameCollection(nativeBuilder.typeVariables)
+    val typeVariables: TypeVariableNameList = TypeVariableNameList(nativeBuilder.typeVariables)
 
     /** Configures type variables of this method. */
-    fun typeVariables(configuration: TypeVariableNameCollection.() -> Unit): Unit = typeVariables.configuration()
+    fun typeVariables(configuration: TypeVariableNameList.() -> Unit): Unit = typeVariables.configuration()
 
     /** Set superclass to type. */
     var superclass: TypeName
@@ -171,46 +170,55 @@ class TypeSpecBuilder internal constructor(val nativeBuilder: TypeSpec.Builder) 
     inline fun <reified T> superclass(): Unit = superclass(T::class)
 
     /** Super interfaces of this type. */
-    val superinterfaces: TypeNameCollection = TypeNameCollection(nativeBuilder.superinterfaces)
+    val superinterfaces: TypeNameList = TypeNameList(nativeBuilder.superinterfaces)
 
     /** Configures super interfaces of this type. */
-    fun superinterfaces(configuration: TypeNameCollection.() -> Unit): Unit = superinterfaces.configuration()
+    fun superinterfaces(configuration: TypeNameList.() -> Unit): Unit = superinterfaces.configuration()
 
-    /** Add enum constant with name and specified [TypeSpec]. */
-    fun addEnumConstant(name: String, spec: TypeSpec = TypeSpec.anonymousClassBuilder("").build()) {
-        nativeBuilder.addEnumConstant(name, spec)
-    }
+    /** Enum constants of this type. */
+    val enumConstants: EnumConstantMap = EnumConstantMap(nativeBuilder.enumConstants)
+
+    /** Configures enum constants of this type. */
+    fun enumConstants(configuration: EnumConstantMapScope.() -> Unit): Unit =
+        EnumConstantMapScope(enumConstants).configuration()
 
     /** Fields of this type. */
-    val fields: FieldSpecCollection = FieldSpecCollection(nativeBuilder.fieldSpecs)
+    val fields: FieldSpecList = FieldSpecList(nativeBuilder.fieldSpecs)
 
     /** Configures fields of this type. */
-    fun fields(configuration: FieldSpecCollectionScope.() -> Unit): Unit =
-        FieldSpecCollectionScope(fields).configuration()
+    fun fields(configuration: FieldSpecListScope.() -> Unit): Unit = FieldSpecListScope(fields).configuration()
 
-    /** Add static block containing [code]. */
+    /** Add static block from [CodeBlock]. */
     fun addStaticBlock(code: CodeBlock) {
         nativeBuilder.addStaticBlock(code)
     }
 
-    /** Add initializer block containing [code]. */
+    /** Add static block from formatted string. */
+    fun addStaticBlock(format: String, vararg args: Any) {
+        nativeBuilder.addStaticBlock(codeBlockOf(format, *args))
+    }
+
+    /** Add initializer block from [CodeBlock]. */
     fun addInitializerBlock(code: CodeBlock) {
         nativeBuilder.addInitializerBlock(code)
     }
 
+    /** Add initializer block from formatted string. */
+    fun addInitializerBlock(format: String, vararg args: Any) {
+        nativeBuilder.addInitializerBlock(codeBlockOf(format, *args))
+    }
+
     /** Methods of this type. */
-    val methods: MethodSpecCollection = MethodSpecCollection(nativeBuilder.methodSpecs)
+    val methods: MethodSpecList = MethodSpecList(nativeBuilder.methodSpecs)
 
     /** Configures methods of this type. */
-    fun methods(configuration: MethodSpecCollectionScope.() -> Unit): Unit =
-        MethodSpecCollectionScope(methods).configuration()
+    fun methods(configuration: MethodSpecListScope.() -> Unit): Unit = MethodSpecListScope(methods).configuration()
 
     /** Types of this type. */
-    val types: TypeSpecCollection = TypeSpecCollection(nativeBuilder.typeSpecs)
+    val types: TypeSpecList = TypeSpecList(nativeBuilder.typeSpecs)
 
     /** Configures types of this type. */
-    fun types(configuration: TypeSpecCollectionScope.() -> Unit): Unit =
-        TypeSpecCollectionScope(types).configuration()
+    fun types(configuration: TypeSpecListScope.() -> Unit): Unit = TypeSpecListScope(types).configuration()
 
     fun alwaysQualify(vararg simpleNames: String) {
         nativeBuilder.alwaysQualify(*simpleNames)

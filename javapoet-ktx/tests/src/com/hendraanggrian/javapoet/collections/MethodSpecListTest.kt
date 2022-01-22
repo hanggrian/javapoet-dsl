@@ -4,11 +4,10 @@ import com.google.common.truth.Truth.assertThat
 import com.squareup.javapoet.MethodSpec
 import kotlin.test.Test
 
-class MethodSpecCollectionTest {
+class MethodSpecListTest {
 
-    private val list = MethodSpecCollection(mutableListOf())
-    private fun list(configuration: MethodSpecCollectionScope.() -> Unit) =
-        MethodSpecCollectionScope(list).configuration()
+    private val list = MethodSpecList(mutableListOf())
+    private fun list(configuration: MethodSpecListScope.() -> Unit) = MethodSpecListScope(list).configuration()
 
     @Test
     fun add() {
