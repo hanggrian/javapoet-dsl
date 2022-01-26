@@ -1,7 +1,7 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.internal.Annotation1
-import com.hendraanggrian.javapoet.internal.Field1
+import com.example.Annotation1
+import com.example.Field1
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.ParameterSpec
 import javax.lang.model.element.Modifier

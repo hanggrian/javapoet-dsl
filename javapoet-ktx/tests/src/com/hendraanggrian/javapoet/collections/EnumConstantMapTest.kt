@@ -2,10 +2,6 @@ package com.hendraanggrian.javapoet.collections
 
 import com.google.common.truth.Truth.assertThat
 import com.hendraanggrian.javapoet.codeBlockOf
-import com.hendraanggrian.javapoet.internal.Annotation1
-import com.hendraanggrian.javapoet.internal.Annotation2
-import com.hendraanggrian.javapoet.internal.Annotation3
-import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.TypeSpec
 import kotlin.test.Test
 

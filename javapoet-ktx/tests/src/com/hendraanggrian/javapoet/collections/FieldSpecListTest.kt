@@ -1,11 +1,11 @@
 package com.hendraanggrian.javapoet.collections
 
+import com.example.Field1
+import com.example.Field2
+import com.example.Field3
+import com.example.Field4
 import com.google.common.truth.Truth.assertThat
 import com.hendraanggrian.javapoet.asTypeName
-import com.hendraanggrian.javapoet.internal.Field1
-import com.hendraanggrian.javapoet.internal.Field2
-import com.hendraanggrian.javapoet.internal.Field3
-import com.hendraanggrian.javapoet.internal.Field4
 import com.squareup.javapoet.FieldSpec
 import kotlin.test.Test
 

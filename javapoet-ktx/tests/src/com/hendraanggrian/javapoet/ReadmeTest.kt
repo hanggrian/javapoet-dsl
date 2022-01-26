@@ -228,7 +228,7 @@ class ReadmeTest {
             buildClassTypeSpec("HelloWorld") {
                 addModifiers(PUBLIC, FINAL)
                 methods.add("tomorrow") {
-                    val hoverboard = "com.mattel".classOf("Hoverboard")
+                    val hoverboard = classNameOf("com.mattel", "Hoverboard")
                     returns = hoverboard
                     appendLine("return new %T()", hoverboard)
                 }
@@ -250,9 +250,9 @@ class ReadmeTest {
             buildClassTypeSpec("HelloWorld") {
                 addModifiers(PUBLIC, FINAL)
                 methods.add("beyond") {
-                    val hoverboard = "com.mattel".classOf("Hoverboard")
-                    val arrayList = "java.util".classOf("ArrayList")
-                    val listOfHoverboards = "java.util".classOf("List").parameterizedBy(hoverboard)
+                    val hoverboard = classNameOf("com.mattel", "Hoverboard")
+                    val arrayList = classNameOf("java.util", "ArrayList")
+                    val listOfHoverboards = classNameOf("java.util", "List").parameterizedBy(hoverboard)
                     returns = listOfHoverboards
                     appendLine("%T result = new %T<>()", listOfHoverboards, arrayList)
                     appendLine("result.add(new %T())", hoverboard)
@@ -287,16 +287,16 @@ class ReadmeTest {
 
             """.trimIndent(),
             buildJavaFile("com.example.helloworld") {
-                val hoverboard = "com.mattel".classOf("Hoverboard")
-                val namedBoards = "com.mattel".classOf("Hoverboard", "Boards")
+                val hoverboard = classNameOf("com.mattel", "Hoverboard")
+                val namedBoards = classNameOf("com.mattel", "Hoverboard", "Boards")
                 addStaticImport(hoverboard, "createNimbus")
                 addStaticImport(namedBoards, "*")
                 addStaticImport<Collections>("*")
                 addClass("HelloWorld") {
                     addModifiers(PUBLIC, FINAL)
                     methods.add("beyond") {
-                        val arrayList = "java.util".classOf("ArrayList")
-                        val listOfHoverboards = "java.util".classOf("List").parameterizedBy(hoverboard)
+                        val arrayList = classNameOf("java.util", "ArrayList")
+                        val listOfHoverboards = classNameOf("java.util", "List").parameterizedBy(hoverboard)
                         returns = listOfHoverboards
                         appendLine("%T result = new %T<>()", listOfHoverboards, arrayList)
                         appendLine("result.add(%T.createNimbus(2000))", hoverboard)

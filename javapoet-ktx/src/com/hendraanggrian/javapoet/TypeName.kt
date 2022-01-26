@@ -16,38 +16,14 @@ val FLOAT: TypeName = TypeName.FLOAT
 val DOUBLE: TypeName = TypeName.DOUBLE
 val OBJECT: TypeName = TypeName.OBJECT
 
-/**
- * Returns a [TypeName] equivalent to [T].
- *
- * **See Also**
- *
- * [KotlinPoet counterpart](https://square.github.io/kotlinpoet/1.x/kotlinpoet/com.squareup.kotlinpoet/type-name-of/)
- */
+/** Returns a [TypeName] equivalent to [T]. */
 inline fun <reified T> typeNameOf(): TypeName = T::class.asTypeName()
 
-/**
- * Returns a [TypeName] equivalent to [TypeMirror].
- *
- * **See Also**
- *
- * [KotlinPoet counterpart](https://square.github.io/kotlinpoet/1.x/kotlinpoet/com.squareup.kotlinpoet/javax.lang.model.type.-type-mirror/as-type-name/)
- */
+/** Returns a [TypeName] equivalent to [TypeMirror]. */
 inline fun TypeMirror.asTypeName(): TypeName = TypeName.get(this)
 
-/**
- * Returns a [TypeName] equivalent to [Type].
- *
- * **See Also**
- *
- * [KotlinPoet counterpart](https://square.github.io/kotlinpoet/1.x/kotlinpoet/com.squareup.kotlinpoet/java.lang.reflect.-type/as-type-name/)
- */
+/** Returns a [TypeName] equivalent to [Type]. */
 inline fun Type.asTypeName(): TypeName = TypeName.get(this)
 
-/**
- * Returns a [TypeName] equivalent to [KClass].
- *
- * **See Also**
- *
- * [KotlinPoet counterpart](https://square.github.io/kotlinpoet/1.x/kotlinpoet/com.squareup.kotlinpoet/kotlin.reflect.-k-class/as-type-name/)
- */
+/** Returns a [TypeName] equivalent to [KClass]. */
 inline fun KClass<*>.asTypeName(): TypeName = TypeName.get(java)

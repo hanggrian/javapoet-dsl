@@ -21,9 +21,13 @@ class TypeNameTest {
     }
 
     @Test
+    fun typeNameOf() {
+        assertEquals("java.lang.String", "${typeNameOf<String>()}")
+    }
+
+    @Test
     fun asTypeName() {
         assertEquals("java.lang.String", "${String::class.java.asTypeName()}")
         assertEquals("java.lang.String", "${String::class.asTypeName()}")
-        assertEquals("java.lang.String", "${typeNameOf<String>()}")
     }
 }

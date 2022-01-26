@@ -1,6 +1,6 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.internal.Annotation1
+import com.example.Annotation1
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.CodeBlock
 import kotlin.test.Test

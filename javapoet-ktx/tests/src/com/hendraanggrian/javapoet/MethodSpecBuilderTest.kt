@@ -1,10 +1,10 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.internal.Annotation1
-import com.hendraanggrian.javapoet.internal.Field1
-import com.hendraanggrian.javapoet.internal.Field2
-import com.hendraanggrian.javapoet.internal.Field3
-import com.hendraanggrian.javapoet.internal.Field4
+import com.example.Annotation1
+import com.example.Field1
+import com.example.Field2
+import com.example.Field3
+import com.example.Field4
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeVariableName

@@ -182,8 +182,7 @@ class MethodSpecBuilder internal constructor(val nativeBuilder: MethodSpec.Build
     }
 
     /** Returns native spec. */
-    fun build(): MethodSpec {
-        nativeBuilder.addExceptions(exceptions)
-        return nativeBuilder.build()
-    }
+    fun build(): MethodSpec = nativeBuilder
+        .addExceptions(exceptions)
+        .build()
 }

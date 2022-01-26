@@ -1,11 +1,11 @@
 package com.hendraanggrian.javapoet.collections
 
+import com.example.Parameter1
+import com.example.Parameter2
+import com.example.Parameter3
+import com.example.Parameter4
 import com.google.common.truth.Truth.assertThat
 import com.hendraanggrian.javapoet.asTypeName
-import com.hendraanggrian.javapoet.internal.Parameter1
-import com.hendraanggrian.javapoet.internal.Parameter2
-import com.hendraanggrian.javapoet.internal.Parameter3
-import com.hendraanggrian.javapoet.internal.Parameter4
 import com.squareup.javapoet.ParameterSpec
 import kotlin.test.Test
 

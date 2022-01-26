@@ -1,22 +1,20 @@
 package com.hendraanggrian.javapoet
 
-import com.example.MyClass
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ClassNameTest {
-    private companion object {
-        const val EXPECTED = "com.example.MyClass"
-    }
 
     @Test
-    fun classOf() {
-        assertEquals(EXPECTED, "${"com.example".classOf("MyClass")}")
+    fun classNameOf() {
+        assertEquals("java.lang.String", "${classNameOf("java.lang.String")}")
+        assertEquals("java.lang.String", "${classNameOf("java.lang", "String")}")
+        assertEquals("java.lang.String", "${classNameOf<String>()}")
     }
 
     @Test
     fun asClassName() {
-        assertEquals(EXPECTED, "${MyClass::class.java.asClassName()}")
-        assertEquals(EXPECTED, "${MyClass::class.asClassName()}")
+        assertEquals("java.lang.String", "${String::class.java.asClassName()}")
+        assertEquals("java.lang.String", "${String::class.asClassName()}")
     }
 }

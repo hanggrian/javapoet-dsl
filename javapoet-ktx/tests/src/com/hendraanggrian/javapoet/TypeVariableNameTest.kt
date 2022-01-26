@@ -6,35 +6,57 @@ import kotlin.test.assertEquals
 class TypeVariableNameTest {
 
     @Test
-    fun noBounds() = assertEquals("T", "${"T".typeVarOf()}")
+    fun genericsBy() {
+        assertEquals("T", "${"T".genericsBy()}")
 
-    @Test
-    fun classNameBounds() = assertEquals(
-        """
-            <T extends java.lang.Integer> void go() {
+        assertEquals(
+            """
+            <T extends java.lang.CharSequence> void go() {
             }
             
             """.trimIndent(),
-        "${buildMethodSpec("go") { typeVariables.add("T", INT.box()) }}"
-    )
-
-    @Test
-    fun classBounds() = assertEquals(
-        """
-            <T extends java.lang.Integer> void go() {
+            "${buildMethodSpec("go") { typeVariables.add("T", CharSequence::class.asClassName()) }}"
+        )
+        assertEquals(
+            """
+            <T extends java.lang.CharSequence> void go() {
             }
             
             """.trimIndent(),
-        "${buildMethodSpec("go") { typeVariables.add("T", java.lang.Integer::class.java) }}"
-    )
-
-    @Test
-    fun kclassBounds() = assertEquals(
-        """
-            <T extends java.lang.Integer> void go() {
+            "${buildMethodSpec("go") { typeVariables.add("T", CharSequence::class.java) }}"
+        )
+        assertEquals(
+            """
+            <T extends java.lang.CharSequence> void go() {
             }
             
             """.trimIndent(),
-        "${buildMethodSpec("go") { typeVariables.add("T", java.lang.Integer::class) }}"
-    )
+            "${buildMethodSpec("go") { typeVariables.add("T", CharSequence::class) }}"
+        )
+
+        assertEquals(
+            """
+            <T extends java.lang.CharSequence> void go() {
+            }
+            
+            """.trimIndent(),
+            "${buildMethodSpec("go") { typeVariables.add("T", listOf(CharSequence::class.asClassName())) }}"
+        )
+        assertEquals(
+            """
+            <T extends java.lang.CharSequence> void go() {
+            }
+            
+            """.trimIndent(),
+            "${buildMethodSpec("go") { typeVariables.add("T", listOf(CharSequence::class.java)) }}"
+        )
+        assertEquals(
+            """
+            <T extends java.lang.CharSequence> void go() {
+            }
+            
+            """.trimIndent(),
+            "${buildMethodSpec("go") { typeVariables.add("T", listOf(CharSequence::class)) }}"
+        )
+    }
 }

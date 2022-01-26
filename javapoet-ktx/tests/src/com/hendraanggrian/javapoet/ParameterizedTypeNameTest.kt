@@ -1,53 +1,52 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.internal.assertEqualsAll
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ParameterizedTypeNameTest {
-    private val className = Pair::class.asClassName()
-    private val `class` = Pair::class.java
-    private val kclass = Pair::class
 
     @Test
-    fun vararg() {
-        assertEqualsAll(
+    fun parameterizedBy() {
+        assertEquals(
             "kotlin.Pair<java.lang.Integer, java.lang.String>",
-            "${className.parameterizedBy(INT.box(), String::class.asTypeName())}",
-            "${`class`.parameterizedBy(INT.box(), String::class.asTypeName())}",
-            "${kclass.parameterizedBy(INT.box(), String::class.asTypeName())}"
+            "${Pair::class.asClassName().parameterizedBy(INT.box(), String::class.asTypeName())}",
+        )
+        assertEquals(
+            "kotlin.Pair<java.lang.Integer, java.lang.String>",
+            "${Pair::class.java.parameterizedBy(java.lang.Integer::class.java, String::class.java)}"
+        )
+        assertEquals(
+            "kotlin.Pair<java.lang.Integer, java.lang.String>",
+            "${Pair::class.parameterizedBy(java.lang.Integer::class, String::class)}"
         )
 
-        assertEqualsAll(
+        assertEquals(
             "kotlin.Pair<java.lang.Integer, java.lang.String>",
-            "${className.parameterizedBy(java.lang.Integer::class.java, String::class.java)}",
-            "${`class`.parameterizedBy(java.lang.Integer::class.java, String::class.java)}",
-            "${kclass.parameterizedBy(java.lang.Integer::class.java, String::class.java)}"
+            "${Pair::class.asClassName().parameterizedBy(listOf(INT.box(), String::class.asTypeName()))}"
         )
-
-        assertEqualsAll(
+        assertEquals(
             "kotlin.Pair<java.lang.Integer, java.lang.String>",
-            "${className.parameterizedBy(java.lang.Integer::class, String::class)}",
-            "${`class`.parameterizedBy(java.lang.Integer::class, String::class)}",
-            "${kclass.parameterizedBy(java.lang.Integer::class, String::class)}"
+            "${Pair::class.java.parameterizedBy(listOf(java.lang.Integer::class.java, String::class.java))}"
+        )
+        assertEquals(
+            "kotlin.Pair<java.lang.Integer, java.lang.String>",
+            "${Pair::class.parameterizedBy(listOf(java.lang.Integer::class, String::class))}"
         )
     }
 
     @Test
-    fun list() {
+    fun plusParameter() {
         assertEquals(
-            "kotlin.Pair<java.lang.Integer, java.lang.String>",
-            "${className.parameterizedBy(listOf(INT.box(), String::class.asTypeName()))}"
+            "java.util.List<java.lang.String>",
+            "${List::class.asClassName().plusParameter<String>()}",
         )
-
         assertEquals(
-            "kotlin.Pair<java.lang.Integer, java.lang.String>",
-            "${`class`.parameterizedBy(listOf(java.lang.Integer::class.java, String::class.java))}"
+            "java.util.List<java.lang.String>",
+            "${List::class.java.plusParameter<String>()}"
         )
-
         assertEquals(
-            "kotlin.Pair<java.lang.Integer, java.lang.String>",
-            "${kclass.parameterizedBy(listOf(java.lang.Integer::class, String::class))}"
+            "java.util.List<java.lang.String>",
+            "${List::class.plusParameter<String>()}"
         )
     }
 }

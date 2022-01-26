@@ -1,11 +1,11 @@
 package com.hendraanggrian.javapoet.collections
 
+import com.example.Annotation1
+import com.example.Annotation2
+import com.example.Annotation3
+import com.example.Annotation4
 import com.google.common.truth.Truth.assertThat
 import com.hendraanggrian.javapoet.asClassName
-import com.hendraanggrian.javapoet.internal.Annotation1
-import com.hendraanggrian.javapoet.internal.Annotation2
-import com.hendraanggrian.javapoet.internal.Annotation3
-import com.hendraanggrian.javapoet.internal.Annotation4
 import com.squareup.javapoet.AnnotationSpec
 import kotlin.test.Test
 

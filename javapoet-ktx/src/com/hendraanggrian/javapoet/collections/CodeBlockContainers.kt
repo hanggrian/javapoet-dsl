@@ -3,7 +3,6 @@ package com.hendraanggrian.javapoet.collections
 import com.hendraanggrian.javapoet.SpecMarker
 import com.squareup.javapoet.CodeBlock
 
-/**  */
 interface CodeBlockAppendable {
 
     /** Add code with arguments to this container. */
