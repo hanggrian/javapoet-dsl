@@ -12,32 +12,32 @@ open class AnnotationSpecList internal constructor(actualList: MutableList<Annot
     MutableList<AnnotationSpec> by actualList {
 
     /** Add annotation from [ClassName]. */
-    fun add(type: ClassName): Boolean = add(AnnotationSpec.builder(type).build())
+    fun add(type: ClassName): AnnotationSpec = AnnotationSpec.builder(type).build().also(::add)
 
     /** Add annotation from [ClassName] with custom initialization [configuration]. */
-    fun add(type: ClassName, configuration: AnnotationSpecBuilder.() -> Unit): Boolean =
-        add(buildAnnotationSpec(type, configuration))
+    fun add(type: ClassName, configuration: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+        buildAnnotationSpec(type, configuration).also(::add)
 
     /** Add annotation from [Class]. */
-    fun add(type: Class<*>): Boolean = add(AnnotationSpec.builder(type).build())
+    fun add(type: Class<*>): AnnotationSpec = AnnotationSpec.builder(type).build().also(::add)
 
     /** Add annotation from [Class] with custom initialization [configuration]. */
-    fun add(type: Class<*>, configuration: AnnotationSpecBuilder.() -> Unit): Boolean =
-        add(buildAnnotationSpec(type, configuration))
+    fun add(type: Class<*>, configuration: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+        buildAnnotationSpec(type, configuration).also(::add)
 
     /** Add annotation from [KClass]. */
-    fun add(type: KClass<*>): Boolean = add(AnnotationSpec.builder(type.java).build())
+    fun add(type: KClass<*>): AnnotationSpec = AnnotationSpec.builder(type.java).build().also(::add)
 
     /** Add annotation from [KClass] with custom initialization [configuration]. */
-    fun add(type: KClass<*>, configuration: AnnotationSpecBuilder.() -> Unit): Boolean =
-        add(buildAnnotationSpec(type, configuration))
+    fun add(type: KClass<*>, configuration: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+        buildAnnotationSpec(type, configuration).also(::add)
 
     /** Add annotation from [T]. */
-    inline fun <reified T> add(): Boolean = add(AnnotationSpec.builder(T::class.java).build())
+    inline fun <reified T> add(): AnnotationSpec = AnnotationSpec.builder(T::class.java).build().also(::add)
 
     /** Add annotation from [T] with custom initialization [configuration]. */
-    inline fun <reified T> add(noinline configuration: AnnotationSpecBuilder.() -> Unit): Boolean =
-        add(buildAnnotationSpec<T>(configuration))
+    inline fun <reified T> add(noinline configuration: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+        buildAnnotationSpec<T>(configuration).also(::add)
 
     /** Convenient method to add annotation with operator function. */
     inline operator fun plusAssign(type: ClassName) {
@@ -61,11 +61,14 @@ class AnnotationSpecListScope internal constructor(actualList: MutableList<Annot
     AnnotationSpecList(actualList) {
 
     /** @see AnnotationSpecList.add */
-    operator fun ClassName.invoke(configuration: AnnotationSpecBuilder.() -> Unit): Boolean = add(this, configuration)
+    operator fun ClassName.invoke(configuration: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+        add(this, configuration)
 
     /** @see AnnotationSpecList.add */
-    operator fun Class<*>.invoke(configuration: AnnotationSpecBuilder.() -> Unit): Boolean = add(this, configuration)
+    operator fun Class<*>.invoke(configuration: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+        add(this, configuration)
 
     /** @see AnnotationSpecList.add */
-    operator fun KClass<*>.invoke(configuration: AnnotationSpecBuilder.() -> Unit): Boolean = add(this, configuration)
+    operator fun KClass<*>.invoke(configuration: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+        add(this, configuration)
 }

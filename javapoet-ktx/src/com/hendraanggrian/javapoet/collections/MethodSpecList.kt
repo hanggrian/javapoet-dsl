@@ -11,18 +11,18 @@ open class MethodSpecList internal constructor(actualList: MutableList<MethodSpe
     MutableList<MethodSpec> by actualList {
 
     /** Add method from name. */
-    fun add(name: String): Boolean = add(MethodSpec.methodBuilder(name).build())
+    fun add(name: String): MethodSpec = MethodSpec.methodBuilder(name).build().also(::add)
 
     /** Add method from name with custom initialization [configuration]. */
-    fun add(name: String, configuration: MethodSpecBuilder.() -> Unit): Boolean =
-        add(buildMethodSpec(name, configuration))
+    fun add(name: String, configuration: MethodSpecBuilder.() -> Unit): MethodSpec =
+        buildMethodSpec(name, configuration).also(::add)
 
     /** Add constructor method. */
-    fun addConstructor(): Boolean = add(MethodSpec.constructorBuilder().build())
+    fun addConstructor(): MethodSpec = MethodSpec.constructorBuilder().build().also(::add)
 
     /** Add constructor method with custom initialization [configuration]. */
-    fun addConstructor(configuration: MethodSpecBuilder.() -> Unit): Boolean =
-        add(buildConstructorMethodSpec(configuration))
+    fun addConstructor(configuration: MethodSpecBuilder.() -> Unit): MethodSpec =
+        buildConstructorMethodSpec(configuration).also(::add)
 
     /** Convenient method to add method with operator function. */
     inline operator fun plusAssign(name: String) {
@@ -35,5 +35,5 @@ open class MethodSpecList internal constructor(actualList: MutableList<MethodSpe
 class MethodSpecListScope internal constructor(actualList: MutableList<MethodSpec>) : MethodSpecList(actualList) {
 
     /** @see MethodSpecList.add */
-    operator fun String.invoke(configuration: MethodSpecBuilder.() -> Unit): Boolean = add(this, configuration)
+    operator fun String.invoke(configuration: MethodSpecBuilder.() -> Unit): MethodSpec = add(this, configuration)
 }

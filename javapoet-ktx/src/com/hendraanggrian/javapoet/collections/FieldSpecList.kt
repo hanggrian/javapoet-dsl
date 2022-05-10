@@ -14,8 +14,8 @@ open class FieldSpecList internal constructor(actualList: MutableList<FieldSpec>
     MutableList<FieldSpec> by actualList {
 
     /** Add field from [TypeName]. */
-    fun add(type: TypeName, name: String, vararg modifiers: Modifier): Boolean =
-        add(FieldSpec.builder(type, name, *modifiers).build())
+    fun add(type: TypeName, name: String, vararg modifiers: Modifier): FieldSpec =
+        FieldSpec.builder(type, name, *modifiers).build().also(::add)
 
     /** Add field from [TypeName] with custom initialization [configuration]. */
     fun add(
@@ -23,11 +23,11 @@ open class FieldSpecList internal constructor(actualList: MutableList<FieldSpec>
         name: String,
         vararg modifiers: Modifier,
         configuration: FieldSpecBuilder.() -> Unit
-    ): Boolean = add(buildFieldSpec(type, name, *modifiers, configuration = configuration))
+    ): FieldSpec = buildFieldSpec(type, name, *modifiers, configuration = configuration).also(::add)
 
     /** Add field from [Type]. */
-    fun add(type: Type, name: String, vararg modifiers: Modifier): Boolean =
-        add(FieldSpec.builder(type, name, *modifiers).build())
+    fun add(type: Type, name: String, vararg modifiers: Modifier): FieldSpec =
+        FieldSpec.builder(type, name, *modifiers).build().also(::add)
 
     /** Add field from [Type] with custom initialization [configuration]. */
     fun add(
@@ -35,11 +35,11 @@ open class FieldSpecList internal constructor(actualList: MutableList<FieldSpec>
         name: String,
         vararg modifiers: Modifier,
         configuration: FieldSpecBuilder.() -> Unit
-    ): Boolean = add(buildFieldSpec(type, name, *modifiers, configuration = configuration))
+    ): FieldSpec = buildFieldSpec(type, name, *modifiers, configuration = configuration).also(::add)
 
     /** Add field from [KClass]. */
-    fun add(type: KClass<*>, name: String, vararg modifiers: Modifier): Boolean =
-        add(FieldSpec.builder(type.java, name, *modifiers).build())
+    fun add(type: KClass<*>, name: String, vararg modifiers: Modifier): FieldSpec =
+        FieldSpec.builder(type.java, name, *modifiers).build().also(::add)
 
     /** Add field from [KClass] with custom initialization [configuration]. */
     fun add(
@@ -47,18 +47,18 @@ open class FieldSpecList internal constructor(actualList: MutableList<FieldSpec>
         name: String,
         vararg modifiers: Modifier,
         configuration: FieldSpecBuilder.() -> Unit
-    ): Boolean = add(buildFieldSpec(type, name, *modifiers, configuration = configuration))
+    ): FieldSpec = buildFieldSpec(type, name, *modifiers, configuration = configuration).also(::add)
 
     /** Add field from [T]. */
-    inline fun <reified T> add(name: String, vararg modifiers: Modifier): Boolean =
-        add(FieldSpec.builder(T::class.java, name, *modifiers).build())
+    inline fun <reified T> add(name: String, vararg modifiers: Modifier): FieldSpec =
+        FieldSpec.builder(T::class.java, name, *modifiers).build().also(::add)
 
     /** Add field from [T] with custom initialization [configuration]. */
     inline fun <reified T> add(
         name: String,
         vararg modifiers: Modifier,
         noinline configuration: FieldSpecBuilder.() -> Unit
-    ): Boolean = add(buildFieldSpec<T>(name, *modifiers, configuration = configuration))
+    ): FieldSpec = buildFieldSpec<T>(name, *modifiers, configuration = configuration).also(::add)
 
     /** Convenient method to add field with operator function. */
     inline operator fun set(name: String, type: TypeName) {
@@ -85,25 +85,25 @@ class FieldSpecListScope internal constructor(actualList: MutableList<FieldSpec>
         type: TypeName,
         vararg modifiers: Modifier,
         configuration: FieldSpecBuilder.() -> Unit
-    ): Boolean = add(type, this, *modifiers, configuration = configuration)
+    ): FieldSpec = add(type, this, *modifiers, configuration = configuration)
 
     /** @see FieldSpecList.add */
     operator fun String.invoke(
         type: Type,
         vararg modifiers: Modifier,
         configuration: FieldSpecBuilder.() -> Unit
-    ): Boolean = add(type, this, *modifiers, configuration = configuration)
+    ): FieldSpec = add(type, this, *modifiers, configuration = configuration)
 
     /** @see FieldSpecList.add */
     operator fun String.invoke(
         type: KClass<*>,
         vararg modifiers: Modifier,
         configuration: FieldSpecBuilder.() -> Unit
-    ): Boolean = add(type, this, *modifiers, configuration = configuration)
+    ): FieldSpec = add(type, this, *modifiers, configuration = configuration)
 
     /** @see FieldSpecList.add */
     inline operator fun <reified T> String.invoke(
         vararg modifiers: Modifier,
         noinline configuration: FieldSpecBuilder.() -> Unit
-    ): Boolean = add<T>(this, *modifiers, configuration = configuration)
+    ): FieldSpec = add<T>(this, *modifiers, configuration = configuration)
 }

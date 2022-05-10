@@ -9,13 +9,13 @@ import kotlin.reflect.KClass
 class TypeNameList internal constructor(actualList: MutableList<TypeName>) : MutableList<TypeName> by actualList {
 
     /** Add type name from [Class]. */
-    fun add(type: Type): Boolean = add(type.asTypeName())
+    fun add(type: Type): TypeName = type.asTypeName().also(::add)
 
     /** Add type name from [KClass]. */
-    fun add(type: KClass<*>): Boolean = add(type.asTypeName())
+    fun add(type: KClass<*>): TypeName = type.asTypeName().also(::add)
 
     /** Add type name from [T]. */
-    inline fun <reified T> add(): Boolean = add(T::class.asTypeName())
+    inline fun <reified T> add(): TypeName = T::class.asTypeName().also(::add)
 
     /** Convenient method to add type name with operator function. */
     inline operator fun plusAssign(type: Type) {

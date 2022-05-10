@@ -11,27 +11,27 @@ class TypeVariableNameList internal constructor(actualList: MutableList<TypeVari
     MutableList<TypeVariableName> by actualList {
 
     /** Add a [TypeVariableName] without bounds. */
-    fun add(name: String): Boolean = add(name.genericsBy())
+    fun add(name: String): TypeVariableName = name.genericsBy().also(::add)
 
     /** Returns a [TypeVariableName] with [TypeName] bounds. */
-    fun add(name: String, vararg bounds: TypeName): Boolean = add(name.genericsBy(*bounds))
+    fun add(name: String, vararg bounds: TypeName): TypeVariableName = name.genericsBy(*bounds).also(::add)
 
     /** Returns a [TypeVariableName] with [Type] bounds. */
-    fun add(name: String, vararg bounds: Type): Boolean = add(name.genericsBy(*bounds))
+    fun add(name: String, vararg bounds: Type): TypeVariableName = name.genericsBy(*bounds).also(::add)
 
     /** Returns a [TypeVariableName] with [KClass] bounds. */
-    fun add(name: String, vararg bounds: KClass<*>): Boolean = add(name.genericsBy(*bounds))
+    fun add(name: String, vararg bounds: KClass<*>): TypeVariableName = name.genericsBy(*bounds).also(::add)
 
     /** Returns a [TypeVariableName] with collection of [TypeName] bounds. */
-    fun add(name: String, bounds: List<TypeName>): Boolean = add(name.genericsBy(bounds))
+    fun add(name: String, bounds: List<TypeName>): TypeVariableName = name.genericsBy(bounds).also(::add)
 
     /** Returns a [TypeVariableName] with collection of [Type] bounds. */
     @JvmName("addType")
-    fun add(name: String, bounds: Iterable<Type>): Boolean = add(name.genericsBy(bounds))
+    fun add(name: String, bounds: Iterable<Type>): TypeVariableName = name.genericsBy(bounds).also(::add)
 
     /** Returns a [TypeVariableName] with collection of [KClass] bounds. */
     @JvmName("addClass")
-    fun add(name: String, bounds: Iterable<KClass<*>>): Boolean = add(name.genericsBy(bounds))
+    fun add(name: String, bounds: Iterable<KClass<*>>): TypeVariableName = name.genericsBy(bounds).also(::add)
 
     /** Convenient method to add type variable name with operator function. */
     inline operator fun plusAssign(name: String) {
