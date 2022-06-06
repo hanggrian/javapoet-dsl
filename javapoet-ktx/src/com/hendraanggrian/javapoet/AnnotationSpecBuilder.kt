@@ -1,9 +1,14 @@
+@file:OptIn(ExperimentalContracts::class)
+
 package com.hendraanggrian.javapoet
 
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import javax.lang.model.element.AnnotationMirror
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 import kotlin.reflect.KClass
 
 /** Converts [Annotation] to [AnnotationSpec]. */
@@ -17,42 +22,44 @@ inline fun AnnotationMirror.asAnnotationSpec(): AnnotationSpec = AnnotationSpec.
  * Builds new [AnnotationSpec] from [ClassName],
  * by populating newly created [AnnotationSpecBuilder] using provided [configuration].
  */
-fun buildAnnotationSpec(type: ClassName, configuration: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
-    AnnotationSpecBuilder(AnnotationSpec.builder(type)).apply(configuration).build()
+inline fun buildAnnotationSpec(type: ClassName, configuration: AnnotationSpecBuilder.() -> Unit): AnnotationSpec {
+    contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
+    return AnnotationSpecBuilder(AnnotationSpec.builder(type)).apply(configuration).build()
+}
 
 /**
  * Builds new [AnnotationSpec] from [Class],
  * by populating newly created [AnnotationSpecBuilder] using provided [configuration].
  */
-fun buildAnnotationSpec(type: Class<*>, configuration: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
-    AnnotationSpecBuilder(AnnotationSpec.builder(type)).apply(configuration).build()
+inline fun buildAnnotationSpec(type: Class<*>, configuration: AnnotationSpecBuilder.() -> Unit): AnnotationSpec {
+    contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
+    return AnnotationSpecBuilder(AnnotationSpec.builder(type)).apply(configuration).build()
+}
 
 /**
  * Builds new [AnnotationSpec] from [KClass],
  * by populating newly created [AnnotationSpecBuilder] using provided [configuration].
  */
-fun buildAnnotationSpec(type: KClass<*>, configuration: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
-    AnnotationSpecBuilder(AnnotationSpec.builder(type.java)).apply(configuration).build()
+inline fun buildAnnotationSpec(type: KClass<*>, configuration: AnnotationSpecBuilder.() -> Unit): AnnotationSpec {
+    contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
+    return AnnotationSpecBuilder(AnnotationSpec.builder(type.java)).apply(configuration).build()
+}
 
 /**
  * Builds new [AnnotationSpec] from [T],
  * by populating newly created [AnnotationSpecBuilder] using provided [configuration].
  */
-inline fun <reified T> buildAnnotationSpec(noinline configuration: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
-    buildAnnotationSpec(T::class, configuration)
-
-/** Modify existing [AnnotationSpec.Builder] using provided [configuration]. */
-fun AnnotationSpec.Builder.edit(configuration: AnnotationSpecBuilder.() -> Unit): AnnotationSpec.Builder =
-    AnnotationSpecBuilder(this).apply(configuration).nativeBuilder
+inline fun <reified T> buildAnnotationSpec(configuration: AnnotationSpecBuilder.() -> Unit): AnnotationSpec {
+    contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
+    return AnnotationSpecBuilder(AnnotationSpec.builder(T::class.java)).apply(configuration).build()
+}
 
 /**
  * Wrapper of [AnnotationSpec.Builder], providing DSL support as a replacement to Java builder.
  * @param nativeBuilder source builder.
  */
-@SpecMarker
-class AnnotationSpecBuilder internal constructor(val nativeBuilder: AnnotationSpec.Builder) {
-
-    /** Members of this annotation. */
+@SpecDslMarker
+class AnnotationSpecBuilder(private val nativeBuilder: AnnotationSpec.Builder) {
     val members: Map<String, List<CodeBlock>> get() = nativeBuilder.members
 
     /** Add code as a member of this annotation. */

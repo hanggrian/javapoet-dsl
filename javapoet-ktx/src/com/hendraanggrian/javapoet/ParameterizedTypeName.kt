@@ -17,7 +17,7 @@ inline fun Class<*>.parameterizedBy(vararg typeArguments: Type): ParameterizedTy
     ParameterizedTypeName.get(this, *typeArguments)
 
 /** Returns a [ParameterizedTypeName] applying [KClass] arguments to [KClass]. */
-inline fun KClass<*>.parameterizedBy(vararg typeArguments: KClass<*>): ParameterizedTypeName =
+fun KClass<*>.parameterizedBy(vararg typeArguments: KClass<*>): ParameterizedTypeName =
     ParameterizedTypeName.get(java, *typeArguments.toJavaClasses())
 
 /** Returns a [ParameterizedTypeName] applying [TypeName] argument to collection of [ClassName]. */

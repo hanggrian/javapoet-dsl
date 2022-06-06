@@ -1,20 +1,27 @@
+@file:OptIn(ExperimentalContracts::class)
+
 package com.hendraanggrian.javapoet
 
 import com.hendraanggrian.javapoet.collections.TypeSpecList
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.JavaFile
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 import kotlin.reflect.KClass
 
 /**
  * Builds new [JavaFile],
  * by populating newly created [JavaFileBuilder] using provided [configuration].
  */
-fun buildJavaFile(packageName: String, configuration: JavaFileBuilder.() -> Unit): JavaFile =
-    JavaFileBuilder(packageName).apply(configuration).build()
+inline fun buildJavaFile(packageName: String, configuration: JavaFileBuilder.() -> Unit): JavaFile {
+    contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
+    return JavaFileBuilder(packageName).apply(configuration).build()
+}
 
 /** Wrapper of [JavaFile.Builder], providing DSL support as a replacement to Java builder. */
-@SpecMarker
-class JavaFileBuilder internal constructor(private val packageName: String) : TypeSpecList(ArrayList()) {
+@SpecDslMarker
+class JavaFileBuilder(private val packageName: String) : TypeSpecList(ArrayList()) {
     private var comments: MutableList<Pair<String, Array<*>>> = mutableListOf()
     private var imports: MutableMap<Any, MutableSet<String>> = mutableMapOf()
     private var isSkipJavaLangImports: Boolean = false

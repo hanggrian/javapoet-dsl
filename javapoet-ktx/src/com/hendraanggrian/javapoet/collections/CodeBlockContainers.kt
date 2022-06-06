@@ -1,6 +1,6 @@
 package com.hendraanggrian.javapoet.collections
 
-import com.hendraanggrian.javapoet.SpecMarker
+import com.hendraanggrian.javapoet.SpecDslMarker
 import com.squareup.javapoet.CodeBlock
 
 interface CodeBlockAppendable {
@@ -105,5 +105,5 @@ interface JavadocContainer : CodeBlockAppendable {
 }
 
 /** Receiver for the `kdoc` block providing an extended set of operators for the configuration. */
-@SpecMarker
+@SpecDslMarker
 class JavadocContainerScope internal constructor(container: JavadocContainer) : JavadocContainer by container

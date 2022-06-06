@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalContracts::class)
+
 package com.hendraanggrian.javapoet
 
 import com.hendraanggrian.javapoet.collections.AnnotationSpecList
@@ -14,34 +16,44 @@ import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeName
 import java.lang.reflect.Type
 import javax.lang.model.element.Modifier
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.InvocationKind
+import kotlin.contracts.contract
 import kotlin.reflect.KClass
 
 /**
- * Builds new [MethodSpec] with name,
+ * Builds new [MethodSpec],
  * by populating newly created [MethodSpecBuilder] using provided [configuration].
  */
-fun buildMethodSpec(name: String, configuration: MethodSpecBuilder.() -> Unit): MethodSpec =
-    MethodSpecBuilder(MethodSpec.methodBuilder(name)).apply(configuration).build()
+inline fun buildMethodSpec(name: String, configuration: MethodSpecBuilder.() -> Unit): MethodSpec {
+    contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
+    return MethodSpecBuilder(MethodSpec.methodBuilder(name)).apply(configuration).build()
+}
 
 /**
  * Builds new constructor [MethodSpec],
  * by populating newly created [MethodSpecBuilder] using provided [configuration].
  */
-fun buildConstructorMethodSpec(configuration: MethodSpecBuilder.() -> Unit): MethodSpec =
-    MethodSpecBuilder(MethodSpec.constructorBuilder()).apply(configuration).build()
+inline fun buildConstructorMethodSpec(configuration: MethodSpecBuilder.() -> Unit): MethodSpec {
+    contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
+    return MethodSpecBuilder(MethodSpec.constructorBuilder()).apply(configuration).build()
+}
 
-/** Modify existing [MethodSpec.Builder] using provided [configuration]. */
-fun MethodSpec.Builder.edit(configuration: MethodSpecBuilder.() -> Unit): MethodSpec.Builder =
-    MethodSpecBuilder(this).apply(configuration).nativeBuilder
+/**
+ * Property delegate for building new [MethodSpec],
+ * by populating newly created [MethodSpecBuilder] using provided [configuration].
+ */
+fun buildingMethodSpec(configuration: MethodSpecBuilder.() -> Unit): SpecLoader<MethodSpec> {
+    contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
+    return createSpecLoader { buildMethodSpec(it, configuration) }
+}
 
 /**
  * Wrapper of [MethodSpec.Builder], providing DSL support as a replacement to Java builder.
  * @param nativeBuilder source builder.
  */
-@SpecMarker
-class MethodSpecBuilder internal constructor(val nativeBuilder: MethodSpec.Builder) : CodeBlockContainer {
-
-    /** Modifiers of this method. */
+@SpecDslMarker
+class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlockContainer {
     val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
 
     /** Name of this method. */
@@ -62,15 +74,19 @@ class MethodSpecBuilder internal constructor(val nativeBuilder: MethodSpec.Build
     }
 
     /** Configures javadoc of this method. */
-    fun javadoc(configuration: JavadocContainerScope.() -> Unit): Unit =
+    fun javadoc(configuration: JavadocContainerScope.() -> Unit) {
+        contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
         JavadocContainerScope(javadoc).configuration()
+    }
 
     /** Annotations of this method. */
     val annotations: AnnotationSpecList = AnnotationSpecList(nativeBuilder.annotations)
 
     /** Configures annotations of this method. */
-    fun annotations(configuration: AnnotationSpecListScope.() -> Unit): Unit =
+    fun annotations(configuration: AnnotationSpecListScope.() -> Unit) {
+        contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
         AnnotationSpecListScope(annotations).configuration()
+    }
 
     /** Add field modifiers. */
     fun addModifiers(vararg modifiers: Modifier) {
@@ -81,7 +97,10 @@ class MethodSpecBuilder internal constructor(val nativeBuilder: MethodSpec.Build
     val typeVariables: TypeVariableNameList = TypeVariableNameList(nativeBuilder.typeVariables)
 
     /** Configures type variables of this method. */
-    fun typeVariables(configuration: TypeVariableNameList.() -> Unit): Unit = typeVariables.configuration()
+    fun typeVariables(configuration: TypeVariableNameList.() -> Unit) {
+        contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
+        typeVariables.configuration()
+    }
 
     /** Add return line to type name. */
     var returns: TypeName
@@ -107,8 +126,10 @@ class MethodSpecBuilder internal constructor(val nativeBuilder: MethodSpec.Build
     val parameters: ParameterSpecList = ParameterSpecList(nativeBuilder.parameters)
 
     /** Configures parameters of this method. */
-    fun parameters(configuration: ParameterSpecListScope.() -> Unit): Unit =
+    fun parameters(configuration: ParameterSpecListScope.() -> Unit) {
+        contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
         ParameterSpecListScope(parameters).configuration()
+    }
 
     /** Add vararg keyword to array type parameter. */
     var isVarargs: Boolean
@@ -121,7 +142,10 @@ class MethodSpecBuilder internal constructor(val nativeBuilder: MethodSpec.Build
     val exceptions: TypeNameList = TypeNameList(mutableListOf())
 
     /** Configures exceptions of this method. */
-    fun exceptions(configuration: TypeNameList.() -> Unit): Unit = exceptions.configuration()
+    fun exceptions(configuration: TypeNameList.() -> Unit) {
+        contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
+        exceptions.configuration()
+    }
 
     override fun append(format: String, vararg args: Any): Unit =
         format.internalFormat(args) { format2, args2 -> nativeBuilder.addCode(format2, *args2) }

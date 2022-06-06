@@ -4,7 +4,6 @@ import com.example.Annotation1
 import com.example.Field1
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.ParameterSpec
-import javax.lang.model.element.Modifier
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -37,10 +36,8 @@ class ParameterSpecBuilderTest {
     @Test
     fun addModifiers() {
         assertEquals(
-            buildParameterSpec<Field1>("parameter1") { addModifiers(PUBLIC, FINAL, STATIC) },
-            ParameterSpec.builder(Field1::class.java, "parameter1")
-                .addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
-                .build()
+            buildParameterSpec<Field1>("parameter1") { addModifiers(FINAL) },
+            ParameterSpec.builder(Field1::class.java, "parameter1").addModifiers(FINAL).build()
         )
     }
 }

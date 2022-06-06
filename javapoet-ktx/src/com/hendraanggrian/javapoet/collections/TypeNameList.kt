@@ -15,7 +15,7 @@ class TypeNameList internal constructor(actualList: MutableList<TypeName>) : Mut
     fun add(type: KClass<*>): TypeName = type.asTypeName().also(::add)
 
     /** Add type name from [T]. */
-    inline fun <reified T> add(): TypeName = T::class.asTypeName().also(::add)
+    inline fun <reified T> add(): TypeName = add(T::class.java)
 
     /** Convenient method to add type name with operator function. */
     inline operator fun plusAssign(type: Type) {

@@ -1,6 +1,5 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.collections.MethodSpecListScope
 import com.squareup.javapoet.CodeBlock
 import java.util.Collections
 import java.util.Date
@@ -8,10 +7,10 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 /** From `https://github.com/square/javapoet`. */
-class ReadmeTest {
+class GitHubTest {
 
     @Test
-    fun example() {
+    fun `Example`() {
         assertEquals(
             """
                 package com.example.helloworld;
@@ -41,8 +40,8 @@ class ReadmeTest {
     }
 
     @Test
-    fun `code&ControlFlow`() {
-        val expected =
+    fun `Code & Control Flow`() {
+        assertEquals(
             """
                 void main() {
                   int total = 0;
@@ -51,24 +50,7 @@ class ReadmeTest {
                   }
                 }
             
-            """.trimIndent()
-        assertEquals(
-            expected,
-            buildMethodSpec("main") {
-                returns = VOID
-                append(
-                    """
-                        int total = 0;
-                        for (int i = 0; i < 10; i++) {
-                          total += i;
-                        }
-                        
-                    """.trimIndent()
-                )
-            }.toString()
-        )
-        assertEquals(
-            expected,
+            """.trimIndent(),
             buildMethodSpec("main") {
                 returns = VOID
                 appendLine("int total = 0")
@@ -144,7 +126,7 @@ class ReadmeTest {
     }
 
     @Test
-    fun `$LForLiterals`() {
+    fun `$L for Literals`() {
         assertEquals(
             """
                 int computeRange() {
@@ -168,7 +150,7 @@ class ReadmeTest {
     }
 
     @Test
-    fun `$SForStrings`() {
+    fun `$S for Strings`() {
         assertEquals(
             """
                 public final class HelloWorld {
@@ -189,16 +171,25 @@ class ReadmeTest {
             buildClassTypeSpec("HelloWorld") {
                 addModifiers(PUBLIC, FINAL)
                 methods {
-                    whatsMyName("slimShady")
-                    whatsMyName("eminem")
-                    whatsMyName("marshallMathers")
+                    "slimShady" {
+                        returns<String>()
+                        appendLine("return %S", "slimShady")
+                    }
+                    "eminem" {
+                        returns<String>()
+                        appendLine("return %S", "eminem")
+                    }
+                    "marshallMathers" {
+                        returns<String>()
+                        appendLine("return %S", "marshallMathers")
+                    }
                 }
             }.toString()
         )
     }
 
     @Test
-    fun `$TForTypes`() {
+    fun `$T for Types`() {
         assertEquals(
             """
                 public final class HelloWorld {
@@ -311,14 +302,14 @@ class ReadmeTest {
     }
 
     @Test
-    fun `$NForNames`() {
-        val hexDigit = buildMethodSpec("hexDigit") {
+    fun `$N for Names`() {
+        val hexDigit by buildingMethodSpec {
             addModifiers(PUBLIC)
             parameters.add(INT, "i")
             returns = CHAR
             appendLine("return (char) (i < 10 ? i + '0' : i - 10 + 'a')")
         }
-        val byteToHex = buildMethodSpec("byteToHex") {
+        val byteToHex by buildingMethodSpec {
             addModifiers(PUBLIC)
             parameters.add(INT, "b")
             returns<String>()
@@ -346,7 +337,7 @@ class ReadmeTest {
     }
 
     @Test
-    fun codeBlockFormatStrings() {
+    fun `Code block format strings`() {
         assertEquals(
             CodeBlock.of("I ate \$L \$L", 3, "tacos"),
             codeBlockOf("I ate %L %L", 3, "tacos")
@@ -355,10 +346,17 @@ class ReadmeTest {
             CodeBlock.of("I ate \$2L \$1L", "tacos", 3),
             codeBlockOf("I ate %2L %1L", "tacos", 3)
         )
+        val map = linkedMapOf<String, Any>()
+        map["food"] = "tacos"
+        map["count"] = 3
+        assertEquals(
+            CodeBlock.builder().addNamed("I ate \$count:L \$food:L", map).build(),
+            buildCodeBlock { appendNamed("I ate %count:L %food:L", map) }
+        )
     }
 
     @Test
-    fun methods() {
+    fun `Methods`() {
         assertEquals(
             """
                 public abstract class HelloWorld {
@@ -376,7 +374,7 @@ class ReadmeTest {
     }
 
     @Test
-    fun constructors() {
+    fun `Constructors`() {
         assertEquals(
             """
                 public class HelloWorld {
@@ -401,7 +399,7 @@ class ReadmeTest {
     }
 
     @Test
-    fun parameters() {
+    fun `Parameters`() {
         assertEquals(
             """
                 void welcomeOverlords(final java.lang.String android, final java.lang.String robot) {
@@ -418,7 +416,7 @@ class ReadmeTest {
     }
 
     @Test
-    fun fields() {
+    fun `Fields`() {
         assertEquals(
             """
                 public class HelloWorld {
@@ -437,7 +435,10 @@ class ReadmeTest {
             }.toString()
         )
         assertEquals(
-            "private final java.lang.String android = \"Lollipop v.\" + 5.0;\n",
+            """
+                private final java.lang.String android = "Lollipop v." + 5.0;
+                
+            """.trimIndent(),
             buildFieldSpec<String>("android", PRIVATE, FINAL) {
                 initializer("\"Lollipop v.\" + 5.0")
             }.toString()
@@ -445,7 +446,7 @@ class ReadmeTest {
     }
 
     @Test
-    fun interfaces() {
+    fun `Interfaces`() {
         assertEquals(
             """
                 public interface HelloWorld {
@@ -468,7 +469,7 @@ class ReadmeTest {
     }
 
     @Test
-    fun enums() {
+    fun `Enums`() {
         assertEquals(
             """
                 public enum Roshambo {
@@ -535,23 +536,7 @@ class ReadmeTest {
     }
 
     @Test
-    fun anonymousInnerClasses() {
-        val sortByLength = buildMethodSpec("sortByLength") {
-            parameters.add(List::class.parameterizedBy(String::class), "strings")
-            appendLine("%T.sort(%N, %L)", Collections::class, "strings", buildAnonymousTypeSpec("") {
-                superinterfaces += Comparator::class.parameterizedBy(String::class)
-                methods.add("compare") {
-                    annotations.add<Override>()
-                    addModifiers(PUBLIC)
-                    parameters {
-                        add<String>("a")
-                        add<String>("b")
-                    }
-                    returns = INT
-                    appendLine("return %N.length() - %N.length()", "a", "b")
-                }
-            })
-        }
+    fun `Anonymous Inner Classes`() {
         assertEquals(
             """
                 void sortByLength(java.util.List<java.lang.String> strings) {
@@ -564,12 +549,27 @@ class ReadmeTest {
                 }
                 
             """.trimIndent(),
-            sortByLength.toString()
+            buildMethodSpec("sortByLength") {
+                parameters.add(List::class.parameterizedBy(String::class), "strings")
+                appendLine("%T.sort(%N, %L)", Collections::class, "strings", buildAnonymousTypeSpec("") {
+                    superinterfaces += Comparator::class.parameterizedBy(String::class)
+                    methods.add("compare") {
+                        annotations.add<Override>()
+                        addModifiers(PUBLIC)
+                        parameters {
+                            add<String>("a")
+                            add<String>("b")
+                        }
+                        returns = INT
+                        appendLine("return %N.length() - %N.length()", "a", "b")
+                    }
+                })
+            }.toString()
         )
     }
 
     @Test
-    fun annotations() {
+    fun `Annotations`() {
         assertEquals(
             """
                 @java.lang.Override
@@ -585,56 +585,61 @@ class ReadmeTest {
                 appendLine("return %S", "Hoverboard")
             }.toString()
         )
+        val headers = classNameOf("com.example", "Headers")
+        val logRecord = classNameOf("com.example", "LogRecord")
+        val logReceipt = classNameOf("com.example", "LogReceipt")
         assertEquals(
             """
-                @com.hendraanggrian.javapoet.ReadmeTest.Headers(
+                @com.example.Headers(
                     accept = "application/json; charset=utf-8",
                     userAgent = "Square Cash"
                 )
-                public abstract com.hendraanggrian.javapoet.ReadmeTest.LogReceipt recordEvent(
-                    com.hendraanggrian.javapoet.ReadmeTest.LogRecord logRecord);
+                public abstract com.example.LogReceipt recordEvent(com.example.LogRecord logRecord);
                 
             """.trimIndent(),
             buildMethodSpec("recordEvent") {
                 addModifiers(PUBLIC, ABSTRACT)
-                annotations.add<Headers> {
+                annotations.add(headers) {
                     addMember("accept", "%S", "application/json; charset=utf-8")
                     addMember("userAgent", "%S", "Square Cash")
                 }
-                parameters.add<LogRecord>("logRecord")
-                returns<LogReceipt>()
+                parameters.add(logRecord, "logRecord")
+                returns = logReceipt
             }.toString()
         )
+        val header = classNameOf("com.example", "Header")
+        val headerList = classNameOf("com.example", "HeaderList")
         assertEquals(
             """
-                @com.hendraanggrian.javapoet.ReadmeTest.HeaderList({
-                    @com.hendraanggrian.javapoet.ReadmeTest.Header(name = "Accept", value = "application/json; charset=utf-8"),
-                    @com.hendraanggrian.javapoet.ReadmeTest.Header(name = "User-Agent", value = "Square Cash")
+                @com.example.HeaderList({
+                    @com.example.Header(name = "Accept", value = "application/json; charset=utf-8"),
+                    @com.example.Header(name = "User-Agent", value = "Square Cash")
                 })
-                public abstract com.hendraanggrian.javapoet.ReadmeTest.LogReceipt recordEvent(
-                    com.hendraanggrian.javapoet.ReadmeTest.LogRecord logRecord);
+                public abstract com.example.LogReceipt recordEvent(com.example.LogRecord logRecord);
                 
             """.trimIndent(),
             buildMethodSpec("recordEvent") {
                 addModifiers(PUBLIC, ABSTRACT)
-                annotations.add<HeaderList> {
-                    addMember("value", "%L", buildAnnotationSpec<Header> {
+                annotations.add(headerList) {
+                    addMember("value", "%L", buildAnnotationSpec(header) {
                         addMember("name", "%S", "Accept")
                         addMember("value", "%S", "application/json; charset=utf-8")
                     })
-                    addMember("value", "%L", buildAnnotationSpec<Header> {
+                    addMember("value", "%L", buildAnnotationSpec(header) {
                         addMember("name", "%S", "User-Agent")
                         addMember("value", "%S", "Square Cash")
                     })
                 }
-                parameters.add<LogRecord>("logRecord")
-                returns<LogReceipt>()
+                parameters.add(logRecord, "logRecord")
+                returns = logReceipt
             }.toString()
         )
     }
 
     @Test
-    fun javadoc() {
+    fun `Javadoc`() {
+        val message = classNameOf("com.example", "Message")
+        val conversation = classNameOf("com.example", "Conversation")
         assertEquals(
             """
                 /**
@@ -642,10 +647,10 @@ class ReadmeTest {
                  * participants in the conversation will continue to see the
                  * message in their own history unless they also delete it.
                  *
-                 * <p>Use {@link #delete(com.hendraanggrian.javapoet.ReadmeTest.Conversation)} to delete the entire
+                 * <p>Use {@link #delete(com.example.Conversation)} to delete the entire
                  * conversation for all participants.
                  */
-                public abstract void dismiss(com.hendraanggrian.javapoet.ReadmeTest.Message message);
+                public abstract void dismiss(com.example.Message message);
 
             """.trimIndent(),
             buildMethodSpec("dismiss") {
@@ -656,28 +661,12 @@ class ReadmeTest {
                     appendLine()
                     append(
                         "<p>Use {@link #delete(%T)} to delete the entire\n"
-                            + "conversation for all participants.\n", Conversation::class
+                            + "conversation for all participants.\n", conversation
                     )
                 }
                 addModifiers(PUBLIC, ABSTRACT)
-                parameters.add<Message>("message")
+                parameters.add(message, "message")
             }.toString()
         )
     }
-
-    private fun MethodSpecListScope.whatsMyName(name: String) {
-        name {
-            returns<String>()
-            appendLine("return %S", name)
-        }
-    }
-
-    private class Headers
-    private class Header
-    private class HeaderList
-    private class LogRecord
-    private class LogReceipt
-
-    private class Message
-    private class Conversation
 }

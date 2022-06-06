@@ -18,7 +18,7 @@ inline fun String.genericsBy(vararg bounds: TypeName): TypeVariableName =
 inline fun String.genericsBy(vararg bounds: Type): TypeVariableName = TypeVariableName.get(this, *bounds)
 
 /** Returns a [TypeVariableName] with [KClass] bounds. */
-inline fun String.genericsBy(vararg bounds: KClass<*>): TypeVariableName =
+fun String.genericsBy(vararg bounds: KClass<*>): TypeVariableName =
     TypeVariableName.get(this, *bounds.toJavaClasses())
 
 /** Returns a [TypeVariableName] with collection of [TypeName] bounds. */

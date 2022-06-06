@@ -15,19 +15,15 @@ fun codeBlockOf(format: String, vararg args: Any?): CodeBlock =
  * Builds new [CodeBlock],
  * by populating newly created [CodeBlockBuilder] using provided [configuration].
  */
-fun buildCodeBlock(configuration: CodeBlockBuilder.() -> Unit): CodeBlock =
+inline fun buildCodeBlock(configuration: CodeBlockBuilder.() -> Unit): CodeBlock =
     CodeBlockBuilder(CodeBlock.builder()).apply(configuration).build()
-
-/** Modify existing [CodeBlock.Builder] using provided [configuration]. */
-fun CodeBlock.Builder.edit(configuration: CodeBlockBuilder.() -> Unit): CodeBlock.Builder =
-    CodeBlockBuilder(this).apply(configuration).nativeBuilder
 
 /**
  * Wrapper of [CodeBlock.Builder], providing DSL support as a replacement to Java builder.
  * @param nativeBuilder source builder.
  */
-@SpecMarker
-class CodeBlockBuilder internal constructor(val nativeBuilder: CodeBlock.Builder) : CodeBlockContainer {
+@SpecDslMarker
+class CodeBlockBuilder(private val nativeBuilder: CodeBlock.Builder) : CodeBlockContainer {
 
     /** Returns true if this builder contains no code. */
     fun isEmpty(): Boolean = nativeBuilder.isEmpty

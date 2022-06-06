@@ -1,6 +1,8 @@
 package com.hendraanggrian.javapoet
 
+import kotlin.properties.ReadOnlyProperty
 import kotlin.reflect.KClass
+import kotlin.reflect.KProperty
 
 /** Field deprecation message. */
 internal const val NO_GETTER: String = "Property does not have a getter"
@@ -36,5 +38,12 @@ internal fun <T> String.internalFormat(args: Map<String, *>, action: (format2: S
     internalFormat(args.values.toTypedArray()) { s, array -> action(s, args.keys.zip(array).toMap()) }
 
 /** Converts array of Kotlin classes to Java classes. */
-@PublishedApi
-internal inline fun Array<out KClass<*>>.toJavaClasses(): Array<Class<*>> = map { it.java }.toTypedArray()
+internal fun Array<out KClass<*>>.toJavaClasses(): Array<Class<*>> = map { it.java }.toTypedArray()
+
+/** Creates property delegate accessor by creating spec using property name. */
+internal fun <T> createSpecLoader(createSpec: (String) -> T): SpecLoader<T> = object : SpecLoader<T> {
+    override fun provideDelegate(thisRef: Any?, property: KProperty<*>): ReadOnlyProperty<Any?, T> {
+        val spec = createSpec(property.name)
+        return ReadOnlyProperty { _, _ -> spec }
+    }
+}
