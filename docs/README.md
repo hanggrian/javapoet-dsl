@@ -8,6 +8,7 @@ JavaPoet DSL Primer
 
 Lightweight Kotlin extension of [JavaPoet](https://github.com/square/javapoet),
 providing Kotlin DSL functionality and other convenient solutions.
+
 - Full of convenient methods to achieve minimum code writing possible.
 - Options to invoke DSL. For example, `methods.add("main") { ... }` is as good as `methods { "main" { ... } }`. Scroll down for more information.
 - Smooth transition, existing JavaPoet native specs can still be configured with DSL.
