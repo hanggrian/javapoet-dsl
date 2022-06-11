@@ -1,7 +1,7 @@
 package com.hendraanggrian.javapoet.collections
 
-import com.hendraanggrian.javapoet.ParameterSpecBuilder
 import com.hendraanggrian.javapoet.JavapoetSpecMarker
+import com.hendraanggrian.javapoet.ParameterSpecBuilder
 import com.hendraanggrian.javapoet.SpecLoader
 import com.hendraanggrian.javapoet.buildParameterSpec
 import com.hendraanggrian.javapoet.createSpecLoader

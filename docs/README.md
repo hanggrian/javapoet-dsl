@@ -22,7 +22,7 @@ buildJavaFile("com.example.helloworld") {
                 addModifiers(Modifier.PUBLIC, Modifier.STATIC)
                 returns = VOID
                 parameters.add<Array<String>>("args")
-                appendln("%T.out.println(%S)", System::class, "Hello, JavaPoet!")
+                appendLine("%T.out.println(%S)", System::class, "Hello, JavaPoet!")
             }
         }
     }
@@ -55,15 +55,15 @@ However in Kotlin, `$` in strings is reserved for variable referral. Avoid using
 ```kotlin
 buildMethodSpec("getName") {
     returns<String>()
-    appendln("%S", name)
+    appendLine("%S", name)
 }
 
 buildCodeBlock {
-    appendln("int result = 0")
+    appendLine("int result = 0")
     beginFlow("for (int i = %L; i < %L; i++)", 0, 10)
-    appendln("result = result %L i", "+=")
+    appendLine("result = result %L i", "+=")
     endFlow()
-    appendln("return result")
+    appendLine("return result")
 }
 ```
 
@@ -75,8 +75,8 @@ buildCodeBlock {
 buildMethodSpec("sortList") {
     returns = int
     parameters.add(classNameOf("java.util", "List").parameterizedBy(hoverboard), "list")
-    appendln("%T.sort(list)", Collections::class)
-    appendln("return list")
+    appendLine("%T.sort(list)", Collections::class)
+    appendLine("return list")
 }
 
 buildFieldSpec<Int>("count") {
@@ -91,21 +91,7 @@ Some elements (field, method, parameter, etc.) are wrapped in container class. T
 For example, 2 examples below will produce the same result.
 
 ```kotlin
-addClass("Car") {
-    annotations {
-        SuppressWarnings::class {
-            members {
-                "value" {
-                    add("deprecation")
-                }
-            }
-        }
-    }
-    fields {
-        "wheels"(int) {
-            initializer("4")
-        }
-    }
+types.addClass("Car") {
     methods {
         "getWheels" {
             returns = int
@@ -124,13 +110,7 @@ addClass("Car") {
     }
 }
 
-addClass("Car") {
-    annotations.add<SuppressWarnings> {
-        members.add("value", "deprecation")
-    }
-    fields.add("wheels", int) {
-        initializer("4")
-    }
+types.addClass("Car") {
     methods.add("getWheels") {
         returns = int
         statements.add("return wheels")
@@ -142,12 +122,26 @@ addClass("Car") {
 }
 ```
 
+### Property delegation
+
+In spirit of [Gradle Kotlin DSL](https://docs.gradle.org/current/userguide/kotlin_dsl.html#using_kotlin_delegated_properties), creating a spec can be done by delegating to a property.
+
+```kotlin
+val title by buildingParameterSpec(String::class) {
+    annotations.add<NotNull>
+}
+
+val message by parameters.adding(String::class) {
+    annotations.add<Nullable>
+}
+```
+
 ### Fluent TypeName API
 
 Write `TypeName` and all its subtypes fluently.
 
 ```kotlin
-val myClass: ClassName = "com.example".classOf("MyClass")
+val myClass: ClassName = classOf("com.example", "MyClass")
 val arrayOfString: ArrayTypeName = "java.lang".classOf("String").arrayOf()
 val pairOfInteger: ParameterizedTypeName = "android.util".classOf("Pair").parameterizedBy(Integer::class, Integer::class)
 val tVariable: TypeVariableName = "T".typeVarOf()

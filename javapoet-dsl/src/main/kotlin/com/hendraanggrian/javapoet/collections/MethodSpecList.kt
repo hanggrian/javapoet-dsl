@@ -1,7 +1,7 @@
 package com.hendraanggrian.javapoet.collections
 
-import com.hendraanggrian.javapoet.MethodSpecBuilder
 import com.hendraanggrian.javapoet.JavapoetSpecMarker
+import com.hendraanggrian.javapoet.MethodSpecBuilder
 import com.hendraanggrian.javapoet.SpecLoader
 import com.hendraanggrian.javapoet.buildConstructorMethodSpec
 import com.hendraanggrian.javapoet.buildMethodSpec
