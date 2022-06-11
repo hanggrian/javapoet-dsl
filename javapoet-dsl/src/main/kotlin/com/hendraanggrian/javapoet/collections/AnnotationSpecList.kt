@@ -1,7 +1,7 @@
 package com.hendraanggrian.javapoet.collections
 
 import com.hendraanggrian.javapoet.AnnotationSpecBuilder
-import com.hendraanggrian.javapoet.SpecDslMarker
+import com.hendraanggrian.javapoet.JavapoetSpecMarker
 import com.hendraanggrian.javapoet.buildAnnotationSpec
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
@@ -68,6 +68,6 @@ open class AnnotationSpecList internal constructor(actualList: MutableList<Annot
 }
 
 /** Receiver for the `annotations` block providing an extended set of operators for the configuration. */
-@SpecDslMarker
+@JavapoetSpecMarker
 class AnnotationSpecListScope internal constructor(actualList: MutableList<AnnotationSpec>) :
     AnnotationSpecList(actualList)

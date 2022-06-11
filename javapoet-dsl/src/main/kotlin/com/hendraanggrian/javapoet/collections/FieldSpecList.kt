@@ -1,7 +1,7 @@
 package com.hendraanggrian.javapoet.collections
 
 import com.hendraanggrian.javapoet.FieldSpecBuilder
-import com.hendraanggrian.javapoet.SpecDslMarker
+import com.hendraanggrian.javapoet.JavapoetSpecMarker
 import com.hendraanggrian.javapoet.SpecLoader
 import com.hendraanggrian.javapoet.buildFieldSpec
 import com.hendraanggrian.javapoet.createSpecLoader
@@ -137,7 +137,7 @@ open class FieldSpecList internal constructor(actualList: MutableList<FieldSpec>
 }
 
 /** Receiver for the `fields` block providing an extended set of operators for the configuration. */
-@SpecDslMarker
+@JavapoetSpecMarker
 class FieldSpecListScope internal constructor(actualList: MutableList<FieldSpec>) : FieldSpecList(actualList) {
 
     /** @see FieldSpecList.add */

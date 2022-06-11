@@ -1,7 +1,7 @@
 package com.hendraanggrian.javapoet.collections
 
 import com.hendraanggrian.javapoet.MethodSpecBuilder
-import com.hendraanggrian.javapoet.SpecDslMarker
+import com.hendraanggrian.javapoet.JavapoetSpecMarker
 import com.hendraanggrian.javapoet.SpecLoader
 import com.hendraanggrian.javapoet.buildConstructorMethodSpec
 import com.hendraanggrian.javapoet.buildMethodSpec
@@ -50,7 +50,7 @@ open class MethodSpecList internal constructor(actualList: MutableList<MethodSpe
 }
 
 /** Receiver for the `methods` block providing an extended set of operators for the configuration. */
-@SpecDslMarker
+@JavapoetSpecMarker
 class MethodSpecListScope internal constructor(actualList: MutableList<MethodSpec>) : MethodSpecList(actualList) {
 
     /** @see MethodSpecList.add */

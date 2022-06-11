@@ -20,7 +20,7 @@ inline fun buildJavaFile(packageName: String, configuration: JavaFileBuilder.() 
 }
 
 /** Wrapper of [JavaFile.Builder], providing DSL support as a replacement to Java builder. */
-@SpecDslMarker
+@JavapoetSpecMarker
 class JavaFileBuilder(private val packageName: String) : TypeSpecList(ArrayList()) {
     private var comments: MutableList<Pair<String, Array<*>>> = mutableListOf()
     private var imports: MutableMap<Any, MutableSet<String>> = mutableMapOf()
