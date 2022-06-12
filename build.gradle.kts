@@ -1,6 +1,7 @@
 import com.diffplug.gradle.spotless.SpotlessExtension
 import com.vanniktech.maven.publish.MavenPublishBaseExtension
 import com.vanniktech.maven.publish.SonatypeHost
+import kotlinx.kover.api.KoverExtension
 import org.jetbrains.dokka.gradle.DokkaTask
 import org.jetbrains.kotlin.gradle.dsl.KotlinProjectExtension
 
@@ -11,6 +12,7 @@ buildscript {
     }
     dependencies {
         classpath(plugs.kotlin)
+        classpath(plugs.kotlin.kover)
         classpath(plugs.dokka)
         classpath(plugs.spotless)
         classpath(plugs.maven.publish)
@@ -30,7 +32,10 @@ allprojects {
 subprojects {
     afterEvaluate {
         extensions.find<KotlinProjectExtension>()?.jvmToolchain {
-            (this as JavaToolchainSpec).languageVersion.set(JavaLanguageVersion.of(8))
+            (this as JavaToolchainSpec).languageVersion.set(JavaLanguageVersion.of(sdk.versions.jdk.get()))
+        }
+        extensions.find<KoverExtension> {
+            generateReportOnCheck = false
         }
         tasks.find<DokkaTask>("dokkaHtml") {
             outputDirectory.set(buildDir.resolve("dokka/dokka"))
