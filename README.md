@@ -1,0 +1,2 @@
+# javapoet-dsl
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/c4e46a0118c3405dab7d9e819699d125)](https://app.codacy.com/gh/hendraanggrian/javapoet-dsl?utm_source=github.com&utm_medium=referral&utm_content=hendraanggrian/javapoet-dsl&utm_campaign=Badge_Grade_Settings)
