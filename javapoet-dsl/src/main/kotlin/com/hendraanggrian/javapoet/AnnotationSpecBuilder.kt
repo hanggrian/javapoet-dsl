@@ -58,7 +58,7 @@ inline fun <reified T> buildAnnotationSpec(configuration: AnnotationSpecBuilder.
  * Wrapper of [AnnotationSpec.Builder], providing DSL support as a replacement to Java builder.
  * @param nativeBuilder source builder.
  */
-@JavapoetSpecMarker
+@JavapoetSpecDsl
 class AnnotationSpecBuilder(private val nativeBuilder: AnnotationSpec.Builder) {
     val members: Map<String, List<CodeBlock>> get() = nativeBuilder.members
 

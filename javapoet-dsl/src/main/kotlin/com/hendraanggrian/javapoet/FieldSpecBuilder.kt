@@ -114,7 +114,7 @@ fun buildingFieldSpec(
  * Wrapper of [FieldSpec.Builder], providing DSL support as a replacement to Java builder.
  * @param nativeBuilder source builder.
  */
-@JavapoetSpecMarker
+@JavapoetSpecDsl
 class FieldSpecBuilder(private val nativeBuilder: FieldSpec.Builder) {
     val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
 

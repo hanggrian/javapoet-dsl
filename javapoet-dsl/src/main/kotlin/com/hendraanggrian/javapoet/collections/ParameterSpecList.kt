@@ -1,6 +1,6 @@
 package com.hendraanggrian.javapoet.collections
 
-import com.hendraanggrian.javapoet.JavapoetSpecMarker
+import com.hendraanggrian.javapoet.JavapoetSpecDsl
 import com.hendraanggrian.javapoet.ParameterSpecBuilder
 import com.hendraanggrian.javapoet.SpecLoader
 import com.hendraanggrian.javapoet.buildParameterSpec
@@ -137,7 +137,7 @@ open class ParameterSpecList internal constructor(actualList: MutableList<Parame
 }
 
 /** Receiver for the `parameters` block providing an extended set of operators for the configuration. */
-@JavapoetSpecMarker
+@JavapoetSpecDsl
 class ParameterSpecListScope internal constructor(actualList: MutableList<ParameterSpec>) :
     ParameterSpecList(actualList) {
 

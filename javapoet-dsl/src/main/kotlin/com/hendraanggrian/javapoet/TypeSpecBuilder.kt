@@ -171,7 +171,7 @@ fun buildingAnnotationTypeSpec(configuration: TypeSpecBuilder.() -> Unit): SpecL
  * Wrapper of [TypeSpec.Builder], providing DSL support as a replacement to Java builder.
  * @param nativeBuilder source builder.
  */
-@JavapoetSpecMarker
+@JavapoetSpecDsl
 class TypeSpecBuilder(private val nativeBuilder: TypeSpec.Builder) {
     val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
     val originatingElements: MutableList<Element> get() = nativeBuilder.originatingElements

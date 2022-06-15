@@ -1,10 +1,11 @@
-[![Maven Central](https://img.shields.io/maven-central/v/com.hendraanggrian/javapoet-dsl)](https://search.maven.org/artifact/com.hendraanggrian/javapoet-dsl)
-[![Travis CI](https://img.shields.io/travis/com/hendraanggrian/javapoet-dsl)](https://travis-ci.com/github/hendraanggrian/javapoet-dsl)
-[![OpenJDK](https://img.shields.io/badge/JDK-1.8+-informational)](https://openjdk.java.net/projects/jdk8)
+[![Maven Central](https://img.shields.io/maven-central/v/com.hendraanggrian/javapoet-dsl)](https://search.maven.org/artifact/com.hendraanggrian/javapoet-dsl/)
+[![Travis CI](https://img.shields.io/travis/com/hendraanggrian/javapoet-dsl)](https://travis-ci.com/github/hendraanggrian/javapoet-dsl/)
+[![Codecov](https://img.shields.io/codecov/c/github/hendraanggrian/javapoet-dsl)](https://app.codecov.io/gh/hendraanggrian/javapoet-dsl/)
+[![OpenJDK](https://img.shields.io/badge/jdk-1.8+-informational)](https://openjdk.java.net/projects/jdk8/)
 
 # JavaPoet DSL Primer
 
-Lightweight Kotlin extension of [JavaPoet](https://github.com/square/javapoet),
+Lightweight Kotlin extension of [JavaPoet](https://github.com/square/javapoet/),
 providing Kotlin DSL functionality and other convenient solutions.
 
 - Full of convenient methods to achieve minimum code writing possible.
@@ -38,14 +39,14 @@ dependencies {
 }
 ```
 
-Snapshots of the development version are available in [Sonatype's snapshots repository](https://s01.oss.sonatype.org/content/repositories/snapshots).
+Snapshots of the development version are available in [Sonatype's snapshots repository](https://s01.oss.sonatype.org/content/repositories/snapshots/).
 
 ## Usage
 
 ### Use `%` in string formatter
 
 JavaPoet uses char prefix `$` when formatting literals (`$L`), strings (`$S`), types (`$T`), an names (`$N`) within strings.
-However in Kotlin, `$` in strings is reserved for variable referral. Avoid using `\$` and instead use `%` as the prefix, this is also the approach taken by [KotlinPoet](https://github.com/square/kotlinpoet).
+However in Kotlin, `$` in strings is reserved for variable referral. Avoid using `\$` and instead use `%` as the prefix, this is also the approach taken by [KotlinPoet](https://github.com/square/kotlinpoet/).
 
 ```kotlin
 buildMethodSpec("getName") {

@@ -1,6 +1,6 @@
 package com.hendraanggrian.javapoet.collections
 
-import com.hendraanggrian.javapoet.JavapoetSpecMarker
+import com.hendraanggrian.javapoet.JavapoetSpecDsl
 import com.hendraanggrian.javapoet.SpecLoader
 import com.hendraanggrian.javapoet.TypeSpecBuilder
 import com.hendraanggrian.javapoet.buildAnonymousTypeSpec
@@ -96,7 +96,7 @@ open class EnumConstantMap internal constructor(actualMap: MutableMap<String, Ty
 }
 
 /** Receiver for the `enumConstants` block providing an extended set of operators for the configuration. */
-@JavapoetSpecMarker
+@JavapoetSpecDsl
 class EnumConstantMapScope internal constructor(actualMap: MutableMap<String, TypeSpec>) :
     EnumConstantMap(actualMap) {
 
