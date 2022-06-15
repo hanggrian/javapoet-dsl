@@ -1,38 +1,213 @@
-<!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>JavaPoet KTX</title>
+    <head>
+        <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <meta charset="utf-8">
+        <meta content="chrome=1" http-equiv="X-UA-Compatible">
+        <title>javapoet-dsl by Hendra Anggrian</title>
+        <link href="styles/main.css" rel="stylesheet">
+        <link href="styles/pygment_trac.css" rel="stylesheet">
+        <meta content="width=device-width" name="viewport">
+        <script src="scripts/theme.js"></script>
+    </head>
+    <body>
+        <div class="wrapper">
+            <header>
+                <h1>javapoet-dsl</h1>
+                <p>JavaPoet Kotlin extension</p>
+                <p class="view">
+                    <a href="https://github.com/hendraanggrian/javapoet-dsl">View the Project on GitHub <small>hendraanggrian/javapoet-dsl</small></a>
+                </p>
+                <ul>
+                    <li>
+                        <a href="dokka">View<strong>Documentation</strong></a>
+                    </li>
+                </ul>
+            </header>
+            <section>
+                <p>
+                    <a href="https://search.maven.org/artifact/com.hendraanggrian/javapoet-dsl/"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.hendraanggrian/javapoet-dsl"></a>
+<a href="https://travis-ci.com/github/hendraanggrian/javapoet-dsl/"><img alt="Travis CI" src="https://img.shields.io/travis/com/hendraanggrian/javapoet-dsl"></a>
+<a href="https://app.codecov.io/gh/hendraanggrian/javapoet-dsl/"><img alt="Codecov" src="https://img.shields.io/codecov/c/github/hendraanggrian/javapoet-dsl"></a>
+<a href="https://openjdk.java.net/projects/jdk8/"><img alt="OpenJDK" src="https://img.shields.io/badge/jdk-1.8+-informational"></a>
+                </p>
+                
+                <h1>JavaPoet DSL Primer</h1>
+                
+                <p>
+                    Lightweight Kotlin extension of <a href="https://github.com/square/javapoet/">JavaPoet</a>,
+providing Kotlin DSL functionality and other convenient solutions.
+                </p>
+                
+                <ul>
+                    
+                    <li>Full of convenient methods to achieve minimum code writing possible.</li>
+                    
+                    <li>
+                        Options to invoke DSL. For example, <code>methods.add("main") { ... }</code> is as good as <code>methods { "main" { ... } }</code>. Scroll down for more information.
+                    </li>
+                    
+                    <li>Smooth transition, existing JavaPoet native specs can still be configured with DSL.</li>
+                    
+                </ul>
+                
+                <pre><code class="language-kotlin">buildJavaFile("com.example.helloworld") {
+    addClass("HelloWorld") {
+        addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+        methods {
+            "main" {
+                addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                returns = VOID
+                parameters.add&lt;Array&lt;String&gt;&gt;("args")
+                appendLine("%T.out.println(%S)", System::class, "Hello, JavaPoet!")
+            }
+        }
+    }
+}.writeTo(System.out)
+</code></pre>
+                
+                <h2>Download</h2>
+                
+                <pre><code class="language-gradle">repositories {
+    mavenCentral()
+}
+dependencies {
+    implementation "com.hendraanggrian:javapoet-dsl:$version"
+}
+</code></pre>
+                
+                <p>
+                    Snapshots of the development version are available in <a href="https://s01.oss.sonatype.org/content/repositories/snapshots/">Sonatype's snapshots repository</a>.
+                </p>
+                
+                <h2>Usage</h2>
+                
+                <h3>
+                    Use <code>%</code> in string formatter
+                </h3>
+                
+                <p>
+                    JavaPoet uses char prefix <code>$</code> when formatting literals (<code>$L</code>), strings (<code>$S</code>), types (<code>$T</code>), an names (<code>$N</code>) within strings.
+However in Kotlin, <code>$</code> in strings is reserved for variable referral. Avoid using <code>\$</code> and instead use <code>%</code> as the prefix, this is also the approach taken by <a href="https://github.com/square/kotlinpoet/">KotlinPoet</a>.
+                </p>
+                
+                <pre><code class="language-kotlin">buildMethodSpec("getName") {
+    returns&lt;String&gt;()
+    appendLine("%S", name)
+}
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <meta name="viewport" content="width=device-width">
-    <!--[if lt IE 9]>
-    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-  </head>
-  <body>
-    <div class="wrapper">
-      <header>
-        <h1>JavaPoet KTX</h1>
-        <p>JavaPoet Kotlin extension</p>
-        <p class="view"><a href="http://github.com/hendraanggrian/javapoet-ktx">View the Project on GitHub <small>hendraanggrian/javapoet-ktx</small></a></p>
-        <ul>
-          <li><a href="https://github.com/hendraanggrian/javapoet-ktx/zipball/master">Download <strong>ZIP File</strong></a></li>
-          <li><a href="https://github.com/hendraanggrian/javapoet-ktx/tarball/master">Download <strong>TAR Ball</strong></a></li>
-          <li><a href="http://github.com/hendraanggrian/javapoet-ktx/releases">View <strong>Releases</strong></a></li>
-        </ul>
-      </header>
-      <section>
-        <h1>Documentation</h1>
-        <h2><a href="javapoet-ktx/index.html">javapoet-ktx</a></h2>
-      </section>
-      <footer>
-        <p>This project is maintained by <a href="http://github.com/orderedlist">Steve Smith</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
-      </footer>
-    </div>
-    <script src="javascripts/scale.fix.js"></script>
-  </body>
+buildCodeBlock {
+    appendLine("int result = 0")
+    beginFlow("for (int i = %L; i &lt; %L; i++)", 0, 10)
+    appendLine("result = result %L i", "+=")
+    endFlow()
+    appendLine("return result")
+}
+</code></pre>
+                
+                <h3>
+                    Use <code>T::class</code> as parameters
+                </h3>
+                
+                <p>
+                    <code>KClass&lt;*&gt;</code> can now be used as format arguments. There is also inline reified type function whenever possible.
+                </p>
+                
+                <pre><code class="language-kotlin">buildMethodSpec("sortList") {
+    returns = int
+    parameters.add(classNameOf("java.util", "List").parameterizedBy(hoverboard), "list")
+    appendLine("%T.sort(list)", Collections::class)
+    appendLine("return list")
+}
+
+buildFieldSpec&lt;Int&gt;("count") {
+    initializer("%L", 0)
+}
+</code></pre>
+                
+                <h3>Optional DSL</h3>
+                
+                <p>Some elements (field, method, parameter, etc.) are wrapped in container class. These containers have ability to add components with/without invoking DSL.</p>
+                
+                <p>For example, 2 examples below will produce the same result.</p>
+                
+                <pre><code class="language-kotlin">types.addClass("Car") {
+    methods {
+        "getWheels" {
+            returns = int
+            statements {
+                add("return wheels")
+            }
+        }
+        "setWheels" {
+            parameters {
+                add(int, "wheels")
+            }
+            statements {
+                add("this.wheels = wheels")
+            }
+        }
+    }
+}
+
+types.addClass("Car") {
+    methods.add("getWheels") {
+        returns = int
+        statements.add("return wheels")
+    }
+    methods.add("setWheels") {
+        parameters["wheels"] = int
+        statements.add("this.wheels = wheels")
+    }
+}
+</code></pre>
+                
+                <h3>Property delegation</h3>
+                
+                <p>
+                    In spirit of <a href="https://docs.gradle.org/current/userguide/kotlin_dsl.html#using_kotlin_delegated_properties">Gradle Kotlin DSL</a>, creating a spec can be done by delegating to a property.
+                </p>
+                
+                <pre><code class="language-kotlin">val title by buildingParameterSpec(String::class) {
+    annotations.add&lt;NotNull&gt;
+}
+
+val message by parameters.adding(String::class) {
+    annotations.add&lt;Nullable&gt;
+}
+</code></pre>
+                
+                <h3>Fluent TypeName API</h3>
+                
+                <p>
+                    Write <code>TypeName</code> and all its subtypes fluently.
+                </p>
+                
+                <pre><code class="language-kotlin">val myClass: ClassName = classOf("com.example", "MyClass")
+val arrayOfString: ArrayTypeName = "java.lang".classOf("String").arrayOf()
+val pairOfInteger: ParameterizedTypeName = "android.util".classOf("Pair").parameterizedBy(Integer::class, Integer::class)
+val tVariable: TypeVariableName = "T".typeVarOf()
+val subtypeOfCharSequence: WildcardTypeName = "java.lang".classOf("CharSequence").subtypeOf()
+</code></pre>
+                
+                <p>If you have access to those types, they can also be strongly-typed.</p>
+                
+                <pre><code class="language-kotlin">val myClass = com.example.MyClass.asClassName()
+val arrayOfString = arrayTypeNameOf&lt;java.lang.String&gt;()
+val pairOfInteger = parameterizedTypeNameOf&lt;android.util.Pair&gt;(Integer::class, Integer::class)
+val subtypeOfCharSequence = wildcardTypeNameSubtypeOf&lt;java.lang.CharSequence&gt;()
+</code></pre>
+                
+            </section>
+            <footer>
+                <p>
+                    <button onclick="toggleDarkMode()" title="Toggle dark mode"><span id="theme-toggle"></span></button>
+                </p>
+                <p>
+                    This project is maintained by <a href="https://github.com/hendraanggrian">Hendra Anggrian</a>
+                </p>
+                <small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/hendraanggrian/minimal-theme">minimal</a></small>
+            </footer>
+        </div>
+        <script src="scripts/scale.fix.js"></script>
+    </body>
 </html>
