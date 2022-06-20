@@ -84,7 +84,7 @@ class JavaFileBuilder(private val packageName: String) : TypeSpecList(ArrayList(
 
     /** Returns native spec. */
     fun build(): JavaFile {
-        check(size == 1) { "JavaFile must have exactly 1 type." }
+        check(size == 1) { "JavaFile must have exactly 1 type" }
         return JavaFile.builder(packageName, first())
             .apply {
                 comments.forEach { (format, args) -> addFileComment(format, *args) }

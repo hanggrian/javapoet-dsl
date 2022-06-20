@@ -1,6 +1,6 @@
-[![Maven Central](https://img.shields.io/maven-central/v/com.hendraanggrian/javapoet-dsl)](https://search.maven.org/artifact/com.hendraanggrian/javapoet-dsl/)
 [![Travis CI](https://img.shields.io/travis/com/hendraanggrian/javapoet-dsl)](https://travis-ci.com/github/hendraanggrian/javapoet-dsl/)
 [![Codecov](https://img.shields.io/codecov/c/github/hendraanggrian/javapoet-dsl)](https://app.codecov.io/gh/hendraanggrian/javapoet-dsl/)
+[![Maven Central](https://img.shields.io/maven-central/v/com.hendraanggrian/javapoet-dsl)](https://search.maven.org/artifact/com.hendraanggrian/javapoet-dsl/)
 [![OpenJDK](https://img.shields.io/badge/jdk-1.8+-informational)](https://openjdk.java.net/projects/jdk8/)
 
 # JavaPoet DSL Primer
