@@ -66,7 +66,7 @@ class FieldSpecListTest {
             FieldSpec.builder(Field3::class.java, "field3").build(),
             FieldSpec.builder(Field4::class.java, "field4").initializer("value4").build(),
             FieldSpec.builder(Field5::class.java, "field5").build(),
-            FieldSpec.builder(Field6::class.java, "field6").initializer("value6").build(),
+            FieldSpec.builder(Field6::class.java, "field6").initializer("value6").build()
         )
     }
 
@@ -80,7 +80,7 @@ class FieldSpecListTest {
         assertThat(list).containsExactly(
             FieldSpec.builder(Field1::class.java, "field1").initializer("value1").build(),
             FieldSpec.builder(Field2::class.java, "field2").initializer("value2").build(),
-            FieldSpec.builder(Field3::class.java, "field3").initializer("value3").build(),
+            FieldSpec.builder(Field3::class.java, "field3").initializer("value3").build()
         )
     }
 }

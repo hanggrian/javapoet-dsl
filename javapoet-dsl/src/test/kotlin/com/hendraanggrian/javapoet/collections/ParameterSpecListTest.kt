@@ -47,7 +47,7 @@ class ParameterSpecListTest {
         assertThat(list).containsExactly(
             ParameterSpec.builder(Parameter1::class.java, "parameter1").build(),
             ParameterSpec.builder(Parameter2::class.java, "parameter2").build(),
-            ParameterSpec.builder(Parameter3::class.java, "parameter3").build(),
+            ParameterSpec.builder(Parameter3::class.java, "parameter3").build()
         )
     }
 
@@ -66,7 +66,7 @@ class ParameterSpecListTest {
             ParameterSpec.builder(Parameter3::class.java, "parameter3").build(),
             ParameterSpec.builder(Parameter4::class.java, "parameter4").addJavadoc("text4").build(),
             ParameterSpec.builder(Parameter5::class.java, "parameter5").build(),
-            ParameterSpec.builder(Parameter6::class.java, "parameter6").addJavadoc("text6").build(),
+            ParameterSpec.builder(Parameter6::class.java, "parameter6").addJavadoc("text6").build()
         )
     }
 

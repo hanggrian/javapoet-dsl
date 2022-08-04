@@ -37,7 +37,7 @@ class MethodSpecListTest {
         val method2 by list.adding { javadoc.append("text2") }
         assertThat(list).containsExactly(
             MethodSpec.methodBuilder("method1").build(),
-            MethodSpec.methodBuilder("method2").addJavadoc("text2").build(),
+            MethodSpec.methodBuilder("method2").addJavadoc("text2").build()
         )
     }
 

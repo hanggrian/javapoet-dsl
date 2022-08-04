@@ -552,7 +552,9 @@ class GitHubTest {
             buildMethodSpec("sortByLength") {
                 parameters.add(List::class.parameterizedBy(String::class), "strings")
                 appendLine(
-                    "%T.sort(%N, %L)", Collections::class, "strings",
+                    "%T.sort(%N, %L)",
+                    Collections::class,
+                    "strings",
                     buildAnonymousTypeSpec("") {
                         superinterfaces += Comparator::class.parameterizedBy(String::class)
                         methods.add("compare") {
@@ -625,14 +627,16 @@ class GitHubTest {
                 addModifiers(PUBLIC, ABSTRACT)
                 annotations.add(headerList) {
                     addMember(
-                        "value", "%L",
+                        "value",
+                        "%L",
                         buildAnnotationSpec(header) {
                             addMember("name", "%S", "Accept")
                             addMember("value", "%S", "application/json; charset=utf-8")
                         }
                     )
                     addMember(
-                        "value", "%L",
+                        "value",
+                        "%L",
                         buildAnnotationSpec(header) {
                             addMember("name", "%S", "User-Agent")
                             addMember("value", "%S", "Square Cash")

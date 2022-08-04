@@ -30,8 +30,10 @@ class EnumConstantMapTest {
         map["FIELD1"] = "value1"
         map["FIELD2"] = codeBlockOf("value2")
         assertThat(map).containsExactly(
-            "FIELD1", TypeSpec.anonymousClassBuilder("value1").build(),
-            "FIELD2", TypeSpec.anonymousClassBuilder("value2").build()
+            "FIELD1",
+            TypeSpec.anonymousClassBuilder("value1").build(),
+            "FIELD2",
+            TypeSpec.anonymousClassBuilder("value2").build()
         )
     }
 
@@ -59,8 +61,10 @@ class EnumConstantMapTest {
             "FIELD2"(codeBlockOf("value2")) { javadoc.append("text2") }
         }
         assertThat(map).containsExactly(
-            "FIELD1", TypeSpec.anonymousClassBuilder("value1").addJavadoc("text1").build(),
-            "FIELD2", TypeSpec.anonymousClassBuilder("value2").addJavadoc("text2").build()
+            "FIELD1",
+            TypeSpec.anonymousClassBuilder("value1").addJavadoc("text1").build(),
+            "FIELD2",
+            TypeSpec.anonymousClassBuilder("value2").addJavadoc("text2").build()
         )
     }
 }

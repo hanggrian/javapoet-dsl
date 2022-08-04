@@ -9,7 +9,7 @@ class ParameterizedTypeNameTest {
     fun parameterizedBy() {
         assertEquals(
             "kotlin.Pair<java.lang.Integer, java.lang.String>",
-            "${Pair::class.asClassName().parameterizedBy(INT.box(), String::class.asTypeName())}",
+            "${Pair::class.asClassName().parameterizedBy(INT.box(), String::class.asTypeName())}"
         )
         assertEquals(
             "kotlin.Pair<java.lang.Integer, java.lang.String>",
@@ -38,7 +38,7 @@ class ParameterizedTypeNameTest {
     fun plusParameter() {
         assertEquals(
             "java.util.List<java.lang.String>",
-            "${List::class.asClassName().plusParameter<String>()}",
+            "${List::class.asClassName().plusParameter<String>()}"
         )
         assertEquals(
             "java.util.List<java.lang.String>",

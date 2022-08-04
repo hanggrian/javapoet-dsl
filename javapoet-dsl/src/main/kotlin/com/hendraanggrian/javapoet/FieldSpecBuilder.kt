@@ -155,7 +155,8 @@ class FieldSpecBuilder(private val nativeBuilder: FieldSpec.Builder) {
 
     /** Initialize field value with code. */
     var initializer: CodeBlock
-        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
+        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR)
+        get() = noGetter()
         set(value) {
             nativeBuilder.initializer(value)
         }

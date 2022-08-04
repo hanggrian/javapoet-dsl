@@ -218,7 +218,8 @@ class TypeSpecBuilder(private val nativeBuilder: TypeSpec.Builder) {
 
     /** Set superclass to type. */
     var superclass: TypeName
-        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
+        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR)
+        get() = noGetter()
         set(value) {
             nativeBuilder.superclass(value)
         }

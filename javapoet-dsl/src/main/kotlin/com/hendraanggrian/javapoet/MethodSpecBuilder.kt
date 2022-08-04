@@ -58,7 +58,8 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
 
     /** Name of this method. */
     var name: String
-        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
+        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR)
+        get() = noGetter()
         set(value) {
             nativeBuilder.setName(value)
         }
@@ -104,7 +105,8 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
 
     /** Add return line to type name. */
     var returns: TypeName
-        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
+        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR)
+        get() = noGetter()
         set(value) {
             nativeBuilder.returns(value)
         }
@@ -133,7 +135,8 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
 
     /** Add vararg keyword to array type parameter. */
     var isVarargs: Boolean
-        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
+        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR)
+        get() = noGetter()
         set(value) {
             nativeBuilder.varargs(value)
         }
@@ -168,7 +171,8 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
 
     /** Set default value to code. */
     var defaultValue: CodeBlock
-        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
+        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR)
+        get() = noGetter()
         set(value) {
             nativeBuilder.defaultValue(value)
         }

@@ -34,7 +34,8 @@ class JavaFileBuilder(private val packageName: String) : TypeSpecList(ArrayList(
 
     /** Set comment with simple string, cancelling all changes made with [addComment]. */
     var comment: String
-        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
+        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR)
+        get() = noGetter()
         set(value) {
             comments = mutableListOf(value to emptyArray<Any>())
         }
@@ -63,28 +64,31 @@ class JavaFileBuilder(private val packageName: String) : TypeSpecList(ArrayList(
 
     /** Set to true to skip java imports. */
     var skipJavaLangImports: Boolean
-        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
+        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR)
+        get() = noGetter()
         set(value) {
             isSkipJavaLangImports = value
         }
 
     /** Set indent text. */
     var indent: String
-        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
+        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR)
+        get() = noGetter()
         set(value) {
             indentString = value
         }
 
     /** Convenient method to set [indent] with space the length of [indentSize]. */
     var indentSize: Int
-        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR) get() = noGetter()
+        @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR)
+        get() = noGetter()
         set(value) {
             indent = buildString { repeat(value) { append(' ') } }
         }
 
     /** Returns native spec. */
     fun build(): JavaFile {
-        check(size == 1) { "JavaFile must have exactly 1 type" }
+        check(size == 1) { "JavaFile must have exactly 1 type." }
         return JavaFile.builder(packageName, first())
             .apply {
                 comments.forEach { (format, args) -> addFileComment(format, *args) }
