@@ -31,7 +31,8 @@ class FieldSpecBuilderTest {
     fun annotations() {
         assertEquals(
             buildFieldSpec<Field1>("field1") { annotations.add<Annotation1>() },
-            FieldSpec.builder(Field1::class.java, "field1").addAnnotation(Annotation1::class.java).build()
+            FieldSpec.builder(Field1::class.java, "field1").addAnnotation(Annotation1::class.java)
+                .build()
         )
     }
 
@@ -53,7 +54,8 @@ class FieldSpecBuilderTest {
         )
         assertEquals(
             buildFieldSpec<Field2>("field2") { initializer = codeBlockOf("value2") },
-            FieldSpec.builder(Field2::class.java, "field2").initializer(CodeBlock.of("value2")).build()
+            FieldSpec.builder(Field2::class.java, "field2").initializer(CodeBlock.of("value2"))
+                .build()
         )
     }
 }

@@ -106,4 +106,5 @@ interface JavadocContainer : CodeBlockAppendable {
 
 /** Receiver for the `kdoc` block providing an extended set of operators for the configuration. */
 @JavapoetSpecDsl
-class JavadocContainerScope internal constructor(container: JavadocContainer) : JavadocContainer by container
+class JavadocContainerScope internal constructor(container: JavadocContainer) :
+    JavadocContainer by container

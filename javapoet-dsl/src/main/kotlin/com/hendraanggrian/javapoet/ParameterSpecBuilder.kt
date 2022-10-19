@@ -21,8 +21,8 @@ import kotlin.reflect.KClass
 inline fun VariableElement.asParameterSpec(): ParameterSpec = ParameterSpec.get(this)
 
 /**
- * Builds new [ParameterSpec] from [TypeName],
- * by populating newly created [ParameterSpecBuilder] using provided [configuration].
+ * Builds new [ParameterSpec] from [TypeName], by populating newly created [ParameterSpecBuilder]
+ * using provided [configuration].
  */
 inline fun buildParameterSpec(
     type: TypeName,
@@ -31,12 +31,13 @@ inline fun buildParameterSpec(
     configuration: ParameterSpecBuilder.() -> Unit
 ): ParameterSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    return ParameterSpecBuilder(ParameterSpec.builder(type, name, *modifiers)).apply(configuration).build()
+    return ParameterSpecBuilder(ParameterSpec.builder(type, name, *modifiers)).apply(configuration)
+        .build()
 }
 
 /**
- * Builds new [ParameterSpec] from [Type],
- * by populating newly created [ParameterSpecBuilder] using provided [configuration].
+ * Builds new [ParameterSpec] from [Type], by populating newly created [ParameterSpecBuilder] using
+ * provided [configuration].
  */
 inline fun buildParameterSpec(
     type: Type,
@@ -45,12 +46,13 @@ inline fun buildParameterSpec(
     configuration: ParameterSpecBuilder.() -> Unit
 ): ParameterSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    return ParameterSpecBuilder(ParameterSpec.builder(type, name, *modifiers)).apply(configuration).build()
+    return ParameterSpecBuilder(ParameterSpec.builder(type, name, *modifiers)).apply(configuration)
+        .build()
 }
 
 /**
- * Builds new [ParameterSpec] from [KClass],
- * by populating newly created [ParameterSpecBuilder] using provided [configuration].
+ * Builds new [ParameterSpec] from [KClass], by populating newly created [ParameterSpecBuilder]
+ * using provided [configuration].
  */
 inline fun buildParameterSpec(
     type: KClass<*>,
@@ -59,12 +61,14 @@ inline fun buildParameterSpec(
     configuration: ParameterSpecBuilder.() -> Unit
 ): ParameterSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    return ParameterSpecBuilder(ParameterSpec.builder(type.java, name, *modifiers)).apply(configuration).build()
+    return ParameterSpecBuilder(ParameterSpec.builder(type.java, name, *modifiers))
+        .apply(configuration)
+        .build()
 }
 
 /**
- * Builds new [ParameterSpec] from [T],
- * by populating newly created [ParameterSpecBuilder] using provided [configuration].
+ * Builds new [ParameterSpec] from [T], by populating newly created [ParameterSpecBuilder] using
+ * provided [configuration].
  */
 inline fun <reified T> buildParameterSpec(
     name: String,
@@ -72,12 +76,14 @@ inline fun <reified T> buildParameterSpec(
     configuration: ParameterSpecBuilder.() -> Unit
 ): ParameterSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    return ParameterSpecBuilder(ParameterSpec.builder(T::class.java, name, *modifiers)).apply(configuration).build()
+    return ParameterSpecBuilder(ParameterSpec.builder(T::class.java, name, *modifiers))
+        .apply(configuration)
+        .build()
 }
 
 /**
- * Property delegate for building new [ParameterSpec] from [TypeName],
- * by populating newly created [ParameterSpecBuilder] using provided [configuration].
+ * Property delegate for building new [ParameterSpec] from [TypeName], by populating newly
+ * created [ParameterSpecBuilder] using provided [configuration].
  */
 fun buildingParameterSpec(
     type: TypeName,
@@ -85,12 +91,14 @@ fun buildingParameterSpec(
     configuration: ParameterSpecBuilder.() -> Unit
 ): SpecLoader<ParameterSpec> {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    return createSpecLoader { buildParameterSpec(type, it, *modifiers, configuration = configuration) }
+    return createSpecLoader {
+        buildParameterSpec(type, it, *modifiers, configuration = configuration)
+    }
 }
 
 /**
- * Property delegate for building new [ParameterSpec] from [Type],
- * by populating newly created [ParameterSpecBuilder] using provided [configuration].
+ * Property delegate for building new [ParameterSpec] from [Type], by populating newly
+ * created [ParameterSpecBuilder] using provided [configuration].
  */
 fun buildingParameterSpec(
     type: Type,
@@ -98,12 +106,14 @@ fun buildingParameterSpec(
     configuration: ParameterSpecBuilder.() -> Unit
 ): SpecLoader<ParameterSpec> {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    return createSpecLoader { buildParameterSpec(type, it, *modifiers, configuration = configuration) }
+    return createSpecLoader {
+        buildParameterSpec(type, it, *modifiers, configuration = configuration)
+    }
 }
 
 /**
- * Property delegate for building new [ParameterSpec] from [KClass],
- * by populating newly created [ParameterSpecBuilder] using provided [configuration].
+ * Property delegate for building new [ParameterSpec] from [KClass], by populating newly
+ * created [ParameterSpecBuilder] using provided [configuration].
  */
 fun buildingParameterSpec(
     type: KClass<*>,
@@ -111,7 +121,9 @@ fun buildingParameterSpec(
     configuration: ParameterSpecBuilder.() -> Unit
 ): SpecLoader<ParameterSpec> {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    return createSpecLoader { buildParameterSpec(type, it, *modifiers, configuration = configuration) }
+    return createSpecLoader {
+        buildParameterSpec(type, it, *modifiers, configuration = configuration)
+    }
 }
 
 /**
@@ -125,7 +137,9 @@ class ParameterSpecBuilder(private val nativeBuilder: ParameterSpec.Builder) {
     /** Javadoc of this parameter. */
     val javadoc: JavadocContainer = object : JavadocContainer {
         override fun append(format: String, vararg args: Any): Unit =
-            format.internalFormat(args) { format2, args2 -> nativeBuilder.addJavadoc(format2, *args2) }
+            format.internalFormat(args) { format2, args2 ->
+                nativeBuilder.addJavadoc(format2, *args2)
+            }
 
         override fun append(code: CodeBlock) {
             nativeBuilder.addJavadoc(code)

@@ -42,7 +42,9 @@ class MethodSpecBuilderTest {
     fun addModifiers() {
         assertEquals(
             buildMethodSpec("method1") { addModifiers(PUBLIC, FINAL, STATIC) },
-            MethodSpec.methodBuilder("method1").addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC).build()
+            MethodSpec.methodBuilder("method1")
+                .addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
+                .build()
         )
     }
 
@@ -80,7 +82,8 @@ class MethodSpecBuilderTest {
     fun parameters() {
         assertEquals(
             buildMethodSpec("method1") { parameters { add<Field1>("parameter1") } },
-            MethodSpec.methodBuilder("method1").addParameter(Field1::class.java, "parameter1").build()
+            MethodSpec.methodBuilder("method1").addParameter(Field1::class.java, "parameter1")
+                .build()
         )
     }
 

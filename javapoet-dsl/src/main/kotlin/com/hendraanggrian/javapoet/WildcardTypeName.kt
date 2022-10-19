@@ -16,7 +16,8 @@ inline fun Type.toUpperWildcardTypeName(): WildcardTypeName = WildcardTypeName.s
 inline fun KClass<*>.toUpperWildcardTypeName(): WildcardTypeName = WildcardTypeName.subtypeOf(java)
 
 /** Returns a [WildcardTypeName] that represents an unknown type that extends [T]. */
-inline fun <reified T> wildcardTypeNameUpperOf(): WildcardTypeName = WildcardTypeName.subtypeOf(T::class.java)
+inline fun <reified T> wildcardTypeNameUpperOf(): WildcardTypeName =
+    WildcardTypeName.subtypeOf(T::class.java)
 
 /** Returns a [WildcardTypeName] that represents an unknown supertype of [TypeName]. */
 inline fun TypeName.toLowerWildcardTypeName(): WildcardTypeName = WildcardTypeName.supertypeOf(this)
@@ -25,13 +26,16 @@ inline fun TypeName.toLowerWildcardTypeName(): WildcardTypeName = WildcardTypeNa
 inline fun Type.toLowerWildcardTypeName(): WildcardTypeName = WildcardTypeName.supertypeOf(this)
 
 /** Returns a [WildcardTypeName] that represents an unknown supertype of [KClass]. */
-inline fun KClass<*>.toLowerWildcardTypeName(): WildcardTypeName = WildcardTypeName.supertypeOf(java)
+inline fun KClass<*>.toLowerWildcardTypeName(): WildcardTypeName =
+    WildcardTypeName.supertypeOf(java)
 
 /** Returns a [WildcardTypeName] that represents an unknown supertype of [T]. */
-inline fun <reified T> wildcardTypeNameLowerOf(): WildcardTypeName = WildcardTypeName.supertypeOf(T::class.java)
+inline fun <reified T> wildcardTypeNameLowerOf(): WildcardTypeName =
+    WildcardTypeName.supertypeOf(T::class.java)
 
 /** Returns a [WildcardTypeName] equivalent to [WildcardType]. */
 inline fun WildcardType.asWildcardTypeName(): TypeName = WildcardTypeName.get(this)
 
 /** Returns a [WildcardTypeName] equivalent to [java.lang.reflect.WildcardType]. */
-inline fun java.lang.reflect.WildcardType.asWildcardTypeName(): TypeName = WildcardTypeName.get(this)
+inline fun java.lang.reflect.WildcardType.asWildcardTypeName(): TypeName =
+    WildcardTypeName.get(this)

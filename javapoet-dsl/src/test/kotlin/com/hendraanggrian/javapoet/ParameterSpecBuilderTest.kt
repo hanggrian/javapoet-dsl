@@ -29,7 +29,9 @@ class ParameterSpecBuilderTest {
     fun annotations() {
         assertEquals(
             buildParameterSpec<Field1>("parameter1") { annotations.add<Annotation1>() },
-            ParameterSpec.builder(Field1::class.java, "parameter1").addAnnotation(Annotation1::class.java).build()
+            ParameterSpec.builder(Field1::class.java, "parameter1")
+                .addAnnotation(Annotation1::class.java)
+                .build()
         )
     }
 

@@ -22,8 +22,8 @@ import kotlin.contracts.contract
 import kotlin.reflect.KClass
 
 /**
- * Builds new [MethodSpec],
- * by populating newly created [MethodSpecBuilder] using provided [configuration].
+ * Builds new [MethodSpec], by populating newly created [MethodSpecBuilder] using
+ * provided [configuration].
  */
 inline fun buildMethodSpec(name: String, configuration: MethodSpecBuilder.() -> Unit): MethodSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
@@ -31,8 +31,8 @@ inline fun buildMethodSpec(name: String, configuration: MethodSpecBuilder.() -> 
 }
 
 /**
- * Builds new constructor [MethodSpec],
- * by populating newly created [MethodSpecBuilder] using provided [configuration].
+ * Builds new constructor [MethodSpec], by populating newly created [MethodSpecBuilder] using
+ * provided [configuration].
  */
 inline fun buildConstructorMethodSpec(configuration: MethodSpecBuilder.() -> Unit): MethodSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
@@ -40,8 +40,8 @@ inline fun buildConstructorMethodSpec(configuration: MethodSpecBuilder.() -> Uni
 }
 
 /**
- * Property delegate for building new [MethodSpec],
- * by populating newly created [MethodSpecBuilder] using provided [configuration].
+ * Property delegate for building new [MethodSpec], by populating newly created [MethodSpecBuilder]
+ * using provided [configuration].
  */
 fun buildingMethodSpec(configuration: MethodSpecBuilder.() -> Unit): SpecLoader<MethodSpec> {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
@@ -67,7 +67,9 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
     /** Javadoc of this method. */
     val javadoc: JavadocContainer = object : JavadocContainer {
         override fun append(format: String, vararg args: Any): Unit =
-            format.internalFormat(args) { format2, args2 -> nativeBuilder.addJavadoc(format2, *args2) }
+            format.internalFormat(args) { format2, args2 ->
+                nativeBuilder.addJavadoc(format2, *args2)
+            }
 
         override fun append(code: CodeBlock) {
             nativeBuilder.addJavadoc(code)
@@ -178,14 +180,18 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
         }
 
     override fun beginControlFlow(format: String, vararg args: Any): Unit =
-        format.internalFormat(args) { format2, args2 -> nativeBuilder.beginControlFlow(format2, *args2) }
+        format.internalFormat(args) { format2, args2 ->
+            nativeBuilder.beginControlFlow(format2, *args2)
+        }
 
     fun beginControlFlow(code: CodeBlock) {
         nativeBuilder.beginControlFlow(code)
     }
 
     override fun nextControlFlow(format: String, vararg args: Any): Unit =
-        format.internalFormat(args) { format2, args2 -> nativeBuilder.nextControlFlow(format2, *args2) }
+        format.internalFormat(args) { format2, args2 ->
+            nativeBuilder.nextControlFlow(format2, *args2)
+        }
 
     fun nextControlFlow(code: CodeBlock) {
         nativeBuilder.nextControlFlow(code)
@@ -196,14 +202,18 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
     }
 
     override fun endControlFlow(format: String, vararg args: Any): Unit =
-        format.internalFormat(args) { format2, args2 -> nativeBuilder.endControlFlow(format2, *args2) }
+        format.internalFormat(args) { format2, args2 ->
+            nativeBuilder.endControlFlow(format2, *args2)
+        }
 
     fun endControlFlow(code: CodeBlock) {
         nativeBuilder.endControlFlow(code)
     }
 
     override fun appendLine(format: String, vararg args: Any): Unit =
-        format.internalFormat(args) { format2, args2 -> nativeBuilder.addStatement(format2, *args2) }
+        format.internalFormat(args) { format2, args2 ->
+            nativeBuilder.addStatement(format2, *args2)
+        }
 
     override fun appendLine(code: CodeBlock) {
         nativeBuilder.addStatement(code)

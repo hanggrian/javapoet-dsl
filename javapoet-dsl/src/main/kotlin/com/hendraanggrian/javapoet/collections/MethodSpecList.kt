@@ -49,11 +49,15 @@ open class MethodSpecList internal constructor(actualList: MutableList<MethodSpe
     }
 }
 
-/** Receiver for the `methods` block providing an extended set of operators for the configuration. */
+/**
+ * Receiver for the `methods` block providing an extended set of operators for the
+ * configuration.
+ */
 @JavapoetSpecDsl
-class MethodSpecListScope internal constructor(actualList: MutableList<MethodSpec>) : MethodSpecList(actualList) {
+class MethodSpecListScope internal constructor(actualList: MutableList<MethodSpec>) :
+    MethodSpecList(actualList) {
 
     /** @see MethodSpecList.add */
-    inline operator fun String.invoke(noinline configuration: MethodSpecBuilder.() -> Unit): MethodSpec =
-        add(this, configuration)
+    inline operator fun String.invoke(noinline configuration: MethodSpecBuilder.() -> Unit):
+        MethodSpec = add(this, configuration)
 }

@@ -22,11 +22,18 @@ class ParameterizedTypeNameTest {
 
         assertEquals(
             "kotlin.Pair<java.lang.Integer, java.lang.String>",
-            "${Pair::class.asClassName().parameterizedBy(listOf(INT.box(), String::class.asTypeName()))}"
+            "${
+            Pair::class.asClassName()
+                .parameterizedBy(listOf(INT.box(), String::class.asTypeName()))
+            }"
         )
         assertEquals(
             "kotlin.Pair<java.lang.Integer, java.lang.String>",
-            "${Pair::class.java.parameterizedBy(listOf(java.lang.Integer::class.java, String::class.java))}"
+            "${
+            Pair::class.java.parameterizedBy(
+                listOf(java.lang.Integer::class.java, String::class.java)
+            )
+            }"
         )
         assertEquals(
             "kotlin.Pair<java.lang.Integer, java.lang.String>",

@@ -12,8 +12,8 @@ fun codeBlockOf(format: String, vararg args: Any?): CodeBlock =
     format.internalFormat(args) { format2, args2 -> CodeBlock.of(format2, *args2) }
 
 /**
- * Builds new [CodeBlock],
- * by populating newly created [CodeBlockBuilder] using provided [configuration].
+ * Builds new [CodeBlock], by populating newly created [CodeBlockBuilder] using
+ * provided [configuration].
  */
 inline fun buildCodeBlock(configuration: CodeBlockBuilder.() -> Unit): CodeBlock =
     CodeBlockBuilder(CodeBlock.builder()).apply(configuration).build()
@@ -38,20 +38,28 @@ class CodeBlockBuilder(private val nativeBuilder: CodeBlock.Builder) : CodeBlock
         format.internalFormat(args) { format2, args2 -> nativeBuilder.add(format2, *args2) }
 
     override fun beginControlFlow(format: String, vararg args: Any): Unit =
-        format.internalFormat(args) { format2, args2 -> nativeBuilder.beginControlFlow(format2, *args2) }
+        format.internalFormat(args) { format2, args2 ->
+            nativeBuilder.beginControlFlow(format2, *args2)
+        }
 
     override fun nextControlFlow(format: String, vararg args: Any): Unit =
-        format.internalFormat(args) { format2, args2 -> nativeBuilder.nextControlFlow(format2, *args2) }
+        format.internalFormat(args) { format2, args2 ->
+            nativeBuilder.nextControlFlow(format2, *args2)
+        }
 
     override fun endControlFlow() {
         nativeBuilder.endControlFlow()
     }
 
     override fun endControlFlow(format: String, vararg args: Any): Unit =
-        format.internalFormat(args) { format2, args2 -> nativeBuilder.endControlFlow(format2, *args2) }
+        format.internalFormat(args) { format2, args2 ->
+            nativeBuilder.endControlFlow(format2, *args2)
+        }
 
     override fun appendLine(format: String, vararg args: Any): Unit =
-        format.internalFormat(args) { format2, args2 -> nativeBuilder.addStatement(format2, *args2) }
+        format.internalFormat(args) { format2, args2 ->
+            nativeBuilder.addStatement(format2, *args2)
+        }
 
     override fun appendLine(code: CodeBlock) {
         nativeBuilder.addStatement(code)

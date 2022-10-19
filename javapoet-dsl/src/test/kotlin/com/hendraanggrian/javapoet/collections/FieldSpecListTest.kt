@@ -15,7 +15,8 @@ import kotlin.test.Test
 
 class FieldSpecListTest {
     private val list = FieldSpecList(mutableListOf())
-    private fun list(configuration: FieldSpecListScope.() -> Unit) = FieldSpecListScope(list).configuration()
+    private fun list(configuration: FieldSpecListScope.() -> Unit) =
+        FieldSpecListScope(list).configuration()
 
     @Test
     fun add() {

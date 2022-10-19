@@ -7,7 +7,8 @@ import kotlin.test.Test
 
 class EnumConstantMapTest {
     private val map = EnumConstantMap(mutableMapOf())
-    private fun map(configuration: EnumConstantMapScope.() -> Unit) = EnumConstantMapScope(map).configuration()
+    private fun map(configuration: EnumConstantMapScope.() -> Unit) =
+        EnumConstantMapScope(map).configuration()
 
     @Test
     fun add() {

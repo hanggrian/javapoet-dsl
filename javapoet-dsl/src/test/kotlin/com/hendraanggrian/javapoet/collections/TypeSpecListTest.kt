@@ -52,7 +52,8 @@ class TypeSpecListTest {
             TypeSpec.annotationBuilder("Annotation1").build(),
             TypeSpec.annotationBuilder("Annotation1").addJavadoc("text16").build(),
             TypeSpec.annotationBuilder(Annotation2::class.asClassName()).build(),
-            TypeSpec.annotationBuilder(Annotation2::class.asClassName()).addJavadoc("text18").build()
+            TypeSpec.annotationBuilder(Annotation2::class.asClassName()).addJavadoc("text18")
+                .build()
         )
     }
 

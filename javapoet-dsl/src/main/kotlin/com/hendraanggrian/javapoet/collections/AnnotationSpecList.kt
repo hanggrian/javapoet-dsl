@@ -46,7 +46,8 @@ open class AnnotationSpecList internal constructor(actualList: MutableList<Annot
     inline fun <reified T> add(): AnnotationSpec = add(T::class.java)
 
     /** Add annotation from [T] with custom initialization [configuration]. */
-    inline fun <reified T> add(noinline configuration: AnnotationSpecBuilder.() -> Unit): AnnotationSpec {
+    inline fun <reified T> add(noinline configuration: AnnotationSpecBuilder.() -> Unit):
+        AnnotationSpec {
         contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
         return add(T::class.java, configuration)
     }
@@ -67,7 +68,10 @@ open class AnnotationSpecList internal constructor(actualList: MutableList<Annot
     }
 }
 
-/** Receiver for the `annotations` block providing an extended set of operators for the configuration. */
+/**
+ * Receiver for the `annotations` block providing an extended set of operators for the
+ * configuration.
+ */
 @JavapoetSpecDsl
 class AnnotationSpecListScope internal constructor(actualList: MutableList<AnnotationSpec>) :
     AnnotationSpecList(actualList)

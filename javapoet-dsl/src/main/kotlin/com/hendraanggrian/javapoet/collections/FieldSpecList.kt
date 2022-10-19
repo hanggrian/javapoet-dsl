@@ -138,7 +138,8 @@ open class FieldSpecList internal constructor(actualList: MutableList<FieldSpec>
 
 /** Receiver for the `fields` block providing an extended set of operators for the configuration. */
 @JavapoetSpecDsl
-class FieldSpecListScope internal constructor(actualList: MutableList<FieldSpec>) : FieldSpecList(actualList) {
+class FieldSpecListScope internal constructor(actualList: MutableList<FieldSpec>) :
+    FieldSpecList(actualList) {
 
     /** @see FieldSpecList.add */
     inline operator fun String.invoke(

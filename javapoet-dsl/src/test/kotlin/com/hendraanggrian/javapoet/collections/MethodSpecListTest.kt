@@ -6,7 +6,8 @@ import kotlin.test.Test
 
 class MethodSpecListTest {
     private val list = MethodSpecList(mutableListOf())
-    private fun list(configuration: MethodSpecListScope.() -> Unit) = MethodSpecListScope(list).configuration()
+    private fun list(configuration: MethodSpecListScope.() -> Unit) =
+        MethodSpecListScope(list).configuration()
 
     @Test
     fun add() {

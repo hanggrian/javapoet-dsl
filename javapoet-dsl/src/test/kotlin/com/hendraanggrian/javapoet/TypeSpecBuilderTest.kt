@@ -153,7 +153,8 @@ class TypeSpecBuilderTest {
     fun avoidClashesWithNestedClasses() {
         assertEquals(
             buildClassTypeSpec("class1") { avoidClashesWithNestedClasses<Field1>() },
-            TypeSpec.classBuilder("class1").avoidClashesWithNestedClasses(Field1::class.java).build()
+            TypeSpec.classBuilder("class1").avoidClashesWithNestedClasses(Field1::class.java)
+                .build()
         )
     }
 }

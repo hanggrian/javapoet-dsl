@@ -15,7 +15,8 @@ import kotlin.test.Test
 
 class ParameterSpecListTest {
     private val list = ParameterSpecList(mutableListOf())
-    private fun list(configuration: ParameterSpecListScope.() -> Unit) = ParameterSpecListScope(list).configuration()
+    private fun list(configuration: ParameterSpecListScope.() -> Unit) =
+        ParameterSpecListScope(list).configuration()
 
     @Test
     fun add() {

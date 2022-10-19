@@ -11,8 +11,8 @@ import kotlin.contracts.contract
 import kotlin.reflect.KClass
 
 /**
- * Builds new [JavaFile],
- * by populating newly created [JavaFileBuilder] using provided [configuration].
+ * Builds new [JavaFile], by populating newly created [JavaFileBuilder] using
+ * provided [configuration].
  */
 inline fun buildJavaFile(packageName: String, configuration: JavaFileBuilder.() -> Unit): JavaFile {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
@@ -54,13 +54,16 @@ class JavaFileBuilder(private val packageName: String) : TypeSpecList(ArrayList(
     }
 
     /** Add static import from [Class]. */
-    fun addStaticImport(type: Class<*>, vararg names: String): Unit = addStaticImport(type.asClassName(), *names)
+    fun addStaticImport(type: Class<*>, vararg names: String): Unit =
+        addStaticImport(type.asClassName(), *names)
 
     /** Add static import from [KClass]. */
-    fun addStaticImport(type: KClass<*>, vararg names: String): Unit = addStaticImport(type.asClassName(), *names)
+    fun addStaticImport(type: KClass<*>, vararg names: String): Unit =
+        addStaticImport(type.asClassName(), *names)
 
     /** Add static import with reified [T]. */
-    inline fun <reified T> addStaticImport(vararg names: String): Unit = addStaticImport(T::class.asClassName(), *names)
+    inline fun <reified T> addStaticImport(vararg names: String): Unit =
+        addStaticImport(T::class.asClassName(), *names)
 
     /** Set to true to skip java imports. */
     var skipJavaLangImports: Boolean

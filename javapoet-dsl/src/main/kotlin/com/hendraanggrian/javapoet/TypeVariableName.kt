@@ -15,7 +15,8 @@ inline fun String.genericsBy(vararg bounds: TypeName): TypeVariableName =
     TypeVariableName.get(this, *bounds)
 
 /** Returns a [TypeVariableName] with [Type] bounds. */
-inline fun String.genericsBy(vararg bounds: Type): TypeVariableName = TypeVariableName.get(this, *bounds)
+inline fun String.genericsBy(vararg bounds: Type): TypeVariableName =
+    TypeVariableName.get(this, *bounds)
 
 /** Returns a [TypeVariableName] with [KClass] bounds. */
 fun String.genericsBy(vararg bounds: KClass<*>): TypeVariableName =
@@ -42,4 +43,5 @@ inline fun TypeParameterElement.asTypeVariableName(): TypeVariableName = TypeVar
 inline fun TypeVariable.asTypeVariableName(): TypeVariableName = TypeVariableName.get(this)
 
 /** Returns a [TypeVariableName] equivalent to [java.lang.reflect.TypeVariable]. */
-inline fun java.lang.reflect.TypeVariable<*>.asTypeVariableName(): TypeVariableName = TypeVariableName.get(this)
+inline fun java.lang.reflect.TypeVariable<*>.asTypeVariableName(): TypeVariableName =
+    TypeVariableName.get(this)

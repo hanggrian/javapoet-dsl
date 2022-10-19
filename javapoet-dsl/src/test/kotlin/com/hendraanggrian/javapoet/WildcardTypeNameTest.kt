@@ -23,7 +23,10 @@ class WildcardTypeNameTest {
 
     @Test
     fun wildcardTypeNameUpperOf() {
-        assertEquals("? extends java.lang.CharSequence", "${wildcardTypeNameUpperOf<CharSequence>()}")
+        assertEquals(
+            "? extends java.lang.CharSequence",
+            "${wildcardTypeNameUpperOf<CharSequence>()}"
+        )
     }
 
     @Test

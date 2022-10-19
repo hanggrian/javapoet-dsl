@@ -30,8 +30,8 @@ import kotlin.contracts.contract
 import kotlin.reflect.KClass
 
 /**
- * Builds new class [TypeSpec] from name,
- * by populating newly created [TypeSpecBuilder] using provided [configuration].
+ * Builds new class [TypeSpec] from name, by populating newly created [TypeSpecBuilder] using
+ * provided [configuration].
  */
 inline fun buildClassTypeSpec(type: String, configuration: TypeSpecBuilder.() -> Unit): TypeSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
@@ -39,35 +39,44 @@ inline fun buildClassTypeSpec(type: String, configuration: TypeSpecBuilder.() ->
 }
 
 /**
- * Builds new class [TypeSpec] from [ClassName],
- * by populating newly created [TypeSpecBuilder] using provided [configuration].
+ * Builds new class [TypeSpec] from [ClassName], by populating newly created [TypeSpecBuilder] using
+ * provided [configuration].
  */
-inline fun buildClassTypeSpec(type: ClassName, configuration: TypeSpecBuilder.() -> Unit): TypeSpec {
+inline fun buildClassTypeSpec(
+    type: ClassName,
+    configuration: TypeSpecBuilder.() -> Unit
+): TypeSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
     return TypeSpecBuilder(TypeSpec.classBuilder(type)).apply(configuration).build()
 }
 
 /**
- * Builds new interface [TypeSpec] from name,
- * by populating newly created [TypeSpecBuilder] using provided [configuration].
+ * Builds new interface [TypeSpec] from name, by populating newly created [TypeSpecBuilder] using
+ * provided [configuration].
  */
-inline fun buildInterfaceTypeSpec(type: String, configuration: TypeSpecBuilder.() -> Unit): TypeSpec {
+inline fun buildInterfaceTypeSpec(
+    type: String,
+    configuration: TypeSpecBuilder.() -> Unit
+): TypeSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
     return TypeSpecBuilder(TypeSpec.interfaceBuilder(type)).apply(configuration).build()
 }
 
 /**
- * Builds new interface [TypeSpec] from [ClassName],
- * by populating newly created [TypeSpecBuilder] using provided [configuration].
+ * Builds new interface [TypeSpec] from [ClassName], by populating newly created [TypeSpecBuilder]
+ * using provided [configuration].
  */
-inline fun buildInterfaceTypeSpec(type: ClassName, configuration: TypeSpecBuilder.() -> Unit): TypeSpec {
+inline fun buildInterfaceTypeSpec(
+    type: ClassName,
+    configuration: TypeSpecBuilder.() -> Unit
+): TypeSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
     return TypeSpecBuilder(TypeSpec.interfaceBuilder(type)).apply(configuration).build()
 }
 
 /**
- * Builds new enum [TypeSpec] from name,
- * by populating newly created [TypeSpecBuilder] using provided [configuration].
+ * Builds new enum [TypeSpec] from name, by populating newly created [TypeSpecBuilder] using
+ * provided [configuration].
  */
 inline fun buildEnumTypeSpec(type: String, configuration: TypeSpecBuilder.() -> Unit): TypeSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
@@ -75,8 +84,8 @@ inline fun buildEnumTypeSpec(type: String, configuration: TypeSpecBuilder.() -> 
 }
 
 /**
- * Builds new enum [TypeSpec] from [ClassName],
- * by populating newly created [TypeSpecBuilder] using provided [configuration].
+ * Builds new enum [TypeSpec] from [ClassName], by populating newly created [TypeSpecBuilder] using
+ * provided [configuration].
  */
 inline fun buildEnumTypeSpec(type: ClassName, configuration: TypeSpecBuilder.() -> Unit): TypeSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
@@ -84,47 +93,60 @@ inline fun buildEnumTypeSpec(type: ClassName, configuration: TypeSpecBuilder.() 
 }
 
 /**
- * Builds new anonymous [TypeSpec] from formatting,
- * by populating newly created [TypeSpecBuilder] using provided [configuration].
- * Not inlining this function since [internalFormat] is not inlined.
+ * Builds new anonymous [TypeSpec] from formatting, by populating newly created [TypeSpecBuilder]
+ * using provided [configuration]. Not inlining this function since [internalFormat] is not inlined.
  */
-fun buildAnonymousTypeSpec(format: String, vararg args: Any, configuration: TypeSpecBuilder.() -> Unit): TypeSpec {
+fun buildAnonymousTypeSpec(
+    format: String,
+    vararg args: Any,
+    configuration: TypeSpecBuilder.() -> Unit
+): TypeSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
     return format.internalFormat(args) { format2, args2 ->
-        TypeSpecBuilder(TypeSpec.anonymousClassBuilder(format2, *args2)).apply(configuration).build()
+        TypeSpecBuilder(TypeSpec.anonymousClassBuilder(format2, *args2)).apply(configuration)
+            .build()
     }
 }
 
 /**
- * Builds new anonymous [TypeSpec] from [CodeBlock],
- * by populating newly created [TypeSpecBuilder] using provided [configuration].
+ * Builds new anonymous [TypeSpec] from [CodeBlock], by populating newly created [TypeSpecBuilder]
+ * using provided [configuration].
  */
-inline fun buildAnonymousTypeSpec(code: CodeBlock, configuration: TypeSpecBuilder.() -> Unit): TypeSpec {
+inline fun buildAnonymousTypeSpec(
+    code: CodeBlock,
+    configuration: TypeSpecBuilder.() -> Unit
+): TypeSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
     return TypeSpecBuilder(TypeSpec.anonymousClassBuilder(code)).apply(configuration).build()
 }
 
 /**
- * Builds new annotation [TypeSpec] from name,
- * by populating newly created [TypeSpecBuilder] using provided [configuration].
+ * Builds new annotation [TypeSpec] from name, by populating newly created [TypeSpecBuilder] using
+ * provided [configuration].
  */
-inline fun buildAnnotationTypeSpec(type: String, configuration: TypeSpecBuilder.() -> Unit): TypeSpec {
+inline fun buildAnnotationTypeSpec(
+    type: String,
+    configuration: TypeSpecBuilder.() -> Unit
+): TypeSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
     return TypeSpecBuilder(TypeSpec.annotationBuilder(type)).apply(configuration).build()
 }
 
 /**
- * Builds new annotation [TypeSpec] from [ClassName],
- * by populating newly created [TypeSpecBuilder] using provided [configuration].
+ * Builds new annotation [TypeSpec] from [ClassName], by populating newly created [TypeSpecBuilder]
+ * using provided [configuration].
  */
-inline fun buildAnnotationTypeSpec(type: ClassName, configuration: TypeSpecBuilder.() -> Unit): TypeSpec {
+inline fun buildAnnotationTypeSpec(
+    type: ClassName,
+    configuration: TypeSpecBuilder.() -> Unit
+): TypeSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
     return TypeSpecBuilder(TypeSpec.annotationBuilder(type)).apply(configuration).build()
 }
 
 /**
- * Property delegate for building new class [TypeSpec] from [ClassName],
- * by populating newly created [TypeSpecBuilder] using provided [configuration].
+ * Property delegate for building new class [TypeSpec] from [ClassName], by populating newly
+ * created [TypeSpecBuilder] using provided [configuration].
  */
 fun buildingClassTypeSpec(configuration: TypeSpecBuilder.() -> Unit): SpecLoader<TypeSpec> {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
@@ -132,8 +154,8 @@ fun buildingClassTypeSpec(configuration: TypeSpecBuilder.() -> Unit): SpecLoader
 }
 
 /**
- * Property delegate for building new interface [TypeSpec] from [ClassName],
- * by populating newly created [TypeSpecBuilder] using provided [configuration].
+ * Property delegate for building new interface [TypeSpec] from [ClassName], by populating newly
+ * created [TypeSpecBuilder] using provided [configuration].
  */
 fun buildingInterfaceTypeSpec(configuration: TypeSpecBuilder.() -> Unit): SpecLoader<TypeSpec> {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
@@ -141,8 +163,8 @@ fun buildingInterfaceTypeSpec(configuration: TypeSpecBuilder.() -> Unit): SpecLo
 }
 
 /**
- * Property delegate for building new enum [TypeSpec] from [ClassName],
- * by populating newly created [TypeSpecBuilder] using provided [configuration].
+ * Property delegate for building new enum [TypeSpec] from [ClassName], by populating newly
+ * created [TypeSpecBuilder] using provided [configuration].
  */
 fun buildingEnumTypeSpec(configuration: TypeSpecBuilder.() -> Unit): SpecLoader<TypeSpec> {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
@@ -150,17 +172,20 @@ fun buildingEnumTypeSpec(configuration: TypeSpecBuilder.() -> Unit): SpecLoader<
 }
 
 /**
- * Property delegate for building new anonymous [TypeSpec] from [ClassName],
- * by populating newly created [TypeSpecBuilder] using provided [configuration].
+ * Property delegate for building new anonymous [TypeSpec] from [ClassName], by populating newly
+ * created [TypeSpecBuilder] using provided [configuration].
  */
-fun buildingAnonymousTypeSpec(vararg args: Any, configuration: TypeSpecBuilder.() -> Unit): SpecLoader<TypeSpec> {
+fun buildingAnonymousTypeSpec(
+    vararg args: Any,
+    configuration: TypeSpecBuilder.() -> Unit
+): SpecLoader<TypeSpec> {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
     return createSpecLoader { buildAnonymousTypeSpec(it, *args, configuration = configuration) }
 }
 
 /**
- * Property delegate for building new annotation [TypeSpec] from [ClassName],
- * by populating newly created [TypeSpecBuilder] using provided [configuration].
+ * Property delegate for building new annotation [TypeSpec] from [ClassName], by populating newly
+ * created [TypeSpecBuilder] using provided [configuration].
  */
 fun buildingAnnotationTypeSpec(configuration: TypeSpecBuilder.() -> Unit): SpecLoader<TypeSpec> {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
@@ -180,7 +205,9 @@ class TypeSpecBuilder(private val nativeBuilder: TypeSpec.Builder) {
     /** Javadoc of this type. */
     val javadoc: JavadocContainer = object : JavadocContainer {
         override fun append(format: String, vararg args: Any): Unit =
-            format.internalFormat(args) { format2, args2 -> nativeBuilder.addJavadoc(format2, *args2) }
+            format.internalFormat(args) { format2, args2 ->
+                nativeBuilder.addJavadoc(format2, *args2)
+            }
 
         override fun append(code: CodeBlock) {
             nativeBuilder.addJavadoc(code)
@@ -318,7 +345,8 @@ class TypeSpecBuilder(private val nativeBuilder: TypeSpec.Builder) {
         nativeBuilder.avoidClashesWithNestedClasses(type.java)
     }
 
-    inline fun <reified T> avoidClashesWithNestedClasses(): Unit = avoidClashesWithNestedClasses(T::class)
+    inline fun <reified T> avoidClashesWithNestedClasses(): Unit =
+        avoidClashesWithNestedClasses(T::class)
 
     /** Returns native spec. */
     fun build(): TypeSpec = nativeBuilder.build()

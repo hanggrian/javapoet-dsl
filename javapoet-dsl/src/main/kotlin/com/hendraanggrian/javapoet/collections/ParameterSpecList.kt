@@ -97,7 +97,10 @@ open class ParameterSpecList internal constructor(actualList: MutableList<Parame
     fun adding(type: TypeName, vararg modifiers: Modifier): SpecLoader<ParameterSpec> =
         createSpecLoader { add(type, it, *modifiers) }
 
-    /** Property delegate for adding parameter from [TypeName] with custom initialization [configuration]. */
+    /**
+     * Property delegate for adding parameter from [TypeName] with custom
+     * initialization [configuration].
+     */
     fun adding(
         type: TypeName,
         vararg modifiers: Modifier,
@@ -111,7 +114,10 @@ open class ParameterSpecList internal constructor(actualList: MutableList<Parame
     fun adding(type: Type, vararg modifiers: Modifier): SpecLoader<ParameterSpec> =
         createSpecLoader { add(type, it, *modifiers) }
 
-    /** Property delegate for adding parameter from [Type] with custom initialization [configuration]. */
+    /**
+     * Property delegate for adding parameter from [Type] with custom
+     * initialization [configuration].
+     */
     fun adding(
         type: Type,
         vararg modifiers: Modifier,
@@ -125,7 +131,10 @@ open class ParameterSpecList internal constructor(actualList: MutableList<Parame
     fun adding(type: KClass<*>, vararg modifiers: Modifier): SpecLoader<ParameterSpec> =
         createSpecLoader { add(type, it, *modifiers) }
 
-    /** Property delegate for adding parameter from [KClass] with custom initialization [configuration]. */
+    /**
+     * Property delegate for adding parameter from [KClass] with custom
+     * initialization [configuration].
+     */
     fun adding(
         type: KClass<*>,
         vararg modifiers: Modifier,
@@ -136,7 +145,10 @@ open class ParameterSpecList internal constructor(actualList: MutableList<Parame
     }
 }
 
-/** Receiver for the `parameters` block providing an extended set of operators for the configuration. */
+/**
+ * Receiver for the `parameters` block providing an extended set of operators for the
+ * configuration.
+ */
 @JavapoetSpecDsl
 class ParameterSpecListScope internal constructor(actualList: MutableList<ParameterSpec>) :
     ParameterSpecList(actualList) {

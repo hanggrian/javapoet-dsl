@@ -19,37 +19,48 @@ inline fun Annotation.asAnnotationSpec(includeDefaultValues: Boolean = false): A
 inline fun AnnotationMirror.asAnnotationSpec(): AnnotationSpec = AnnotationSpec.get(this)
 
 /**
- * Builds new [AnnotationSpec] from [ClassName],
- * by populating newly created [AnnotationSpecBuilder] using provided [configuration].
+ * Builds new [AnnotationSpec] from [ClassName], by populating newly created [AnnotationSpecBuilder]
+ * using provided [configuration].
  */
-inline fun buildAnnotationSpec(type: ClassName, configuration: AnnotationSpecBuilder.() -> Unit): AnnotationSpec {
+inline fun buildAnnotationSpec(
+    type: ClassName,
+    configuration: AnnotationSpecBuilder.() -> Unit
+): AnnotationSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
     return AnnotationSpecBuilder(AnnotationSpec.builder(type)).apply(configuration).build()
 }
 
 /**
- * Builds new [AnnotationSpec] from [Class],
- * by populating newly created [AnnotationSpecBuilder] using provided [configuration].
+ * Builds new [AnnotationSpec] from [Class], by populating newly created [AnnotationSpecBuilder]
+ * using provided [configuration].
  */
-inline fun buildAnnotationSpec(type: Class<*>, configuration: AnnotationSpecBuilder.() -> Unit): AnnotationSpec {
+inline fun buildAnnotationSpec(
+    type: Class<*>,
+    configuration: AnnotationSpecBuilder.() -> Unit
+): AnnotationSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
     return AnnotationSpecBuilder(AnnotationSpec.builder(type)).apply(configuration).build()
 }
 
 /**
- * Builds new [AnnotationSpec] from [KClass],
- * by populating newly created [AnnotationSpecBuilder] using provided [configuration].
+ * Builds new [AnnotationSpec] from [KClass], by populating newly created [AnnotationSpecBuilder]
+ * using provided [configuration].
  */
-inline fun buildAnnotationSpec(type: KClass<*>, configuration: AnnotationSpecBuilder.() -> Unit): AnnotationSpec {
+inline fun buildAnnotationSpec(
+    type: KClass<*>,
+    configuration: AnnotationSpecBuilder.() -> Unit
+): AnnotationSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
     return AnnotationSpecBuilder(AnnotationSpec.builder(type.java)).apply(configuration).build()
 }
 
 /**
- * Builds new [AnnotationSpec] from [T],
- * by populating newly created [AnnotationSpecBuilder] using provided [configuration].
+ * Builds new [AnnotationSpec] from [T], by populating newly created [AnnotationSpecBuilder] using
+ * provided [configuration].
  */
-inline fun <reified T> buildAnnotationSpec(configuration: AnnotationSpecBuilder.() -> Unit): AnnotationSpec {
+inline fun <reified T> buildAnnotationSpec(
+    configuration: AnnotationSpecBuilder.() -> Unit
+): AnnotationSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
     return AnnotationSpecBuilder(AnnotationSpec.builder(T::class.java)).apply(configuration).build()
 }
@@ -63,7 +74,8 @@ class AnnotationSpecBuilder(private val nativeBuilder: AnnotationSpec.Builder) {
     val members: Map<String, List<CodeBlock>> get() = nativeBuilder.members
 
     /** Add code as a member of this annotation. */
-    fun addMember(name: String, format: String, vararg args: Any): Unit = addMember(name, codeBlockOf(format, *args))
+    fun addMember(name: String, format: String, vararg args: Any): Unit =
+        addMember(name, codeBlockOf(format, *args))
 
     /** Add code as a member of this annotation. */
     fun addMember(name: String, code: CodeBlock) {

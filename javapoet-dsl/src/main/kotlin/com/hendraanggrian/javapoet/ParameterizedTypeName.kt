@@ -45,4 +45,5 @@ inline fun <reified T> KClass<*>.plusParameter(): ParameterizedTypeName =
     parameterizedBy(T::class)
 
 /** Returns a [ParameterizedTypeName] equivalent to [ParameterizedType]. */
-inline fun ParameterizedType.asParameterizedTypeName(): ParameterizedTypeName = ParameterizedTypeName.get(this)
+inline fun ParameterizedType.asParameterizedTypeName(): ParameterizedTypeName =
+    ParameterizedTypeName.get(this)

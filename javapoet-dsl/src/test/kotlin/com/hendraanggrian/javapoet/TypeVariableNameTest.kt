@@ -40,7 +40,11 @@ class TypeVariableNameTest {
             }
             
             """.trimIndent(),
-            "${buildMethodSpec("go") { typeVariables.add("T", listOf(CharSequence::class.asClassName())) }}"
+            "${
+            buildMethodSpec("go") {
+                typeVariables.add("T", listOf(CharSequence::class.asClassName()))
+            }
+            }"
         )
         assertEquals(
             """

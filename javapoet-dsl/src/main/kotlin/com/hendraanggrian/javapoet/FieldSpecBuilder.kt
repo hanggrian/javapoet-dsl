@@ -17,8 +17,8 @@ import kotlin.contracts.contract
 import kotlin.reflect.KClass
 
 /**
- * Builds new [FieldSpec] from [TypeName] supplying its name and modifiers,
- * by populating newly created [FieldSpecBuilder] using provided [configuration].
+ * Builds new [FieldSpec] from [TypeName] supplying its name and modifiers, by populating newly
+ * created [FieldSpecBuilder] using provided [configuration].
  */
 inline fun buildFieldSpec(
     type: TypeName,
@@ -31,8 +31,8 @@ inline fun buildFieldSpec(
 }
 
 /**
- * Builds new [FieldSpec] from [Type] supplying its name and modifiers,
- * by populating newly created [FieldSpecBuilder] using provided [configuration].
+ * Builds new [FieldSpec] from [Type] supplying its name and modifiers, by populating newly
+ * created [FieldSpecBuilder] using provided [configuration].
  */
 inline fun buildFieldSpec(
     type: Type,
@@ -45,8 +45,8 @@ inline fun buildFieldSpec(
 }
 
 /**
- * Builds new [FieldSpec] from [KClass] supplying its name and modifiers,
- * by populating newly created [FieldSpecBuilder] using provided [configuration].
+ * Builds new [FieldSpec] from [KClass] supplying its name and modifiers, by populating newly
+ * created [FieldSpecBuilder] using provided [configuration].
  */
 inline fun buildFieldSpec(
     type: KClass<*>,
@@ -55,12 +55,13 @@ inline fun buildFieldSpec(
     configuration: FieldSpecBuilder.() -> Unit
 ): FieldSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    return FieldSpecBuilder(FieldSpec.builder(type.java, name, *modifiers)).apply(configuration).build()
+    return FieldSpecBuilder(FieldSpec.builder(type.java, name, *modifiers)).apply(configuration)
+        .build()
 }
 
 /**
- * Builds new [FieldSpec] from [T] supplying its name and modifiers,
- * by populating newly created [FieldSpecBuilder] using provided [configuration].
+ * Builds new [FieldSpec] from [T] supplying its name and modifiers, by populating newly
+ * created [FieldSpecBuilder] using provided [configuration].
  */
 inline fun <reified T> buildFieldSpec(
     name: String,
@@ -68,7 +69,8 @@ inline fun <reified T> buildFieldSpec(
     configuration: FieldSpecBuilder.() -> Unit
 ): FieldSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    return FieldSpecBuilder(FieldSpec.builder(T::class.java, name, *modifiers)).apply(configuration).build()
+    return FieldSpecBuilder(FieldSpec.builder(T::class.java, name, *modifiers)).apply(configuration)
+        .build()
 }
 
 /**
@@ -85,8 +87,8 @@ fun buildingFieldSpec(
 }
 
 /**
- * Property delegate for building new [FieldSpec] from [Type] supplying its name and modifiers,
- * by populating newly created [FieldSpecBuilder] using provided [configuration].
+ * Property delegate for building new [FieldSpec] from [Type] supplying its name and modifiers, by
+ * populating newly created [FieldSpecBuilder] using provided [configuration].
  */
 fun buildingFieldSpec(
     type: Type,
@@ -98,8 +100,8 @@ fun buildingFieldSpec(
 }
 
 /**
- * Property delegate for building new [FieldSpec] from [KClass] supplying its name and modifiers,
- * by populating newly created [FieldSpecBuilder] using provided [configuration].
+ * Property delegate for building new [FieldSpec] from [KClass] supplying its name and modifiers, by
+ * populating newly created [FieldSpecBuilder] using provided [configuration].
  */
 fun buildingFieldSpec(
     type: KClass<*>,
@@ -121,7 +123,9 @@ class FieldSpecBuilder(private val nativeBuilder: FieldSpec.Builder) {
     /** Javadoc of this field. */
     val javadoc: JavadocContainer = object : JavadocContainer {
         override fun append(format: String, vararg args: Any): Unit =
-            format.internalFormat(args) { format2, args2 -> nativeBuilder.addJavadoc(format2, *args2) }
+            format.internalFormat(args) { format2, args2 ->
+                nativeBuilder.addJavadoc(format2, *args2)
+            }
 
         override fun append(code: CodeBlock) {
             nativeBuilder.addJavadoc(code)

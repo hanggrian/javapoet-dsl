@@ -243,7 +243,8 @@ class GitHubTest {
                 methods.add("beyond") {
                     val hoverboard = classNameOf("com.mattel", "Hoverboard")
                     val arrayList = classNameOf("java.util", "ArrayList")
-                    val listOfHoverboards = classNameOf("java.util", "List").parameterizedBy(hoverboard)
+                    val listOfHoverboards = classNameOf("java.util", "List")
+                        .parameterizedBy(hoverboard)
                     returns = listOfHoverboards
                     appendLine("%T result = new %T<>()", listOfHoverboards, arrayList)
                     appendLine("result.add(new %T())", hoverboard)
@@ -287,14 +288,22 @@ class GitHubTest {
                     addModifiers(PUBLIC, FINAL)
                     methods.add("beyond") {
                         val arrayList = classNameOf("java.util", "ArrayList")
-                        val listOfHoverboards = classNameOf("java.util", "List").parameterizedBy(hoverboard)
+                        val listOfHoverboards = classNameOf("java.util", "List")
+                            .parameterizedBy(hoverboard)
                         returns = listOfHoverboards
                         appendLine("%T result = new %T<>()", listOfHoverboards, arrayList)
                         appendLine("result.add(%T.createNimbus(2000))", hoverboard)
                         appendLine("result.add(%T.createNimbus(\"2001\"))", hoverboard)
-                        appendLine("result.add(%T.createNimbus(%T.THUNDERBOLT))", hoverboard, namedBoards)
+                        appendLine(
+                            "result.add(%T.createNimbus(%T.THUNDERBOLT))",
+                            hoverboard,
+                            namedBoards
+                        )
                         appendLine("%T.sort(result)", Collections::class)
-                        appendLine("return result.isEmpty() ? %T.emptyList() : result", Collections::class)
+                        appendLine(
+                            "return result.isEmpty() ? %T.emptyList() : result",
+                            Collections::class
+                        )
                     }
                 }
             }.toString()
