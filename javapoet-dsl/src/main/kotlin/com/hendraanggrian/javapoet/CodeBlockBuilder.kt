@@ -20,6 +20,7 @@ inline fun buildCodeBlock(configuration: CodeBlockBuilder.() -> Unit): CodeBlock
 
 /**
  * Wrapper of [CodeBlock.Builder], providing DSL support as a replacement to Java builder.
+ *
  * @param nativeBuilder source builder.
  */
 @JavapoetSpecDsl

@@ -50,24 +50,28 @@ interface CodeBlockContainer : CodeBlockAppendable {
 
     /**
      * Manually starts the control flow, as opposed to [appendControlFlow].
+     *
      * @see CodeBlock.Builder.beginControlFlow
      */
     fun beginControlFlow(format: String, vararg args: Any)
 
     /**
      * Continues the control flow.
+     *
      * @see CodeBlock.Builder.nextControlFlow
      */
     fun nextControlFlow(format: String, vararg args: Any)
 
     /**
      * Manually stops the control flow.
+     *
      * @see CodeBlock.Builder.endControlFlow
      */
     fun endControlFlow()
 
     /**
      * Manually stops the control flow, only used in do/while.
+     *
      * @see CodeBlock.Builder.endControlFlow
      */
     fun endControlFlow(format: String, vararg args: Any)

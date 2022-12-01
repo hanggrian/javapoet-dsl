@@ -50,6 +50,7 @@ fun buildingMethodSpec(configuration: MethodSpecBuilder.() -> Unit): SpecLoader<
 
 /**
  * Wrapper of [MethodSpec.Builder], providing DSL support as a replacement to Java builder.
+ *
  * @param nativeBuilder source builder.
  */
 @JavapoetSpecDsl

@@ -194,6 +194,7 @@ fun buildingAnnotationTypeSpec(configuration: TypeSpecBuilder.() -> Unit): SpecL
 
 /**
  * Wrapper of [TypeSpec.Builder], providing DSL support as a replacement to Java builder.
+ *
  * @param nativeBuilder source builder.
  */
 @JavapoetSpecDsl

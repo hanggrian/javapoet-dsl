@@ -4,7 +4,7 @@
 [![Nexus Snapshot](https://img.shields.io/nexus/s/com.hendraanggrian/javapoet-dsl?server=https%3A%2F%2Fs01.oss.sonatype.org)](https://s01.oss.sonatype.org/content/repositories/snapshots/com/hendraanggrian/javapoet-dsl/)
 [![OpenJDK](https://img.shields.io/badge/jdk-1.8%2B-informational)](https://openjdk.java.net/projects/jdk8/)
 
-# JavaPoet DSL Primer
+# JavaPoet DSL
 
 Lightweight Kotlin extension of [JavaPoet](https://github.com/square/javapoet/), providing Kotlin
 DSL functionality and other convenient solutions.
@@ -47,8 +47,7 @@ dependencies {
 
 JavaPoet uses char prefix `$` when formatting literals (`$L`), strings (`$S`), types (`$T`), an
 names (`$N`) within strings. However in Kotlin, `$` in strings is reserved for variable referral.
-Avoid using `\$` and instead use `%` as the prefix, this is also the approach taken
-by [KotlinPoet](https://github.com/square/kotlinpoet/).
+Avoid using `\$` and instead use `%` as the prefix, this is also the approach taken by [KotlinPoet](https://github.com/square/kotlinpoet/).
 
 ```kotlin
 buildMethodSpec("getName") {
@@ -124,8 +123,7 @@ types.addClass("Car") {
 
 ### Property delegation
 
-In spirit
-of [Gradle Kotlin DSL](https://docs.gradle.org/current/userguide/kotlin_dsl.html#using_kotlin_delegated_properties)
+In spirit of [Gradle Kotlin DSL](https://docs.gradle.org/current/userguide/kotlin_dsl.html#using_kotlin_delegated_properties)
 , creating a spec can be done by delegating to a property.
 
 ```kotlin
