@@ -4,7 +4,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class TypeVariableNameTest {
-
     @Test
     fun genericsBy() {
         assertEquals("T", "${"T".genericsBy()}")
@@ -13,7 +12,7 @@ class TypeVariableNameTest {
             """
             <T extends java.lang.CharSequence> void go() {
             }
-            
+
             """.trimIndent(),
             "${buildMethodSpec("go") { typeVariables.add("T", CharSequence::class.asClassName()) }}"
         )
@@ -21,7 +20,7 @@ class TypeVariableNameTest {
             """
             <T extends java.lang.CharSequence> void go() {
             }
-            
+
             """.trimIndent(),
             "${buildMethodSpec("go") { typeVariables.add("T", CharSequence::class.java) }}"
         )
@@ -29,7 +28,7 @@ class TypeVariableNameTest {
             """
             <T extends java.lang.CharSequence> void go() {
             }
-            
+
             """.trimIndent(),
             "${buildMethodSpec("go") { typeVariables.add("T", CharSequence::class) }}"
         )
@@ -38,19 +37,19 @@ class TypeVariableNameTest {
             """
             <T extends java.lang.CharSequence> void go() {
             }
-            
+
             """.trimIndent(),
             "${
-            buildMethodSpec("go") {
-                typeVariables.add("T", listOf(CharSequence::class.asClassName()))
-            }
+                buildMethodSpec("go") {
+                    typeVariables.add("T", listOf(CharSequence::class.asClassName()))
+                }
             }"
         )
         assertEquals(
             """
             <T extends java.lang.CharSequence> void go() {
             }
-            
+
             """.trimIndent(),
             "${buildMethodSpec("go") { typeVariables.add("T", listOf(CharSequence::class.java)) }}"
         )
@@ -58,7 +57,7 @@ class TypeVariableNameTest {
             """
             <T extends java.lang.CharSequence> void go() {
             }
-            
+
             """.trimIndent(),
             "${buildMethodSpec("go") { typeVariables.add("T", listOf(CharSequence::class)) }}"
         )

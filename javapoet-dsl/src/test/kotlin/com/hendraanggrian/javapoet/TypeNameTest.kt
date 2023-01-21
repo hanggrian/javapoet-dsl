@@ -5,7 +5,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class TypeNameTest {
-
     @Test
     fun staticFields() {
         assertEquals(TypeName.VOID, VOID)

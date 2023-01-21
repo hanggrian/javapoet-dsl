@@ -8,7 +8,6 @@ import kotlin.test.assertEquals
 
 /** From `https://github.com/square/javapoet`. */
 class GitHubTest {
-
     @Test
     fun `Example`() {
         assertEquals(
@@ -49,7 +48,7 @@ class GitHubTest {
                     total += i;
                   }
                 }
-            
+
             """.trimIndent(),
             buildMethodSpec("main") {
                 returns = VOID
@@ -113,7 +112,7 @@ class GitHubTest {
                     throw new java.lang.RuntimeException(e);
                   }
                 }
-                
+
             """.trimIndent(),
             buildMethodSpec("main") {
                 appendControlFlow("try") {
@@ -371,7 +370,7 @@ class GitHubTest {
                 public abstract class HelloWorld {
                   protected abstract void flux();
                 }
-                
+
             """.trimIndent(),
             buildClassTypeSpec("HelloWorld") {
                 addModifiers(PUBLIC, ABSTRACT)
@@ -393,7 +392,7 @@ class GitHubTest {
                     this.greeting = greeting;
                   }
                 }
-                
+
             """.trimIndent(),
             buildClassTypeSpec("HelloWorld") {
                 addModifiers(PUBLIC)
@@ -433,7 +432,7 @@ class GitHubTest {
 
                   private final java.lang.String robot;
                 }
-                
+
             """.trimIndent(),
             buildClassTypeSpec("HelloWorld") {
                 addModifiers(PUBLIC)
@@ -446,7 +445,7 @@ class GitHubTest {
         assertEquals(
             """
                 private final java.lang.String android = "Lollipop v." + 5.0;
-                
+
             """.trimIndent(),
             buildFieldSpec<String>("android", PRIVATE, FINAL) {
                 initializer("\"Lollipop v.\" + 5.0")
@@ -463,7 +462,7 @@ class GitHubTest {
 
                   void beep();
                 }
-                
+
             """.trimIndent(),
             buildInterfaceTypeSpec("HelloWorld") {
                 addModifiers(PUBLIC)
@@ -488,7 +487,7 @@ class GitHubTest {
 
                   PAPER
                 }
-                
+
             """.trimIndent(),
             buildEnumTypeSpec("Roshambo") {
                 addModifiers(PUBLIC)
@@ -519,7 +518,7 @@ class GitHubTest {
                     this.handsign = handsign;
                   }
                 }
-                
+
             """.trimIndent(),
             buildEnumTypeSpec("Roshambo") {
                 addModifiers(PUBLIC)
@@ -556,7 +555,7 @@ class GitHubTest {
                     }
                   });
                 }
-                
+
             """.trimIndent(),
             buildMethodSpec("sortByLength") {
                 parameters.add(List::class.parameterizedBy(String::class), "strings")
@@ -590,7 +589,7 @@ class GitHubTest {
                 public java.lang.String toString() {
                   return "Hoverboard";
                 }
-                
+
             """.trimIndent(),
             buildMethodSpec("toString") {
                 annotations.add<Override>()
@@ -609,7 +608,7 @@ class GitHubTest {
                     userAgent = "Square Cash"
                 )
                 public abstract com.example.LogReceipt recordEvent(com.example.LogRecord logRecord);
-                
+
             """.trimIndent(),
             buildMethodSpec("recordEvent") {
                 addModifiers(PUBLIC, ABSTRACT)
@@ -630,7 +629,7 @@ class GitHubTest {
                     @com.example.Header(name = "User-Agent", value = "Square Cash")
                 })
                 public abstract com.example.LogReceipt recordEvent(com.example.LogRecord logRecord);
-                
+
             """.trimIndent(),
             buildMethodSpec("recordEvent") {
                 addModifiers(PUBLIC, ABSTRACT)

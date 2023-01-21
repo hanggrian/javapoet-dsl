@@ -78,7 +78,7 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
     }
 
     /** Configures javadoc of this method. */
-    fun javadoc(configuration: JavadocContainerScope.() -> Unit) {
+    inline fun javadoc(configuration: JavadocContainerScope.() -> Unit) {
         contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
         JavadocContainerScope(javadoc).configuration()
     }
@@ -87,7 +87,7 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
     val annotations: AnnotationSpecList = AnnotationSpecList(nativeBuilder.annotations)
 
     /** Configures annotations of this method. */
-    fun annotations(configuration: AnnotationSpecListScope.() -> Unit) {
+    inline fun annotations(configuration: AnnotationSpecListScope.() -> Unit) {
         contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
         AnnotationSpecListScope(annotations).configuration()
     }
@@ -131,7 +131,7 @@ class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) : CodeBlo
     val parameters: ParameterSpecList = ParameterSpecList(nativeBuilder.parameters)
 
     /** Configures parameters of this method. */
-    fun parameters(configuration: ParameterSpecListScope.() -> Unit) {
+    inline fun parameters(configuration: ParameterSpecListScope.() -> Unit) {
         contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
         ParameterSpecListScope(parameters).configuration()
     }

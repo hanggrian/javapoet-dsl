@@ -54,9 +54,7 @@ open class MethodSpecList internal constructor(actualList: MutableList<MethodSpe
  * configuration.
  */
 @JavapoetSpecDsl
-class MethodSpecListScope internal constructor(actualList: MutableList<MethodSpec>) :
-    MethodSpecList(actualList) {
-
+class MethodSpecListScope(actualList: MutableList<MethodSpec>) : MethodSpecList(actualList) {
     /** @see MethodSpecList.add */
     inline operator fun String.invoke(noinline configuration: MethodSpecBuilder.() -> Unit):
         MethodSpec = add(this, configuration)

@@ -14,7 +14,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class TypeSpecBuilderTest {
-
     @Test
     fun javadoc() {
         assertEquals(

@@ -185,5 +185,4 @@ open class TypeSpecList internal constructor(actualList: MutableList<TypeSpec>) 
 
 /** Receiver for the `types` block providing an extended set of operators for the configuration. */
 @JavapoetSpecDsl
-class TypeSpecListScope internal constructor(actualList: MutableList<TypeSpec>) :
-    TypeSpecList(actualList)
+class TypeSpecListScope(actualList: MutableList<TypeSpec>) : TypeSpecList(actualList)

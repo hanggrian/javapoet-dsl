@@ -13,7 +13,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class MethodSpecBuilderTest {
-
     @Test
     fun name() {
         assertEquals(

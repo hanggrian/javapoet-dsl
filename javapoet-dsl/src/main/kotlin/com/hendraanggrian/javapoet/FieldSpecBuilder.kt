@@ -134,7 +134,7 @@ class FieldSpecBuilder(private val nativeBuilder: FieldSpec.Builder) {
     }
 
     /** Configures javadoc for this field. */
-    fun javadoc(configuration: JavadocContainerScope.() -> Unit) {
+    inline fun javadoc(configuration: JavadocContainerScope.() -> Unit) {
         contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
         JavadocContainerScope(javadoc).configuration()
     }
@@ -143,7 +143,7 @@ class FieldSpecBuilder(private val nativeBuilder: FieldSpec.Builder) {
     val annotations: AnnotationSpecList = AnnotationSpecList(nativeBuilder.annotations)
 
     /** Configures annotations for this field. */
-    fun annotations(configuration: AnnotationSpecListScope.() -> Unit) {
+    inline fun annotations(configuration: AnnotationSpecListScope.() -> Unit) {
         contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
         AnnotationSpecListScope(annotations).configuration()
     }

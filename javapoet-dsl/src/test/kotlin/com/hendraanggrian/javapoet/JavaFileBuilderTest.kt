@@ -7,7 +7,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFails
 
 class JavaFileBuilderTest {
-
     enum class MyEnum { A }
 
     /** A java file may only have one type. */
@@ -80,7 +79,7 @@ class JavaFileBuilderTest {
 
                 class MyClass {
                 }
-                
+
             """.trimIndent(),
             buildJavaFile("com.example") {
                 addClass("MyClass")

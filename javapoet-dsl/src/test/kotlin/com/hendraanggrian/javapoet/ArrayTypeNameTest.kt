@@ -4,7 +4,6 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class ArrayTypeNameTest {
-
     @Test
     fun toArrayTypeName() {
         assertEquals("java.lang.String[]", "${String::class.asTypeName().toArrayTypeName()}")

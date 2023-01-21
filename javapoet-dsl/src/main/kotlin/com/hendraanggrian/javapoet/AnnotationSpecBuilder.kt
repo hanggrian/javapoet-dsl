@@ -12,11 +12,20 @@ import kotlin.contracts.contract
 import kotlin.reflect.KClass
 
 /** Converts [Annotation] to [AnnotationSpec]. */
-inline fun Annotation.asAnnotationSpec(includeDefaultValues: Boolean = false): AnnotationSpec =
+inline fun Annotation.toAnnotationSpec(includeDefaultValues: Boolean = false): AnnotationSpec =
     AnnotationSpec.get(this, includeDefaultValues)
 
 /** Converts [AnnotationMirror] to [AnnotationSpec]. */
-inline fun AnnotationMirror.asAnnotationSpec(): AnnotationSpec = AnnotationSpec.get(this)
+inline fun AnnotationMirror.toAnnotationSpec(): AnnotationSpec = AnnotationSpec.get(this)
+
+/** Converts [ClassName] to [AnnotationSpec]. */
+inline fun ClassName.toAnnotationSpec(): AnnotationSpec = AnnotationSpec.builder(this).build()
+
+/** Converts [Class] to [AnnotationSpec]. */
+inline fun Class<*>.toAnnotationSpec(): AnnotationSpec = AnnotationSpec.builder(this).build()
+
+/** Converts [KClass] to [AnnotationSpec]. */
+inline fun KClass<*>.toAnnotationSpec(): AnnotationSpec = AnnotationSpec.builder(java).build()
 
 /**
  * Builds new [AnnotationSpec] from [ClassName], by populating newly created [AnnotationSpecBuilder]

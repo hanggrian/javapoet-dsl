@@ -4,7 +4,6 @@ import com.hendraanggrian.javapoet.JavapoetSpecDsl
 import com.squareup.javapoet.CodeBlock
 
 interface CodeBlockAppendable {
-
     /** Add code with arguments to this container. */
     fun append(format: String, vararg args: Any)
 
@@ -22,7 +21,6 @@ interface CodeBlockAppendable {
 }
 
 interface CodeBlockContainer : CodeBlockAppendable {
-
     /** Add named code to this container. */
     fun appendNamed(format: String, args: Map<String, *>)
 
@@ -79,7 +77,6 @@ interface CodeBlockContainer : CodeBlockAppendable {
 
 /** A [JavadocContainer] is responsible for managing a set of code instances. */
 interface JavadocContainer : CodeBlockAppendable {
-
     override fun appendLine(): Unit = append(SystemProperties.LINE_SEPARATOR)
 
     override fun appendLine(format: String, vararg args: Any) {
@@ -110,5 +107,4 @@ interface JavadocContainer : CodeBlockAppendable {
 
 /** Receiver for the `kdoc` block providing an extended set of operators for the configuration. */
 @JavapoetSpecDsl
-class JavadocContainerScope internal constructor(container: JavadocContainer) :
-    JavadocContainer by container
+class JavadocContainerScope(container: JavadocContainer) : JavadocContainer by container

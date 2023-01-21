@@ -126,9 +126,7 @@ open class EnumConstantMap internal constructor(actualMap: MutableMap<String, Ty
  * configuration.
  */
 @JavapoetSpecDsl
-class EnumConstantMapScope internal constructor(actualMap: MutableMap<String, TypeSpec>) :
-    EnumConstantMap(actualMap) {
-
+class EnumConstantMapScope(actualMap: MutableMap<String, TypeSpec>) : EnumConstantMap(actualMap) {
     /** @see EnumConstantMap.put */
     inline operator fun String.invoke(
         anonymousTypeCode: CodeBlock,

@@ -18,7 +18,7 @@ import kotlin.contracts.contract
 import kotlin.reflect.KClass
 
 /** Converts element to [ParameterSpec]. */
-inline fun VariableElement.asParameterSpec(): ParameterSpec = ParameterSpec.get(this)
+inline fun VariableElement.toParameterSpec(): ParameterSpec = ParameterSpec.get(this)
 
 /**
  * Builds new [ParameterSpec] from [TypeName], by populating newly created [ParameterSpecBuilder]
@@ -148,7 +148,7 @@ class ParameterSpecBuilder(private val nativeBuilder: ParameterSpec.Builder) {
     }
 
     /** Configures javadoc for this parameter. */
-    fun javadoc(configuration: JavadocContainerScope.() -> Unit) {
+    inline fun javadoc(configuration: JavadocContainerScope.() -> Unit) {
         contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
         JavadocContainerScope(javadoc).configuration()
     }
@@ -157,7 +157,7 @@ class ParameterSpecBuilder(private val nativeBuilder: ParameterSpec.Builder) {
     val annotations: AnnotationSpecList = AnnotationSpecList(nativeBuilder.annotations)
 
     /** Configures annotations of this parameter. */
-    fun annotations(configuration: AnnotationSpecListScope.() -> Unit) {
+    inline fun annotations(configuration: AnnotationSpecListScope.() -> Unit) {
         contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
         AnnotationSpecListScope(annotations).configuration()
     }
