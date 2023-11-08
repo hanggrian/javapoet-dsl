@@ -41,8 +41,7 @@ inline fun <reified T> Class<*>.plusParameter(): ParameterizedTypeName =
     parameterizedBy(T::class.java)
 
 /** Returns a [ParameterizedTypeName] applying [T] argument to [KClass]. */
-inline fun <reified T> KClass<*>.plusParameter(): ParameterizedTypeName =
-    parameterizedBy(T::class)
+inline fun <reified T> KClass<*>.plusParameter(): ParameterizedTypeName = parameterizedBy(T::class)
 
 /** Returns a [ParameterizedTypeName] equivalent to [ParameterizedType]. */
 inline fun ParameterizedType.asParameterizedTypeName(): ParameterizedTypeName =

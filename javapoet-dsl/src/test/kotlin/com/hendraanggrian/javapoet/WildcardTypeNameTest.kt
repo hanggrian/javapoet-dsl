@@ -8,15 +8,15 @@ class WildcardTypeNameTest {
     fun toUpperWildcardTypeName() {
         assertEquals(
             "? extends java.lang.CharSequence",
-            "${CharSequence::class.asTypeName().toUpperWildcardTypeName()}"
+            "${CharSequence::class.asTypeName().toUpperWildcardTypeName()}",
         )
         assertEquals(
             "? extends java.lang.CharSequence",
-            "${CharSequence::class.java.toUpperWildcardTypeName()}"
+            "${CharSequence::class.java.toUpperWildcardTypeName()}",
         )
         assertEquals(
             "? extends java.lang.CharSequence",
-            "${CharSequence::class.toUpperWildcardTypeName()}"
+            "${CharSequence::class.toUpperWildcardTypeName()}",
         )
     }
 
@@ -24,7 +24,7 @@ class WildcardTypeNameTest {
     fun wildcardTypeNameUpperOf() {
         assertEquals(
             "? extends java.lang.CharSequence",
-            "${wildcardTypeNameUpperOf<CharSequence>()}"
+            "${wildcardTypeNameUpperOf<CharSequence>()}",
         )
     }
 
@@ -32,15 +32,15 @@ class WildcardTypeNameTest {
     fun toLowerWildcardTypeName() {
         assertEquals(
             "? super java.lang.CharSequence",
-            "${CharSequence::class.asTypeName().toLowerWildcardTypeName()}"
+            "${CharSequence::class.asTypeName().toLowerWildcardTypeName()}",
         )
         assertEquals(
             "? super java.lang.CharSequence",
-            "${CharSequence::class.java.toLowerWildcardTypeName()}"
+            "${CharSequence::class.java.toLowerWildcardTypeName()}",
         )
         assertEquals(
             "? super java.lang.CharSequence",
-            "${CharSequence::class.toLowerWildcardTypeName()}"
+            "${CharSequence::class.toLowerWildcardTypeName()}",
         )
     }
 

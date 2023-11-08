@@ -8,15 +8,20 @@ class ParameterizedTypeNameTest {
     fun parameterizedBy() {
         assertEquals(
             "kotlin.Pair<java.lang.Integer, java.lang.String>",
-            "${Pair::class.asClassName().parameterizedBy(INT.box(), String::class.asTypeName())}"
+            "${Pair::class.asClassName().parameterizedBy(INT.box(), String::class.asTypeName())}",
         )
         assertEquals(
             "kotlin.Pair<java.lang.Integer, java.lang.String>",
-            "${Pair::class.java.parameterizedBy(java.lang.Integer::class.java, String::class.java)}"
+            "${
+                Pair::class.java.parameterizedBy(
+                    java.lang.Integer::class.java,
+                    String::class.java,
+                )
+            }",
         )
         assertEquals(
             "kotlin.Pair<java.lang.Integer, java.lang.String>",
-            "${Pair::class.parameterizedBy(java.lang.Integer::class, String::class)}"
+            "${Pair::class.parameterizedBy(java.lang.Integer::class, String::class)}",
         )
 
         assertEquals(
@@ -24,19 +29,19 @@ class ParameterizedTypeNameTest {
             "${
                 Pair::class.asClassName()
                     .parameterizedBy(listOf(INT.box(), String::class.asTypeName()))
-            }"
+            }",
         )
         assertEquals(
             "kotlin.Pair<java.lang.Integer, java.lang.String>",
             "${
                 Pair::class.java.parameterizedBy(
-                    listOf(java.lang.Integer::class.java, String::class.java)
+                    listOf(java.lang.Integer::class.java, String::class.java),
                 )
-            }"
+            }",
         )
         assertEquals(
             "kotlin.Pair<java.lang.Integer, java.lang.String>",
-            "${Pair::class.parameterizedBy(listOf(java.lang.Integer::class, String::class))}"
+            "${Pair::class.parameterizedBy(listOf(java.lang.Integer::class, String::class))}",
         )
     }
 
@@ -44,15 +49,15 @@ class ParameterizedTypeNameTest {
     fun plusParameter() {
         assertEquals(
             "java.util.List<java.lang.String>",
-            "${List::class.asClassName().plusParameter<String>()}"
+            "${List::class.asClassName().plusParameter<String>()}",
         )
         assertEquals(
             "java.util.List<java.lang.String>",
-            "${List::class.java.plusParameter<String>()}"
+            "${List::class.java.plusParameter<String>()}",
         )
         assertEquals(
             "java.util.List<java.lang.String>",
-            "${List::class.plusParameter<String>()}"
+            "${List::class.plusParameter<String>()}",
         )
     }
 }

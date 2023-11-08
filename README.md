@@ -1,6 +1,6 @@
 [![Travis CI](https://img.shields.io/travis/com/hendraanggrian/javapoet-dsl)](https://travis-ci.com/github/hendraanggrian/javapoet-dsl/)
 [![Codecov](https://img.shields.io/codecov/c/github/hendraanggrian/javapoet-dsl)](https://codecov.io/gh/hendraanggrian/javapoet-dsl/)
-[![Maven Central](https://img.shields.io/maven-central/v/com.hendraanggrian/javapoet-dsl)](https://search.maven.org/artifact/com.hendraanggrian/javapoet-dsl/)
+[![Maven Central](https://img.shields.io/maven-central/v/com.hendraanggrian/javapoet-dsl)](https://repo1.maven.org/maven2/com/hendraanggrian/javapoet-dsl/)
 [![Nexus Snapshot](https://img.shields.io/nexus/s/com.hendraanggrian/javapoet-dsl?server=https%3A%2F%2Fs01.oss.sonatype.org)](https://s01.oss.sonatype.org/content/repositories/snapshots/com/hendraanggrian/javapoet-dsl/)
 [![OpenJDK](https://img.shields.io/badge/jdk-1.8%2B-informational)](https://openjdk.java.net/projects/jdk8/)
 
@@ -17,13 +17,13 @@ providing Kotlin DSL functionality and other convenient solutions.
 
 ```kotlin
 buildJavaFile("com.example.helloworld") {
-    addClass("HelloWorld") {
-        addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+    classType("HelloWorld") {
+        modifiers(Modifier.PUBLIC, Modifier.FINAL)
         methods {
             "main" {
-                addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                modifiers(Modifier.PUBLIC, Modifier.STATIC)
                 returns = VOID
-                parameters.add<Array<String>>("args")
+                parameter<Array<String>>("args")
                 appendLine("%T.out.println(%S)", System::class, "Hello, JavaPoet!")
             }
         }
@@ -74,7 +74,7 @@ type function whenever possible.
 ```kotlin
 buildMethodSpec("sortList") {
     returns = int
-    parameters.add(classNameOf("java.util", "List").parameterizedBy(hoverboard), "list")
+    parameter(classNameOf("java.util", "List").parameterizedBy(hoverboard), "list")
     appendLine("%T.sort(list)", Collections::class)
     appendLine("return list")
 }
@@ -96,29 +96,23 @@ types.addClass("Car") {
     methods {
         "getWheels" {
             returns = int
-            statements {
-                add("return wheels")
-            }
+            appendLine("return wheels")
         }
         "setWheels" {
-            parameters {
-                add(int, "wheels")
-            }
-            statements {
-                add("this.wheels = wheels")
-            }
+            parameter(int, "wheels")
+            appendLine("this.wheels = wheels")
         }
     }
 }
 
 types.addClass("Car") {
-    methods.add("getWheels") {
+    method("getWheels") {
         returns = int
-        statements.add("return wheels")
+        appendLine("return wheels")
     }
-    methods.add("setWheels") {
-        parameters["wheels"] = int
-        statements.add("this.wheels = wheels")
+    method("setWheels") {
+        parameter(int, "wheels")
+        appendLine("this.wheels = wheels")
     }
 }
 ```

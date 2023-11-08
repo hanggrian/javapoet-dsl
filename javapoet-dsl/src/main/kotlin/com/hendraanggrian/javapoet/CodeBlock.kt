@@ -1,6 +1,5 @@
 package com.hendraanggrian.javapoet
 
-import com.hendraanggrian.javapoet.collections.CodeBlockContainer
 import com.squareup.javapoet.CodeBlock
 
 /**
@@ -18,43 +17,90 @@ fun codeBlockOf(format: String, vararg args: Any?): CodeBlock =
 inline fun buildCodeBlock(configuration: CodeBlockBuilder.() -> Unit): CodeBlock =
     CodeBlockBuilder(CodeBlock.builder()).apply(configuration).build()
 
-/**
- * Wrapper of [CodeBlock.Builder], providing DSL support as a replacement to Java builder.
- *
- * @param nativeBuilder source builder.
- */
+interface CodeBlockAppendable {
+    /** Add code with arguments to this container. */
+    fun append(format: String, vararg args: Any)
+
+    /** Add code block to this container. */
+    fun append(code: CodeBlock)
+
+    /** Add empty new line to this container. */
+    fun appendLine()
+
+    /** Add code block with a new line to this container. */
+    fun appendLine(format: String, vararg args: Any)
+
+    /** Add code block with a new line to this container. */
+    fun appendLine(code: CodeBlock)
+}
+
+/** A [JavadocContainer] is responsible for managing a set of code instances. */
+interface JavadocContainer : CodeBlockAppendable {
+    override fun appendLine(): Unit = append(SystemProperties.LINE_SEPARATOR)
+
+    override fun appendLine(format: String, vararg args: Any) {
+        append(format, *args)
+        appendLine()
+    }
+
+    override fun appendLine(code: CodeBlock) {
+        append(code)
+        appendLine()
+    }
+
+    /** Convenient method to add code block with operator function. */
+    operator fun plusAssign(value: String): Unit = append(value)
+
+    /** Convenient method to add code block with operator function. */
+    operator fun plusAssign(code: CodeBlock): Unit = append(code)
+
+    /**
+     * @see kotlin.text.SystemProperties
+     */
+    private object SystemProperties {
+        /** Line separator for current system. */
+        @JvmField
+        val LINE_SEPARATOR = System.getProperty("line.separator")!!
+    }
+}
+
+/** Wrapper of [CodeBlock.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetSpecDsl
-class CodeBlockBuilder(private val nativeBuilder: CodeBlock.Builder) : CodeBlockContainer {
+class CodeBlockBuilder(private val nativeBuilder: CodeBlock.Builder) : CodeBlockAppendable {
     /** Returns true if this builder contains no code. */
     fun isEmpty(): Boolean = nativeBuilder.isEmpty
 
     /** Returns true if this builder contains code. */
     fun isNotEmpty(): Boolean = !nativeBuilder.isEmpty
 
-    override fun appendNamed(format: String, args: Map<String, *>): Unit =
+    fun appendNamed(format: String, args: Map<String, *>): Unit =
         format.internalFormat(args) { format2, args2 -> nativeBuilder.addNamed(format2, args2) }
 
     override fun append(format: String, vararg args: Any): Unit =
         format.internalFormat(args) { format2, args2 -> nativeBuilder.add(format2, *args2) }
 
-    override fun beginControlFlow(format: String, vararg args: Any): Unit =
+    fun beginControlFlow(format: String, vararg args: Any): Unit =
         format.internalFormat(args) { format2, args2 ->
             nativeBuilder.beginControlFlow(format2, *args2)
         }
 
-    override fun nextControlFlow(format: String, vararg args: Any): Unit =
+    fun nextControlFlow(format: String, vararg args: Any): Unit =
         format.internalFormat(args) { format2, args2 ->
             nativeBuilder.nextControlFlow(format2, *args2)
         }
 
-    override fun endControlFlow() {
+    fun endControlFlow() {
         nativeBuilder.endControlFlow()
     }
 
-    override fun endControlFlow(format: String, vararg args: Any): Unit =
+    fun endControlFlow(format: String, vararg args: Any): Unit =
         format.internalFormat(args) { format2, args2 ->
             nativeBuilder.endControlFlow(format2, *args2)
         }
+
+    override fun appendLine() {
+        nativeBuilder.addStatement("")
+    }
 
     override fun appendLine(format: String, vararg args: Any): Unit =
         format.internalFormat(args) { format2, args2 ->
@@ -69,35 +115,29 @@ class CodeBlockBuilder(private val nativeBuilder: CodeBlock.Builder) : CodeBlock
         nativeBuilder.add(code)
     }
 
-    /** Append an indentation. */
     fun indent() {
         nativeBuilder.indent()
     }
 
-    /** Reverse an indentation. */
     fun unindent() {
         nativeBuilder.unindent()
     }
 
-    /** Convenient way to configure code within single indentation. */
     fun indent(configuration: () -> Unit) {
         indent()
         configuration()
         unindent()
     }
 
-    /** Convenient way to configure code within multiple indentation. */
     fun indent(level: Int, configuration: () -> Unit) {
         repeat(level) { indent() }
         configuration()
         repeat(level) { unindent() }
     }
 
-    /** Clear current code. */
     fun clear() {
         nativeBuilder.clear()
     }
 
-    /** Returns native spec. */
     fun build(): CodeBlock = nativeBuilder.build()
 }

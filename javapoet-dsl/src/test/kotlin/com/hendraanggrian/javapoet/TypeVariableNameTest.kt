@@ -14,7 +14,11 @@ class TypeVariableNameTest {
             }
 
             """.trimIndent(),
-            "${buildMethodSpec("go") { typeVariables.add("T", CharSequence::class.asClassName()) }}"
+            "${
+                buildMethodSpec("go") {
+                    typeVariables.add("T".genericsBy(CharSequence::class.asClassName()))
+                }
+            }",
         )
         assertEquals(
             """
@@ -22,7 +26,11 @@ class TypeVariableNameTest {
             }
 
             """.trimIndent(),
-            "${buildMethodSpec("go") { typeVariables.add("T", CharSequence::class.java) }}"
+            "${
+                buildMethodSpec("go") {
+                    typeVariables.add("T".genericsBy(CharSequence::class.java))
+                }
+            }",
         )
         assertEquals(
             """
@@ -30,7 +38,7 @@ class TypeVariableNameTest {
             }
 
             """.trimIndent(),
-            "${buildMethodSpec("go") { typeVariables.add("T", CharSequence::class) }}"
+            "${buildMethodSpec("go") { typeVariables.add("T".genericsBy(CharSequence::class)) }}",
         )
 
         assertEquals(
@@ -41,9 +49,9 @@ class TypeVariableNameTest {
             """.trimIndent(),
             "${
                 buildMethodSpec("go") {
-                    typeVariables.add("T", listOf(CharSequence::class.asClassName()))
+                    typeVariables.add("T".genericsBy(listOf(CharSequence::class.asClassName())))
                 }
-            }"
+            }",
         )
         assertEquals(
             """
@@ -51,7 +59,11 @@ class TypeVariableNameTest {
             }
 
             """.trimIndent(),
-            "${buildMethodSpec("go") { typeVariables.add("T", listOf(CharSequence::class.java)) }}"
+            "${
+                buildMethodSpec("go") {
+                    typeVariables.add("T".genericsBy(listOf(CharSequence::class.java)))
+                }
+            }",
         )
         assertEquals(
             """
@@ -59,7 +71,11 @@ class TypeVariableNameTest {
             }
 
             """.trimIndent(),
-            "${buildMethodSpec("go") { typeVariables.add("T", listOf(CharSequence::class)) }}"
+            "${
+                buildMethodSpec("go") {
+                    typeVariables.add("T".genericsBy(listOf(CharSequence::class)))
+                }
+            }",
         )
     }
 }

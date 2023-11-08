@@ -3,8 +3,12 @@ package com.example
 import com.hendraanggrian.javapoet.ABSTRACT
 import com.hendraanggrian.javapoet.INT
 import com.hendraanggrian.javapoet.PUBLIC
+import com.hendraanggrian.javapoet.annotation
 import com.hendraanggrian.javapoet.buildJavaFile
 import com.hendraanggrian.javapoet.classNameOf
+import com.hendraanggrian.javapoet.classType
+import com.hendraanggrian.javapoet.interfaceType
+import com.hendraanggrian.javapoet.methods
 import java.nio.file.Paths
 
 class VehicleWriter {
@@ -24,14 +28,14 @@ class VehicleWriter {
 
     fun prepare() {
         buildJavaFile(PACKAGE_NAME) {
-            addInterface("Vehicle") {
+            interfaceType("Vehicle") {
                 methods {
                     "getName" {
-                        addModifiers(PUBLIC, ABSTRACT)
+                        modifiers(PUBLIC, ABSTRACT)
                         returns<String>()
                     }
                     "getWheelCount" {
-                        addModifiers(PUBLIC, ABSTRACT)
+                        modifiers(PUBLIC, ABSTRACT)
                         returns = INT
                     }
                 }
@@ -41,19 +45,19 @@ class VehicleWriter {
 
     fun write(name: String, wheelCount: Int) {
         buildJavaFile(PACKAGE_NAME) {
-            addClass(name) {
+            classType(name) {
                 superinterfaces += VEHICLE_NAME
                 methods {
                     "getName" {
-                        addModifiers(PUBLIC)
+                        modifiers(PUBLIC)
                         returns<String>()
-                        annotations.add<Override>()
+                        annotation<Override>()
                         appendLine("return %S", name)
                     }
                     "getWheelCount" {
-                        addModifiers(PUBLIC)
+                        modifiers(PUBLIC)
                         returns = INT
-                        annotations.add<Override>()
+                        annotation<Override>()
                         appendLine("return %L", wheelCount)
                     }
                 }

@@ -5,13 +5,14 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
 
-class CodeBlockBuilderTest {
-    private val expected = CodeBlock.builder()
-        .addStatement("int total = 0")
-        .beginControlFlow("for (int i = 0; i < 10; i++)")
-        .addStatement("total += i")
-        .endControlFlow()
-        .build()
+class CodeBlockTest {
+    private val expected =
+        CodeBlock.builder()
+            .addStatement("int total = 0")
+            .beginControlFlow("for (int i = 0; i < 10; i++)")
+            .addStatement("total += i")
+            .endControlFlow()
+            .build()
 
     @Test
     fun simple() {
@@ -19,10 +20,10 @@ class CodeBlockBuilderTest {
             expected,
             buildCodeBlock {
                 appendLine("int total = 0")
-                appendControlFlow("for (int i = 0; i < 10; i++)") {
-                    appendLine("total += i")
-                }
-            }
+                beginControlFlow("for (int i = 0; i < 10; i++)")
+                appendLine("total += i")
+                endControlFlow()
+            },
         )
     }
 

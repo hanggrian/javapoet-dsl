@@ -11,7 +11,7 @@ inline fun classNameOf(fullName: String): ClassName = ClassName.bestGuess(fullNa
 inline fun classNameOf(
     packageName: String,
     simpleName: String,
-    vararg simpleNames: String
+    vararg simpleNames: String,
 ): ClassName = ClassName.get(packageName, simpleName, *simpleNames)
 
 /** Returns a [ClassName] equivalent to [T]. */
