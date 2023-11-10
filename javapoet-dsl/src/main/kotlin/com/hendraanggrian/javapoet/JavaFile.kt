@@ -46,14 +46,10 @@ class JavaFileBuilder(
         }
     }
 
-    fun staticImport(type: Class<*>, vararg names: String): Unit =
-        staticImport(type.asClassName(), *names)
-
-    fun staticImport(type: KClass<*>, vararg names: String): Unit =
-        staticImport(type.asClassName(), *names)
+    fun staticImport(type: KClass<*>, vararg names: String): Unit = staticImport(type.name, *names)
 
     inline fun <reified T> staticImport(vararg names: String): Unit =
-        staticImport(T::class.asClassName(), *names)
+        staticImport(T::class.name, *names)
 
     var skipJavaLangImports: Boolean
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR)

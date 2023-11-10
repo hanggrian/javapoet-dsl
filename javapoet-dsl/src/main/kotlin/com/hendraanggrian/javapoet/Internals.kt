@@ -42,6 +42,3 @@ internal fun <T> String.internalFormat(
     internalFormat(args.values.toTypedArray()) { s, array ->
         action(s, args.keys.zip(array).toMap())
     }
-
-/** Converts array of Kotlin classes to Java classes. */
-internal fun Array<out KClass<*>>.toJavaClasses(): Array<Class<*>> = map { it.java }.toTypedArray()

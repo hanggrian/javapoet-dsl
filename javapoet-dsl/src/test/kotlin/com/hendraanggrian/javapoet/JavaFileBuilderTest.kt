@@ -61,7 +61,6 @@ class JavaFileBuilderTest {
             import static com.hendraanggrian.javapoet.JavaFileBuilderTest.MyEnum.A;
             import static java.lang.String.toDouble;
             import static java.lang.String.toFloat;
-            import static java.lang.String.toInt;
 
             class MyClass {
             }
@@ -70,7 +69,6 @@ class JavaFileBuilderTest {
             buildJavaFile("com.example") {
                 classType("MyClass")
                 staticImport(MyEnum.A)
-                staticImport(String::class.java, "toInt")
                 staticImport(String::class, "toDouble")
                 staticImport<String>("toFloat")
             }.toString(),

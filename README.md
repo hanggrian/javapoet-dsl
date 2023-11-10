@@ -10,18 +10,18 @@ Lightweight Kotlin extension of [JavaPoet](https://github.com/square/javapoet/),
 providing Kotlin DSL functionality and other convenient solutions.
 
 - Full of convenient methods to achieve minimum code writing possible.
-- Options to invoke DSL. For example, `methods.add("main") { ... }` is as good
-  as `methods { "main" { ... } }`. Scroll down for more information.
+- Options to invoke DSL. For example, `method("main") { ... }` is as good as
+  `methods { "main" { ... } }`. Scroll down for more information.
 - Smooth transition, existing JavaPoet native specs can still be configured with
   DSL.
 
 ```kotlin
 buildJavaFile("com.example.helloworld") {
     classType("HelloWorld") {
-        modifiers(Modifier.PUBLIC, Modifier.FINAL)
+        modifiers(PUBLIC, FINAL)
         methods {
             "main" {
-                modifiers(Modifier.PUBLIC, Modifier.STATIC)
+                modifiers(PUBLIC, STATIC)
                 returns = VOID
                 parameter<Array<String>>("args")
                 appendLine("%T.out.println(%S)", System::class, "Hello, JavaPoet!")
@@ -95,11 +95,11 @@ For example, 2 examples below will produce the same result.
 types.addClass("Car") {
     methods {
         "getWheels" {
-            returns = int
+            returns = INT
             appendLine("return wheels")
         }
         "setWheels" {
-            parameter(int, "wheels")
+            parameter(INT, "wheels")
             appendLine("this.wheels = wheels")
         }
     }
@@ -107,11 +107,11 @@ types.addClass("Car") {
 
 types.addClass("Car") {
     method("getWheels") {
-        returns = int
+        returns = INT
         appendLine("return wheels")
     }
     method("setWheels") {
-        parameter(int, "wheels")
+        parameter(INT, "wheels")
         appendLine("this.wheels = wheels")
     }
 }
@@ -123,12 +123,9 @@ In spirit of [Gradle Kotlin DSL](https://docs.gradle.org/current/userguide/kotli
 creating a spec can be done by delegating to a property.
 
 ```kotlin
-val title by buildingParameterSpec(String::class) {
-    annotations.add<NotNull>
-}
-
-val message by parameters.adding(String::class) {
-    annotations.add<Nullable>
+val setWheels by methoding {
+    val wheels by parametering(INT)
+    appendLine("this.wheels = wheels")
 }
 ```
 
@@ -137,18 +134,19 @@ val message by parameters.adding(String::class) {
 Write `TypeName` and all its subtypes fluently.
 
 ```kotlin
-val myClass: ClassName = classOf("com.example", "MyClass")
-val arrayOfString: ArrayTypeName = "java.lang".classOf("String").arrayOf()
-val pairOfInteger: ParameterizedTypeName = "android.util".classOf("Pair").parameterizedBy(Integer::class, Integer::class)
-val tVariable: TypeVariableName = "T".typeVarOf()
-val subtypeOfCharSequence: WildcardTypeName = "java.lang".classOf("CharSequence").subtypeOf()
-```
+val customClass: ClassName =
+    classNamed("com.example", "MyClass")
 
-If you have access to those types, they can also be strongly-typed.
+val arrayOfString: ArrayTypeName =
+    String::class.name.array
 
-```kotlin
-val myClass = com.example.MyClass.asClassName()
-val arrayOfString = arrayTypeNameOf<java.lang.String>()
-val pairOfInteger = parameterizedTypeNameOf<android.util.Pair>(Integer::class, Integer::class)
-val subtypeOfCharSequence = wildcardTypeNameSubtypeOf<java.lang.CharSequence>()
+val pairOfInteger: ParameterizedTypeName =
+    classNamed("android.util", "Pair")
+        .parameterizedBy(Integer::class, Integer::class)
+
+val aGenerics: TypeVariableName =
+    "T".generics
+
+val subtypeOfCharSequence: WildcardTypeName =
+    CharSequence::class.name.subtype
 ```

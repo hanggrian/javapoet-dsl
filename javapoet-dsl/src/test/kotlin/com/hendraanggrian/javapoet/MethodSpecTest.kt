@@ -1,29 +1,32 @@
 package com.hendraanggrian.javapoet
 
 import com.example.Annotation1
+import com.example.Annotation2
+import com.example.Annotation3
 import com.example.Field1
 import com.example.Field2
 import com.example.Field3
 import com.example.Field4
+import com.example.Field5
 import com.google.common.truth.Truth.assertThat
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeVariableName
 import javax.lang.model.element.Modifier
 import kotlin.test.Test
-import kotlin.test.assertEquals
+import kotlin.test.assertFalse
 
 class MethodSpecHandlerTest {
     @Test
     fun method() {
-        val types =
+        assertThat(
             buildClassTypeSpec("test") {
                 method("method1")
                 method("method2") { javadoc.append("text2") }
                 constructorMethod()
                 constructorMethod { javadoc.append("text4") }
-            }
-        assertThat(types.methodSpecs).containsExactly(
+            }.methodSpecs,
+        ).containsExactly(
             MethodSpec.methodBuilder("method1").build(),
             MethodSpec.methodBuilder("method2").addJavadoc("text2").build(),
             MethodSpec.constructorBuilder().build(),
@@ -33,14 +36,27 @@ class MethodSpecHandlerTest {
 
     @Test
     fun methoding() {
-        val types =
+        assertThat(
             buildClassTypeSpec("test") {
                 val method1 by methoding()
                 val method2 by methoding { javadoc.append("text2") }
-            }
-        assertThat(types.methodSpecs).containsExactly(
+            }.methodSpecs,
+        ).containsExactly(
             MethodSpec.methodBuilder("method1").build(),
             MethodSpec.methodBuilder("method2").addJavadoc("text2").build(),
+        )
+    }
+
+    @Test
+    fun invoke() {
+        assertThat(
+            buildClassTypeSpec("test") {
+                methods {
+                    "method1" { javadoc.append("text1") }
+                }
+            }.methodSpecs,
+        ).containsExactly(
+            MethodSpec.methodBuilder("method1").addJavadoc("text1").build(),
         )
     }
 }
@@ -48,32 +64,53 @@ class MethodSpecHandlerTest {
 class MethodSpecBuilderTest {
     @Test
     fun name() {
-        assertEquals(
+        assertThat(
             buildMethodSpec("method1") { name = "method2" },
+        ).isEqualTo(
             MethodSpec.methodBuilder("method1").setName("method2").build(),
         )
     }
 
     @Test
     fun javadoc() {
-        assertEquals(
-            buildMethodSpec("method1") { javadoc.append("some doc") },
-            MethodSpec.methodBuilder("method1").addJavadoc("some doc").build(),
+        assertThat(
+            buildMethodSpec("method1") {
+                javadoc.append("javadoc1")
+                javadoc.append(codeBlockOf("javadoc2"))
+            },
+        ).isEqualTo(
+            MethodSpec.methodBuilder("method1")
+                .addJavadoc("javadoc1")
+                .addJavadoc(CodeBlock.of("javadoc2"))
+                .build(),
         )
     }
 
     @Test
     fun annotations() {
-        assertEquals(
-            buildMethodSpec("method1") { annotation<Annotation1>() },
-            MethodSpec.methodBuilder("method1").addAnnotation(Annotation1::class.java).build(),
+        assertThat(
+            buildMethodSpec("method1") {
+                annotation(Annotation1::class.name)
+                annotation(Annotation2::class)
+                annotation<Annotation3>()
+            },
+        ).isEqualTo(
+            MethodSpec.methodBuilder("method1")
+                .addAnnotation(Annotation1::class.java)
+                .addAnnotation(Annotation2::class.java)
+                .addAnnotation(Annotation3::class.java)
+                .build(),
         )
     }
 
     @Test
-    fun addModifiers() {
-        assertEquals(
-            buildMethodSpec("method1") { modifiers(PUBLIC, FINAL, STATIC) },
+    fun modifiers() {
+        assertThat(
+            buildMethodSpec("method1") {
+                modifiers(PUBLIC, FINAL, STATIC)
+                assertFalse(modifiers.isEmpty())
+            },
+        ).isEqualTo(
             MethodSpec.methodBuilder("method1")
                 .addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
                 .build(),
@@ -82,52 +119,73 @@ class MethodSpecBuilderTest {
 
     @Test
     fun typeVariables() {
-        assertEquals(
+        assertThat(
             buildMethodSpec("method1") {
-                typeVariables.add("typeVar1".genericsBy(Annotation1::class))
+                typeVariables(
+                    listOf(
+                        "typeVar1".genericsBy(Annotation1::class),
+                        "typeVar2".genericsBy(Annotation2::class),
+                    ),
+                )
+                typeVariable("typeVar3".genericsBy(Annotation3::class))
             },
+        ).isEqualTo(
             MethodSpec.methodBuilder("method1")
-                .addTypeVariable(TypeVariableName.get("typeVar1", Annotation1::class.java))
+                .addTypeVariables(
+                    listOf(
+                        TypeVariableName.get("typeVar1", Annotation1::class.java),
+                        TypeVariableName.get("typeVar2", Annotation2::class.java),
+                    ),
+                )
+                .addTypeVariable(TypeVariableName.get("typeVar3", Annotation3::class.java))
                 .build(),
         )
     }
 
     @Test
     fun returns() {
-        assertEquals(
-            buildMethodSpec("method1") { returns = Field1::class.asClassName() },
-            MethodSpec.methodBuilder("method1").returns(Field1::class.asClassName()).build(),
+        assertThat(
+            buildMethodSpec("method1") { returns = Field1::class.name },
+        ).isEqualTo(
+            MethodSpec.methodBuilder("method1").returns(Field1::class.name).build(),
         )
-        assertEquals(
-            buildMethodSpec("method2") { returns(Field2::class.java) },
+        assertThat(
+            buildMethodSpec("method2") { returns(Field2::class) },
+        ).isEqualTo(
             MethodSpec.methodBuilder("method2").returns(Field2::class.java).build(),
         )
-        assertEquals(
-            buildMethodSpec("method3") { returns(Field3::class) },
+        assertThat(
+            buildMethodSpec("method3") { returns<Field3>() },
+        ).isEqualTo(
             MethodSpec.methodBuilder("method3").returns(Field3::class.java).build(),
-        )
-        assertEquals(
-            buildMethodSpec("method4") { returns<Field4>() },
-            MethodSpec.methodBuilder("method4").returns(Field4::class.java).build(),
         )
     }
 
     @Test
     fun parameters() {
-        assertEquals(
-            buildMethodSpec("method1") { parameter<Field1>("parameter1") },
-            MethodSpec.methodBuilder("method1").addParameter(Field1::class.java, "parameter1")
+        assertThat(
+            buildMethodSpec("method1") {
+                parameter(Field1::class.name, "parameter1")
+                parameter(Field2::class.name, "parameter2")
+                parameter<Field3>("parameter3")
+            },
+        ).isEqualTo(
+            MethodSpec.methodBuilder("method1")
+                .addParameter(Field1::class.java, "parameter1")
+                .addParameter(Field2::class.java, "parameter2")
+                .addParameter(Field3::class.java, "parameter3")
                 .build(),
         )
     }
 
     @Test
     fun isVarargs() {
-        assertEquals(
+        assertThat(
             buildMethodSpec("method1") {
                 parameter(Array::class, "args")
                 isVarargs = true
             },
+        ).isEqualTo(
             MethodSpec.methodBuilder("method1")
                 .addParameter(Array::class.java, "args")
                 .varargs()
@@ -137,56 +195,76 @@ class MethodSpecBuilderTest {
 
     @Test
     fun exceptions() {
-        assertEquals(
-            buildMethodSpec("method1") { exception(Field1::class) },
-            MethodSpec.methodBuilder("method1").addException(Field1::class.java).build(),
+        assertThat(
+            buildMethodSpec("method1") {
+                exceptions(
+                    listOf(
+                        Field1::class.name,
+                        Field2::class.name,
+                    ),
+                )
+                exception(Field3::class.name)
+                exception(Field4::class)
+                exception<Field5>()
+            },
+        ).isEqualTo(
+            MethodSpec.methodBuilder("method1")
+                .addExceptions(
+                    listOf(
+                        Field1::class.name,
+                        Field2::class.name,
+                    ),
+                )
+                .addException(Field3::class.java)
+                .addException(Field4::class.java)
+                .addException(Field5::class.java)
+                .build(),
         )
     }
 
     @Test
     fun addComment() {
-        assertEquals(
-            buildMethodSpec("method1") { comment("some comment") },
-            MethodSpec.methodBuilder("method1").addComment("some comment").build(),
-        )
+        assertThat(buildMethodSpec("method1") { comment("some comment") })
+            .isEqualTo(MethodSpec.methodBuilder("method1").addComment("some comment").build())
     }
 
     @Test
     fun defaultValue() {
-        assertEquals(
-            buildMethodSpec("method1") { defaultValue("value1") },
-            MethodSpec.methodBuilder("method1").defaultValue("value1").build(),
-        )
-        assertEquals(
-            buildMethodSpec("method2") { defaultValue = codeBlockOf("value2") },
-            MethodSpec.methodBuilder("method2").defaultValue(CodeBlock.of("value2")).build(),
-        )
+        assertThat(buildMethodSpec("method1") { defaultValue("value1") })
+            .isEqualTo(
+                MethodSpec.methodBuilder("method1")
+                    .defaultValue("value1")
+                    .build(),
+            )
+        assertThat(buildMethodSpec("method2") { defaultValue = codeBlockOf("value2") })
+            .isEqualTo(
+                MethodSpec.methodBuilder("method2")
+                    .defaultValue(CodeBlock.of("value2"))
+                    .build(),
+            )
     }
 
     @Test
     fun append() {
-        assertEquals(
-            buildMethodSpec("method1") { append("some code") },
-            MethodSpec.methodBuilder("method1").addCode("some code").build(),
-        )
+        assertThat(buildMethodSpec("method1") { append("some code") })
+            .isEqualTo(MethodSpec.methodBuilder("method1").addCode("some code").build())
     }
 
     @Test
     fun appendLine() {
-        assertEquals(
-            buildMethodSpec("method1") { appendLine("some code") },
-            MethodSpec.methodBuilder("method1").addStatement("some code").build(),
-        )
+        assertThat(buildMethodSpec("method1") { appendLine("some code") })
+            .isEqualTo(MethodSpec.methodBuilder("method1").addStatement("some code").build())
     }
 
     @Test
     fun controlFlow() {
-        assertEquals(
+        assertThat(
             buildMethodSpec("method1") {
                 beginControlFlow("some code")
                 nextControlFlow("another code")
                 endControlFlow()
             },
+        ).isEqualTo(
             MethodSpec.methodBuilder("method1")
                 .beginControlFlow("some code")
                 .nextControlFlow("another code")

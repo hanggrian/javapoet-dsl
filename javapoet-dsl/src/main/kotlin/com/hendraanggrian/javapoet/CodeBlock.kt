@@ -32,6 +32,12 @@ interface CodeBlockAppendable {
 
     /** Add code block with a new line to this container. */
     fun appendLine(code: CodeBlock)
+
+    /** Convenient method to add code block with operator function. */
+    operator fun plusAssign(value: String): Unit = append(value)
+
+    /** Convenient method to add code block with operator function. */
+    operator fun plusAssign(code: CodeBlock): Unit = append(code)
 }
 
 /** A [JavadocContainer] is responsible for managing a set of code instances. */
@@ -47,12 +53,6 @@ interface JavadocContainer : CodeBlockAppendable {
         append(code)
         appendLine()
     }
-
-    /** Convenient method to add code block with operator function. */
-    operator fun plusAssign(value: String): Unit = append(value)
-
-    /** Convenient method to add code block with operator function. */
-    operator fun plusAssign(code: CodeBlock): Unit = append(code)
 
     /**
      * @see kotlin.text.SystemProperties
@@ -121,18 +121,6 @@ class CodeBlockBuilder(private val nativeBuilder: CodeBlock.Builder) : CodeBlock
 
     fun unindent() {
         nativeBuilder.unindent()
-    }
-
-    fun indent(configuration: () -> Unit) {
-        indent()
-        configuration()
-        unindent()
-    }
-
-    fun indent(level: Int, configuration: () -> Unit) {
-        repeat(level) { indent() }
-        configuration()
-        repeat(level) { unindent() }
     }
 
     fun clear() {

@@ -218,7 +218,7 @@ class GitHubTest {
             buildClassTypeSpec("HelloWorld") {
                 modifiers(PUBLIC, FINAL)
                 method("tomorrow") {
-                    val hoverboard = classNameOf("com.mattel", "Hoverboard")
+                    val hoverboard = classNamed("com.mattel", "Hoverboard")
                     returns = hoverboard
                     appendLine("return new %T()", hoverboard)
                 }
@@ -240,10 +240,10 @@ class GitHubTest {
             buildClassTypeSpec("HelloWorld") {
                 modifiers(PUBLIC, FINAL)
                 method("beyond") {
-                    val hoverboard = classNameOf("com.mattel", "Hoverboard")
-                    val arrayList = classNameOf("java.util", "ArrayList")
+                    val hoverboard = classNamed("com.mattel", "Hoverboard")
+                    val arrayList = classNamed("java.util", "ArrayList")
                     val listOfHoverboards =
-                        classNameOf("java.util", "List")
+                        classNamed("java.util", "List")
                             .parameterizedBy(hoverboard)
                     returns = listOfHoverboards
                     appendLine("%T result = new %T<>()", listOfHoverboards, arrayList)
@@ -279,17 +279,17 @@ class GitHubTest {
 
             """.trimIndent(),
             buildJavaFile("com.example.helloworld") {
-                val hoverboard = classNameOf("com.mattel", "Hoverboard")
-                val namedBoards = classNameOf("com.mattel", "Hoverboard", "Boards")
+                val hoverboard = classNamed("com.mattel", "Hoverboard")
+                val namedBoards = classNamed("com.mattel", "Hoverboard", "Boards")
                 staticImport(hoverboard, "createNimbus")
                 staticImport(namedBoards, "*")
                 staticImport<Collections>("*")
                 classType("HelloWorld") {
                     modifiers(PUBLIC, FINAL)
                     method("beyond") {
-                        val arrayList = classNameOf("java.util", "ArrayList")
+                        val arrayList = classNamed("java.util", "ArrayList")
                         val listOfHoverboards =
-                            classNameOf("java.util", "List")
+                            classNamed("java.util", "List")
                                 .parameterizedBy(hoverboard)
                         returns = listOfHoverboards
                         appendLine("%T result = new %T<>()", listOfHoverboards, arrayList)
@@ -447,7 +447,7 @@ class GitHubTest {
             private final java.lang.String android = "Lollipop v." + 5.0;
 
             """.trimIndent(),
-            buildFieldSpec(String::class.asTypeName(), "android", PRIVATE, FINAL) {
+            buildFieldSpec(String::class.name, "android", PRIVATE, FINAL) {
                 initializer("\"Lollipop v.\" + 5.0")
             }.toString(),
         )
@@ -555,13 +555,13 @@ class GitHubTest {
 
             """.trimIndent(),
             buildMethodSpec("sortByLength") {
-                parameter(List::class.parameterizedBy(String::class), "strings")
+                parameter(List::class.name.parameterizedBy<String>(), "strings")
                 appendLine(
                     "%T.sort(%N, %L)",
                     Collections::class,
                     "strings",
                     buildAnonymousTypeSpec("") {
-                        superinterfaces += Comparator::class.parameterizedBy(String::class)
+                        superinterfaces += Comparator::class.name.parameterizedBy<String>()
                         method("compare") {
                             annotation<Override>()
                             modifiers(PUBLIC)
@@ -593,9 +593,9 @@ class GitHubTest {
                 appendLine("return %S", "Hoverboard")
             }.toString(),
         )
-        val headers = classNameOf("com.example", "Headers")
-        val logRecord = classNameOf("com.example", "LogRecord")
-        val logReceipt = classNameOf("com.example", "LogReceipt")
+        val headers = classNamed("com.example", "Headers")
+        val logRecord = classNamed("com.example", "LogRecord")
+        val logReceipt = classNamed("com.example", "LogReceipt")
         assertEquals(
             """
             @com.example.Headers(
@@ -615,8 +615,8 @@ class GitHubTest {
                 returns = logReceipt
             }.toString(),
         )
-        val header = classNameOf("com.example", "Header")
-        val headerList = classNameOf("com.example", "HeaderList")
+        val header = classNamed("com.example", "Header")
+        val headerList = classNamed("com.example", "HeaderList")
         assertEquals(
             """
             @com.example.HeaderList({
@@ -654,8 +654,8 @@ class GitHubTest {
 
     @Test
     fun `Javadoc`() {
-        val message = classNameOf("com.example", "Message")
-        val conversation = classNameOf("com.example", "Conversation")
+        val message = classNamed("com.example", "Message")
+        val conversation = classNamed("com.example", "Conversation")
         assertEquals(
             """
             /**

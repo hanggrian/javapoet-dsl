@@ -6,7 +6,6 @@ import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.TypeName
-import java.lang.reflect.Type
 import javax.lang.model.element.Modifier
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
@@ -46,28 +45,13 @@ inline fun FieldSpecHandler.field(
  * [configuration].
  */
 inline fun FieldSpecHandler.field(
-    type: Type,
-    name: String,
-    vararg modifiers: Modifier,
-    configuration: FieldSpecBuilder.() -> Unit,
-): FieldSpec {
-    contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    return buildFieldSpec(type.asTypeName(), name, *modifiers, configuration = configuration)
-        .also(fields::add)
-}
-
-/**
- * Inserts new [FieldSpec] by populating newly created [FieldSpecBuilder] using provided
- * [configuration].
- */
-inline fun FieldSpecHandler.field(
     type: KClass<*>,
     name: String,
     vararg modifiers: Modifier,
     configuration: FieldSpecBuilder.() -> Unit,
 ): FieldSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    return buildFieldSpec(type.asTypeName(), name, *modifiers, configuration = configuration)
+    return buildFieldSpec(type.name, name, *modifiers, configuration = configuration)
         .also(fields::add)
 }
 
@@ -91,29 +75,13 @@ fun FieldSpecHandler.fielding(
  * using provided [configuration].
  */
 fun FieldSpecHandler.fielding(
-    type: Type,
-    vararg modifiers: Modifier,
-    configuration: FieldSpecBuilder.() -> Unit,
-): SpecDelegateProvider<FieldSpec> {
-    contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    return SpecDelegateProvider {
-        buildFieldSpec(type.asTypeName(), it, *modifiers, configuration = configuration)
-            .also(fields::add)
-    }
-}
-
-/**
- * Property delegate for inserting new [FieldSpec] by populating newly created [FieldSpecBuilder]
- * using provided [configuration].
- */
-fun FieldSpecHandler.fielding(
     type: KClass<*>,
     vararg modifiers: Modifier,
     configuration: FieldSpecBuilder.() -> Unit,
 ): SpecDelegateProvider<FieldSpec> {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
     return SpecDelegateProvider {
-        buildFieldSpec(type.asTypeName(), it, *modifiers, configuration = configuration)
+        buildFieldSpec(type.name, it, *modifiers, configuration = configuration)
             .also(fields::add)
     }
 }
@@ -127,7 +95,7 @@ inline fun <reified T> FieldSpecHandler.field(
 /** Invokes DSL to configure [FieldSpec] collection. */
 fun FieldSpecHandler.fields(configuration: FieldSpecHandlerScope.() -> Unit) {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    FieldSpecHandlerScope(fields).configuration()
+    FieldSpecHandlerScope(this).configuration()
 }
 
 /** Responsible for managing a set of [FieldSpec] instances. */
@@ -137,16 +105,10 @@ sealed interface FieldSpecHandler {
     fun field(type: TypeName, name: String, vararg modifiers: Modifier): FieldSpec =
         FieldSpec.builder(type, name, *modifiers).build().also(fields::add)
 
-    fun field(type: Type, name: String, vararg modifiers: Modifier): FieldSpec =
-        FieldSpec.builder(type, name, *modifiers).build().also(fields::add)
-
     fun field(type: KClass<*>, name: String, vararg modifiers: Modifier): FieldSpec =
         FieldSpec.builder(type.java, name, *modifiers).build().also(fields::add)
 
     fun fielding(type: TypeName, vararg modifiers: Modifier): SpecDelegateProvider<FieldSpec> =
-        SpecDelegateProvider { FieldSpec.builder(type, it, *modifiers).build().also(fields::add) }
-
-    fun fielding(type: Type, vararg modifiers: Modifier): SpecDelegateProvider<FieldSpec> =
         SpecDelegateProvider { FieldSpec.builder(type, it, *modifiers).build().also(fields::add) }
 
     fun fielding(type: KClass<*>, vararg modifiers: Modifier): SpecDelegateProvider<FieldSpec> =
@@ -158,23 +120,16 @@ sealed interface FieldSpecHandler {
 /** Receiver for the `fields` block providing an extended set of operators for the configuration. */
 @JavapoetSpecDsl
 class FieldSpecHandlerScope internal constructor(
-    actualList: MutableList<FieldSpec>,
-) : MutableList<FieldSpec> by actualList {
+    handler: FieldSpecHandler,
+) : FieldSpecHandler by handler {
     /** @see field */
     operator fun String.invoke(
         type: TypeName,
         vararg modifiers: Modifier,
         configuration: FieldSpecBuilder.() -> Unit,
-    ): FieldSpec = buildFieldSpec(type, this, *modifiers, configuration = configuration).also(::add)
-
-    /** @see field */
-    operator fun String.invoke(
-        type: Type,
-        vararg modifiers: Modifier,
-        configuration: FieldSpecBuilder.() -> Unit,
     ): FieldSpec =
-        buildFieldSpec(type.asTypeName(), this, *modifiers, configuration = configuration)
-            .also(::add)
+        buildFieldSpec(type, this, *modifiers, configuration = configuration)
+            .also(fields::add)
 
     /** @see field */
     operator fun String.invoke(
@@ -182,8 +137,8 @@ class FieldSpecHandlerScope internal constructor(
         vararg modifiers: Modifier,
         configuration: FieldSpecBuilder.() -> Unit,
     ): FieldSpec =
-        buildFieldSpec(type.asTypeName(), this, *modifiers, configuration = configuration)
-            .also(::add)
+        buildFieldSpec(type.name, this, *modifiers, configuration = configuration)
+            .also(fields::add)
 }
 
 /** Wrapper of [FieldSpec.Builder], providing DSL support as a replacement to Java builder. */
@@ -191,7 +146,7 @@ class FieldSpecHandlerScope internal constructor(
 class FieldSpecBuilder(
     private val nativeBuilder: FieldSpec.Builder,
 ) : AnnotationSpecHandler {
-    override val annotations: MutableList<AnnotationSpec> = nativeBuilder.annotations
+    override val annotations: MutableList<AnnotationSpec> get() = nativeBuilder.annotations
     val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
 
     val javadoc: JavadocContainer =

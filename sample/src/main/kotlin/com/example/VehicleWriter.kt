@@ -5,17 +5,16 @@ import com.hendraanggrian.javapoet.INT
 import com.hendraanggrian.javapoet.PUBLIC
 import com.hendraanggrian.javapoet.annotation
 import com.hendraanggrian.javapoet.buildJavaFile
-import com.hendraanggrian.javapoet.classNameOf
+import com.hendraanggrian.javapoet.classNamed
 import com.hendraanggrian.javapoet.classType
 import com.hendraanggrian.javapoet.interfaceType
 import com.hendraanggrian.javapoet.methods
 import java.nio.file.Paths
 
 class VehicleWriter {
-
     companion object {
         private const val PACKAGE_NAME = "com.example.output"
-        private val VEHICLE_NAME = classNameOf(PACKAGE_NAME, "Vehicle")
+        private const val SOURCE_PATH = "sample/src/main/kotlin"
 
         @JvmStatic
         fun main(args: Array<String>) {
@@ -40,13 +39,13 @@ class VehicleWriter {
                     }
                 }
             }
-        }.writeTo(Paths.get("sample/src"))
+        }.writeTo(Paths.get(SOURCE_PATH))
     }
 
     fun write(name: String, wheelCount: Int) {
         buildJavaFile(PACKAGE_NAME) {
             classType(name) {
-                superinterfaces += VEHICLE_NAME
+                superinterfaces += classNamed(PACKAGE_NAME, "Vehicle")
                 methods {
                     "getName" {
                         modifiers(PUBLIC)
@@ -62,6 +61,6 @@ class VehicleWriter {
                     }
                 }
             }
-        }.writeTo(Paths.get("sample/src"))
+        }.writeTo(Paths.get(SOURCE_PATH))
     }
 }

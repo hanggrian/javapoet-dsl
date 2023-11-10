@@ -9,7 +9,6 @@ import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeSpec
 import com.squareup.javapoet.TypeVariableName
-import java.lang.reflect.Type
 import javax.lang.model.element.Element
 import javax.lang.model.element.Modifier
 import javax.lang.model.element.TypeElement
@@ -198,7 +197,7 @@ fun TypeSpecHandler.annotationTyping(
 /** Invokes DSL to configure [TypeSpec] collection. */
 fun TypeSpecHandler.types(configuration: TypeSpecHandlerScope.() -> Unit) {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    TypeSpecHandlerScope(types).configuration()
+    TypeSpecHandlerScope(this).configuration()
 }
 
 /** Responsible for managing a set of [TypeSpec] instances. */
@@ -240,23 +239,27 @@ sealed interface TypeSpecHandler {
 
 /** Receiver for the `types` block providing an extended set of operators for the configuration. */
 @JavapoetSpecDsl
-class TypeSpecHandlerScope(
-    actualList: MutableList<TypeSpec>,
-) : MutableList<TypeSpec> by actualList
+class TypeSpecHandlerScope internal constructor(
+    handler: TypeSpecHandler,
+) : TypeSpecHandler by handler {
+    /** @see classType */
+    operator fun String.invoke(configuration: TypeSpecBuilder.() -> Unit): TypeSpec =
+        buildClassTypeSpec(this, configuration).also(types::add)
+}
 
 /** Wrapper of [TypeSpec.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetSpecDsl
 class TypeSpecBuilder(
     private val nativeBuilder: TypeSpec.Builder,
 ) : AnnotationSpecHandler, FieldSpecHandler, MethodSpecHandler, TypeSpecHandler {
-    override val annotations: MutableList<AnnotationSpec> = nativeBuilder.annotations
+    override val annotations: MutableList<AnnotationSpec> get() = nativeBuilder.annotations
     val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
-    val typeVariables: MutableList<TypeVariableName> = nativeBuilder.typeVariables
-    val superinterfaces: MutableList<TypeName> = nativeBuilder.superinterfaces
-    val enumConstants: MutableMap<String, TypeSpec> = nativeBuilder.enumConstants
-    override val fields: MutableList<FieldSpec> = nativeBuilder.fieldSpecs
-    override val methods: MutableList<MethodSpec> = nativeBuilder.methodSpecs
-    override val types: MutableList<TypeSpec> = nativeBuilder.typeSpecs
+    val typeVariables: MutableList<TypeVariableName> get() = nativeBuilder.typeVariables
+    val superinterfaces: MutableList<TypeName> get() = nativeBuilder.superinterfaces
+    val enumConstants: MutableMap<String, TypeSpec> get() = nativeBuilder.enumConstants
+    override val fields: MutableList<FieldSpec> get() = nativeBuilder.fieldSpecs
+    override val methods: MutableList<MethodSpec> get() = nativeBuilder.methodSpecs
+    override val types: MutableList<TypeSpec> get() = nativeBuilder.typeSpecs
     val originatingElements: MutableList<Element> get() = nativeBuilder.originatingElements
     val alwaysQualifiedNames: MutableSet<String> get() = nativeBuilder.alwaysQualifiedNames
 
@@ -291,10 +294,6 @@ class TypeSpecBuilder(
             nativeBuilder.superclass(value)
         }
 
-    fun superclass(type: Type) {
-        nativeBuilder.superclass(type)
-    }
-
     fun superclass(type: KClass<*>) {
         nativeBuilder.superclass(type.java)
     }
@@ -306,10 +305,6 @@ class TypeSpecBuilder(
     }
 
     fun superinterface(superinterface: TypeName) {
-        nativeBuilder.addSuperinterface(superinterface)
-    }
-
-    fun superinterface(superinterface: Type) {
         nativeBuilder.addSuperinterface(superinterface)
     }
 
@@ -357,10 +352,6 @@ class TypeSpecBuilder(
 
     fun avoidClashesWithNestedClasses(typeElement: TypeElement) {
         nativeBuilder.avoidClashesWithNestedClasses(typeElement)
-    }
-
-    fun avoidClashesWithNestedClasses(type: Class<*>) {
-        nativeBuilder.avoidClashesWithNestedClasses(type)
     }
 
     fun avoidClashesWithNestedClasses(type: KClass<*>) {

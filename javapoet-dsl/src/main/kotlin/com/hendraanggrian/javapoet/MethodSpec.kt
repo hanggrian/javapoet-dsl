@@ -8,7 +8,6 @@ import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.ParameterSpec
 import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeVariableName
-import java.lang.reflect.Type
 import javax.lang.model.element.Modifier
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
@@ -70,7 +69,7 @@ fun MethodSpecHandler.methoding(
 /** Invokes DSL to configure [MethodSpec] collection. */
 fun MethodSpecHandler.methods(configuration: MethodSpecHandlerScope.() -> Unit) {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    MethodSpecHandlerScope(methods).configuration()
+    MethodSpecHandlerScope(this).configuration()
 }
 
 /** Responsible for managing a set of [MethodSpec] instances. */
@@ -91,11 +90,11 @@ sealed interface MethodSpecHandler {
  */
 @JavapoetSpecDsl
 class MethodSpecHandlerScope internal constructor(
-    actualList: MutableList<MethodSpec>,
-) : MutableList<MethodSpec> by actualList {
+    handler: MethodSpecHandler,
+) : MethodSpecHandler by handler {
     /** @see method */
     operator fun String.invoke(configuration: MethodSpecBuilder.() -> Unit): MethodSpec =
-        buildMethodSpec(this, configuration).also(::add)
+        buildMethodSpec(this, configuration).also(methods::add)
 }
 
 /** Wrapper of [MethodSpec.Builder], providing DSL support as a replacement to Java builder. */
@@ -103,10 +102,10 @@ class MethodSpecHandlerScope internal constructor(
 class MethodSpecBuilder(
     private val nativeBuilder: MethodSpec.Builder,
 ) : AnnotationSpecHandler, ParameterSpecHandler {
-    override val annotations: MutableList<AnnotationSpec> = nativeBuilder.annotations
+    override val annotations: MutableList<AnnotationSpec> get() = nativeBuilder.annotations
     val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
-    val typeVariables: MutableList<TypeVariableName> = nativeBuilder.typeVariables
-    override val parameters: MutableList<ParameterSpec> = nativeBuilder.parameters
+    val typeVariables: MutableList<TypeVariableName> get() = nativeBuilder.typeVariables
+    override val parameters: MutableList<ParameterSpec> get() = nativeBuilder.parameters
 
     var name: String
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR)
@@ -131,16 +130,20 @@ class MethodSpecBuilder(
         nativeBuilder.addModifiers(*modifiers)
     }
 
+    fun typeVariables(typeVariables: Iterable<TypeVariableName>) {
+        nativeBuilder.addTypeVariables(typeVariables)
+    }
+
+    fun typeVariable(typeVariable: TypeVariableName) {
+        nativeBuilder.addTypeVariable(typeVariable)
+    }
+
     var returns: TypeName
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR)
         get() = noGetter()
         set(value) {
             nativeBuilder.returns(value)
         }
-
-    fun returns(type: Type) {
-        nativeBuilder.returns(type)
-    }
 
     fun returns(type: KClass<*>) {
         nativeBuilder.returns(type.java)
@@ -163,13 +166,11 @@ class MethodSpecBuilder(
         nativeBuilder.addException(exception)
     }
 
-    fun exception(exception: Type) {
-        nativeBuilder.addException(exception)
-    }
-
     fun exception(exception: KClass<*>) {
         nativeBuilder.addException(exception.java)
     }
+
+    inline fun <reified T> exception(): Unit = exception(T::class)
 
     fun append(format: String, vararg args: Any): Unit =
         format.internalFormat(args) { format2, args2 -> nativeBuilder.addCode(format2, *args2) }
