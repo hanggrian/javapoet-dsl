@@ -31,7 +31,7 @@ class TypeSpecHandlerTest {
         )
         assertThat(
             buildJavaFile("com.example") {
-                classType("Class2") { javadoc.append("text2") }
+                classType("Class2") { javadoc("text2") }
             }.typeSpec,
         ).isEqualTo(
             TypeSpec.classBuilder("Class2").addJavadoc("text2").build(),
@@ -49,7 +49,7 @@ class TypeSpecHandlerTest {
         )
         assertThat(
             buildJavaFile("com.example") {
-                interfaceType("Interface2") { javadoc.append("text2") }
+                interfaceType("Interface2") { javadoc("text2") }
             }.typeSpec,
         ).isEqualTo(
             TypeSpec.interfaceBuilder("Interface2").addJavadoc("text2").build(),
@@ -85,7 +85,7 @@ class TypeSpecHandlerTest {
         )
         assertThat(
             buildJavaFile("com.example") {
-                anonymousType("Anonymous2") { javadoc.append("text2") }
+                anonymousType("Anonymous2") { javadoc("text2") }
             }.typeSpec,
         ).isEqualTo(
             TypeSpec.anonymousClassBuilder("Anonymous2").addJavadoc("text2").build(),
@@ -103,7 +103,7 @@ class TypeSpecHandlerTest {
         )
         assertThat(
             buildJavaFile("com.example") {
-                annotationType("Annotation2") { javadoc.append("text2") }
+                annotationType("Annotation2") { javadoc("text2") }
             }.typeSpec,
         ).isEqualTo(
             TypeSpec.annotationBuilder("Annotation2").addJavadoc("text2").build(),
@@ -121,7 +121,7 @@ class TypeSpecHandlerTest {
         )
         assertThat(
             buildJavaFile("com.example") {
-                val Class2 by classTyping { javadoc.append("text2") }
+                val Class2 by classTyping { javadoc("text2") }
             }.typeSpec,
         ).isEqualTo(
             TypeSpec.classBuilder("Class2").addJavadoc("text2").build(),
@@ -139,7 +139,7 @@ class TypeSpecHandlerTest {
         )
         assertThat(
             buildJavaFile("com.example") {
-                val Interface2 by interfaceTyping { javadoc.append("text2") }
+                val Interface2 by interfaceTyping { javadoc("text2") }
             }.typeSpec,
         ).isEqualTo(
             TypeSpec.interfaceBuilder("Interface2").addJavadoc("text2").build(),
@@ -175,7 +175,7 @@ class TypeSpecHandlerTest {
         )
         assertThat(
             buildJavaFile("com.example") {
-                val Anonymous2 by anonymousTyping { javadoc.append("text2") }
+                val Anonymous2 by anonymousTyping { javadoc("text2") }
             }.typeSpec,
         ).isEqualTo(
             TypeSpec.anonymousClassBuilder("Anonymous2").addJavadoc("text2").build(),
@@ -193,7 +193,7 @@ class TypeSpecHandlerTest {
         )
         assertThat(
             buildJavaFile("com.example") {
-                val Annotation2 by annotationTyping { javadoc.append("text2") }
+                val Annotation2 by annotationTyping { javadoc("text2") }
             }.typeSpec,
         ).isEqualTo(
             TypeSpec.annotationBuilder("Annotation2").addJavadoc("text2").build(),
@@ -206,8 +206,8 @@ class TypeSpecHandlerTest {
             buildJavaFile("com.example") {
                 classType("OuterClass") {
                     types {
-                        "Class1" { javadoc.append("text1") }
-                        "Class2" { javadoc.append("text2") }
+                        "Class1" { javadoc("text1") }
+                        "Class2" { javadoc("text2") }
                     }
                 }
             }.typeSpec,
@@ -235,8 +235,8 @@ class TypeSpecBuilderTest {
     fun javadoc() {
         assertThat(
             buildClassTypeSpec("class1") {
-                javadoc.append("javadoc1")
-                javadoc.append(codeBlockOf("javadoc2"))
+                javadoc("javadoc1")
+                javadoc(codeBlockOf("javadoc2"))
             },
         ).isEqualTo(
             TypeSpec.classBuilder("class1")
@@ -247,12 +247,13 @@ class TypeSpecBuilderTest {
     }
 
     @Test
-    fun annotations() {
+    fun annotation() {
         assertThat(
             buildClassTypeSpec("class1") {
                 annotation(Annotation1::class.name)
                 annotation(Annotation2::class)
                 annotation<Annotation3>()
+                assertFalse(annotations.isEmpty())
             },
         ).isEqualTo(
             TypeSpec.classBuilder("class1")
@@ -264,7 +265,7 @@ class TypeSpecBuilderTest {
     }
 
     @Test
-    fun modifiers() {
+    fun modifier() {
         assertThat(
             buildClassTypeSpec("class1") {
                 modifiers(PUBLIC, FINAL, STATIC)
@@ -278,7 +279,7 @@ class TypeSpecBuilderTest {
     }
 
     @Test
-    fun typeVariables() {
+    fun typeVariable() {
         assertThat(
             buildClassTypeSpec("class1") {
                 typeVariables(
@@ -344,7 +345,7 @@ class TypeSpecBuilderTest {
     }
 
     @Test
-    fun enumConstants() {
+    fun enumConstant() {
         assertThat(
             buildEnumTypeSpec("class1") { enumConstant("VALUE") },
         ).isEqualTo(
@@ -353,11 +354,20 @@ class TypeSpecBuilderTest {
     }
 
     @Test
-    fun fields() {
+    fun field() {
         assertThat(
-            buildClassTypeSpec("class1") { field<Field1>("field1") },
+            buildClassTypeSpec("class1") {
+                field(Field1::class.name, "field1")
+                field(Field2::class, "field2")
+                field<Field3>("field3")
+                assertFalse(fields.isEmpty())
+            },
         ).isEqualTo(
-            TypeSpec.classBuilder("class1").addField(Field1::class.java, "field1").build(),
+            TypeSpec.classBuilder("class1")
+                .addField(Field1::class.java, "field1")
+                .addField(Field2::class.java, "field2")
+                .addField(Field3::class.java, "field3")
+                .build(),
         )
     }
 
@@ -390,20 +400,28 @@ class TypeSpecBuilderTest {
     }
 
     @Test
-    fun methods() {
+    fun method() {
         assertThat(
-            buildClassTypeSpec("class1") { method("method1") },
+            buildClassTypeSpec("class1") {
+                method("method1")
+                constructorMethod()
+                assertFalse(methods.isEmpty())
+            },
         ).isEqualTo(
             TypeSpec.classBuilder("class1")
                 .addMethod(MethodSpec.methodBuilder("method1").build())
+                .addMethod(MethodSpec.constructorBuilder().build())
                 .build(),
         )
     }
 
     @Test
-    fun types() {
+    fun type() {
         assertThat(
-            buildClassTypeSpec("class1") { classType("class2") },
+            buildClassTypeSpec("class1") {
+                classType("class2")
+                assertFalse(types.isEmpty())
+            },
         ).isEqualTo(
             TypeSpec.classBuilder("class1")
                 .addType(TypeSpec.classBuilder("class2").build())

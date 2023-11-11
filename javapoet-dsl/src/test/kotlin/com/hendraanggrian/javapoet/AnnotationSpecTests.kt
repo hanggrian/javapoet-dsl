@@ -15,7 +15,7 @@ class AnnotationSpecHandlerTest {
     @Test
     fun annotation() {
         assertThat(
-            buildFieldSpec(String::class.name, "test") {
+            buildFieldSpec(STRING, "test") {
                 annotation(Annotation1::class.name)
                 annotation(Annotation2::class)
                 annotation<Annotation3>()
@@ -34,7 +34,7 @@ class AnnotationSpecHandlerTest {
     @Test
     fun invoke() {
         assertThat(
-            buildFieldSpec(String::class.name, "test") {
+            buildFieldSpec(STRING, "test") {
                 annotations {
                     Annotation1::class.name { member("name1", "value1") }
                     Annotation2::class { member("name2", "value2") }

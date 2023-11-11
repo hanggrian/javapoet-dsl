@@ -73,8 +73,8 @@ class FieldSpecBuilderTest {
     fun javadoc() {
         assertThat(
             buildFieldSpec(Field1::class.name, "field1") {
-                javadoc.append("javadoc1")
-                javadoc.append(codeBlockOf("javadoc2"))
+                javadoc("javadoc1")
+                javadoc(codeBlockOf("javadoc2"))
             },
         ).isEqualTo(
             FieldSpec.builder(Field1::class.java, "field1")
@@ -85,12 +85,13 @@ class FieldSpecBuilderTest {
     }
 
     @Test
-    fun annotations() {
+    fun annotation() {
         assertThat(
             buildFieldSpec(Field1::class.name, "field1") {
                 annotation(Annotation1::class.name)
                 annotation(Annotation2::class)
                 annotation<Annotation3>()
+                assertFalse(annotations.isEmpty())
             },
         ).isEqualTo(
             FieldSpec.builder(Field1::class.java, "field1")

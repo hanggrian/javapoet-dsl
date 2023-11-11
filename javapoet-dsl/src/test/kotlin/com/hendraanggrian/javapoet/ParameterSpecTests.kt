@@ -21,9 +21,9 @@ class ParameterSpecHandlerTest {
         assertThat(
             buildMethodSpec("test") {
                 parameter(Parameter1::class.name, "parameter1")
-                parameter(Parameter2::class.name, "parameter2") { javadoc.append("text2") }
+                parameter(Parameter2::class.name, "parameter2") { javadoc("text2") }
                 parameter(Parameter3::class, "parameter3")
-                parameter(Parameter4::class, "parameter4") { javadoc.append("text4`") }
+                parameter(Parameter4::class, "parameter4") { javadoc("text4`") }
                 parameter<Parameter5>("parameter5")
             }.parameters,
         ).containsExactly(
@@ -40,9 +40,9 @@ class ParameterSpecHandlerTest {
         assertThat(
             buildMethodSpec("test") {
                 val parameter1 by parametering(Parameter1::class.name)
-                val parameter2 by parametering(Parameter2::class.name) { javadoc.append("text2") }
+                val parameter2 by parametering(Parameter2::class.name) { javadoc("text2") }
                 val parameter3 by parametering(Parameter3::class)
-                val parameter4 by parametering(Parameter4::class) { javadoc.append("text4") }
+                val parameter4 by parametering(Parameter4::class) { javadoc("text4") }
             }.parameters,
         ).containsExactly(
             ParameterSpec.builder(Parameter1::class.java, "parameter1").build(),
@@ -57,8 +57,8 @@ class ParameterSpecHandlerTest {
         assertThat(
             buildMethodSpec("test") {
                 parameters {
-                    "parameter1"(Parameter1::class.name) { javadoc.append("text1") }
-                    "parameter2"(Parameter2::class) { javadoc.append("text2") }
+                    "parameter1"(Parameter1::class.name) { javadoc("text1") }
+                    "parameter2"(Parameter2::class) { javadoc("text2") }
                 }
             }.parameters,
         ).containsExactly(
@@ -73,8 +73,8 @@ class ParameterSpecBuilderTest {
     fun javadoc() {
         assertThat(
             buildParameterSpec(Field1::class.name, "parameter1") {
-                javadoc.append("javadoc1")
-                javadoc.append(codeBlockOf("javadoc2"))
+                javadoc("javadoc1")
+                javadoc(codeBlockOf("javadoc2"))
             },
         ).isEqualTo(
             ParameterSpec.builder(Field1::class.java, "parameter1")
@@ -85,12 +85,13 @@ class ParameterSpecBuilderTest {
     }
 
     @Test
-    fun annotations() {
+    fun annotation() {
         assertThat(
             buildParameterSpec(Field1::class.name, "parameter1") {
                 annotation(Annotation1::class.name)
                 annotation(Annotation2::class)
                 annotation<Annotation3>()
+                assertFalse(annotations.isEmpty())
             },
         ).isEqualTo(
             ParameterSpec.builder(Field1::class.java, "parameter1")

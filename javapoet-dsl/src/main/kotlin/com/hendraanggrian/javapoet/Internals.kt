@@ -2,13 +2,10 @@ package com.hendraanggrian.javapoet
 
 import kotlin.reflect.KClass
 
-/** Field deprecation message. */
 internal const val NO_GETTER: String = "Property does not have a getter"
 
-/** Some mutable backing fields are only used to set value. */
 internal fun noGetter(): Nothing = throw UnsupportedOperationException(NO_GETTER)
 
-/** Converts JavaPoet standard [format] and [args] to KotlinPoet. */
 internal fun <T> String.internalFormat(
     args: Array<*>,
     action: (format2: String, args2: Array<*>) -> T,
@@ -34,7 +31,6 @@ internal fun <T> String.internalFormat(
     return action(s, args.map { (it as? KClass<*>)?.java ?: it }.toTypedArray())
 }
 
-/** Converts JavaPoet standard [format] and [args] to KotlinPoet. */
 internal fun <T> String.internalFormat(
     args: Map<String, *>,
     action: (format2: String, args2: Map<String, *>) -> T,

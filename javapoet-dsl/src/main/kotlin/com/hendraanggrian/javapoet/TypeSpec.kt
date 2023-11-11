@@ -85,7 +85,7 @@ inline fun TypeSpecHandler.classType(
     configuration: TypeSpecBuilder.() -> Unit,
 ): TypeSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    return buildClassTypeSpec(name, configuration).also(types::add)
+    return buildClassTypeSpec(name, configuration).also(::type)
 }
 
 /**
@@ -97,7 +97,7 @@ inline fun TypeSpecHandler.interfaceType(
     configuration: TypeSpecBuilder.() -> Unit,
 ): TypeSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    return buildInterfaceTypeSpec(name, configuration).also(types::add)
+    return buildInterfaceTypeSpec(name, configuration).also(::type)
 }
 
 /**
@@ -109,7 +109,7 @@ inline fun TypeSpecHandler.enumType(
     configuration: TypeSpecBuilder.() -> Unit,
 ): TypeSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    return buildEnumTypeSpec(name, configuration).also(types::add)
+    return buildEnumTypeSpec(name, configuration).also(::type)
 }
 
 /**
@@ -122,7 +122,7 @@ fun TypeSpecHandler.anonymousType(
     configuration: TypeSpecBuilder.() -> Unit,
 ): TypeSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    return buildAnonymousTypeSpec(format, *args, configuration = configuration).also(types::add)
+    return buildAnonymousTypeSpec(format, *args, configuration = configuration).also(::type)
 }
 
 /**
@@ -134,7 +134,7 @@ inline fun TypeSpecHandler.annotationType(
     configuration: TypeSpecBuilder.() -> Unit,
 ): TypeSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    return buildAnnotationTypeSpec(name, configuration).also(types::add)
+    return buildAnnotationTypeSpec(name, configuration).also(::type)
 }
 
 /**
@@ -145,7 +145,7 @@ fun TypeSpecHandler.classTyping(
     configuration: TypeSpecBuilder.() -> Unit,
 ): SpecDelegateProvider<TypeSpec> {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    return SpecDelegateProvider { buildClassTypeSpec(it, configuration).also(types::add) }
+    return SpecDelegateProvider { buildClassTypeSpec(it, configuration).also(::type) }
 }
 
 /**
@@ -156,7 +156,7 @@ fun TypeSpecHandler.interfaceTyping(
     configuration: TypeSpecBuilder.() -> Unit,
 ): SpecDelegateProvider<TypeSpec> {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    return SpecDelegateProvider { buildInterfaceTypeSpec(it, configuration).also(types::add) }
+    return SpecDelegateProvider { buildInterfaceTypeSpec(it, configuration).also(::type) }
 }
 
 /**
@@ -167,7 +167,7 @@ fun TypeSpecHandler.enumTyping(
     configuration: TypeSpecBuilder.() -> Unit,
 ): SpecDelegateProvider<TypeSpec> {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    return SpecDelegateProvider { buildEnumTypeSpec(it, configuration).also(types::add) }
+    return SpecDelegateProvider { buildEnumTypeSpec(it, configuration).also(::type) }
 }
 
 /**
@@ -179,7 +179,7 @@ fun TypeSpecHandler.anonymousTyping(
 ): SpecDelegateProvider<TypeSpec> {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
     return SpecDelegateProvider {
-        buildAnonymousTypeSpec(it, configuration = configuration).also(types::add)
+        buildAnonymousTypeSpec(it, configuration = configuration).also(::type)
     }
 }
 
@@ -191,7 +191,7 @@ fun TypeSpecHandler.annotationTyping(
     configuration: TypeSpecBuilder.() -> Unit,
 ): SpecDelegateProvider<TypeSpec> {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    return SpecDelegateProvider { buildAnnotationTypeSpec(it, configuration).also(types::add) }
+    return SpecDelegateProvider { buildAnnotationTypeSpec(it, configuration).also(::type) }
 }
 
 /** Invokes DSL to configure [TypeSpec] collection. */
@@ -202,78 +202,78 @@ fun TypeSpecHandler.types(configuration: TypeSpecHandlerScope.() -> Unit) {
 
 /** Responsible for managing a set of [TypeSpec] instances. */
 sealed interface TypeSpecHandler {
-    val types: MutableList<TypeSpec>
+    fun type(type: TypeSpec)
 
-    fun classType(name: String): TypeSpec = TypeSpec.classBuilder(name).build().also(types::add)
+    fun classType(name: String): TypeSpec = TypeSpec.classBuilder(name).build().also(::type)
 
-    fun interfaceType(name: String): TypeSpec =
-        TypeSpec.interfaceBuilder(name).build().also(types::add)
+    fun interfaceType(name: String): TypeSpec = TypeSpec.interfaceBuilder(name).build().also(::type)
 
-    fun enumType(name: String): TypeSpec = TypeSpec.enumBuilder(name).build().also(types::add)
+    fun enumType(name: String): TypeSpec = TypeSpec.enumBuilder(name).build().also(::type)
 
     fun anonymousType(format: String, vararg args: Any): TypeSpec =
         format.internalFormat(args) { format2, args2 ->
             TypeSpecBuilder(TypeSpec.anonymousClassBuilder(format2, *args2))
                 .build()
-                .also(types::add)
+                .also(::type)
         }
 
     fun annotationType(name: String): TypeSpec =
-        TypeSpec.annotationBuilder(name).build().also(types::add)
+        TypeSpec.annotationBuilder(name).build().also(::type)
 
     fun classTyping(): SpecDelegateProvider<TypeSpec> =
-        SpecDelegateProvider { TypeSpec.classBuilder(it).build().also(types::add) }
+        SpecDelegateProvider { TypeSpec.classBuilder(it).build().also(::type) }
 
     fun interfaceTyping(): SpecDelegateProvider<TypeSpec> =
-        SpecDelegateProvider { TypeSpec.interfaceBuilder(it).build().also(types::add) }
+        SpecDelegateProvider { TypeSpec.interfaceBuilder(it).build().also(::type) }
 
     fun enumTyping(): SpecDelegateProvider<TypeSpec> =
-        SpecDelegateProvider { TypeSpec.enumBuilder(it).build().also(types::add) }
+        SpecDelegateProvider { TypeSpec.enumBuilder(it).build().also(::type) }
 
     fun anonymousTyping(): SpecDelegateProvider<TypeSpec> =
-        SpecDelegateProvider { TypeSpec.anonymousClassBuilder(it).build().also(types::add) }
+        SpecDelegateProvider { TypeSpec.anonymousClassBuilder(it).build().also(::type) }
 
     fun annotationTyping(): SpecDelegateProvider<TypeSpec> =
-        SpecDelegateProvider { TypeSpec.annotationBuilder(it).build().also(types::add) }
+        SpecDelegateProvider { TypeSpec.annotationBuilder(it).build().also(::type) }
 }
 
 /** Receiver for the `types` block providing an extended set of operators for the configuration. */
-@JavapoetSpecDsl
+@JavapoetDsl
 class TypeSpecHandlerScope internal constructor(
     handler: TypeSpecHandler,
 ) : TypeSpecHandler by handler {
     /** @see classType */
     operator fun String.invoke(configuration: TypeSpecBuilder.() -> Unit): TypeSpec =
-        buildClassTypeSpec(this, configuration).also(types::add)
+        buildClassTypeSpec(this, configuration).also(::type)
 }
 
 /** Wrapper of [TypeSpec.Builder], providing DSL support as a replacement to Java builder. */
-@JavapoetSpecDsl
+@JavapoetDsl
 class TypeSpecBuilder(
     private val nativeBuilder: TypeSpec.Builder,
 ) : AnnotationSpecHandler, FieldSpecHandler, MethodSpecHandler, TypeSpecHandler {
-    override val annotations: MutableList<AnnotationSpec> get() = nativeBuilder.annotations
+    val annotations: MutableList<AnnotationSpec> get() = nativeBuilder.annotations
     val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
     val typeVariables: MutableList<TypeVariableName> get() = nativeBuilder.typeVariables
     val superinterfaces: MutableList<TypeName> get() = nativeBuilder.superinterfaces
     val enumConstants: MutableMap<String, TypeSpec> get() = nativeBuilder.enumConstants
-    override val fields: MutableList<FieldSpec> get() = nativeBuilder.fieldSpecs
-    override val methods: MutableList<MethodSpec> get() = nativeBuilder.methodSpecs
-    override val types: MutableList<TypeSpec> get() = nativeBuilder.typeSpecs
+    val fields: MutableList<FieldSpec> get() = nativeBuilder.fieldSpecs
+    val methods: MutableList<MethodSpec> get() = nativeBuilder.methodSpecs
+    val types: MutableList<TypeSpec> get() = nativeBuilder.typeSpecs
     val originatingElements: MutableList<Element> get() = nativeBuilder.originatingElements
     val alwaysQualifiedNames: MutableSet<String> get() = nativeBuilder.alwaysQualifiedNames
 
-    val javadoc: JavadocContainer =
-        object : JavadocContainer {
-            override fun append(format: String, vararg args: Any): Unit =
-                format.internalFormat(args) { format2, args2 ->
-                    nativeBuilder.addJavadoc(format2, *args2)
-                }
-
-            override fun append(code: CodeBlock) {
-                nativeBuilder.addJavadoc(code)
-            }
+    fun javadoc(format: String, vararg args: Any): Unit =
+        format.internalFormat(args) { format2, args2 ->
+            nativeBuilder.addJavadoc(format2, *args2)
         }
+
+    fun javadoc(block: CodeBlock) {
+        nativeBuilder.addJavadoc(block)
+    }
+
+    override fun annotation(annotation: AnnotationSpec) {
+        nativeBuilder.addAnnotation(annotation)
+    }
 
     fun modifiers(vararg modifiers: Modifier) {
         nativeBuilder.addModifiers(*modifiers)
@@ -318,12 +318,12 @@ class TypeSpecBuilder(
         nativeBuilder.addSuperinterface(superinterface, avoidNestedTypeNameClashes)
     }
 
-    fun enumConstant(name: String) {
-        nativeBuilder.addEnumConstant(name)
+    fun enumConstant(name: String, spec: TypeSpec = TypeSpec.anonymousClassBuilder("").build()) {
+        nativeBuilder.addEnumConstant(name, spec)
     }
 
-    fun enumConstant(name: String, spec: TypeSpec) {
-        nativeBuilder.addEnumConstant(name, spec)
+    override fun field(field: FieldSpec) {
+        nativeBuilder.addField(field)
     }
 
     fun staticBlock(code: CodeBlock) {
@@ -340,6 +340,14 @@ class TypeSpecBuilder(
 
     fun initializerBlock(format: String, vararg args: Any) {
         nativeBuilder.addInitializerBlock(codeBlockOf(format, *args))
+    }
+
+    override fun method(method: MethodSpec) {
+        nativeBuilder.addMethod(method)
+    }
+
+    override fun type(type: TypeSpec) {
+        nativeBuilder.addType(type)
     }
 
     fun originatingElement(originatingElement: Element) {

@@ -17,7 +17,18 @@ val LONG: TypeName = TypeName.LONG
 val CHAR: TypeName = TypeName.CHAR
 val FLOAT: TypeName = TypeName.FLOAT
 val DOUBLE: TypeName = TypeName.DOUBLE
-val OBJECT: TypeName = TypeName.OBJECT
+val OBJECT: ClassName = TypeName.OBJECT
+
+val STRING: ClassName = classNamed("java.lang", "String")
+val CHAR_SEQUENCE: ClassName = classNamed("java.lang", "CharSequence")
+val COMPARABLE: ClassName = classNamed("java.lang", "Comparable")
+val THROWABLE: ClassName = classNamed("java.lang", "Throwable")
+val ANNOTATION: ClassName = classNamed("java.lang", "Annotation")
+val ITERABLE: ClassName = classNamed("java.lang", "Iterable")
+val COLLECTION: ClassName = classNamed("java.util", "Collection")
+val LIST: ClassName = classNamed("java.util", "List")
+val SET: ClassName = classNamed("java.util", "Set")
+val MAP: ClassName = classNamed("java.util", "Map")
 
 inline val KClass<*>.name: ClassName get() = ClassName.get(java)
 

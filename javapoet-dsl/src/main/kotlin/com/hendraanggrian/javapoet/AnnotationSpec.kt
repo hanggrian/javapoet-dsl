@@ -31,7 +31,7 @@ inline fun AnnotationSpecHandler.annotation(
     configuration: AnnotationSpecBuilder.() -> Unit,
 ): AnnotationSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    return buildAnnotationSpec(type, configuration).also(annotations::add)
+    return buildAnnotationSpec(type, configuration).also(::annotation)
 }
 
 /**
@@ -43,12 +43,12 @@ inline fun AnnotationSpecHandler.annotation(
     configuration: AnnotationSpecBuilder.() -> Unit,
 ): AnnotationSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    return buildAnnotationSpec(type.name, configuration).also(annotations::add)
+    return buildAnnotationSpec(type.name, configuration).also(::annotation)
 }
 
 /** Convenient method to insert [AnnotationSpec] using reified type. */
 inline fun <reified T> AnnotationSpecHandler.annotation(): AnnotationSpec =
-    AnnotationSpec.builder(T::class.java).build().also(annotations::add)
+    AnnotationSpec.builder(T::class.java).build().also(::annotation)
 
 /** Invokes DSL to configure [AnnotationSpec] collection. */
 fun AnnotationSpecHandler.annotations(configuration: AnnotationSpecHandlerScope.() -> Unit) {
@@ -58,40 +58,36 @@ fun AnnotationSpecHandler.annotations(configuration: AnnotationSpecHandlerScope.
 
 /** Responsible for managing a set of [AnnotationSpec] instances. */
 sealed interface AnnotationSpecHandler {
-    val annotations: MutableList<AnnotationSpec>
+    fun annotation(annotation: AnnotationSpec)
 
     fun annotation(type: ClassName): AnnotationSpec =
-        AnnotationSpec.builder(type).build().also(annotations::add)
+        AnnotationSpec.builder(type).build().also(::annotation)
 
     fun annotation(type: KClass<*>): AnnotationSpec =
-        AnnotationSpec.builder(type.java).build().also(annotations::add)
+        AnnotationSpec.builder(type.java).build().also(::annotation)
 }
 
 /**
  * Receiver for the `annotations` block providing an extended set of operators for the
  * configuration.
  */
-@JavapoetSpecDsl
+@JavapoetDsl
 class AnnotationSpecHandlerScope internal constructor(
     handler: AnnotationSpecHandler,
 ) : AnnotationSpecHandler by handler {
     /** @see annotation */
     operator fun ClassName.invoke(
         configuration: AnnotationSpecBuilder.() -> Unit,
-    ): AnnotationSpec =
-        buildAnnotationSpec(this, configuration)
-            .also { this@AnnotationSpecHandlerScope.annotations.add(it) }
+    ): AnnotationSpec = buildAnnotationSpec(this, configuration).also(::annotation)
 
     /** @see annotation */
     operator fun KClass<*>.invoke(
         configuration: AnnotationSpecBuilder.() -> Unit,
-    ): AnnotationSpec =
-        buildAnnotationSpec(name, configuration)
-            .also { this@AnnotationSpecHandlerScope.annotations.add(it) }
+    ): AnnotationSpec = buildAnnotationSpec(name, configuration).also(::annotation)
 }
 
 /** Wrapper of [AnnotationSpec.Builder], providing DSL support as a replacement to Java builder. */
-@JavapoetSpecDsl
+@JavapoetDsl
 class AnnotationSpecBuilder(
     private val nativeBuilder: AnnotationSpec.Builder,
 ) {

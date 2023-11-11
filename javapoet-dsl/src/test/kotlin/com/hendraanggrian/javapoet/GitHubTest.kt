@@ -447,7 +447,7 @@ class GitHubTest {
             private final java.lang.String android = "Lollipop v." + 5.0;
 
             """.trimIndent(),
-            buildFieldSpec(String::class.name, "android", PRIVATE, FINAL) {
+            buildFieldSpec(STRING, "android", PRIVATE, FINAL) {
                 initializer("\"Lollipop v.\" + 5.0")
             }.toString(),
         )
@@ -555,7 +555,7 @@ class GitHubTest {
 
             """.trimIndent(),
             buildMethodSpec("sortByLength") {
-                parameter(List::class.name.parameterizedBy<String>(), "strings")
+                parameter(LIST.parameterizedBy<String>(), "strings")
                 appendLine(
                     "%T.sort(%N, %L)",
                     Collections::class,
@@ -670,13 +670,12 @@ class GitHubTest {
 
             """.trimIndent(),
             buildMethodSpec("dismiss") {
-                javadoc.appendLine("Hides {@code message} from the caller's history. Other")
-                javadoc.appendLine("participants in the conversation will continue to see the")
-                javadoc.appendLine("message in their own history unless they also delete it.")
-                javadoc.appendLine()
-                javadoc.append(
+                javadoc("Hides {@code message} from the caller's history. Other\n")
+                javadoc("participants in the conversation will continue to see the\n")
+                javadoc("message in their own history unless they also delete it.\n\n")
+                javadoc(
                     "<p>Use {@link #delete(%T)} to delete the entire\n" +
-                        "conversation for all participants.\n",
+                        "conversation for all participants.",
                     conversation,
                 )
                 modifiers(PUBLIC, ABSTRACT)

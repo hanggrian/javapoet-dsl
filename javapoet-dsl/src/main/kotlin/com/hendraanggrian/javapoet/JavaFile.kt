@@ -20,7 +20,7 @@ inline fun buildJavaFile(packageName: String, configuration: JavaFileBuilder.() 
 }
 
 /** Wrapper of [JavaFile.Builder], providing DSL support as a replacement to Java builder. */
-@JavapoetSpecDsl
+@JavapoetDsl
 class JavaFileBuilder(
     private val packageName: String,
 ) : TypeSpecHandler {
@@ -29,7 +29,11 @@ class JavaFileBuilder(
     private var isSkipJavaLangImports: Boolean = false
     private var indentString: String = "  "
 
-    override val types: MutableList<TypeSpec> = mutableListOf()
+    val types: MutableList<TypeSpec> = mutableListOf()
+
+    override fun type(type: TypeSpec) {
+        types.add(type)
+    }
 
     fun comment(format: String, vararg args: Any) {
         comments += format to arrayOf(*args)

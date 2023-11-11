@@ -40,7 +40,7 @@ inline fun ParameterSpecHandler.parameter(
 ): ParameterSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
     return buildParameterSpec(type, name, *modifiers, configuration = configuration)
-        .also(parameters::add)
+        .also(::parameter)
 }
 
 /**
@@ -55,7 +55,7 @@ inline fun ParameterSpecHandler.parameter(
 ): ParameterSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
     return buildParameterSpec(type.name, name, *modifiers, configuration = configuration)
-        .also(parameters::add)
+        .also(::parameter)
 }
 
 /**
@@ -70,7 +70,7 @@ fun ParameterSpecHandler.parametering(
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
     return SpecDelegateProvider {
         buildParameterSpec(type, it, *modifiers, configuration = configuration)
-            .also(parameters::add)
+            .also(::parameter)
     }
 }
 
@@ -86,7 +86,7 @@ fun ParameterSpecHandler.parametering(
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
     return SpecDelegateProvider {
         buildParameterSpec(type.name, it, *modifiers, configuration = configuration)
-            .also(parameters::add)
+            .also(::parameter)
     }
 }
 
@@ -94,8 +94,7 @@ fun ParameterSpecHandler.parametering(
 inline fun <reified T> ParameterSpecHandler.parameter(
     name: String,
     vararg modifiers: Modifier,
-): ParameterSpec =
-    ParameterSpec.builder(T::class.java, name, *modifiers).build().also(parameters::add)
+): ParameterSpec = ParameterSpec.builder(T::class.java, name, *modifiers).build().also(::parameter)
 
 /** Invokes DSL to configure [ParameterSpec] collection. */
 fun ParameterSpecHandler.parameters(configuration: ParameterSpecHandlerScope.() -> Unit) {
@@ -105,20 +104,20 @@ fun ParameterSpecHandler.parameters(configuration: ParameterSpecHandlerScope.() 
 
 /** Responsible for managing a set of [ParameterSpec] instances. */
 sealed interface ParameterSpecHandler {
-    val parameters: MutableList<ParameterSpec>
+    fun parameter(parameter: ParameterSpec)
 
     fun parameter(type: TypeName, name: String, vararg modifiers: Modifier): ParameterSpec =
-        ParameterSpec.builder(type, name, *modifiers).build().also(parameters::add)
+        ParameterSpec.builder(type, name, *modifiers).build().also(::parameter)
 
     fun parameter(type: KClass<*>, name: String, vararg modifiers: Modifier): ParameterSpec =
-        ParameterSpec.builder(type.java, name, *modifiers).build().also(parameters::add)
+        ParameterSpec.builder(type.java, name, *modifiers).build().also(::parameter)
 
     fun parametering(
         type: TypeName,
         vararg modifiers: Modifier,
     ): SpecDelegateProvider<ParameterSpec> =
         SpecDelegateProvider {
-            ParameterSpec.builder(type, it, *modifiers).build().also(parameters::add)
+            ParameterSpec.builder(type, it, *modifiers).build().also(::parameter)
         }
 
     fun parametering(
@@ -126,7 +125,7 @@ sealed interface ParameterSpecHandler {
         vararg modifiers: Modifier,
     ): SpecDelegateProvider<ParameterSpec> =
         SpecDelegateProvider {
-            ParameterSpec.builder(type.java, it, *modifiers).build().also(parameters::add)
+            ParameterSpec.builder(type.java, it, *modifiers).build().also(::parameter)
         }
 }
 
@@ -134,7 +133,7 @@ sealed interface ParameterSpecHandler {
  * Receiver for the `parameters` block providing an extended set of operators for the
  * configuration.
  */
-@JavapoetSpecDsl
+@JavapoetDsl
 class ParameterSpecHandlerScope internal constructor(
     handler: ParameterSpecHandler,
 ) : ParameterSpecHandler by handler {
@@ -144,8 +143,7 @@ class ParameterSpecHandlerScope internal constructor(
         vararg modifiers: Modifier,
         configuration: ParameterSpecBuilder.() -> Unit,
     ): ParameterSpec =
-        buildParameterSpec(type, this, *modifiers, configuration = configuration)
-            .also(parameters::add)
+        buildParameterSpec(type, this, *modifiers, configuration = configuration).also(::parameter)
 
     /** @see parameter */
     operator fun String.invoke(
@@ -154,31 +152,36 @@ class ParameterSpecHandlerScope internal constructor(
         configuration: ParameterSpecBuilder.() -> Unit,
     ): ParameterSpec =
         buildParameterSpec(type.name, this, *modifiers, configuration = configuration)
-            .also(parameters::add)
+            .also(::parameter)
 }
 
 /** Wrapper of [ParameterSpec.Builder], providing DSL support as a replacement to Java builder.*/
-@JavapoetSpecDsl
+@JavapoetDsl
 class ParameterSpecBuilder(
     private val nativeBuilder: ParameterSpec.Builder,
 ) : AnnotationSpecHandler {
-    override val annotations: MutableList<AnnotationSpec> get() = nativeBuilder.annotations
+    val annotations: MutableList<AnnotationSpec> get() = nativeBuilder.annotations
     val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
 
-    val javadoc: JavadocContainer =
-        object : JavadocContainer {
-            override fun append(format: String, vararg args: Any): Unit =
-                format.internalFormat(args) { format2, args2 ->
-                    nativeBuilder.addJavadoc(format2, *args2)
-                }
-
-            override fun append(code: CodeBlock) {
-                nativeBuilder.addJavadoc(code)
-            }
+    fun javadoc(format: String, vararg args: Any): Unit =
+        format.internalFormat(args) { format2, args2 ->
+            nativeBuilder.addJavadoc(format2, *args2)
         }
+
+    fun javadoc(block: CodeBlock) {
+        nativeBuilder.addJavadoc(block)
+    }
+
+    override fun annotation(annotation: AnnotationSpec) {
+        nativeBuilder.addAnnotation(annotation)
+    }
 
     fun modifiers(vararg modifiers: Modifier) {
         nativeBuilder.addModifiers(*modifiers)
+    }
+
+    fun modifiers(modifiers: Iterable<Modifier>) {
+        nativeBuilder.addModifiers(modifiers)
     }
 
     fun build(): ParameterSpec = nativeBuilder.build()

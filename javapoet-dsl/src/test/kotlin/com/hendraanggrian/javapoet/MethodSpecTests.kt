@@ -22,9 +22,9 @@ class MethodSpecHandlerTest {
         assertThat(
             buildClassTypeSpec("test") {
                 method("method1")
-                method("method2") { javadoc.append("text2") }
+                method("method2") { javadoc("text2") }
                 constructorMethod()
-                constructorMethod { javadoc.append("text4") }
+                constructorMethod { javadoc("text4") }
             }.methodSpecs,
         ).containsExactly(
             MethodSpec.methodBuilder("method1").build(),
@@ -39,7 +39,7 @@ class MethodSpecHandlerTest {
         assertThat(
             buildClassTypeSpec("test") {
                 val method1 by methoding()
-                val method2 by methoding { javadoc.append("text2") }
+                val method2 by methoding { javadoc("text2") }
             }.methodSpecs,
         ).containsExactly(
             MethodSpec.methodBuilder("method1").build(),
@@ -52,7 +52,7 @@ class MethodSpecHandlerTest {
         assertThat(
             buildClassTypeSpec("test") {
                 methods {
-                    "method1" { javadoc.append("text1") }
+                    "method1" { javadoc("text1") }
                 }
             }.methodSpecs,
         ).containsExactly(
@@ -75,8 +75,8 @@ class MethodSpecBuilderTest {
     fun javadoc() {
         assertThat(
             buildMethodSpec("method1") {
-                javadoc.append("javadoc1")
-                javadoc.append(codeBlockOf("javadoc2"))
+                javadoc("javadoc1")
+                javadoc(codeBlockOf("javadoc2"))
             },
         ).isEqualTo(
             MethodSpec.methodBuilder("method1")
@@ -87,12 +87,13 @@ class MethodSpecBuilderTest {
     }
 
     @Test
-    fun annotations() {
+    fun annotation() {
         assertThat(
             buildMethodSpec("method1") {
                 annotation(Annotation1::class.name)
                 annotation(Annotation2::class)
                 annotation<Annotation3>()
+                assertFalse(annotations.isEmpty())
             },
         ).isEqualTo(
             MethodSpec.methodBuilder("method1")
@@ -118,7 +119,7 @@ class MethodSpecBuilderTest {
     }
 
     @Test
-    fun typeVariables() {
+    fun typeVariable() {
         assertThat(
             buildMethodSpec("method1") {
                 typeVariables(
@@ -128,6 +129,7 @@ class MethodSpecBuilderTest {
                     ),
                 )
                 typeVariable("typeVar3".genericsBy(Annotation3::class))
+                assertFalse(typeVariables.isEmpty())
             },
         ).isEqualTo(
             MethodSpec.methodBuilder("method1")
@@ -162,12 +164,13 @@ class MethodSpecBuilderTest {
     }
 
     @Test
-    fun parameters() {
+    fun parameter() {
         assertThat(
             buildMethodSpec("method1") {
                 parameter(Field1::class.name, "parameter1")
-                parameter(Field2::class.name, "parameter2")
+                parameter(Field2::class, "parameter2")
                 parameter<Field3>("parameter3")
+                assertFalse(parameters.isEmpty())
             },
         ).isEqualTo(
             MethodSpec.methodBuilder("method1")
@@ -223,7 +226,7 @@ class MethodSpecBuilderTest {
     }
 
     @Test
-    fun addComment() {
+    fun comment() {
         assertThat(buildMethodSpec("method1") { comment("some comment") })
             .isEqualTo(MethodSpec.methodBuilder("method1").addComment("some comment").build())
     }

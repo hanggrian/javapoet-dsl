@@ -17,56 +17,9 @@ fun codeBlockOf(format: String, vararg args: Any?): CodeBlock =
 inline fun buildCodeBlock(configuration: CodeBlockBuilder.() -> Unit): CodeBlock =
     CodeBlockBuilder(CodeBlock.builder()).apply(configuration).build()
 
-interface CodeBlockAppendable {
-    /** Add code with arguments to this container. */
-    fun append(format: String, vararg args: Any)
-
-    /** Add code block to this container. */
-    fun append(code: CodeBlock)
-
-    /** Add empty new line to this container. */
-    fun appendLine()
-
-    /** Add code block with a new line to this container. */
-    fun appendLine(format: String, vararg args: Any)
-
-    /** Add code block with a new line to this container. */
-    fun appendLine(code: CodeBlock)
-
-    /** Convenient method to add code block with operator function. */
-    operator fun plusAssign(value: String): Unit = append(value)
-
-    /** Convenient method to add code block with operator function. */
-    operator fun plusAssign(code: CodeBlock): Unit = append(code)
-}
-
-/** A [JavadocContainer] is responsible for managing a set of code instances. */
-interface JavadocContainer : CodeBlockAppendable {
-    override fun appendLine(): Unit = append(SystemProperties.LINE_SEPARATOR)
-
-    override fun appendLine(format: String, vararg args: Any) {
-        append(format, *args)
-        appendLine()
-    }
-
-    override fun appendLine(code: CodeBlock) {
-        append(code)
-        appendLine()
-    }
-
-    /**
-     * @see kotlin.text.SystemProperties
-     */
-    private object SystemProperties {
-        /** Line separator for current system. */
-        @JvmField
-        val LINE_SEPARATOR = System.getProperty("line.separator")!!
-    }
-}
-
 /** Wrapper of [CodeBlock.Builder], providing DSL support as a replacement to Java builder. */
-@JavapoetSpecDsl
-class CodeBlockBuilder(private val nativeBuilder: CodeBlock.Builder) : CodeBlockAppendable {
+@JavapoetDsl
+class CodeBlockBuilder(private val nativeBuilder: CodeBlock.Builder) {
     /** Returns true if this builder contains no code. */
     fun isEmpty(): Boolean = nativeBuilder.isEmpty
 
@@ -76,7 +29,7 @@ class CodeBlockBuilder(private val nativeBuilder: CodeBlock.Builder) : CodeBlock
     fun appendNamed(format: String, args: Map<String, *>): Unit =
         format.internalFormat(args) { format2, args2 -> nativeBuilder.addNamed(format2, args2) }
 
-    override fun append(format: String, vararg args: Any): Unit =
+    fun append(format: String, vararg args: Any): Unit =
         format.internalFormat(args) { format2, args2 -> nativeBuilder.add(format2, *args2) }
 
     fun beginControlFlow(format: String, vararg args: Any): Unit =
@@ -98,20 +51,20 @@ class CodeBlockBuilder(private val nativeBuilder: CodeBlock.Builder) : CodeBlock
             nativeBuilder.endControlFlow(format2, *args2)
         }
 
-    override fun appendLine() {
+    fun appendLine() {
         nativeBuilder.addStatement("")
     }
 
-    override fun appendLine(format: String, vararg args: Any): Unit =
+    fun appendLine(format: String, vararg args: Any): Unit =
         format.internalFormat(args) { format2, args2 ->
             nativeBuilder.addStatement(format2, *args2)
         }
 
-    override fun appendLine(code: CodeBlock) {
+    fun appendLine(code: CodeBlock) {
         nativeBuilder.addStatement(code)
     }
 
-    override fun append(code: CodeBlock) {
+    fun append(code: CodeBlock) {
         nativeBuilder.add(code)
     }
 
