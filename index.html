@@ -9,7 +9,7 @@
         <link href="styles/main.css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Sharp:opsz,wght,FILL,GRAD@48,400,1,0" rel="stylesheet">
         <link href="styles/prism-tomorrow.min.css" rel="stylesheet">
-        <script src="scripts/theme.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/prism.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/components/prism-groovy.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.28.0/components/prism-kotlin.min.js"></script>
+        <script src="scripts/theme.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-groovy.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-kotlin.min.js"></script>
         <!--Primary meta tags-->
         <meta content="javapoet-dsl" name="title">
         <meta content="Replace JavaPoet builders with Kotlin DSL" name="description">
@@ -32,7 +32,7 @@
                 <p>
                     <a href="https://travis-ci.com/github/hendraanggrian/javapoet-dsl/"><img alt="Travis CI" src="https://img.shields.io/travis/com/hendraanggrian/javapoet-dsl"></a>
 <a href="https://codecov.io/gh/hendraanggrian/javapoet-dsl/"><img alt="Codecov" src="https://img.shields.io/codecov/c/github/hendraanggrian/javapoet-dsl"></a>
-<a href="https://search.maven.org/artifact/com.hendraanggrian/javapoet-dsl/"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.hendraanggrian/javapoet-dsl"></a>
+<a href="https://repo1.maven.org/maven2/com/hendraanggrian/javapoet-dsl/"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.hendraanggrian/javapoet-dsl"></a>
 <a href="https://s01.oss.sonatype.org/content/repositories/snapshots/com/hendraanggrian/javapoet-dsl/"><img alt="Nexus Snapshot" src="https://img.shields.io/nexus/s/com.hendraanggrian/javapoet-dsl?server=https%3A%2F%2Fs01.oss.sonatype.org"></a>
 <a href="https://openjdk.java.net/projects/jdk8/"><img alt="OpenJDK" src="https://img.shields.io/badge/jdk-1.8%2B-informational"></a>
                 </p>
@@ -49,8 +49,8 @@ providing Kotlin DSL functionality and other convenient solutions.
                     <li>Full of convenient methods to achieve minimum code writing possible.</li>
 
                     <li>
-                        Options to invoke DSL. For example, <code>methods.add("main") { ... }</code> is as good
-as <code>methods { "main" { ... } }</code>. Scroll down for more information.
+                        Options to invoke DSL. For example, <code>method("main") { ... }</code> is as good as
+<code>methods { "main" { ... } }</code>. Scroll down for more information.
                     </li>
 
                     <li>Smooth transition, existing JavaPoet native specs can still be configured with
@@ -59,13 +59,13 @@ DSL.</li>
                 </ul>
 
                 <pre><code class="language-kotlin">buildJavaFile("com.example.helloworld") {
-    addClass("HelloWorld") {
-        addModifiers(Modifier.PUBLIC, Modifier.FINAL)
+    classType("HelloWorld") {
+        modifiers(PUBLIC, FINAL)
         methods {
             "main" {
-                addModifiers(Modifier.PUBLIC, Modifier.STATIC)
+                modifiers(PUBLIC, STATIC)
                 returns = VOID
-                parameters.add&lt;Array&lt;String&gt;&gt;("args")
+                parameter&lt;Array&lt;String&gt;&gt;("args")
                 appendLine("%T.out.println(%S)", System::class, "Hello, JavaPoet!")
             }
         }
@@ -75,7 +75,7 @@ DSL.</li>
 
                 <h2>Download</h2>
 
-                <pre><code class="language-gradle">repositories {
+                <pre><code class="language-groovy">repositories {
     mavenCentral()
 }
 dependencies {
@@ -121,7 +121,7 @@ type function whenever possible.
 
                 <pre><code class="language-kotlin">buildMethodSpec("sortList") {
     returns = int
-    parameters.add(classNameOf("java.util", "List").parameterizedBy(hoverboard), "list")
+    parameter(classNameOf("java.util", "List").parameterizedBy(hoverboard), "list")
     appendLine("%T.sort(list)", Collections::class)
     appendLine("return list")
 }
@@ -141,30 +141,24 @@ These containers have ability to add components with/without invoking DSL.</p>
                 <pre><code class="language-kotlin">types.addClass("Car") {
     methods {
         "getWheels" {
-            returns = int
-            statements {
-                add("return wheels")
-            }
+            returns = INT
+            appendLine("return wheels")
         }
         "setWheels" {
-            parameters {
-                add(int, "wheels")
-            }
-            statements {
-                add("this.wheels = wheels")
-            }
+            parameter(INT, "wheels")
+            appendLine("this.wheels = wheels")
         }
     }
 }
 
 types.addClass("Car") {
-    methods.add("getWheels") {
-        returns = int
-        statements.add("return wheels")
+    method("getWheels") {
+        returns = INT
+        appendLine("return wheels")
     }
-    methods.add("setWheels") {
-        parameters["wheels"] = int
-        statements.add("this.wheels = wheels")
+    method("setWheels") {
+        parameter(INT, "wheels")
+        appendLine("this.wheels = wheels")
     }
 }
 </code></pre>
@@ -176,12 +170,9 @@ types.addClass("Car") {
 creating a spec can be done by delegating to a property.
                 </p>
 
-                <pre><code class="language-kotlin">val title by buildingParameterSpec(String::class) {
-    annotations.add&lt;NotNull&gt;
-}
-
-val message by parameters.adding(String::class) {
-    annotations.add&lt;Nullable&gt;
+                <pre><code class="language-kotlin">val setWheels by methoding {
+    val wheels by parametering(INT)
+    appendLine("this.wheels = wheels")
 }
 </code></pre>
 
@@ -191,19 +182,21 @@ val message by parameters.adding(String::class) {
                     Write <code>TypeName</code> and all its subtypes fluently.
                 </p>
 
-                <pre><code class="language-kotlin">val myClass: ClassName = classOf("com.example", "MyClass")
-val arrayOfString: ArrayTypeName = "java.lang".classOf("String").arrayOf()
-val pairOfInteger: ParameterizedTypeName = "android.util".classOf("Pair").parameterizedBy(Integer::class, Integer::class)
-val tVariable: TypeVariableName = "T".typeVarOf()
-val subtypeOfCharSequence: WildcardTypeName = "java.lang".classOf("CharSequence").subtypeOf()
-</code></pre>
+                <pre><code class="language-kotlin">val customClass: ClassName =
+    classNamed("com.example", "MyClass")
 
-                <p>If you have access to those types, they can also be strongly-typed.</p>
+val arrayOfString: ArrayTypeName =
+    String::class.name.array
 
-                <pre><code class="language-kotlin">val myClass = com.example.MyClass.asClassName()
-val arrayOfString = arrayTypeNameOf&lt;java.lang.String&gt;()
-val pairOfInteger = parameterizedTypeNameOf&lt;android.util.Pair&gt;(Integer::class, Integer::class)
-val subtypeOfCharSequence = wildcardTypeNameSubtypeOf&lt;java.lang.CharSequence&gt;()
+val pairOfInteger: ParameterizedTypeName =
+    classNamed("android.util", "Pair")
+        .parameterizedBy(Integer::class, Integer::class)
+
+val aGenerics: TypeVariableName =
+    "T".generics
+
+val subtypeOfCharSequence: WildcardTypeName =
+    CharSequence::class.name.subtype
 </code></pre>
 
             </section>
