@@ -30,7 +30,7 @@ class GitHubTest {
                     method("main") {
                         modifiers(PUBLIC, STATIC)
                         returns = VOID
-                        parameter<Array<String>>("args")
+                        parameter(STRING.array, "args")
                         appendLine("%T.out.println(%S)", System::class, "Hello, JavaPoet!")
                     }
                 }

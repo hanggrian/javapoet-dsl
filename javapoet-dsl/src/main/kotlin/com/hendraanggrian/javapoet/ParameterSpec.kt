@@ -12,6 +12,9 @@ import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.reflect.KClass
 
+fun TypeName.asParameterSpec(name: String, vararg modifiers: Modifier): ParameterSpec =
+    ParameterSpec.builder(this, name, *modifiers).build()
+
 /**
  * Builds new [ParameterSpec] by populating newly created [ParameterSpecBuilder] using provided
  * [configuration].
@@ -40,6 +43,21 @@ inline fun ParameterSpecHandler.parameter(
 ): ParameterSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
     return buildParameterSpec(type, name, *modifiers, configuration = configuration)
+        .also(::parameter)
+}
+
+/**
+ * Inserts new [ParameterSpec] by populating newly created [ParameterSpecBuilder] using provided
+ * [configuration].
+ */
+inline fun ParameterSpecHandler.parameter(
+    type: Class<*>,
+    name: String,
+    vararg modifiers: Modifier,
+    configuration: ParameterSpecBuilder.() -> Unit,
+): ParameterSpec {
+    contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
+    return buildParameterSpec(type.name2, name, *modifiers, configuration = configuration)
         .also(::parameter)
 }
 
@@ -79,6 +97,22 @@ fun ParameterSpecHandler.parametering(
  * [ParameterSpecBuilder] using provided [configuration].
  */
 fun ParameterSpecHandler.parametering(
+    type: Class<*>,
+    vararg modifiers: Modifier,
+    configuration: ParameterSpecBuilder.() -> Unit,
+): SpecDelegateProvider<ParameterSpec> {
+    contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
+    return SpecDelegateProvider {
+        buildParameterSpec(type.name2, it, *modifiers, configuration = configuration)
+            .also(::parameter)
+    }
+}
+
+/**
+ * Property delegate for inserting new [ParameterSpec] by populating newly created
+ * [ParameterSpecBuilder] using provided [configuration].
+ */
+fun ParameterSpecHandler.parametering(
     type: KClass<*>,
     vararg modifiers: Modifier,
     configuration: ParameterSpecBuilder.() -> Unit,
@@ -94,39 +128,44 @@ fun ParameterSpecHandler.parametering(
 inline fun <reified T> ParameterSpecHandler.parameter(
     name: String,
     vararg modifiers: Modifier,
-): ParameterSpec = ParameterSpec.builder(T::class.java, name, *modifiers).build().also(::parameter)
+): ParameterSpec = T::class.name.asParameterSpec(name, *modifiers).also(::parameter)
 
 /** Invokes DSL to configure [ParameterSpec] collection. */
 fun ParameterSpecHandler.parameters(configuration: ParameterSpecHandlerScope.() -> Unit) {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    ParameterSpecHandlerScope(this).configuration()
+    ParameterSpecHandlerScope.of(this).configuration()
 }
 
 /** Responsible for managing a set of [ParameterSpec] instances. */
-sealed interface ParameterSpecHandler {
+interface ParameterSpecHandler {
     fun parameter(parameter: ParameterSpec)
 
     fun parameter(type: TypeName, name: String, vararg modifiers: Modifier): ParameterSpec =
-        ParameterSpec.builder(type, name, *modifiers).build().also(::parameter)
+        type.asParameterSpec(name, *modifiers).also(::parameter)
+
+    fun parameter(type: Class<*>, name: String, vararg modifiers: Modifier): ParameterSpec =
+        type.name2.asParameterSpec(name, *modifiers).also(::parameter)
 
     fun parameter(type: KClass<*>, name: String, vararg modifiers: Modifier): ParameterSpec =
-        ParameterSpec.builder(type.java, name, *modifiers).build().also(::parameter)
+        type.name.asParameterSpec(name, *modifiers).also(::parameter)
 
     fun parametering(
         type: TypeName,
         vararg modifiers: Modifier,
     ): SpecDelegateProvider<ParameterSpec> =
-        SpecDelegateProvider {
-            ParameterSpec.builder(type, it, *modifiers).build().also(::parameter)
-        }
+        SpecDelegateProvider { type.asParameterSpec(it, *modifiers).also(::parameter) }
+
+    fun parametering(
+        type: Class<*>,
+        vararg modifiers: Modifier,
+    ): SpecDelegateProvider<ParameterSpec> =
+        SpecDelegateProvider { type.name2.asParameterSpec(it, *modifiers).also(::parameter) }
 
     fun parametering(
         type: KClass<*>,
         vararg modifiers: Modifier,
     ): SpecDelegateProvider<ParameterSpec> =
-        SpecDelegateProvider {
-            ParameterSpec.builder(type.java, it, *modifiers).build().also(::parameter)
-        }
+        SpecDelegateProvider { type.name.asParameterSpec(it, *modifiers).also(::parameter) }
 }
 
 /**
@@ -134,9 +173,14 @@ sealed interface ParameterSpecHandler {
  * configuration.
  */
 @JavapoetDsl
-class ParameterSpecHandlerScope internal constructor(
+open class ParameterSpecHandlerScope private constructor(
     handler: ParameterSpecHandler,
 ) : ParameterSpecHandler by handler {
+    companion object {
+        fun of(handler: ParameterSpecHandler): ParameterSpecHandlerScope =
+            ParameterSpecHandlerScope(handler)
+    }
+
     /** @see parameter */
     operator fun String.invoke(
         type: TypeName,
@@ -144,6 +188,15 @@ class ParameterSpecHandlerScope internal constructor(
         configuration: ParameterSpecBuilder.() -> Unit,
     ): ParameterSpec =
         buildParameterSpec(type, this, *modifiers, configuration = configuration).also(::parameter)
+
+    /** @see parameter */
+    operator fun String.invoke(
+        type: Class<*>,
+        vararg modifiers: Modifier,
+        configuration: ParameterSpecBuilder.() -> Unit,
+    ): ParameterSpec =
+        buildParameterSpec(type.name2, this, *modifiers, configuration = configuration)
+            .also(::parameter)
 
     /** @see parameter */
     operator fun String.invoke(

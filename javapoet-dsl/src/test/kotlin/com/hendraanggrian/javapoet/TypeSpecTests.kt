@@ -8,6 +8,7 @@ import com.example.Field2
 import com.example.Field3
 import com.example.Field4
 import com.example.Field5
+import com.example.Field6
 import com.google.common.truth.Truth.assertThat
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.MethodSpec
@@ -317,9 +318,14 @@ class TypeSpecBuilderTest {
             TypeSpec.classBuilder("class2").superclass(Field2::class.java).build(),
         )
         assertThat(
-            buildClassTypeSpec("class3") { superclass<Field3>() },
+            buildClassTypeSpec("class3") { superclass(Field2::class.java) },
         ).isEqualTo(
-            TypeSpec.classBuilder("class3").superclass(Field3::class.java).build(),
+            TypeSpec.classBuilder("class3").superclass(Field2::class.java).build(),
+        )
+        assertThat(
+            buildClassTypeSpec("class4") { superclass<Field3>() },
+        ).isEqualTo(
+            TypeSpec.classBuilder("class4").superclass(Field3::class.java).build(),
         )
     }
 
@@ -329,8 +335,9 @@ class TypeSpecBuilderTest {
             buildClassTypeSpec("class1") {
                 superinterfaces(listOf(Field1::class.name, Field2::class.name))
                 superinterface(Field3::class.name)
-                superinterface(Field4::class)
-                superinterface<Field5>()
+                superinterface(Field4::class.java)
+                superinterface(Field5::class)
+                superinterface<Field6>()
                 assertFalse(superinterfaces.isEmpty())
             },
         ).isEqualTo(
@@ -340,6 +347,7 @@ class TypeSpecBuilderTest {
                 .addSuperinterface(Field3::class.java)
                 .addSuperinterface(Field4::class.java)
                 .addSuperinterface(Field5::class.java)
+                .addSuperinterface(Field6::class.java)
                 .build(),
         )
     }

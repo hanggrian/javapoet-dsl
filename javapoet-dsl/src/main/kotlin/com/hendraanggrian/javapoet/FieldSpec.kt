@@ -12,6 +12,9 @@ import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.reflect.KClass
 
+fun TypeName.asFieldSpec(name: String, vararg modifiers: Modifier): FieldSpec =
+    FieldSpec.builder(this, name, *modifiers).build()
+
 /**
  * Creates new [FieldSpec] by populating newly created [FieldSpecBuilder] using provided
  * [configuration].
@@ -38,6 +41,21 @@ inline fun FieldSpecHandler.field(
 ): FieldSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
     return buildFieldSpec(type, name, *modifiers, configuration = configuration).also(::field)
+}
+
+/**
+ * Inserts new [FieldSpec] by populating newly created [FieldSpecBuilder] using provided
+ * [configuration].
+ */
+inline fun FieldSpecHandler.field(
+    type: Class<*>,
+    name: String,
+    vararg modifiers: Modifier,
+    configuration: FieldSpecBuilder.() -> Unit,
+): FieldSpec {
+    contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
+    return buildFieldSpec(type.name2, name, *modifiers, configuration = configuration)
+        .also(::field)
 }
 
 /**
@@ -75,6 +93,22 @@ fun FieldSpecHandler.fielding(
  * using provided [configuration].
  */
 fun FieldSpecHandler.fielding(
+    type: Class<*>,
+    vararg modifiers: Modifier,
+    configuration: FieldSpecBuilder.() -> Unit,
+): SpecDelegateProvider<FieldSpec> {
+    contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
+    return SpecDelegateProvider {
+        buildFieldSpec(type.name2, it, *modifiers, configuration = configuration)
+            .also(::field)
+    }
+}
+
+/**
+ * Property delegate for inserting new [FieldSpec] by populating newly created [FieldSpecBuilder]
+ * using provided [configuration].
+ */
+fun FieldSpecHandler.fielding(
     type: KClass<*>,
     vararg modifiers: Modifier,
     configuration: FieldSpecBuilder.() -> Unit,
@@ -90,46 +124,61 @@ fun FieldSpecHandler.fielding(
 inline fun <reified T> FieldSpecHandler.field(
     name: String,
     vararg modifiers: Modifier,
-): FieldSpec = FieldSpec.builder(T::class.java, name, *modifiers).build().also(::field)
+): FieldSpec = T::class.name.asFieldSpec(name, *modifiers).also(::field)
 
 /** Invokes DSL to configure [FieldSpec] collection. */
 fun FieldSpecHandler.fields(configuration: FieldSpecHandlerScope.() -> Unit) {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    FieldSpecHandlerScope(this).configuration()
+    FieldSpecHandlerScope.of(this).configuration()
 }
 
 /** Responsible for managing a set of [FieldSpec] instances. */
-sealed interface FieldSpecHandler {
+interface FieldSpecHandler {
     fun field(field: FieldSpec)
 
     fun field(type: TypeName, name: String, vararg modifiers: Modifier): FieldSpec =
-        FieldSpec.builder(type, name, *modifiers).build().also(::field)
+        type.asFieldSpec(name, *modifiers).also(::field)
+
+    fun field(type: Class<*>, name: String, vararg modifiers: Modifier): FieldSpec =
+        type.name2.asFieldSpec(name, *modifiers).also(::field)
 
     fun field(type: KClass<*>, name: String, vararg modifiers: Modifier): FieldSpec =
-        FieldSpec.builder(type.java, name, *modifiers).build().also(::field)
+        type.name.asFieldSpec(name, *modifiers).also(::field)
 
     fun fielding(type: TypeName, vararg modifiers: Modifier): SpecDelegateProvider<FieldSpec> =
-        SpecDelegateProvider { FieldSpec.builder(type, it, *modifiers).build().also(::field) }
+        SpecDelegateProvider { type.asFieldSpec(it, *modifiers).also(::field) }
+
+    fun fielding(type: Class<*>, vararg modifiers: Modifier): SpecDelegateProvider<FieldSpec> =
+        SpecDelegateProvider { type.name2.asFieldSpec(it, *modifiers).also(::field) }
 
     fun fielding(type: KClass<*>, vararg modifiers: Modifier): SpecDelegateProvider<FieldSpec> =
-        SpecDelegateProvider {
-            FieldSpec.builder(type.java, it, *modifiers).build().also(::field)
-        }
+        SpecDelegateProvider { type.name.asFieldSpec(it, *modifiers).also(::field) }
 }
 
 /** Receiver for the `fields` block providing an extended set of operators for the configuration. */
 @JavapoetDsl
-class FieldSpecHandlerScope internal constructor(
+open class FieldSpecHandlerScope private constructor(
     handler: FieldSpecHandler,
 ) : FieldSpecHandler by handler {
+    companion object {
+        fun of(handler: FieldSpecHandler): FieldSpecHandlerScope = FieldSpecHandlerScope(handler)
+    }
+
     /** @see field */
     operator fun String.invoke(
         type: TypeName,
         vararg modifiers: Modifier,
         configuration: FieldSpecBuilder.() -> Unit,
     ): FieldSpec =
-        buildFieldSpec(type, this, *modifiers, configuration = configuration)
-            .also(::field)
+        buildFieldSpec(type, this, *modifiers, configuration = configuration).also(::field)
+
+    /** @see field */
+    operator fun String.invoke(
+        type: Class<*>,
+        vararg modifiers: Modifier,
+        configuration: FieldSpecBuilder.() -> Unit,
+    ): FieldSpec =
+        buildFieldSpec(type.name2, this, *modifiers, configuration = configuration).also(::field)
 
     /** @see field */
     operator fun String.invoke(
@@ -137,8 +186,7 @@ class FieldSpecHandlerScope internal constructor(
         vararg modifiers: Modifier,
         configuration: FieldSpecBuilder.() -> Unit,
     ): FieldSpec =
-        buildFieldSpec(type.name, this, *modifiers, configuration = configuration)
-            .also(::field)
+        buildFieldSpec(type.name, this, *modifiers, configuration = configuration).also(::field)
 }
 
 /** Wrapper of [FieldSpec.Builder], providing DSL support as a replacement to Java builder. */

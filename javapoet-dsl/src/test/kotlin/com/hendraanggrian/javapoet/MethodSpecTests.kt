@@ -8,6 +8,7 @@ import com.example.Field2
 import com.example.Field3
 import com.example.Field4
 import com.example.Field5
+import com.example.Field6
 import com.google.common.truth.Truth.assertThat
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.MethodSpec
@@ -157,9 +158,14 @@ class MethodSpecBuilderTest {
             MethodSpec.methodBuilder("method2").returns(Field2::class.java).build(),
         )
         assertThat(
-            buildMethodSpec("method3") { returns<Field3>() },
+            buildMethodSpec("method3") { returns(Field3::class.java) },
         ).isEqualTo(
             MethodSpec.methodBuilder("method3").returns(Field3::class.java).build(),
+        )
+        assertThat(
+            buildMethodSpec("method4") { returns<Field4>() },
+        ).isEqualTo(
+            MethodSpec.methodBuilder("method4").returns(Field4::class.java).build(),
         )
     }
 
@@ -185,7 +191,7 @@ class MethodSpecBuilderTest {
     fun isVarargs() {
         assertThat(
             buildMethodSpec("method1") {
-                parameter(Array::class, "args")
+                parameter(OBJECT.array, "args")
                 isVarargs = true
             },
         ).isEqualTo(
@@ -207,8 +213,9 @@ class MethodSpecBuilderTest {
                     ),
                 )
                 exception(Field3::class.name)
-                exception(Field4::class)
-                exception<Field5>()
+                exception(Field4::class.java)
+                exception(Field5::class)
+                exception<Field6>()
             },
         ).isEqualTo(
             MethodSpec.methodBuilder("method1")
@@ -221,6 +228,7 @@ class MethodSpecBuilderTest {
                 .addException(Field3::class.java)
                 .addException(Field4::class.java)
                 .addException(Field5::class.java)
+                .addException(Field6::class.java)
                 .build(),
         )
     }

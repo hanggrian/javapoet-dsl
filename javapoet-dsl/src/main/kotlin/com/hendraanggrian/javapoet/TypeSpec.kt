@@ -197,11 +197,11 @@ fun TypeSpecHandler.annotationTyping(
 /** Invokes DSL to configure [TypeSpec] collection. */
 fun TypeSpecHandler.types(configuration: TypeSpecHandlerScope.() -> Unit) {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    TypeSpecHandlerScope(this).configuration()
+    TypeSpecHandlerScope.of(this).configuration()
 }
 
 /** Responsible for managing a set of [TypeSpec] instances. */
-sealed interface TypeSpecHandler {
+interface TypeSpecHandler {
     fun type(type: TypeSpec)
 
     fun classType(name: String): TypeSpec = TypeSpec.classBuilder(name).build().also(::type)
@@ -238,9 +238,13 @@ sealed interface TypeSpecHandler {
 
 /** Receiver for the `types` block providing an extended set of operators for the configuration. */
 @JavapoetDsl
-class TypeSpecHandlerScope internal constructor(
+open class TypeSpecHandlerScope private constructor(
     handler: TypeSpecHandler,
 ) : TypeSpecHandler by handler {
+    companion object {
+        fun of(handler: TypeSpecHandler): TypeSpecHandlerScope = TypeSpecHandlerScope(handler)
+    }
+
     /** @see classType */
     operator fun String.invoke(configuration: TypeSpecBuilder.() -> Unit): TypeSpec =
         buildClassTypeSpec(this, configuration).also(::type)
@@ -294,6 +298,10 @@ class TypeSpecBuilder(
             nativeBuilder.superclass(value)
         }
 
+    fun superclass(type: Class<*>) {
+        nativeBuilder.superclass(type)
+    }
+
     fun superclass(type: KClass<*>) {
         nativeBuilder.superclass(type.java)
     }
@@ -305,6 +313,10 @@ class TypeSpecBuilder(
     }
 
     fun superinterface(superinterface: TypeName) {
+        nativeBuilder.addSuperinterface(superinterface)
+    }
+
+    fun superinterface(superinterface: Class<*>) {
         nativeBuilder.addSuperinterface(superinterface)
     }
 
@@ -360,6 +372,10 @@ class TypeSpecBuilder(
 
     fun avoidClashesWithNestedClasses(typeElement: TypeElement) {
         nativeBuilder.avoidClashesWithNestedClasses(typeElement)
+    }
+
+    fun avoidClashesWithNestedClasses(type: Class<*>) {
+        nativeBuilder.avoidClashesWithNestedClasses(type)
     }
 
     fun avoidClashesWithNestedClasses(type: KClass<*>) {

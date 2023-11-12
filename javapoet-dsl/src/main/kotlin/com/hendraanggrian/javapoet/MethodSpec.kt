@@ -62,11 +62,11 @@ fun MethodSpecHandler.methoding(
 /** Invokes DSL to configure [MethodSpec] collection. */
 fun MethodSpecHandler.methods(configuration: MethodSpecHandlerScope.() -> Unit) {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    MethodSpecHandlerScope(this).configuration()
+    MethodSpecHandlerScope.of(this).configuration()
 }
 
 /** Responsible for managing a set of [MethodSpec] instances. */
-sealed interface MethodSpecHandler {
+interface MethodSpecHandler {
     fun method(method: MethodSpec)
 
     fun method(name: String): MethodSpec = MethodSpec.methodBuilder(name).build().also(::method)
@@ -82,9 +82,13 @@ sealed interface MethodSpecHandler {
  * configuration.
  */
 @JavapoetDsl
-class MethodSpecHandlerScope internal constructor(
+open class MethodSpecHandlerScope private constructor(
     handler: MethodSpecHandler,
 ) : MethodSpecHandler by handler {
+    companion object {
+        fun of(handler: MethodSpecHandler): MethodSpecHandlerScope = MethodSpecHandlerScope(handler)
+    }
+
     /** @see method */
     operator fun String.invoke(configuration: MethodSpecBuilder.() -> Unit): MethodSpec =
         buildMethodSpec(this, configuration).also(::method)
@@ -143,6 +147,10 @@ class MethodSpecBuilder(
             nativeBuilder.returns(value)
         }
 
+    fun returns(type: Class<*>) {
+        nativeBuilder.returns(type)
+    }
+
     fun returns(type: KClass<*>) {
         nativeBuilder.returns(type.java)
     }
@@ -165,6 +173,10 @@ class MethodSpecBuilder(
     }
 
     fun exception(exception: TypeName) {
+        nativeBuilder.addException(exception)
+    }
+
+    fun exception(exception: Class<*>) {
         nativeBuilder.addException(exception)
     }
 

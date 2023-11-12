@@ -10,6 +10,8 @@ import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
 import kotlin.reflect.KClass
 
+fun ClassName.asAnnotationSpec(): AnnotationSpec = AnnotationSpec.builder(this).build()
+
 /**
  * Creates new [AnnotationSpec] by populating newly created [AnnotationSpecBuilder] using provided
  * [configuration].
@@ -39,6 +41,18 @@ inline fun AnnotationSpecHandler.annotation(
  * [configuration].
  */
 inline fun AnnotationSpecHandler.annotation(
+    type: Class<*>,
+    configuration: AnnotationSpecBuilder.() -> Unit,
+): AnnotationSpec {
+    contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
+    return buildAnnotationSpec(type.name2, configuration).also(::annotation)
+}
+
+/**
+ * Inserts new [AnnotationSpec] by populating newly created [AnnotationSpecBuilder] using provided
+ * [configuration].
+ */
+inline fun AnnotationSpecHandler.annotation(
     type: KClass<*>,
     configuration: AnnotationSpecBuilder.() -> Unit,
 ): AnnotationSpec {
@@ -48,23 +62,25 @@ inline fun AnnotationSpecHandler.annotation(
 
 /** Convenient method to insert [AnnotationSpec] using reified type. */
 inline fun <reified T> AnnotationSpecHandler.annotation(): AnnotationSpec =
-    AnnotationSpec.builder(T::class.java).build().also(::annotation)
+    T::class.name.asAnnotationSpec().also(::annotation)
 
 /** Invokes DSL to configure [AnnotationSpec] collection. */
 fun AnnotationSpecHandler.annotations(configuration: AnnotationSpecHandlerScope.() -> Unit) {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    AnnotationSpecHandlerScope(this).configuration()
+    AnnotationSpecHandlerScope.of(this).configuration()
 }
 
 /** Responsible for managing a set of [AnnotationSpec] instances. */
-sealed interface AnnotationSpecHandler {
+interface AnnotationSpecHandler {
     fun annotation(annotation: AnnotationSpec)
 
-    fun annotation(type: ClassName): AnnotationSpec =
-        AnnotationSpec.builder(type).build().also(::annotation)
+    fun annotation(type: ClassName): AnnotationSpec = type.asAnnotationSpec().also(::annotation)
+
+    fun annotation(type: Class<*>): AnnotationSpec =
+        type.name2.asAnnotationSpec().also(::annotation)
 
     fun annotation(type: KClass<*>): AnnotationSpec =
-        AnnotationSpec.builder(type.java).build().also(::annotation)
+        type.name.asAnnotationSpec().also(::annotation)
 }
 
 /**
@@ -72,13 +88,22 @@ sealed interface AnnotationSpecHandler {
  * configuration.
  */
 @JavapoetDsl
-class AnnotationSpecHandlerScope internal constructor(
+open class AnnotationSpecHandlerScope private constructor(
     handler: AnnotationSpecHandler,
 ) : AnnotationSpecHandler by handler {
+    companion object {
+        fun of(handler: AnnotationSpecHandler): AnnotationSpecHandlerScope =
+            AnnotationSpecHandlerScope(handler)
+    }
+
     /** @see annotation */
     operator fun ClassName.invoke(
         configuration: AnnotationSpecBuilder.() -> Unit,
     ): AnnotationSpec = buildAnnotationSpec(this, configuration).also(::annotation)
+
+    /** @see annotation */
+    operator fun Class<*>.invoke(configuration: AnnotationSpecBuilder.() -> Unit): AnnotationSpec =
+        buildAnnotationSpec(name2, configuration).also(::annotation)
 
     /** @see annotation */
     operator fun KClass<*>.invoke(

@@ -23,7 +23,7 @@ buildJavaFile("com.example.helloworld") {
             "main" {
                 modifiers(PUBLIC, STATIC)
                 returns = VOID
-                parameter<Array<String>>("args")
+                parameter(STRING.array, "args")
                 appendLine("%T.out.println(%S)", System::class, "Hello, JavaPoet!")
             }
         }
@@ -74,12 +74,12 @@ type function whenever possible.
 ```kotlin
 buildMethodSpec("sortList") {
     returns = int
-    parameter(classNameOf("java.util", "List").parameterizedBy(hoverboard), "list")
+    parameter(classNamed("java.util", "List").parameterizedBy(hoverboard), "list")
     appendLine("%T.sort(list)", Collections::class)
     appendLine("return list")
 }
 
-buildFieldSpec<Int>("count") {
+buildFieldSpec("count", INT) {
     initializer("%L", 0)
 }
 ```
