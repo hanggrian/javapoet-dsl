@@ -7,19 +7,19 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFails
 
 class JavaFileBuilderTest {
-    enum class MyEnum { A }
+    public enum class MyEnum { A }
 
     /** A java file may only have one type. */
     @Test
     fun invalidNumberOfType() {
-        // multiple types
+        // Multiple types.
         assertFails {
             buildJavaFile("com.example") {
                 classType("MyClass")
                 classType("MyOtherClass")
             }
         }
-        // no type
+        // No type.
         assertFails {
             buildJavaFile("com.example") { }
         }
@@ -46,14 +46,14 @@ class JavaFileBuilderTest {
 
     @Test
     fun staticImports() {
-        // names array cannot be empty
+        // Names array cannot be empty.
         assertFails {
             buildJavaFile("com.example") {
                 classType("MyClass")
                 staticImport<String>()
             }
         }
-        // same type import using different functions
+        // Same type import using different functions.
         assertEquals(
             """
             package com.example;
@@ -101,7 +101,7 @@ class JavaFileBuilderTest {
 
     @Test
     fun indent() {
-        // custom string
+        // Custom string.
         assertEquals(
             """
             package com.example;
@@ -119,7 +119,7 @@ class JavaFileBuilderTest {
                 indent = ">"
             }.toString(),
         )
-        // use count
+        // Use count.
         assertEquals(
             """
             package com.example;

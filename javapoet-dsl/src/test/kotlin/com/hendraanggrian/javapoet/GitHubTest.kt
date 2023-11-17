@@ -674,8 +674,10 @@ class GitHubTest {
                 javadoc("participants in the conversation will continue to see the\n")
                 javadoc("message in their own history unless they also delete it.\n\n")
                 javadoc(
-                    "<p>Use {@link #delete(%T)} to delete the entire\n" +
-                        "conversation for all participants.",
+                    """
+                    <p>Use {@link #delete(%T)} to delete the entire
+                    conversation for all participants.
+                    """.trimIndent(),
                     conversation,
                 )
                 modifiers(PUBLIC, ABSTRACT)

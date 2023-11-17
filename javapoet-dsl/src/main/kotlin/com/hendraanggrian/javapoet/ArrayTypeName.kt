@@ -7,4 +7,4 @@ import com.squareup.javapoet.ArrayTypeName
 import com.squareup.javapoet.TypeName
 
 /** Returns an array type whose elements are all instances of componentType. */
-inline val TypeName.array: ArrayTypeName get() = ArrayTypeName.of(this)
+public inline val TypeName.array: ArrayTypeName get() = ArrayTypeName.of(this)

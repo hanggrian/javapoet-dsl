@@ -7,78 +7,78 @@ import com.squareup.javapoet.CodeBlock
  *
  * @see kotlin.text.format
  */
-fun codeBlockOf(format: String, vararg args: Any?): CodeBlock =
+public fun codeBlockOf(format: String, vararg args: Any?): CodeBlock =
     format.internalFormat(args) { format2, args2 -> CodeBlock.of(format2, *args2) }
 
 /**
  * Builds new [CodeBlock], by populating newly created [CodeBlockBuilder] using
  * provided [configuration].
  */
-inline fun buildCodeBlock(configuration: CodeBlockBuilder.() -> Unit): CodeBlock =
+public inline fun buildCodeBlock(configuration: CodeBlockBuilder.() -> Unit): CodeBlock =
     CodeBlockBuilder(CodeBlock.builder()).apply(configuration).build()
 
 /** Wrapper of [CodeBlock.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetDsl
-class CodeBlockBuilder(private val nativeBuilder: CodeBlock.Builder) {
+public class CodeBlockBuilder(private val nativeBuilder: CodeBlock.Builder) {
     /** Returns true if this builder contains no code. */
-    fun isEmpty(): Boolean = nativeBuilder.isEmpty
+    public fun isEmpty(): Boolean = nativeBuilder.isEmpty
 
     /** Returns true if this builder contains code. */
-    fun isNotEmpty(): Boolean = !nativeBuilder.isEmpty
+    public fun isNotEmpty(): Boolean = !nativeBuilder.isEmpty
 
-    fun appendNamed(format: String, args: Map<String, *>): Unit =
+    public fun appendNamed(format: String, args: Map<String, *>): Unit =
         format.internalFormat(args) { format2, args2 -> nativeBuilder.addNamed(format2, args2) }
 
-    fun append(format: String, vararg args: Any): Unit =
+    public fun append(format: String, vararg args: Any): Unit =
         format.internalFormat(args) { format2, args2 -> nativeBuilder.add(format2, *args2) }
 
-    fun beginControlFlow(format: String, vararg args: Any): Unit =
+    public fun beginControlFlow(format: String, vararg args: Any): Unit =
         format.internalFormat(args) { format2, args2 ->
             nativeBuilder.beginControlFlow(format2, *args2)
         }
 
-    fun nextControlFlow(format: String, vararg args: Any): Unit =
+    public fun nextControlFlow(format: String, vararg args: Any): Unit =
         format.internalFormat(args) { format2, args2 ->
             nativeBuilder.nextControlFlow(format2, *args2)
         }
 
-    fun endControlFlow() {
+    public fun endControlFlow() {
         nativeBuilder.endControlFlow()
     }
 
-    fun endControlFlow(format: String, vararg args: Any): Unit =
+    public fun endControlFlow(format: String, vararg args: Any): Unit =
         format.internalFormat(args) { format2, args2 ->
             nativeBuilder.endControlFlow(format2, *args2)
         }
 
-    fun appendLine() {
+    public fun appendLine() {
         nativeBuilder.addStatement("")
     }
 
-    fun appendLine(format: String, vararg args: Any): Unit =
+    public fun appendLine(format: String, vararg args: Any): Unit =
         format.internalFormat(args) { format2, args2 ->
             nativeBuilder.addStatement(format2, *args2)
         }
 
-    fun appendLine(code: CodeBlock) {
+    public fun appendLine(code: CodeBlock) {
         nativeBuilder.addStatement(code)
     }
 
-    fun append(code: CodeBlock) {
+    public fun append(code: CodeBlock) {
         nativeBuilder.add(code)
     }
 
-    fun indent() {
+    public fun indent() {
         nativeBuilder.indent()
     }
 
-    fun unindent() {
+    public fun unindent() {
         nativeBuilder.unindent()
     }
 
-    fun clear() {
+    public fun clear() {
         nativeBuilder.clear()
     }
 
-    fun build(): CodeBlock = nativeBuilder.build()
+    public fun build(): CodeBlock = nativeBuilder.build()
 }

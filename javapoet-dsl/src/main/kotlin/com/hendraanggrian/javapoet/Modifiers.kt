@@ -2,17 +2,17 @@ package com.hendraanggrian.javapoet
 
 import javax.lang.model.element.Modifier
 
-val PUBLIC: Modifier = Modifier.PUBLIC
-val PROTECTED: Modifier = Modifier.PROTECTED
-val PRIVATE: Modifier = Modifier.PRIVATE
-val ABSTRACT: Modifier = Modifier.ABSTRACT
+public val PUBLIC: Modifier = Modifier.PUBLIC
+public val PROTECTED: Modifier = Modifier.PROTECTED
+public val PRIVATE: Modifier = Modifier.PRIVATE
+public val ABSTRACT: Modifier = Modifier.ABSTRACT
 
-val DEFAULT: Modifier = Modifier.DEFAULT
+public val DEFAULT: Modifier = Modifier.DEFAULT
 
-val STATIC: Modifier = Modifier.STATIC
-val FINAL: Modifier = Modifier.FINAL
-val TRANSIENT: Modifier = Modifier.TRANSIENT
-val VOLATILE: Modifier = Modifier.VOLATILE
-val SYNCHRONIZED: Modifier = Modifier.SYNCHRONIZED
-val NATIVE: Modifier = Modifier.NATIVE
-val STRICTFP: Modifier = Modifier.STRICTFP
+public val STATIC: Modifier = Modifier.STATIC
+public val FINAL: Modifier = Modifier.FINAL
+public val TRANSIENT: Modifier = Modifier.TRANSIENT
+public val VOLATILE: Modifier = Modifier.VOLATILE
+public val SYNCHRONIZED: Modifier = Modifier.SYNCHRONIZED
+public val NATIVE: Modifier = Modifier.NATIVE
+public val STRICTFP: Modifier = Modifier.STRICTFP

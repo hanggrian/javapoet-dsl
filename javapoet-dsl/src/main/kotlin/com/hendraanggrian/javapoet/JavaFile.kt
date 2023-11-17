@@ -14,14 +14,17 @@ import kotlin.reflect.KClass
  * Builds new [JavaFile] by populating newly created [JavaFileBuilder] using provided
  * [configuration].
  */
-inline fun buildJavaFile(packageName: String, configuration: JavaFileBuilder.() -> Unit): JavaFile {
+public inline fun buildJavaFile(
+    packageName: String,
+    configuration: JavaFileBuilder.() -> Unit,
+): JavaFile {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
     return JavaFileBuilder(packageName).apply(configuration).build()
 }
 
 /** Wrapper of [JavaFile.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetDsl
-class JavaFileBuilder(
+public class JavaFileBuilder(
     private val packageName: String,
 ) : TypeSpecHandler {
     private var comments: MutableList<Pair<String, Array<*>>> = mutableListOf()
@@ -29,54 +32,55 @@ class JavaFileBuilder(
     private var isSkipJavaLangImports: Boolean = false
     private var indentString: String = "  "
 
-    val types: MutableList<TypeSpec> = mutableListOf()
+    public val types: MutableList<TypeSpec> = mutableListOf()
 
-    override fun type(type: TypeSpec) {
+    public override fun type(type: TypeSpec) {
         types.add(type)
     }
 
-    fun comment(format: String, vararg args: Any) {
+    public fun comment(format: String, vararg args: Any) {
         comments += format to arrayOf(*args)
     }
 
-    fun staticImport(constant: Enum<*>) {
+    public fun staticImport(constant: Enum<*>) {
         imports[constant] = mutableSetOf()
     }
 
-    fun staticImport(type: ClassName, vararg names: String) {
+    public fun staticImport(type: ClassName, vararg names: String) {
         when (type) {
             in imports -> imports[type]!! += names
             else -> imports[type] = mutableSetOf(*names)
         }
     }
 
-    fun staticImport(type: KClass<*>, vararg names: String): Unit = staticImport(type.name, *names)
+    public fun staticImport(type: KClass<*>, vararg names: String): Unit =
+        staticImport(type.name, *names)
 
-    inline fun <reified T> staticImport(vararg names: String): Unit =
+    public inline fun <reified T> staticImport(vararg names: String): Unit =
         staticImport(T::class.name, *names)
 
-    var skipJavaLangImports: Boolean
+    public var skipJavaLangImports: Boolean
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR)
         get() = noGetter()
         set(value) {
             isSkipJavaLangImports = value
         }
 
-    var indent: String
+    public var indent: String
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR)
         get() = noGetter()
         set(value) {
             indentString = value
         }
 
-    var indentSize: Int
+    public var indentSize: Int
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR)
         get() = noGetter()
         set(value) {
             indent = buildString { repeat(value) { append(' ') } }
         }
 
-    fun build(): JavaFile =
+    public fun build(): JavaFile =
         JavaFile.builder(packageName, types.single())
             .apply {
                 comments.forEach { (format, args) -> addFileComment(format, *args) }

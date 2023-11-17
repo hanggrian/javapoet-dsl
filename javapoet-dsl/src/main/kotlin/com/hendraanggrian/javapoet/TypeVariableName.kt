@@ -8,12 +8,12 @@ import com.squareup.javapoet.TypeVariableName
 import kotlin.reflect.KClass
 
 /** Returns type variable named name without bounds. */
-inline val String.generics: TypeVariableName get() = TypeVariableName.get(this)
+public inline val String.generics: TypeVariableName get() = TypeVariableName.get(this)
 
 /** Returns type variable named name with bounds. */
-inline fun String.genericsBy(vararg bounds: TypeName): TypeVariableName =
+public inline fun String.genericsBy(vararg bounds: TypeName): TypeVariableName =
     TypeVariableName.get(this, *bounds)
 
 /** Returns type variable named name with bounds. */
-fun String.genericsBy(vararg bounds: KClass<*>): TypeVariableName =
+public fun String.genericsBy(vararg bounds: KClass<*>): TypeVariableName =
     TypeVariableName.get(this, *bounds.map { it.java }.toTypedArray())
