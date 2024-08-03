@@ -1,8 +1,7 @@
-[![Travis CI](https://img.shields.io/travis/com/hendraanggrian/javapoet-dsl)](https://travis-ci.com/github/hendraanggrian/javapoet-dsl/)
-[![Codecov](https://img.shields.io/codecov/c/github/hendraanggrian/javapoet-dsl)](https://codecov.io/gh/hendraanggrian/javapoet-dsl/)
-[![Maven Central](https://img.shields.io/maven-central/v/com.hendraanggrian/javapoet-dsl)](https://repo1.maven.org/maven2/com/hendraanggrian/javapoet-dsl/)
-[![Nexus Snapshot](https://img.shields.io/nexus/s/com.hendraanggrian/javapoet-dsl?server=https%3A%2F%2Fs01.oss.sonatype.org)](https://s01.oss.sonatype.org/content/repositories/snapshots/com/hendraanggrian/javapoet-dsl/)
-[![OpenJDK](https://img.shields.io/badge/jdk-1.8%2B-informational)](https://openjdk.java.net/projects/jdk8/)
+[![CircleCI](https://img.shields.io/circleci/build/gh/hanggrian/javapoet-dsl)](https://app.circleci.com/pipelines/github/hanggrian/javapoet-dsl/)
+[![Codecov](https://img.shields.io/codecov/c/gh/hanggrian/javapoet-dsl)](https://app.codecov.io/gh/hanggrian/javapoet-dsl/)
+[![Maven Central](https://img.shields.io/maven-central/v/com.hanggrian/javapoet-dsl)](https://repo1.maven.org/maven2/com/hanggrian/javapoet-dsl/)
+[![OpenJDK](https://img.shields.io/badge/jdk-11%2B-informational)](https://openjdk.org/projects/jdk/11/)
 
 # JavaPoet DSL
 
@@ -15,7 +14,7 @@ providing Kotlin DSL functionality and other convenient solutions.
 - Smooth transition, existing JavaPoet native specs can still be configured with
   DSL.
 
-```kotlin
+```kt
 buildJavaFile("com.example.helloworld") {
     classType("HelloWorld") {
         modifiers(PUBLIC, FINAL)
@@ -51,7 +50,7 @@ types (`$T`), an names (`$N`) within strings. However in Kotlin, `$` in strings
 is reserved for variable referral. Avoid using `\$` and instead use `%` as the
 prefix, this is also the approach taken by [KotlinPoet](https://github.com/square/kotlinpoet/).
 
-```kotlin
+```kt
 buildMethodSpec("getName") {
     returns<String>()
     appendLine("%S", name)
@@ -71,7 +70,7 @@ buildCodeBlock {
 `KClass<*>` can now be used as format arguments. There is also inline reified
 type function whenever possible.
 
-```kotlin
+```kt
 buildMethodSpec("sortList") {
     returns = int
     parameter(classNamed("java.util", "List").parameterizedBy(hoverboard), "list")
@@ -91,7 +90,7 @@ These containers have ability to add components with/without invoking DSL.
 
 For example, 2 examples below will produce the same result.
 
-```kotlin
+```kt
 types.addClass("Car") {
     methods {
         "getWheels" {
@@ -122,7 +121,7 @@ types.addClass("Car") {
 In spirit of [Gradle Kotlin DSL](https://docs.gradle.org/current/userguide/kotlin_dsl.html#using_kotlin_delegated_properties),
 creating a spec can be done by delegating to a property.
 
-```kotlin
+```kt
 val setWheels by methoding {
     val wheels by parametering(INT)
     appendLine("this.wheels = wheels")
@@ -133,7 +132,7 @@ val setWheels by methoding {
 
 Write `TypeName` and all its subtypes fluently.
 
-```kotlin
+```kt
 val customClass: ClassName =
     classNamed("com.example", "MyClass")
 

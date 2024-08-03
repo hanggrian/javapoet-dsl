@@ -1,14 +1,14 @@
 package com.example
 
-import com.hendraanggrian.javapoet.ABSTRACT
-import com.hendraanggrian.javapoet.INT
-import com.hendraanggrian.javapoet.PUBLIC
-import com.hendraanggrian.javapoet.annotation
-import com.hendraanggrian.javapoet.buildJavaFile
-import com.hendraanggrian.javapoet.classNamed
-import com.hendraanggrian.javapoet.classType
-import com.hendraanggrian.javapoet.interfaceType
-import com.hendraanggrian.javapoet.methods
+import com.hanggrian.javapoet.ABSTRACT
+import com.hanggrian.javapoet.INT
+import com.hanggrian.javapoet.PUBLIC
+import com.hanggrian.javapoet.annotation
+import com.hanggrian.javapoet.buildJavaFile
+import com.hanggrian.javapoet.classNamed
+import com.hanggrian.javapoet.classType
+import com.hanggrian.javapoet.interfaceType
+import com.hanggrian.javapoet.methods
 import java.nio.file.Paths
 
 class VehicleWriter {
