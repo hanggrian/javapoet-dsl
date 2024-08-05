@@ -1,9 +1,9 @@
 $dokka.format:javadoc-v1
 $dokka.linkExtension:html
-$dokka.location:com.hendraanggrian.javapoet/AnnotationSpecHandlerScope.Companion///PointingToDeclaration/com/hendraanggrian/javapoet/AnnotationSpecHandlerScope.Companion.html
-$dokka.location:com.hendraanggrian.javapoet/FieldSpecHandlerScope.Companion///PointingToDeclaration/com/hendraanggrian/javapoet/FieldSpecHandlerScope.Companion.html
-$dokka.location:com.hendraanggrian.javapoet/MethodSpecHandlerScope.Companion///PointingToDeclaration/com/hendraanggrian/javapoet/MethodSpecHandlerScope.Companion.html
-$dokka.location:com.hendraanggrian.javapoet/ParameterSpecHandlerScope.Companion///PointingToDeclaration/com/hendraanggrian/javapoet/ParameterSpecHandlerScope.Companion.html
-$dokka.location:com.hendraanggrian.javapoet/TypeSpecHandlerScope.Companion///PointingToDeclaration/com/hendraanggrian/javapoet/TypeSpecHandlerScope.Companion.html
-com.hendraanggrian.javapoet
+$dokka.location:com.hanggrian.javapoet/AnnotationSpecHandlerScope.Companion///PointingToDeclaration/com/hanggrian/javapoet/AnnotationSpecHandlerScope.Companion.html
+$dokka.location:com.hanggrian.javapoet/FieldSpecHandlerScope.Companion///PointingToDeclaration/com/hanggrian/javapoet/FieldSpecHandlerScope.Companion.html
+$dokka.location:com.hanggrian.javapoet/MethodSpecHandlerScope.Companion///PointingToDeclaration/com/hanggrian/javapoet/MethodSpecHandlerScope.Companion.html
+$dokka.location:com.hanggrian.javapoet/ParameterSpecHandlerScope.Companion///PointingToDeclaration/com/hanggrian/javapoet/ParameterSpecHandlerScope.Companion.html
+$dokka.location:com.hanggrian.javapoet/TypeSpecHandlerScope.Companion///PointingToDeclaration/com/hanggrian/javapoet/TypeSpecHandlerScope.Companion.html
+com.hanggrian.javapoet
 
