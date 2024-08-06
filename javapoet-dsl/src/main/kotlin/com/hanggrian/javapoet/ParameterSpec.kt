@@ -257,9 +257,5 @@ public class ParameterSpecBuilder(private val nativeBuilder: ParameterSpec.Build
         nativeBuilder.addModifiers(*modifiers)
     }
 
-    public fun modifiers(modifiers: Iterable<Modifier>) {
-        nativeBuilder.addModifiers(modifiers)
-    }
-
     public fun build(): ParameterSpec = nativeBuilder.build()
 }

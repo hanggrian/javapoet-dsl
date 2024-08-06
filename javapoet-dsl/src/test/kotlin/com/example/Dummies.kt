@@ -1,5 +1,7 @@
 package com.example
 
+class Class1
+
 annotation class Annotation1
 
 annotation class Annotation2

@@ -291,17 +291,13 @@ class TypeSpecBuilderTest {
     fun annotation() {
         assertThat(
             buildClassTypeSpec("class1") {
-                annotation(Annotation1::class.name)
-                annotation(Annotation2::class)
-                annotation<Annotation3>()
+                annotation(annotationSpecOf(Annotation1::class.name))
                 assertFalse(annotations.isEmpty())
             },
         ).isEqualTo(
             TypeSpec
                 .classBuilder("class1")
                 .addAnnotation(Annotation1::class.java)
-                .addAnnotation(Annotation2::class.java)
-                .addAnnotation(Annotation3::class.java)
                 .build(),
         )
     }

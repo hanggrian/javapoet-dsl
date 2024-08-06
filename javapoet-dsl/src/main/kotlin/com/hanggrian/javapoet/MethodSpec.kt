@@ -155,10 +155,6 @@ public class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) :
         nativeBuilder.addModifiers(*modifiers)
     }
 
-    public fun modifiers(modifiers: Iterable<Modifier>) {
-        nativeBuilder.addModifiers(modifiers)
-    }
-
     public fun typeVariables(typeVariables: Iterable<TypeVariableName>) {
         nativeBuilder.addTypeVariables(typeVariables)
     }

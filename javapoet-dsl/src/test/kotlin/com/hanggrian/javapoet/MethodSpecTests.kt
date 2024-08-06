@@ -92,17 +92,13 @@ class MethodSpecBuilderTest {
     fun annotation() {
         assertThat(
             buildMethodSpec("method1") {
-                annotation(Annotation1::class.name)
-                annotation(Annotation2::class)
-                annotation<Annotation3>()
+                annotation(annotationSpecOf(Annotation1::class.name))
                 assertFalse(annotations.isEmpty())
             },
         ).isEqualTo(
             MethodSpec
                 .methodBuilder("method1")
                 .addAnnotation(Annotation1::class.java)
-                .addAnnotation(Annotation2::class.java)
-                .addAnnotation(Annotation3::class.java)
                 .build(),
         )
     }
@@ -111,13 +107,15 @@ class MethodSpecBuilderTest {
     fun modifiers() {
         assertThat(
             buildMethodSpec("method1") {
-                modifiers(PUBLIC, FINAL, STATIC)
+                modifiers(PUBLIC)
+                modifiers += listOf(STATIC, FINAL)
                 assertFalse(modifiers.isEmpty())
             },
         ).isEqualTo(
             MethodSpec
                 .methodBuilder("method1")
-                .addModifiers(Modifier.PUBLIC, Modifier.FINAL, Modifier.STATIC)
+                .addModifiers(Modifier.PUBLIC)
+                .addModifiers(listOf(Modifier.STATIC, Modifier.FINAL))
                 .build(),
         )
     }
@@ -264,14 +262,48 @@ class MethodSpecBuilderTest {
 
     @Test
     fun append() {
-        assertThat(buildMethodSpec("method1") { append("some code") })
-            .isEqualTo(MethodSpec.methodBuilder("method1").addCode("some code").build())
+        assertThat(
+            buildMethodSpec("method1") {
+                append("some code")
+                append(codeBlockOf("some other code"))
+            },
+        ).isEqualTo(
+            MethodSpec
+                .methodBuilder("method1")
+                .addCode("some code")
+                .addCode(CodeBlock.of("some other code"))
+                .build(),
+        )
     }
 
     @Test
     fun appendLine() {
-        assertThat(buildMethodSpec("method1") { appendLine("some code") })
-            .isEqualTo(MethodSpec.methodBuilder("method1").addStatement("some code").build())
+        assertThat(
+            buildMethodSpec("method1") {
+                appendLine("some code")
+                appendLine(codeBlockOf("another code"))
+            },
+        ).isEqualTo(
+            MethodSpec
+                .methodBuilder("method1")
+                .addStatement("some code")
+                .addStatement(CodeBlock.of("another code"))
+                .build(),
+        )
+    }
+
+    @Test
+    fun appendNamed() {
+        assertThat(
+            buildMethodSpec("method1") {
+                appendNamed("format", mapOf("key1" to "value1", "key2" to "value2"))
+            },
+        ).isEqualTo(
+            MethodSpec
+                .methodBuilder("method1")
+                .addNamedCode("format", mapOf("key1" to "value1", "key2" to "value2"))
+                .build(),
+        )
     }
 
     @Test
@@ -288,6 +320,32 @@ class MethodSpecBuilderTest {
                 .beginControlFlow("some code")
                 .nextControlFlow("another code")
                 .endControlFlow()
+                .build(),
+        )
+        assertThat(
+            buildMethodSpec("method2") {
+                beginControlFlow(codeBlockOf("some code"))
+                nextControlFlow(codeBlockOf("another code"))
+                endControlFlow(codeBlockOf("yet another code"))
+            },
+        ).isEqualTo(
+            MethodSpec
+                .methodBuilder("method2")
+                .beginControlFlow(CodeBlock.of("some code"))
+                .nextControlFlow(CodeBlock.of("another code"))
+                .endControlFlow(CodeBlock.of("yet another code"))
+                .build(),
+        )
+        assertThat(
+            buildMethodSpec("method1") {
+                beginControlFlow("some code")
+                endControlFlow("format", "arg")
+            },
+        ).isEqualTo(
+            MethodSpec
+                .methodBuilder("method1")
+                .beginControlFlow("some code")
+                .endControlFlow("format", "arg")
                 .build(),
         )
     }

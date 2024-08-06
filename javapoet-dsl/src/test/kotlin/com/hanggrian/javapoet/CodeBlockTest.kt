@@ -1,35 +1,116 @@
 package com.hanggrian.javapoet
 
+import com.google.common.truth.Truth.assertThat
 import com.squareup.javapoet.CodeBlock
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFails
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 class CodeBlockTest {
-    private val expected =
-        CodeBlock
-            .builder()
-            .addStatement("int total = 0")
-            .beginControlFlow("for (int i = 0; i < 10; i++)")
-            .addStatement("total += i")
-            .endControlFlow()
-            .build()
+    @Test
+    fun isEmpty() {
+        buildCodeBlock {
+            assertTrue(isEmpty())
+            append("text")
+            assertFalse(isEmpty())
+        }
+    }
 
     @Test
-    fun simple() {
-        assertEquals(
-            expected,
+    fun isNotEmpty() {
+        buildCodeBlock {
+            assertFalse(isNotEmpty())
+            append("text")
+            assertTrue(isNotEmpty())
+        }
+    }
+
+    @Test
+    fun controlFlow() {
+        assertThat(
+            buildCodeBlock {
+                beginControlFlow("format", "arg")
+                nextControlFlow("format", "arg")
+                endControlFlow("format", "arg")
+            },
+        ).isEqualTo(
+            CodeBlock
+                .builder()
+                .beginControlFlow("format", "arg")
+                .nextControlFlow("format", "arg")
+                .endControlFlow("format", "arg")
+                .build(),
+        )
+    }
+
+    @Test
+    fun append() {
+        assertThat(
+            buildCodeBlock {
+                append("text")
+                append(codeBlockOf("some code"))
+            },
+        ).isEqualTo(
+            CodeBlock
+                .builder()
+                .add("text")
+                .add(CodeBlock.of("some code"))
+                .build(),
+        )
+    }
+
+    @Test
+    fun appendLine() {
+        assertThat(
+            buildCodeBlock {
+                appendLine()
+                appendLine("text")
+                appendLine(codeBlockOf("some code"))
+            },
+        ).isEqualTo(
+            CodeBlock
+                .builder()
+                .addStatement("")
+                .addStatement("text")
+                .addStatement(CodeBlock.of("some code"))
+                .build(),
+        )
+    }
+
+    @Test
+    fun clear() {
+        buildCodeBlock {
+            assertFalse(isNotEmpty())
+            append("text")
+            clear()
+            assertTrue(isEmpty())
+        }
+    }
+
+    @Test
+    fun `Simple example`() {
+        assertThat(
             buildCodeBlock {
                 appendLine("int total = 0")
                 beginControlFlow("for (int i = 0; i < 10; i++)")
                 appendLine("total += i")
                 endControlFlow()
             },
+        ).isEqualTo(
+            CodeBlock
+                .builder()
+                .addStatement("int total = 0")
+                .beginControlFlow("for (int i = 0; i < 10; i++)")
+                .addStatement("total += i")
+                .endControlFlow()
+                .build(),
         )
     }
 
     @Test
-    fun escapeSpecialChar() {
+    fun `Escape special characters`() {
         assertFails { codeBlockOf("100$") }
         assertEquals("100$", "${codeBlockOf("100$$")}")
         assertEquals("100\$S", "${codeBlockOf("100$\$S")}")

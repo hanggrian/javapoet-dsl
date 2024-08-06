@@ -19,7 +19,9 @@ public fun buildJavaFile(
     configuration: JavaFileBuilder.() -> Unit,
 ): JavaFile {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    return JavaFileBuilder(packageName).apply(configuration).build()
+    return JavaFileBuilder(packageName)
+        .apply(configuration)
+        .build()
 }
 
 /** Wrapper of [JavaFile.Builder], providing DSL support as a replacement to Java builder. */

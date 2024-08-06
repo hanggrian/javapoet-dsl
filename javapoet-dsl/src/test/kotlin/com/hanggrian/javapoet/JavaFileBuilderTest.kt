@@ -9,7 +9,7 @@ import kotlin.test.assertFails
 class JavaFileBuilderTest {
     /** A java file may only have one type. */
     @Test
-    fun invalidNumberOfType() {
+    fun `Invalid number of types`() {
         // Multiple types.
         assertFails {
             buildJavaFile("com.example") {
