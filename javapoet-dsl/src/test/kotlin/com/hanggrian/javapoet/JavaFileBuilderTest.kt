@@ -13,8 +13,10 @@ class JavaFileBuilderTest {
         // Multiple types.
         assertFails {
             buildJavaFile("com.example") {
-                classType("MyClass")
-                classType("MyOtherClass")
+                types {
+                    addClass("MyClass")
+                    addClass("MyOtherClass")
+                }
             }
         }
         // No type.
@@ -24,8 +26,15 @@ class JavaFileBuilderTest {
     }
 
     @Test
-    fun comments() {
+    fun addComment() {
         assertEquals(
+            buildJavaFile("com.example") {
+                types.addClass("MyClass")
+                addComment("A ")
+                addComment("very ")
+                addComment("long ")
+                addComment("comment")
+            },
             JavaFile
                 .builder("com.example", TypeSpec.classBuilder("MyClass").build())
                 .addFileComment("A ")
@@ -33,23 +42,16 @@ class JavaFileBuilderTest {
                 .addFileComment("long ")
                 .addFileComment("comment")
                 .build(),
-            buildJavaFile("com.example") {
-                classType("MyClass")
-                comment("A ")
-                comment("very ")
-                comment("long ")
-                comment("comment")
-            },
         )
     }
 
     @Test
-    fun staticImports() {
+    fun addStaticImports() {
         // Names array cannot be empty.
         assertFails {
             buildJavaFile("com.example") {
-                classType("MyClass")
-                staticImport<String>()
+                types.addClass("MyClass")
+                addStaticImport<String>()
             }
         }
         // Same type import using different functions.
@@ -66,10 +68,10 @@ class JavaFileBuilderTest {
 
             """.trimIndent(),
             buildJavaFile("com.example") {
-                classType("MyClass")
-                staticImport(MyEnum.A)
-                staticImport(String::class, "toDouble")
-                staticImport<String>("toFloat")
+                types.addClass("MyClass")
+                addStaticImport(MyEnum.A)
+                addStaticImport(String::class, "toDouble")
+                addStaticImport<String>("toFloat")
             }.toString(),
         )
     }
@@ -88,8 +90,8 @@ class JavaFileBuilderTest {
 
             """.trimIndent(),
             buildJavaFile("com.example") {
-                classType("MyClass") {
-                    constructorMethod {
+                types.addClass("MyClass") {
+                    methods.addConstructor {
                         appendLine("%T s = new %T", String::class, String::class)
                     }
                 }
@@ -112,8 +114,8 @@ class JavaFileBuilderTest {
 
             """.trimIndent(),
             buildJavaFile("com.example") {
-                classType("MyClass") {
-                    constructorMethod()
+                types.addClass("MyClass") {
+                    methods.addConstructor()
                 }
                 indent = ">"
             }.toString(),
@@ -130,8 +132,8 @@ class JavaFileBuilderTest {
 
             """.trimIndent(),
             buildJavaFile("com.example") {
-                classType("MyClass") {
-                    constructorMethod()
+                types.addClass("MyClass") {
+                    methods.addConstructor()
                 }
                 indentSize = 4
             }.toString(),

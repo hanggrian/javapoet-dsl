@@ -15,16 +15,16 @@ import kotlin.test.assertFalse
 
 class AnnotationSpecHandlerTest {
     @Test
-    fun annotation() {
+    fun add() {
         assertThat(
             buildFieldSpec(STRING, "test") {
-                annotation(Annotation1::class.name)
-                annotation(Annotation2::class.java)
-                annotation(Annotation3::class)
-                annotation<Annotation4>()
-                annotation(Annotation5::class.name) { member("name5", "value5") }
-                annotation(Annotation6::class.java) { member("name6", "value6") }
-                annotation(Annotation7::class) { member("name7", "value7") }
+                annotations.add(Annotation1::class.name)
+                annotations.add(Annotation2::class.java)
+                annotations.add(Annotation3::class)
+                annotations.add<Annotation4>()
+                annotations.add(Annotation5::class.name) { addMember("name5", "value5") }
+                annotations.add(Annotation6::class.java) { addMember("name6", "value6") }
+                annotations.add(Annotation7::class) { addMember("name7", "value7") }
             }.annotations,
         ).containsExactly(
             AnnotationSpec.builder(Annotation1::class.java).build(),
@@ -42,9 +42,9 @@ class AnnotationSpecHandlerTest {
         assertThat(
             buildFieldSpec(STRING, "test") {
                 annotations {
-                    Annotation1::class.name { member("name1", "value1") }
-                    Annotation2::class.java { member("name2", "value2") }
-                    Annotation3::class { member("name3", "value3") }
+                    Annotation1::class.name { addMember("name1", "value1") }
+                    Annotation2::class.java { addMember("name2", "value2") }
+                    Annotation3::class { addMember("name3", "value3") }
                 }
             }.annotations,
         ).containsExactly(
@@ -57,11 +57,11 @@ class AnnotationSpecHandlerTest {
 
 class AnnotationSpecBuilderTest {
     @Test
-    fun member() {
+    fun addMember() {
         assertThat(
             buildAnnotationSpec(Annotation1::class.name) {
-                member("member1", "value1")
-                member("member2", codeBlockOf("value2"))
+                addMember("member1", "value1")
+                addMember("member2", codeBlockOf("value2"))
                 assertFalse(members.isEmpty())
             },
         ).isEqualTo(

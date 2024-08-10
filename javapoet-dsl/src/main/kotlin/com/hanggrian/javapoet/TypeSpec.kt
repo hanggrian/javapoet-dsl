@@ -210,7 +210,7 @@ public fun buildAnnotationTypeSpec(
  * Inserts new class [TypeSpec] by populating newly created [TypeSpecBuilder] using provided
  * [configuration].
  */
-public fun TypeSpecHandler.classType(
+public fun TypeSpecHandler.addClass(
     name: String,
     configuration: TypeSpecBuilder.() -> Unit,
 ): TypeSpec {
@@ -218,14 +218,14 @@ public fun TypeSpecHandler.classType(
     return TypeSpecBuilder(TypeSpec.classBuilder(name))
         .apply(configuration)
         .build()
-        .also(::type)
+        .also(::add)
 }
 
 /**
  * Inserts new class [TypeSpec] by populating newly created [TypeSpecBuilder] using provided
  * [configuration].
  */
-public fun TypeSpecHandler.classType(
+public fun TypeSpecHandler.addClass(
     name: ClassName,
     configuration: TypeSpecBuilder.() -> Unit,
 ): TypeSpec {
@@ -233,14 +233,14 @@ public fun TypeSpecHandler.classType(
     return TypeSpecBuilder(TypeSpec.classBuilder(name))
         .apply(configuration)
         .build()
-        .also(::type)
+        .also(::add)
 }
 
 /**
  * Inserts new interface [TypeSpec] by populating newly created [TypeSpecBuilder] using provided
  * [configuration].
  */
-public fun TypeSpecHandler.interfaceType(
+public fun TypeSpecHandler.addInterface(
     name: String,
     configuration: TypeSpecBuilder.() -> Unit,
 ): TypeSpec {
@@ -248,14 +248,14 @@ public fun TypeSpecHandler.interfaceType(
     return TypeSpecBuilder(TypeSpec.interfaceBuilder(name))
         .apply(configuration)
         .build()
-        .also(::type)
+        .also(::add)
 }
 
 /**
  * Inserts new interface [TypeSpec] by populating newly created [TypeSpecBuilder] using provided
  * [configuration].
  */
-public fun TypeSpecHandler.interfaceType(
+public fun TypeSpecHandler.addInterface(
     name: ClassName,
     configuration: TypeSpecBuilder.() -> Unit,
 ): TypeSpec {
@@ -263,14 +263,14 @@ public fun TypeSpecHandler.interfaceType(
     return TypeSpecBuilder(TypeSpec.interfaceBuilder(name))
         .apply(configuration)
         .build()
-        .also(::type)
+        .also(::add)
 }
 
 /**
  * Inserts new enum [TypeSpec] by populating newly created [TypeSpecBuilder] using provided
  * [configuration].
  */
-public fun TypeSpecHandler.enumType(
+public fun TypeSpecHandler.addEnum(
     name: String,
     configuration: TypeSpecBuilder.() -> Unit,
 ): TypeSpec {
@@ -278,14 +278,14 @@ public fun TypeSpecHandler.enumType(
     return TypeSpecBuilder(TypeSpec.enumBuilder(name))
         .apply(configuration)
         .build()
-        .also(::type)
+        .also(::add)
 }
 
 /**
  * Inserts new enum [TypeSpec] by populating newly created [TypeSpecBuilder] using provided
  * [configuration].
  */
-public fun TypeSpecHandler.enumType(
+public fun TypeSpecHandler.addEnum(
     name: ClassName,
     configuration: TypeSpecBuilder.() -> Unit,
 ): TypeSpec {
@@ -293,14 +293,14 @@ public fun TypeSpecHandler.enumType(
     return TypeSpecBuilder(TypeSpec.enumBuilder(name))
         .apply(configuration)
         .build()
-        .also(::type)
+        .also(::add)
 }
 
 /**
  * Inserts new anonymous [TypeSpec] by populating newly created [TypeSpecBuilder] using provided
  * [configuration].
  */
-public fun TypeSpecHandler.anonymousType(
+public fun TypeSpecHandler.addAnonymous(
     format: String,
     vararg args: Any,
     configuration: TypeSpecBuilder.() -> Unit,
@@ -310,7 +310,7 @@ public fun TypeSpecHandler.anonymousType(
         TypeSpecBuilder(TypeSpec.anonymousClassBuilder(format2, *args2))
             .apply(configuration)
             .build()
-            .also(::type)
+            .also(::add)
     }
 }
 
@@ -318,7 +318,7 @@ public fun TypeSpecHandler.anonymousType(
  * Inserts new anonymous [TypeSpec] by populating newly created [TypeSpecBuilder] using provided
  * [configuration].
  */
-public fun TypeSpecHandler.anonymousType(
+public fun TypeSpecHandler.addAnonymous(
     code: CodeBlock,
     configuration: TypeSpecBuilder.() -> Unit,
 ): TypeSpec {
@@ -326,14 +326,14 @@ public fun TypeSpecHandler.anonymousType(
     return TypeSpecBuilder(TypeSpec.anonymousClassBuilder(code))
         .apply(configuration)
         .build()
-        .also(::type)
+        .also(::add)
 }
 
 /**
  * Inserts new annotation [TypeSpec] by populating newly created [TypeSpecBuilder] using provided
  * [configuration].
  */
-public fun TypeSpecHandler.annotationType(
+public fun TypeSpecHandler.addAnnotation(
     name: String,
     configuration: TypeSpecBuilder.() -> Unit,
 ): TypeSpec {
@@ -341,14 +341,14 @@ public fun TypeSpecHandler.annotationType(
     return TypeSpecBuilder(TypeSpec.annotationBuilder(name))
         .apply(configuration)
         .build()
-        .also(::type)
+        .also(::add)
 }
 
 /**
  * Inserts new annotation [TypeSpec] by populating newly created [TypeSpecBuilder] using provided
  * [configuration].
  */
-public fun TypeSpecHandler.annotationType(
+public fun TypeSpecHandler.addAnnotation(
     name: ClassName,
     configuration: TypeSpecBuilder.() -> Unit,
 ): TypeSpec {
@@ -356,14 +356,14 @@ public fun TypeSpecHandler.annotationType(
     return TypeSpecBuilder(TypeSpec.annotationBuilder(name))
         .apply(configuration)
         .build()
-        .also(::type)
+        .also(::add)
 }
 
 /**
  * Property delegate for inserting new class [TypeSpec] by populating newly created [TypeSpecBuilder]
  * using provided [configuration].
  */
-public fun TypeSpecHandler.classTyping(
+public fun TypeSpecHandler.addingClass(
     configuration: TypeSpecBuilder.() -> Unit,
 ): SpecDelegateProvider<TypeSpec> {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
@@ -371,7 +371,7 @@ public fun TypeSpecHandler.classTyping(
         TypeSpecBuilder(TypeSpec.classBuilder(it))
             .apply(configuration)
             .build()
-            .also(::type)
+            .also(::add)
     }
 }
 
@@ -379,7 +379,7 @@ public fun TypeSpecHandler.classTyping(
  * Property delegate for inserting new interface [TypeSpec] by populating newly created
  * [TypeSpecBuilder] using provided [configuration].
  */
-public fun TypeSpecHandler.interfaceTyping(
+public fun TypeSpecHandler.addingInterface(
     configuration: TypeSpecBuilder.() -> Unit,
 ): SpecDelegateProvider<TypeSpec> {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
@@ -387,7 +387,7 @@ public fun TypeSpecHandler.interfaceTyping(
         TypeSpecBuilder(TypeSpec.interfaceBuilder(it))
             .apply(configuration)
             .build()
-            .also(::type)
+            .also(::add)
     }
 }
 
@@ -395,7 +395,7 @@ public fun TypeSpecHandler.interfaceTyping(
  * Property delegate for inserting new interface [TypeSpec] by populating newly created
  * [TypeSpecBuilder] using provided [configuration].
  */
-public fun TypeSpecHandler.enumTyping(
+public fun TypeSpecHandler.addingEnum(
     configuration: TypeSpecBuilder.() -> Unit,
 ): SpecDelegateProvider<TypeSpec> {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
@@ -403,7 +403,7 @@ public fun TypeSpecHandler.enumTyping(
         TypeSpecBuilder(TypeSpec.enumBuilder(it))
             .apply(configuration)
             .build()
-            .also(::type)
+            .also(::add)
     }
 }
 
@@ -411,7 +411,7 @@ public fun TypeSpecHandler.enumTyping(
  * Property delegate for inserting new interface [TypeSpec] by populating newly created
  * [TypeSpecBuilder] using provided [configuration].
  */
-public fun TypeSpecHandler.anonymousTyping(
+public fun TypeSpecHandler.addingAnonymous(
     vararg args: Any,
     configuration: TypeSpecBuilder.() -> Unit,
 ): SpecDelegateProvider<TypeSpec> {
@@ -421,7 +421,7 @@ public fun TypeSpecHandler.anonymousTyping(
             TypeSpecBuilder(TypeSpec.anonymousClassBuilder(format2, args2))
                 .apply(configuration)
                 .build()
-                .also(::type)
+                .also(::add)
         }
     }
 }
@@ -430,7 +430,7 @@ public fun TypeSpecHandler.anonymousTyping(
  * Property delegate for inserting new interface [TypeSpec] by populating newly created
  * [TypeSpecBuilder] using provided [configuration].
  */
-public fun TypeSpecHandler.annotationTyping(
+public fun TypeSpecHandler.addingAnnotation(
     configuration: TypeSpecBuilder.() -> Unit,
 ): SpecDelegateProvider<TypeSpec> {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
@@ -438,61 +438,50 @@ public fun TypeSpecHandler.annotationTyping(
         TypeSpecBuilder(TypeSpec.annotationBuilder(it))
             .apply(configuration)
             .build()
-            .also(::type)
+            .also(::add)
     }
-}
-
-/** Invokes DSL to configure [TypeSpec] collection. */
-public fun TypeSpecHandler.types(configuration: TypeSpecHandlerScope.() -> Unit) {
-    contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    TypeSpecHandlerScope
-        .of(this)
-        .configuration()
 }
 
 /** Responsible for managing a set of [TypeSpec] instances. */
 public interface TypeSpecHandler {
-    public fun type(type: TypeSpec)
+    public fun add(type: TypeSpec)
 
-    public fun classType(name: String): TypeSpec = classTypeSpecOf(name).also(::type)
+    public fun addClass(name: String): TypeSpec = classTypeSpecOf(name).also(::add)
 
-    public fun classType(name: ClassName): TypeSpec = classTypeSpecOf(name).also(::type)
+    public fun addClass(name: ClassName): TypeSpec = classTypeSpecOf(name).also(::add)
 
-    public fun interfaceType(name: String): TypeSpec = interfaceTypeSpecOf(name).also(::type)
+    public fun addInterface(name: String): TypeSpec = interfaceTypeSpecOf(name).also(::add)
 
-    public fun interfaceType(name: ClassName): TypeSpec = interfaceTypeSpecOf(name).also(::type)
+    public fun addInterface(name: ClassName): TypeSpec = interfaceTypeSpecOf(name).also(::add)
 
-    public fun anonymousType(format: String, vararg args: Any): TypeSpec =
-        anonymousTypeSpecOf(format, *args).also(::type)
+    public fun addAnonymous(format: String, vararg args: Any): TypeSpec =
+        anonymousTypeSpecOf(format, *args).also(::add)
 
-    public fun anonymousType(code: CodeBlock): TypeSpec = anonymousTypeSpecOf(code).also(::type)
+    public fun addAnonymous(code: CodeBlock): TypeSpec = anonymousTypeSpecOf(code).also(::add)
 
-    public fun annotationType(name: String): TypeSpec = annotationTypeSpecOf(name).also(::type)
+    public fun addAnnotation(name: String): TypeSpec = annotationTypeSpecOf(name).also(::add)
 
-    public fun annotationType(name: ClassName): TypeSpec = annotationTypeSpecOf(name).also(::type)
+    public fun addAnnotation(name: ClassName): TypeSpec = annotationTypeSpecOf(name).also(::add)
 
-    public fun classTyping(): SpecDelegateProvider<TypeSpec> =
-        SpecDelegateProvider { classTypeSpecOf(it).also(::type) }
+    public fun addingClass(): SpecDelegateProvider<TypeSpec> =
+        SpecDelegateProvider { classTypeSpecOf(it).also(::add) }
 
-    public fun interfaceTyping(): SpecDelegateProvider<TypeSpec> =
-        SpecDelegateProvider { interfaceTypeSpecOf(it).also(::type) }
+    public fun addingInterface(): SpecDelegateProvider<TypeSpec> =
+        SpecDelegateProvider { interfaceTypeSpecOf(it).also(::add) }
 
-    public fun anonymousTyping(vararg args: Any): SpecDelegateProvider<TypeSpec> =
-        SpecDelegateProvider { anonymousTypeSpecOf(it, *args).also(::type) }
+    public fun addingAnonymous(vararg args: Any): SpecDelegateProvider<TypeSpec> =
+        SpecDelegateProvider { anonymousTypeSpecOf(it, *args).also(::add) }
 
-    public fun annotationTyping(): SpecDelegateProvider<TypeSpec> =
-        SpecDelegateProvider { annotationTypeSpecOf(it).also(::type) }
+    public fun addingAnnotation(): SpecDelegateProvider<TypeSpec> =
+        SpecDelegateProvider { annotationTypeSpecOf(it).also(::add) }
 }
 
 /** Receiver for the `types` block providing an extended set of operators for the configuration. */
 @JavapoetDsl
 public open class TypeSpecHandlerScope private constructor(handler: TypeSpecHandler) :
     TypeSpecHandler by handler {
-        /**
-         * @see classType
-         */
         public operator fun String.invoke(configuration: TypeSpecBuilder.() -> Unit): TypeSpec =
-            classType(this, configuration)
+            addClass(this, configuration)
 
         public companion object {
             public fun of(handler: TypeSpecHandler): TypeSpecHandlerScope =
@@ -502,45 +491,93 @@ public open class TypeSpecHandlerScope private constructor(handler: TypeSpecHand
 
 /** Wrapper of [TypeSpec.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetDsl
-public class TypeSpecBuilder(private val nativeBuilder: TypeSpec.Builder) :
-    AnnotationSpecHandler,
-    FieldSpecHandler,
-    MethodSpecHandler,
-    TypeSpecHandler {
-    public val annotations: MutableList<AnnotationSpec> get() = nativeBuilder.annotations
+public class TypeSpecBuilder(private val nativeBuilder: TypeSpec.Builder) {
+    public val annotations: AnnotationSpecHandler =
+        object : AnnotationSpecHandler {
+            override fun add(annotation: AnnotationSpec) {
+                annotationSpecs += annotation
+            }
+        }
+
+    public val fields: FieldSpecHandler =
+        object : FieldSpecHandler {
+            override fun add(field: FieldSpec) {
+                fieldSpecs += field
+            }
+        }
+
+    public val methods: MethodSpecHandler =
+        object : MethodSpecHandler {
+            override fun add(method: MethodSpec) {
+                methodSpecs += method
+            }
+        }
+
+    public val types: TypeSpecHandler =
+        object : TypeSpecHandler {
+            override fun add(type: TypeSpec) {
+                typeSpecs += type
+            }
+        }
+
+    /** Invokes DSL to configure [AnnotationSpec] collection. */
+    public fun annotations(configuration: AnnotationSpecHandlerScope.() -> Unit) {
+        contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
+        AnnotationSpecHandlerScope
+            .of(annotations)
+            .configuration()
+    }
+
+    /** Invokes DSL to configure [FieldSpec] collection. */
+    public fun fields(configuration: FieldSpecHandlerScope.() -> Unit) {
+        contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
+        FieldSpecHandlerScope
+            .of(fields)
+            .configuration()
+    }
+
+    /** Invokes DSL to configure [MethodSpec] collection. */
+    public fun methods(configuration: MethodSpecHandlerScope.() -> Unit) {
+        contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
+        MethodSpecHandlerScope
+            .of(methods)
+            .configuration()
+    }
+
+    /** Invokes DSL to configure [TypeSpec] collection. */
+    public fun types(configuration: TypeSpecHandlerScope.() -> Unit) {
+        contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
+        TypeSpecHandlerScope
+            .of(types)
+            .configuration()
+    }
+
+    public val annotationSpecs: MutableList<AnnotationSpec> get() = nativeBuilder.annotations
     public val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
     public val typeVariables: MutableList<TypeVariableName> get() = nativeBuilder.typeVariables
     public val superinterfaces: MutableList<TypeName> get() = nativeBuilder.superinterfaces
     public val enumConstants: MutableMap<String, TypeSpec> get() = nativeBuilder.enumConstants
-    public val fields: MutableList<FieldSpec> get() = nativeBuilder.fieldSpecs
-    public val methods: MutableList<MethodSpec> get() = nativeBuilder.methodSpecs
-    public val types: MutableList<TypeSpec> get() = nativeBuilder.typeSpecs
+    public val fieldSpecs: MutableList<FieldSpec> get() = nativeBuilder.fieldSpecs
+    public val methodSpecs: MutableList<MethodSpec> get() = nativeBuilder.methodSpecs
+    public val typeSpecs: MutableList<TypeSpec> get() = nativeBuilder.typeSpecs
     public val originatingElements: MutableList<Element> get() = nativeBuilder.originatingElements
     public val alwaysQualifiedNames: MutableSet<String> get() = nativeBuilder.alwaysQualifiedNames
 
-    public fun javadoc(format: String, vararg args: Any): Unit =
+    public fun addJavadoc(format: String, vararg args: Any): Unit =
         format.internalFormat(args) { format2, args2 ->
             nativeBuilder.addJavadoc(format2, *args2)
         }
 
-    public fun javadoc(block: CodeBlock) {
+    public fun addJavadoc(block: CodeBlock) {
         nativeBuilder.addJavadoc(block)
     }
 
-    public override fun annotation(annotation: AnnotationSpec) {
-        nativeBuilder.addAnnotation(annotation)
+    public fun addModifiers(vararg modifiers: Modifier) {
+        this.modifiers += modifiers
     }
 
-    public fun modifiers(vararg modifiers: Modifier) {
-        nativeBuilder.addModifiers(*modifiers)
-    }
-
-    public fun typeVariables(typeVariables: Iterable<TypeVariableName>) {
-        nativeBuilder.addTypeVariables(typeVariables)
-    }
-
-    public fun typeVariable(typeVariable: TypeVariableName) {
-        nativeBuilder.addTypeVariable(typeVariable)
+    public fun addTypeVariables(vararg typeVariables: TypeVariableName) {
+        this.typeVariables += typeVariables
     }
 
     public var superclass: TypeName
@@ -550,77 +587,65 @@ public class TypeSpecBuilder(private val nativeBuilder: TypeSpec.Builder) :
             nativeBuilder.superclass(value)
         }
 
-    public fun superclass(type: Class<*>) {
-        nativeBuilder.superclass(type)
+    public fun setSuperclass(type: Class<*>) {
+        superclass = type.name2
     }
 
-    public fun superclass(type: KClass<*>) {
-        nativeBuilder.superclass(type.java)
+    public fun setSuperclass(type: KClass<*>) {
+        superclass = type.name
     }
 
-    public inline fun <reified T> superclass(): Unit = superclass(T::class)
-
-    public fun superinterfaces(superinterfaces: Iterable<TypeName>) {
-        nativeBuilder.addSuperinterfaces(superinterfaces)
+    public inline fun <reified T> setSuperclass() {
+        superclass = T::class.name
     }
 
-    public fun superinterface(superinterface: TypeName) {
-        nativeBuilder.addSuperinterface(superinterface)
+    public fun addSuperinterfaces(vararg superinterfaces: TypeName) {
+        this.superinterfaces += superinterfaces
     }
 
-    public fun superinterface(superinterface: Class<*>) {
-        nativeBuilder.addSuperinterface(superinterface)
+    public fun addSuperinterfaces(vararg superinterfaces: Class<*>) {
+        this.superinterfaces += superinterfaces.map { it.name2 }
     }
 
-    public fun superinterface(superinterface: KClass<*>) {
-        nativeBuilder.addSuperinterface(superinterface.java)
+    public fun addSuperinterfaces(vararg superinterfaces: KClass<*>) {
+        this.superinterfaces += superinterfaces.map { it.name }
     }
 
-    public inline fun <reified T> superinterface(): Unit = superinterface(T::class)
+    public inline fun <reified T> addSuperinterface() {
+        superinterfaces += T::class.name
+    }
 
-    public fun superinterface(
+    public fun addSuperinterface(
         superinterface: TypeMirror,
         avoidNestedTypeNameClashes: Boolean = true,
     ) {
         nativeBuilder.addSuperinterface(superinterface, avoidNestedTypeNameClashes)
     }
 
-    public fun enumConstant(
+    public fun addEnumConstant(
         name: String,
-        spec: TypeSpec = TypeSpec.anonymousClassBuilder("").build(),
+        type: TypeSpec = TypeSpec.anonymousClassBuilder("").build(),
     ) {
-        nativeBuilder.addEnumConstant(name, spec)
+        enumConstants[name] = type
     }
 
-    public override fun field(field: FieldSpec) {
-        nativeBuilder.addField(field)
-    }
-
-    public fun staticBlock(code: CodeBlock) {
+    public fun addStaticBlock(code: CodeBlock) {
         nativeBuilder.addStaticBlock(code)
     }
 
-    public fun staticBlock(format: String, vararg args: Any) {
+    public fun addStaticBlock(format: String, vararg args: Any) {
         nativeBuilder.addStaticBlock(codeBlockOf(format, *args))
     }
 
-    public fun initializerBlock(code: CodeBlock) {
+    public fun addInitializerBlock(code: CodeBlock) {
         nativeBuilder.addInitializerBlock(code)
     }
 
-    public fun initializerBlock(format: String, vararg args: Any) {
+    public fun addInitializerBlock(format: String, vararg args: Any) {
         nativeBuilder.addInitializerBlock(codeBlockOf(format, *args))
     }
 
-    public override fun method(method: MethodSpec) {
-        nativeBuilder.addMethod(method)
-    }
-
-    public override fun type(type: TypeSpec) {
-        nativeBuilder.addType(type)
-    }
-
-    public fun originatingElement(originatingElement: Element) {
+    public fun addOriginatingElement(originatingElement: Element) {
         nativeBuilder.addOriginatingElement(originatingElement)
     }
 

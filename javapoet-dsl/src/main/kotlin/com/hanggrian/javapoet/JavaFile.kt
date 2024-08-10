@@ -26,38 +26,49 @@ public fun buildJavaFile(
 
 /** Wrapper of [JavaFile.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetDsl
-public class JavaFileBuilder(private val packageName: String) : TypeSpecHandler {
+public class JavaFileBuilder(private val packageName: String) {
     private var comments: MutableList<Pair<String, Array<*>>> = mutableListOf()
     private var imports: MutableMap<Any, MutableSet<String>> = mutableMapOf()
     private var skipJavaLangImports: Boolean = false
     private var indentString: String = "  "
 
-    public val types: MutableList<TypeSpec> = mutableListOf()
+    public val typeSpecs: MutableList<TypeSpec> = mutableListOf()
 
-    public override fun type(type: TypeSpec) {
-        types.add(type)
+    public val types: TypeSpecHandler =
+        object : TypeSpecHandler {
+            override fun add(type: TypeSpec) {
+                typeSpecs.add(type)
+            }
+        }
+
+    /** Invokes DSL to configure [TypeSpec] collection. */
+    public fun types(configuration: TypeSpecHandlerScope.() -> Unit) {
+        contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
+        TypeSpecHandlerScope
+            .of(types)
+            .configuration()
     }
 
-    public fun comment(format: String, vararg args: Any) {
+    public fun addComment(format: String, vararg args: Any) {
         comments += format to arrayOf(*args)
     }
 
-    public fun staticImport(constant: Enum<*>) {
+    public fun addStaticImport(constant: Enum<*>) {
         imports[constant] = mutableSetOf()
     }
 
-    public fun staticImport(type: ClassName, vararg names: String) {
+    public fun addStaticImport(type: ClassName, vararg names: String) {
         when (type) {
             in imports -> imports[type]!! += names
             else -> imports[type] = mutableSetOf(*names)
         }
     }
 
-    public fun staticImport(type: KClass<*>, vararg names: String): Unit =
-        staticImport(type.name, *names)
+    public fun addStaticImport(type: KClass<*>, vararg names: String): Unit =
+        addStaticImport(type.name, *names)
 
-    public inline fun <reified T> staticImport(vararg names: String): Unit =
-        staticImport(T::class.name, *names)
+    public inline fun <reified T> addStaticImport(vararg names: String): Unit =
+        addStaticImport(T::class.name, *names)
 
     public var isSkipJavaLangImports: Boolean
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR)
@@ -82,7 +93,7 @@ public class JavaFileBuilder(private val packageName: String) : TypeSpecHandler 
 
     public fun build(): JavaFile =
         JavaFile
-            .builder(packageName, types.single())
+            .builder(packageName, typeSpecs.single())
             .apply {
                 comments.forEach { (format, args) -> addFileComment(format, *args) }
                 imports.forEach { (type, names) ->

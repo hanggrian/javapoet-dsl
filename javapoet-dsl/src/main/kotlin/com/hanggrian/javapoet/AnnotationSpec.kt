@@ -34,7 +34,7 @@ public fun buildAnnotationSpec(
  * Inserts new [AnnotationSpec] by populating newly created [AnnotationSpecBuilder] using provided
  * [configuration].
  */
-public fun AnnotationSpecHandler.annotation(
+public fun AnnotationSpecHandler.add(
     type: ClassName,
     configuration: AnnotationSpecBuilder.() -> Unit,
 ): AnnotationSpec {
@@ -42,14 +42,14 @@ public fun AnnotationSpecHandler.annotation(
     return AnnotationSpecBuilder(AnnotationSpec.builder(type))
         .apply(configuration)
         .build()
-        .also(::annotation)
+        .also(::add)
 }
 
 /**
  * Inserts new [AnnotationSpec] by populating newly created [AnnotationSpecBuilder] using provided
  * [configuration].
  */
-public fun AnnotationSpecHandler.annotation(
+public fun AnnotationSpecHandler.add(
     type: Class<*>,
     configuration: AnnotationSpecBuilder.() -> Unit,
 ): AnnotationSpec {
@@ -57,14 +57,14 @@ public fun AnnotationSpecHandler.annotation(
     return AnnotationSpecBuilder(AnnotationSpec.builder(type))
         .apply(configuration)
         .build()
-        .also(::annotation)
+        .also(::add)
 }
 
 /**
  * Inserts new [AnnotationSpec] by populating newly created [AnnotationSpecBuilder] using provided
  * [configuration].
  */
-public fun AnnotationSpecHandler.annotation(
+public fun AnnotationSpecHandler.add(
     type: KClass<*>,
     configuration: AnnotationSpecBuilder.() -> Unit,
 ): AnnotationSpec {
@@ -72,36 +72,25 @@ public fun AnnotationSpecHandler.annotation(
     return AnnotationSpecBuilder(AnnotationSpec.builder(type.java))
         .apply(configuration)
         .build()
-        .also(::annotation)
+        .also(::add)
 }
 
 /** Convenient method to insert [AnnotationSpec] using reified type. */
-public inline fun <reified T> AnnotationSpecHandler.annotation(): AnnotationSpec =
+public inline fun <reified T> AnnotationSpecHandler.add(): AnnotationSpec =
     AnnotationSpec
         .builder(T::class.java)
         .build()
-        .also(::annotation)
-
-/** Invokes DSL to configure [AnnotationSpec] collection. */
-public fun AnnotationSpecHandler.annotations(configuration: AnnotationSpecHandlerScope.() -> Unit) {
-    contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    AnnotationSpecHandlerScope
-        .of(this)
-        .configuration()
-}
+        .also(::add)
 
 /** Responsible for managing a set of [AnnotationSpec] instances. */
 public interface AnnotationSpecHandler {
-    public fun annotation(annotation: AnnotationSpec)
+    public fun add(annotation: AnnotationSpec)
 
-    public fun annotation(type: ClassName): AnnotationSpec =
-        annotationSpecOf(type).also(::annotation)
+    public fun add(type: ClassName): AnnotationSpec = annotationSpecOf(type).also(::add)
 
-    public fun annotation(type: Class<*>): AnnotationSpec =
-        annotationSpecOf(type.name2).also(::annotation)
+    public fun add(type: Class<*>): AnnotationSpec = annotationSpecOf(type.name2).also(::add)
 
-    public fun annotation(type: KClass<*>): AnnotationSpec =
-        annotationSpecOf(type.name).also(::annotation)
+    public fun add(type: KClass<*>): AnnotationSpec = annotationSpecOf(type.name).also(::add)
 }
 
 /**
@@ -111,26 +100,17 @@ public interface AnnotationSpecHandler {
 @JavapoetDsl
 public open class AnnotationSpecHandlerScope private constructor(handler: AnnotationSpecHandler) :
     AnnotationSpecHandler by handler {
-        /**
-         * @see annotation
-         */
         public operator fun ClassName.invoke(
             configuration: AnnotationSpecBuilder.() -> Unit,
-        ): AnnotationSpec = annotation(this, configuration)
+        ): AnnotationSpec = add(this, configuration)
 
-        /**
-         * @see annotation
-         */
         public operator fun Class<*>.invoke(
             configuration: AnnotationSpecBuilder.() -> Unit,
-        ): AnnotationSpec = annotation(this, configuration)
+        ): AnnotationSpec = add(this, configuration)
 
-        /**
-         * @see annotation
-         */
         public operator fun KClass<*>.invoke(
             configuration: AnnotationSpecBuilder.() -> Unit,
-        ): AnnotationSpec = annotation(this, configuration)
+        ): AnnotationSpec = add(this, configuration)
 
         public companion object {
             public fun of(handler: AnnotationSpecHandler): AnnotationSpecHandlerScope =
@@ -141,12 +121,12 @@ public open class AnnotationSpecHandlerScope private constructor(handler: Annota
 /** Wrapper of [AnnotationSpec.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetDsl
 public class AnnotationSpecBuilder(private val nativeBuilder: AnnotationSpec.Builder) {
-    public val members: Map<String, List<CodeBlock>> get() = nativeBuilder.members
+    public val members: MutableMap<String, MutableList<CodeBlock>> get() = nativeBuilder.members
 
-    public fun member(name: String, format: String, vararg args: Any): Unit =
-        member(name, codeBlockOf(format, *args))
+    public fun addMember(name: String, format: String, vararg args: Any): Unit =
+        addMember(name, codeBlockOf(format, *args))
 
-    public fun member(name: String, code: CodeBlock) {
+    public fun addMember(name: String, code: CodeBlock) {
         nativeBuilder.addMember(name, code)
     }
 

@@ -41,7 +41,7 @@ public fun buildMethodSpec(name: String, configuration: MethodSpecBuilder.() -> 
  * Inserts new [MethodSpec] by populating newly created [MethodSpecBuilder] using provided
  * [configuration].
  */
-public fun MethodSpecHandler.method(
+public fun MethodSpecHandler.add(
     name: String,
     configuration: MethodSpecBuilder.() -> Unit,
 ): MethodSpec {
@@ -49,28 +49,28 @@ public fun MethodSpecHandler.method(
     return MethodSpecBuilder(MethodSpec.methodBuilder(name))
         .apply(configuration)
         .build()
-        .also(::method)
+        .also(::add)
 }
 
 /**
  * Inserts new constructor [MethodSpec] by populating newly created [MethodSpecBuilder] using
  * provided [configuration].
  */
-public fun MethodSpecHandler.constructorMethod(
+public fun MethodSpecHandler.addConstructor(
     configuration: MethodSpecBuilder.() -> Unit,
 ): MethodSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
     return MethodSpecBuilder(MethodSpec.constructorBuilder())
         .apply(configuration)
         .build()
-        .also(::method)
+        .also(::add)
 }
 
 /**
  * Property delegate for inserting new [MethodSpec] by populating newly created [MethodSpecBuilder]
  * using provided [configuration].
  */
-public fun MethodSpecHandler.methoding(
+public fun MethodSpecHandler.adding(
     configuration: MethodSpecBuilder.() -> Unit,
 ): SpecDelegateProvider<MethodSpec> {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
@@ -78,28 +78,20 @@ public fun MethodSpecHandler.methoding(
         MethodSpecBuilder(MethodSpec.methodBuilder(it))
             .apply(configuration)
             .build()
-            .also(::method)
+            .also(::add)
     }
-}
-
-/** Invokes DSL to configure [MethodSpec] collection. */
-public fun MethodSpecHandler.methods(configuration: MethodSpecHandlerScope.() -> Unit) {
-    contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    MethodSpecHandlerScope
-        .of(this)
-        .configuration()
 }
 
 /** Responsible for managing a set of [MethodSpec] instances. */
 public interface MethodSpecHandler {
-    public fun method(method: MethodSpec)
+    public fun add(method: MethodSpec)
 
-    public fun method(name: String): MethodSpec = methodSpecOf(name).also(::method)
+    public fun add(name: String): MethodSpec = methodSpecOf(name).also(::add)
 
-    public fun methoding(): SpecDelegateProvider<MethodSpec> =
-        SpecDelegateProvider { methodSpecOf(it).also(::method) }
+    public fun adding(): SpecDelegateProvider<MethodSpec> =
+        SpecDelegateProvider { methodSpecOf(it).also(::add) }
 
-    public fun constructorMethod(): MethodSpec = emptyConstructorMethodSpec().also(::method)
+    public fun addConstructor(): MethodSpec = emptyConstructorMethodSpec().also(::add)
 }
 
 /**
@@ -109,11 +101,8 @@ public interface MethodSpecHandler {
 @JavapoetDsl
 public open class MethodSpecHandlerScope private constructor(handler: MethodSpecHandler) :
     MethodSpecHandler by handler {
-        /**
-         * @see method
-         */
         public operator fun String.invoke(configuration: MethodSpecBuilder.() -> Unit): MethodSpec =
-            method(this, configuration)
+            add(this, configuration)
 
         public companion object {
             public fun of(handler: MethodSpecHandler): MethodSpecHandlerScope =
@@ -123,13 +112,41 @@ public open class MethodSpecHandlerScope private constructor(handler: MethodSpec
 
 /** Wrapper of [MethodSpec.Builder], providing DSL support as a replacement to Java builder. */
 @JavapoetDsl
-public class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) :
-    AnnotationSpecHandler,
-    ParameterSpecHandler {
-    public val annotations: MutableList<AnnotationSpec> get() = nativeBuilder.annotations
+public class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) {
+    public val annotations: AnnotationSpecHandler =
+        object : AnnotationSpecHandler {
+            override fun add(annotation: AnnotationSpec) {
+                annotationSpecs += annotation
+            }
+        }
+
+    public val parameters: ParameterSpecHandler =
+        object : ParameterSpecHandler {
+            override fun add(parameter: ParameterSpec) {
+                parameterSpecs += parameter
+            }
+        }
+
+    /** Invokes DSL to configure [AnnotationSpec] collection. */
+    public fun annotations(configuration: AnnotationSpecHandlerScope.() -> Unit) {
+        contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
+        AnnotationSpecHandlerScope
+            .of(annotations)
+            .configuration()
+    }
+
+    /** Invokes DSL to configure [ParameterSpec] collection. */
+    public fun parameters(configuration: ParameterSpecHandlerScope.() -> Unit) {
+        contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
+        ParameterSpecHandlerScope
+            .of(parameters)
+            .configuration()
+    }
+
+    public val annotationSpecs: MutableList<AnnotationSpec> get() = nativeBuilder.annotations
     public val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
     public val typeVariables: MutableList<TypeVariableName> get() = nativeBuilder.typeVariables
-    public val parameters: MutableList<ParameterSpec> get() = nativeBuilder.parameters
+    public val parameterSpecs: MutableList<ParameterSpec> get() = nativeBuilder.parameters
 
     public var name: String
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR)
@@ -138,29 +155,21 @@ public class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) :
             nativeBuilder.setName(value)
         }
 
-    public fun javadoc(format: String, vararg args: Any): Unit =
+    public fun addJavadoc(format: String, vararg args: Any): Unit =
         format.internalFormat(args) { format2, args2 ->
             nativeBuilder.addJavadoc(format2, *args2)
         }
 
-    public fun javadoc(block: CodeBlock) {
+    public fun addJavadoc(block: CodeBlock) {
         nativeBuilder.addJavadoc(block)
     }
 
-    public override fun annotation(annotation: AnnotationSpec) {
-        nativeBuilder.addAnnotation(annotation)
+    public fun addModifiers(vararg modifiers: Modifier) {
+        this.modifiers += modifiers
     }
 
-    public fun modifiers(vararg modifiers: Modifier) {
-        nativeBuilder.addModifiers(*modifiers)
-    }
-
-    public fun typeVariables(typeVariables: Iterable<TypeVariableName>) {
-        nativeBuilder.addTypeVariables(typeVariables)
-    }
-
-    public fun typeVariable(typeVariable: TypeVariableName) {
-        nativeBuilder.addTypeVariable(typeVariable)
+    public fun addTypeVariables(vararg typeVariables: TypeVariableName) {
+        this.typeVariables += typeVariables
     }
 
     public var returns: TypeName
@@ -170,18 +179,16 @@ public class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) :
             nativeBuilder.returns(value)
         }
 
-    public fun returns(type: Class<*>) {
-        nativeBuilder.returns(type)
+    public fun setReturns(type: Class<*>) {
+        returns = type.name2
     }
 
-    public fun returns(type: KClass<*>) {
-        nativeBuilder.returns(type.java)
+    public fun setReturns(type: KClass<*>) {
+        returns = type.name
     }
 
-    public inline fun <reified T> returns(): Unit = returns(T::class)
-
-    public override fun parameter(parameter: ParameterSpec) {
-        nativeBuilder.addParameter(parameter)
+    public inline fun <reified T> setReturns() {
+        returns = T::class.name
     }
 
     public var isVarargs: Boolean
@@ -191,23 +198,23 @@ public class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) :
             nativeBuilder.varargs(value)
         }
 
-    public fun exceptions(exceptions: Iterable<TypeName>) {
+    public fun addExceptions(exceptions: Iterable<TypeName>) {
         nativeBuilder.addExceptions(exceptions)
     }
 
-    public fun exception(exception: TypeName) {
+    public fun addException(exception: TypeName) {
         nativeBuilder.addException(exception)
     }
 
-    public fun exception(exception: Class<*>) {
+    public fun addException(exception: Class<*>) {
         nativeBuilder.addException(exception)
     }
 
-    public fun exception(exception: KClass<*>) {
+    public fun addException(exception: KClass<*>) {
         nativeBuilder.addException(exception.java)
     }
 
-    public inline fun <reified T> exception(): Unit = exception(T::class)
+    public inline fun <reified T> addException(): Unit = addException(T::class)
 
     public fun append(format: String, vararg args: Any): Unit =
         format.internalFormat(args) { format2, args2 -> nativeBuilder.addCode(format2, *args2) }
@@ -219,12 +226,8 @@ public class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) :
         nativeBuilder.addCode(code)
     }
 
-    public fun comment(format: String, vararg args: Any): Unit =
+    public fun addComment(format: String, vararg args: Any): Unit =
         format.internalFormat(args) { format2, args2 -> nativeBuilder.addComment(format2, *args2) }
-
-    public fun defaultValue(format: String, vararg args: Any) {
-        defaultValue = codeBlockOf(format, *args)
-    }
 
     public var defaultValue: CodeBlock
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR)
@@ -232,6 +235,10 @@ public class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) :
         set(value) {
             nativeBuilder.defaultValue(value)
         }
+
+    public fun setDefaultValue(format: String, vararg args: Any) {
+        defaultValue = codeBlockOf(format, *args)
+    }
 
     public fun beginControlFlow(format: String, vararg args: Any): Unit =
         format.internalFormat(args) { format2, args2 ->

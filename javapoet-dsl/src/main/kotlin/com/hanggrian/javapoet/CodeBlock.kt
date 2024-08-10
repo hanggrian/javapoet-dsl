@@ -2,11 +2,7 @@ package com.hanggrian.javapoet
 
 import com.squareup.javapoet.CodeBlock
 
-/**
- * Converts string to [CodeBlock] using formatted [args].
- *
- * @see kotlin.text.format
- */
+/** Converts string to [CodeBlock] using formatted [args]. */
 public fun codeBlockOf(format: String, vararg args: Any?): CodeBlock =
     format.internalFormat(args) { format2, args2 -> CodeBlock.of(format2, *args2) }
 

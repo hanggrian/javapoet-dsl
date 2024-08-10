@@ -5,6 +5,7 @@ package com.hanggrian.javapoet
 
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.TypeName
+import java.lang.reflect.Type
 
 public val VOID: TypeName = TypeName.VOID
 public val BOOLEAN: TypeName = TypeName.BOOLEAN
@@ -16,3 +17,5 @@ public val CHAR: TypeName = TypeName.CHAR
 public val FLOAT: TypeName = TypeName.FLOAT
 public val DOUBLE: TypeName = TypeName.DOUBLE
 public val OBJECT: ClassName = TypeName.OBJECT
+
+public inline val Type.name: TypeName get() = TypeName.get(this)

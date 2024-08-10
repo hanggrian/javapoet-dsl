@@ -3,12 +3,11 @@ package com.example
 import com.hanggrian.javapoet.ABSTRACT
 import com.hanggrian.javapoet.INT
 import com.hanggrian.javapoet.PUBLIC
-import com.hanggrian.javapoet.annotation
+import com.hanggrian.javapoet.add
+import com.hanggrian.javapoet.addClass
+import com.hanggrian.javapoet.addInterface
 import com.hanggrian.javapoet.buildJavaFile
 import com.hanggrian.javapoet.classNamed
-import com.hanggrian.javapoet.classType
-import com.hanggrian.javapoet.interfaceType
-import com.hanggrian.javapoet.methods
 import java.nio.file.Paths
 
 class VehicleWriter {
@@ -27,14 +26,14 @@ class VehicleWriter {
 
     fun prepare() {
         buildJavaFile(PACKAGE_NAME) {
-            interfaceType("Vehicle") {
+            types.addInterface("Vehicle") {
                 methods {
                     "getName" {
-                        modifiers(PUBLIC, ABSTRACT)
-                        returns<String>()
+                        addModifiers(PUBLIC, ABSTRACT)
+                        setReturns<String>()
                     }
                     "getWheelCount" {
-                        modifiers(PUBLIC, ABSTRACT)
+                        addModifiers(PUBLIC, ABSTRACT)
                         returns = INT
                     }
                 }
@@ -44,19 +43,19 @@ class VehicleWriter {
 
     fun write(name: String, wheelCount: Int) {
         buildJavaFile(PACKAGE_NAME) {
-            classType(name) {
+            types.addClass(name) {
                 superinterfaces += classNamed(PACKAGE_NAME, "Vehicle")
                 methods {
                     "getName" {
-                        modifiers(PUBLIC)
-                        returns<String>()
-                        annotation<Override>()
+                        addModifiers(PUBLIC)
+                        setReturns<String>()
+                        annotations.add<Override>()
                         appendLine("return %S", name)
                     }
                     "getWheelCount" {
-                        modifiers(PUBLIC)
+                        addModifiers(PUBLIC)
                         returns = INT
-                        annotation<Override>()
+                        annotations.add<Override>()
                         appendLine("return %L", wheelCount)
                     }
                 }
