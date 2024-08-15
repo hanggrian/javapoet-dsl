@@ -1,7 +1,7 @@
 [![CircleCI](https://img.shields.io/circleci/build/gh/hanggrian/javapoet-dsl)](https://app.circleci.com/pipelines/github/hanggrian/javapoet-dsl/)
 [![Codecov](https://img.shields.io/codecov/c/gh/hanggrian/javapoet-dsl)](https://app.codecov.io/gh/hanggrian/javapoet-dsl/)
 [![Maven Central](https://img.shields.io/maven-central/v/com.hanggrian/javapoet-dsl)](https://repo1.maven.org/maven2/com/hanggrian/javapoet-dsl/)
-[![OpenJDK](https://img.shields.io/badge/jdk-11%2B-informational)](https://openjdk.org/projects/jdk/11/)
+[![Java](https://img.shields.io/badge/java-8+-informational)](https://www.java.com/en/download/help/java8.html)
 
 # JavaPoet DSL
 
