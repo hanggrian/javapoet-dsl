@@ -20,7 +20,7 @@ public inline fun annotationSpecOf(name: ClassName): AnnotationSpec =
  * Builds new [AnnotationSpec] by populating newly created [AnnotationSpecBuilder] using provided
  * [configuration].
  */
-public fun buildAnnotationSpec(
+public inline fun buildAnnotationSpec(
     type: ClassName,
     configuration: AnnotationSpecBuilder.() -> Unit,
 ): AnnotationSpec {
@@ -34,7 +34,7 @@ public fun buildAnnotationSpec(
  * Inserts new [AnnotationSpec] by populating newly created [AnnotationSpecBuilder] using provided
  * [configuration].
  */
-public fun AnnotationSpecHandler.add(
+public inline fun AnnotationSpecHandler.add(
     type: ClassName,
     configuration: AnnotationSpecBuilder.() -> Unit,
 ): AnnotationSpec {
@@ -49,7 +49,7 @@ public fun AnnotationSpecHandler.add(
  * Inserts new [AnnotationSpec] by populating newly created [AnnotationSpecBuilder] using provided
  * [configuration].
  */
-public fun AnnotationSpecHandler.add(
+public inline fun AnnotationSpecHandler.add(
     type: Class<*>,
     configuration: AnnotationSpecBuilder.() -> Unit,
 ): AnnotationSpec {
@@ -64,7 +64,7 @@ public fun AnnotationSpecHandler.add(
  * Inserts new [AnnotationSpec] by populating newly created [AnnotationSpecBuilder] using provided
  * [configuration].
  */
-public fun AnnotationSpecHandler.add(
+public inline fun AnnotationSpecHandler.add(
     type: KClass<*>,
     configuration: AnnotationSpecBuilder.() -> Unit,
 ): AnnotationSpec {
@@ -100,15 +100,15 @@ public interface AnnotationSpecHandler {
 @JavapoetDsl
 public open class AnnotationSpecHandlerScope private constructor(handler: AnnotationSpecHandler) :
     AnnotationSpecHandler by handler {
-        public operator fun ClassName.invoke(
+        public inline operator fun ClassName.invoke(
             configuration: AnnotationSpecBuilder.() -> Unit,
         ): AnnotationSpec = add(this, configuration)
 
-        public operator fun Class<*>.invoke(
+        public inline operator fun Class<*>.invoke(
             configuration: AnnotationSpecBuilder.() -> Unit,
         ): AnnotationSpec = add(this, configuration)
 
-        public operator fun KClass<*>.invoke(
+        public inline operator fun KClass<*>.invoke(
             configuration: AnnotationSpecBuilder.() -> Unit,
         ): AnnotationSpec = add(this, configuration)
 

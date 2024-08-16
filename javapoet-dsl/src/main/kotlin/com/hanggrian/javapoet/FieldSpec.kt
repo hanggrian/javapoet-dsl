@@ -2,6 +2,7 @@
 
 package com.hanggrian.javapoet
 
+import com.hanggrian.javapoet.internals.Internals
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.FieldSpec
@@ -23,7 +24,7 @@ public inline fun fieldSpecOf(type: TypeName, name: String, vararg modifiers: Mo
  * Builds new [FieldSpec] by populating newly created [FieldSpecBuilder] using provided
  * [configuration].
  */
-public fun buildFieldSpec(
+public inline fun buildFieldSpec(
     type: TypeName,
     name: String,
     vararg modifiers: Modifier,
@@ -39,7 +40,7 @@ public fun buildFieldSpec(
  * Inserts new [FieldSpec] by populating newly created [FieldSpecBuilder] using provided
  * [configuration].
  */
-public fun FieldSpecHandler.add(
+public inline fun FieldSpecHandler.add(
     type: TypeName,
     name: String,
     vararg modifiers: Modifier,
@@ -56,7 +57,7 @@ public fun FieldSpecHandler.add(
  * Inserts new [FieldSpec] by populating newly created [FieldSpecBuilder] using provided
  * [configuration].
  */
-public fun FieldSpecHandler.add(
+public inline fun FieldSpecHandler.add(
     type: Type,
     name: String,
     vararg modifiers: Modifier,
@@ -73,7 +74,7 @@ public fun FieldSpecHandler.add(
  * Inserts new [FieldSpec] by populating newly created [FieldSpecBuilder] using provided
  * [configuration].
  */
-public fun FieldSpecHandler.add(
+public inline fun FieldSpecHandler.add(
     type: KClass<*>,
     name: String,
     vararg modifiers: Modifier,
@@ -180,19 +181,19 @@ public interface FieldSpecHandler {
 @JavapoetDsl
 public open class FieldSpecHandlerScope private constructor(handler: FieldSpecHandler) :
     FieldSpecHandler by handler {
-        public operator fun String.invoke(
+        public inline operator fun String.invoke(
             type: TypeName,
             vararg modifiers: Modifier,
             configuration: FieldSpecBuilder.() -> Unit,
         ): FieldSpec = add(type, this, *modifiers, configuration = configuration)
 
-        public operator fun String.invoke(
+        public inline operator fun String.invoke(
             type: Type,
             vararg modifiers: Modifier,
             configuration: FieldSpecBuilder.() -> Unit,
         ): FieldSpec = add(type, this, *modifiers, configuration = configuration)
 
-        public operator fun String.invoke(
+        public inline operator fun String.invoke(
             type: KClass<*>,
             vararg modifiers: Modifier,
             configuration: FieldSpecBuilder.() -> Unit,
@@ -215,7 +216,7 @@ public class FieldSpecBuilder(private val nativeBuilder: FieldSpec.Builder) {
         }
 
     /** Invokes DSL to configure [AnnotationSpec] collection. */
-    public fun annotations(configuration: AnnotationSpecHandlerScope.() -> Unit) {
+    public inline fun annotations(configuration: AnnotationSpecHandlerScope.() -> Unit) {
         contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
         AnnotationSpecHandlerScope
             .of(annotations)
@@ -226,7 +227,7 @@ public class FieldSpecBuilder(private val nativeBuilder: FieldSpec.Builder) {
     public val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
 
     public fun addJavadoc(format: String, vararg args: Any): Unit =
-        format.internalFormat(args) { format2, args2 ->
+        Internals.format(format, args) { format2, args2 ->
             nativeBuilder.addJavadoc(format2, *args2)
         }
 

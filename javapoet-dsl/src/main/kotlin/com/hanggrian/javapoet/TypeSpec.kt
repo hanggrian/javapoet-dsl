@@ -2,6 +2,7 @@
 
 package com.hanggrian.javapoet
 
+import com.hanggrian.javapoet.internals.Internals
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
@@ -47,15 +48,15 @@ public inline fun interfaceTypeSpecOf(name: ClassName): TypeSpec =
         .build()
 
 /** Creates new class [TypeSpec] using parameters. */
-public fun anonymousTypeSpecOf(format: String, vararg args: Any): TypeSpec =
-    format.internalFormat(args) { format2, args2 ->
+public inline fun anonymousTypeSpecOf(format: String, vararg args: Any): TypeSpec =
+    Internals.format(format, args) { format2, args2 ->
         TypeSpec
             .anonymousClassBuilder(format2, *args2)
             .build()
     }
 
 /** Creates new class [TypeSpec] using parameters. */
-public fun anonymousTypeSpecOf(code: CodeBlock): TypeSpec =
+public inline fun anonymousTypeSpecOf(code: CodeBlock): TypeSpec =
     TypeSpec
         .anonymousClassBuilder(code)
         .build()
@@ -76,7 +77,10 @@ public inline fun annotationTypeSpecOf(name: ClassName): TypeSpec =
  * Builds new class [TypeSpec] by populating newly created [TypeSpecBuilder] using provided
  * [configuration].
  */
-public fun buildClassTypeSpec(name: String, configuration: TypeSpecBuilder.() -> Unit): TypeSpec {
+public inline fun buildClassTypeSpec(
+    name: String,
+    configuration: TypeSpecBuilder.() -> Unit,
+): TypeSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
     return TypeSpecBuilder(TypeSpec.classBuilder(name))
         .apply(configuration)
@@ -87,7 +91,7 @@ public fun buildClassTypeSpec(name: String, configuration: TypeSpecBuilder.() ->
  * Builds new class [TypeSpec] by populating newly created [TypeSpecBuilder] using provided
  * [configuration].
  */
-public fun buildClassTypeSpec(
+public inline fun buildClassTypeSpec(
     name: ClassName,
     configuration: TypeSpecBuilder.() -> Unit,
 ): TypeSpec {
@@ -101,7 +105,7 @@ public fun buildClassTypeSpec(
  * Builds new interface [TypeSpec] by populating newly created [TypeSpecBuilder] using provided
  * [configuration].
  */
-public fun buildInterfaceTypeSpec(
+public inline fun buildInterfaceTypeSpec(
     name: String,
     configuration: TypeSpecBuilder.() -> Unit,
 ): TypeSpec {
@@ -115,7 +119,7 @@ public fun buildInterfaceTypeSpec(
  * Builds new interface [TypeSpec] by populating newly created [TypeSpecBuilder] using provided
  * [configuration].
  */
-public fun buildInterfaceTypeSpec(
+public inline fun buildInterfaceTypeSpec(
     name: ClassName,
     configuration: TypeSpecBuilder.() -> Unit,
 ): TypeSpec {
@@ -129,7 +133,10 @@ public fun buildInterfaceTypeSpec(
  * Builds new enum [TypeSpec] by populating newly created [TypeSpecBuilder] using provided
  * [configuration].
  */
-public fun buildEnumTypeSpec(name: String, configuration: TypeSpecBuilder.() -> Unit): TypeSpec {
+public inline fun buildEnumTypeSpec(
+    name: String,
+    configuration: TypeSpecBuilder.() -> Unit,
+): TypeSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
     return TypeSpecBuilder(TypeSpec.enumBuilder(name))
         .apply(configuration)
@@ -140,7 +147,10 @@ public fun buildEnumTypeSpec(name: String, configuration: TypeSpecBuilder.() -> 
  * Builds new enum [TypeSpec] by populating newly created [TypeSpecBuilder] using provided
  * [configuration].
  */
-public fun buildEnumTypeSpec(name: ClassName, configuration: TypeSpecBuilder.() -> Unit): TypeSpec {
+public inline fun buildEnumTypeSpec(
+    name: ClassName,
+    configuration: TypeSpecBuilder.() -> Unit,
+): TypeSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
     return TypeSpecBuilder(TypeSpec.enumBuilder(name))
         .apply(configuration)
@@ -151,13 +161,13 @@ public fun buildEnumTypeSpec(name: ClassName, configuration: TypeSpecBuilder.() 
  * Builds new anonymous [TypeSpec] by populating newly created [TypeSpecBuilder] using provided
  * [configuration].
  */
-public fun buildAnonymousTypeSpec(
+public inline fun buildAnonymousTypeSpec(
     format: String,
     vararg args: Any,
-    configuration: TypeSpecBuilder.() -> Unit,
+    noinline configuration: TypeSpecBuilder.() -> Unit,
 ): TypeSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    return format.internalFormat(args) { format2, args2 ->
+    return Internals.format(format, args) { format2, args2 ->
         TypeSpecBuilder(TypeSpec.anonymousClassBuilder(format2, *args2))
             .apply(configuration)
             .build()
@@ -168,7 +178,7 @@ public fun buildAnonymousTypeSpec(
  * Builds new anonymous [TypeSpec] by populating newly created [TypeSpecBuilder] using provided
  * [configuration].
  */
-public fun buildAnonymousTypeSpec(
+public inline fun buildAnonymousTypeSpec(
     code: CodeBlock,
     configuration: TypeSpecBuilder.() -> Unit,
 ): TypeSpec {
@@ -182,7 +192,7 @@ public fun buildAnonymousTypeSpec(
  * Builds new annotation [TypeSpec] by populating newly created [TypeSpecBuilder] using provided
  * [configuration].
  */
-public fun buildAnnotationTypeSpec(
+public inline fun buildAnnotationTypeSpec(
     name: String,
     configuration: TypeSpecBuilder.() -> Unit,
 ): TypeSpec {
@@ -196,7 +206,7 @@ public fun buildAnnotationTypeSpec(
  * Builds new annotation [TypeSpec] by populating newly created [TypeSpecBuilder] using provided
  * [configuration].
  */
-public fun buildAnnotationTypeSpec(
+public inline fun buildAnnotationTypeSpec(
     name: ClassName,
     configuration: TypeSpecBuilder.() -> Unit,
 ): TypeSpec {
@@ -210,7 +220,7 @@ public fun buildAnnotationTypeSpec(
  * Inserts new class [TypeSpec] by populating newly created [TypeSpecBuilder] using provided
  * [configuration].
  */
-public fun TypeSpecHandler.addClass(
+public inline fun TypeSpecHandler.addClass(
     name: String,
     configuration: TypeSpecBuilder.() -> Unit,
 ): TypeSpec {
@@ -225,7 +235,7 @@ public fun TypeSpecHandler.addClass(
  * Inserts new class [TypeSpec] by populating newly created [TypeSpecBuilder] using provided
  * [configuration].
  */
-public fun TypeSpecHandler.addClass(
+public inline fun TypeSpecHandler.addClass(
     name: ClassName,
     configuration: TypeSpecBuilder.() -> Unit,
 ): TypeSpec {
@@ -240,7 +250,7 @@ public fun TypeSpecHandler.addClass(
  * Inserts new interface [TypeSpec] by populating newly created [TypeSpecBuilder] using provided
  * [configuration].
  */
-public fun TypeSpecHandler.addInterface(
+public inline fun TypeSpecHandler.addInterface(
     name: String,
     configuration: TypeSpecBuilder.() -> Unit,
 ): TypeSpec {
@@ -255,7 +265,7 @@ public fun TypeSpecHandler.addInterface(
  * Inserts new interface [TypeSpec] by populating newly created [TypeSpecBuilder] using provided
  * [configuration].
  */
-public fun TypeSpecHandler.addInterface(
+public inline fun TypeSpecHandler.addInterface(
     name: ClassName,
     configuration: TypeSpecBuilder.() -> Unit,
 ): TypeSpec {
@@ -270,7 +280,7 @@ public fun TypeSpecHandler.addInterface(
  * Inserts new enum [TypeSpec] by populating newly created [TypeSpecBuilder] using provided
  * [configuration].
  */
-public fun TypeSpecHandler.addEnum(
+public inline fun TypeSpecHandler.addEnum(
     name: String,
     configuration: TypeSpecBuilder.() -> Unit,
 ): TypeSpec {
@@ -285,7 +295,7 @@ public fun TypeSpecHandler.addEnum(
  * Inserts new enum [TypeSpec] by populating newly created [TypeSpecBuilder] using provided
  * [configuration].
  */
-public fun TypeSpecHandler.addEnum(
+public inline fun TypeSpecHandler.addEnum(
     name: ClassName,
     configuration: TypeSpecBuilder.() -> Unit,
 ): TypeSpec {
@@ -300,13 +310,13 @@ public fun TypeSpecHandler.addEnum(
  * Inserts new anonymous [TypeSpec] by populating newly created [TypeSpecBuilder] using provided
  * [configuration].
  */
-public fun TypeSpecHandler.addAnonymous(
+public inline fun TypeSpecHandler.addAnonymous(
     format: String,
     vararg args: Any,
-    configuration: TypeSpecBuilder.() -> Unit,
+    noinline configuration: TypeSpecBuilder.() -> Unit,
 ): TypeSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
-    return format.internalFormat(args) { format2, args2 ->
+    return Internals.format(format, args) { format2, args2 ->
         TypeSpecBuilder(TypeSpec.anonymousClassBuilder(format2, *args2))
             .apply(configuration)
             .build()
@@ -318,7 +328,7 @@ public fun TypeSpecHandler.addAnonymous(
  * Inserts new anonymous [TypeSpec] by populating newly created [TypeSpecBuilder] using provided
  * [configuration].
  */
-public fun TypeSpecHandler.addAnonymous(
+public inline fun TypeSpecHandler.addAnonymous(
     code: CodeBlock,
     configuration: TypeSpecBuilder.() -> Unit,
 ): TypeSpec {
@@ -333,7 +343,7 @@ public fun TypeSpecHandler.addAnonymous(
  * Inserts new annotation [TypeSpec] by populating newly created [TypeSpecBuilder] using provided
  * [configuration].
  */
-public fun TypeSpecHandler.addAnnotation(
+public inline fun TypeSpecHandler.addAnnotation(
     name: String,
     configuration: TypeSpecBuilder.() -> Unit,
 ): TypeSpec {
@@ -348,7 +358,7 @@ public fun TypeSpecHandler.addAnnotation(
  * Inserts new annotation [TypeSpec] by populating newly created [TypeSpecBuilder] using provided
  * [configuration].
  */
-public fun TypeSpecHandler.addAnnotation(
+public inline fun TypeSpecHandler.addAnnotation(
     name: ClassName,
     configuration: TypeSpecBuilder.() -> Unit,
 ): TypeSpec {
@@ -417,7 +427,7 @@ public fun TypeSpecHandler.addingAnonymous(
 ): SpecDelegateProvider<TypeSpec> {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
     return SpecDelegateProvider {
-        it.internalFormat(args) { format2, args2 ->
+        Internals.format(it, args) { format2, args2 ->
             TypeSpecBuilder(TypeSpec.anonymousClassBuilder(format2, args2))
                 .apply(configuration)
                 .build()
@@ -480,8 +490,9 @@ public interface TypeSpecHandler {
 @JavapoetDsl
 public open class TypeSpecHandlerScope private constructor(handler: TypeSpecHandler) :
     TypeSpecHandler by handler {
-        public operator fun String.invoke(configuration: TypeSpecBuilder.() -> Unit): TypeSpec =
-            addClass(this, configuration)
+        public inline operator fun String.invoke(
+            configuration: TypeSpecBuilder.() -> Unit,
+        ): TypeSpec = addClass(this, configuration)
 
         public companion object {
             public fun of(handler: TypeSpecHandler): TypeSpecHandlerScope =
@@ -521,7 +532,7 @@ public class TypeSpecBuilder(private val nativeBuilder: TypeSpec.Builder) {
         }
 
     /** Invokes DSL to configure [AnnotationSpec] collection. */
-    public fun annotations(configuration: AnnotationSpecHandlerScope.() -> Unit) {
+    public inline fun annotations(configuration: AnnotationSpecHandlerScope.() -> Unit) {
         contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
         AnnotationSpecHandlerScope
             .of(annotations)
@@ -529,7 +540,7 @@ public class TypeSpecBuilder(private val nativeBuilder: TypeSpec.Builder) {
     }
 
     /** Invokes DSL to configure [FieldSpec] collection. */
-    public fun fields(configuration: FieldSpecHandlerScope.() -> Unit) {
+    public inline fun fields(configuration: FieldSpecHandlerScope.() -> Unit) {
         contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
         FieldSpecHandlerScope
             .of(fields)
@@ -537,7 +548,7 @@ public class TypeSpecBuilder(private val nativeBuilder: TypeSpec.Builder) {
     }
 
     /** Invokes DSL to configure [MethodSpec] collection. */
-    public fun methods(configuration: MethodSpecHandlerScope.() -> Unit) {
+    public inline fun methods(configuration: MethodSpecHandlerScope.() -> Unit) {
         contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
         MethodSpecHandlerScope
             .of(methods)
@@ -545,7 +556,7 @@ public class TypeSpecBuilder(private val nativeBuilder: TypeSpec.Builder) {
     }
 
     /** Invokes DSL to configure [TypeSpec] collection. */
-    public fun types(configuration: TypeSpecHandlerScope.() -> Unit) {
+    public inline fun types(configuration: TypeSpecHandlerScope.() -> Unit) {
         contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
         TypeSpecHandlerScope
             .of(types)
@@ -564,7 +575,7 @@ public class TypeSpecBuilder(private val nativeBuilder: TypeSpec.Builder) {
     public val alwaysQualifiedNames: MutableSet<String> get() = nativeBuilder.alwaysQualifiedNames
 
     public fun addJavadoc(format: String, vararg args: Any): Unit =
-        format.internalFormat(args) { format2, args2 ->
+        Internals.format(format, args) { format2, args2 ->
             nativeBuilder.addJavadoc(format2, *args2)
         }
 

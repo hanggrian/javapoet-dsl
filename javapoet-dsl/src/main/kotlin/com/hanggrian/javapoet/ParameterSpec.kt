@@ -2,6 +2,7 @@
 
 package com.hanggrian.javapoet
 
+import com.hanggrian.javapoet.internals.Internals
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.ParameterSpec
@@ -27,7 +28,7 @@ public inline fun parameterSpecOf(
  * Builds new [ParameterSpec] by populating newly created [ParameterSpecBuilder] using provided
  * [configuration].
  */
-public fun buildParameterSpec(
+public inline fun buildParameterSpec(
     type: TypeName,
     name: String,
     vararg modifiers: Modifier,
@@ -43,7 +44,7 @@ public fun buildParameterSpec(
  * Inserts new [ParameterSpec] by populating newly created [ParameterSpecBuilder] using provided
  * [configuration].
  */
-public fun ParameterSpecHandler.add(
+public inline fun ParameterSpecHandler.add(
     type: TypeName,
     name: String,
     vararg modifiers: Modifier,
@@ -60,7 +61,7 @@ public fun ParameterSpecHandler.add(
  * Inserts new [ParameterSpec] by populating newly created [ParameterSpecBuilder] using provided
  * [configuration].
  */
-public fun ParameterSpecHandler.add(
+public inline fun ParameterSpecHandler.add(
     type: Type,
     name: String,
     vararg modifiers: Modifier,
@@ -77,7 +78,7 @@ public fun ParameterSpecHandler.add(
  * Inserts new [ParameterSpec] by populating newly created [ParameterSpecBuilder] using provided
  * [configuration].
  */
-public fun ParameterSpecHandler.add(
+public inline fun ParameterSpecHandler.add(
     type: KClass<*>,
     name: String,
     vararg modifiers: Modifier,
@@ -193,19 +194,19 @@ public interface ParameterSpecHandler {
 @JavapoetDsl
 public open class ParameterSpecHandlerScope private constructor(handler: ParameterSpecHandler) :
     ParameterSpecHandler by handler {
-        public operator fun String.invoke(
+        public inline operator fun String.invoke(
             type: TypeName,
             vararg modifiers: Modifier,
             configuration: ParameterSpecBuilder.() -> Unit,
         ): ParameterSpec = add(type, this, *modifiers, configuration = configuration)
 
-        public operator fun String.invoke(
+        public inline operator fun String.invoke(
             type: Type,
             vararg modifiers: Modifier,
             configuration: ParameterSpecBuilder.() -> Unit,
         ): ParameterSpec = add(type.name, this, *modifiers, configuration = configuration)
 
-        public operator fun String.invoke(
+        public inline operator fun String.invoke(
             type: KClass<*>,
             vararg modifiers: Modifier,
             configuration: ParameterSpecBuilder.() -> Unit,
@@ -228,7 +229,7 @@ public class ParameterSpecBuilder(private val nativeBuilder: ParameterSpec.Build
         }
 
     /** Invokes DSL to configure [AnnotationSpec] collection. */
-    public fun annotations(configuration: AnnotationSpecHandlerScope.() -> Unit) {
+    public inline fun annotations(configuration: AnnotationSpecHandlerScope.() -> Unit) {
         contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
         AnnotationSpecHandlerScope
             .of(annotations)
@@ -239,7 +240,7 @@ public class ParameterSpecBuilder(private val nativeBuilder: ParameterSpec.Build
     public val modifiers: MutableList<Modifier> get() = nativeBuilder.modifiers
 
     public fun addJavadoc(format: String, vararg args: Any): Unit =
-        format.internalFormat(args) { format2, args2 ->
+        Internals.format(format, args) { format2, args2 ->
             nativeBuilder.addJavadoc(format2, *args2)
         }
 

@@ -14,7 +14,7 @@ import kotlin.reflect.KClass
  * Builds new [JavaFile] by populating newly created [JavaFileBuilder] using provided
  * [configuration].
  */
-public fun buildJavaFile(
+public inline fun buildJavaFile(
     packageName: String,
     configuration: JavaFileBuilder.() -> Unit,
 ): JavaFile {
@@ -42,7 +42,7 @@ public class JavaFileBuilder(private val packageName: String) {
         }
 
     /** Invokes DSL to configure [TypeSpec] collection. */
-    public fun types(configuration: TypeSpecHandlerScope.() -> Unit) {
+    public inline fun types(configuration: TypeSpecHandlerScope.() -> Unit) {
         contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
         TypeSpecHandlerScope
             .of(types)

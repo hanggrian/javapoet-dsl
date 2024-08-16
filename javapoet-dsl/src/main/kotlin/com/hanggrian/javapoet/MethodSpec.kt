@@ -2,6 +2,7 @@
 
 package com.hanggrian.javapoet
 
+import com.hanggrian.javapoet.internals.Internals
 import com.squareup.javapoet.AnnotationSpec
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.MethodSpec
@@ -30,7 +31,10 @@ public inline fun emptyConstructorMethodSpec(): MethodSpec =
  * Builds new [MethodSpec] by populating newly created [MethodSpecBuilder] using provided
  * [configuration].
  */
-public fun buildMethodSpec(name: String, configuration: MethodSpecBuilder.() -> Unit): MethodSpec {
+public inline fun buildMethodSpec(
+    name: String,
+    configuration: MethodSpecBuilder.() -> Unit,
+): MethodSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
     return MethodSpecBuilder(MethodSpec.methodBuilder(name))
         .apply(configuration)
@@ -41,7 +45,7 @@ public fun buildMethodSpec(name: String, configuration: MethodSpecBuilder.() -> 
  * Inserts new [MethodSpec] by populating newly created [MethodSpecBuilder] using provided
  * [configuration].
  */
-public fun MethodSpecHandler.add(
+public inline fun MethodSpecHandler.add(
     name: String,
     configuration: MethodSpecBuilder.() -> Unit,
 ): MethodSpec {
@@ -56,7 +60,7 @@ public fun MethodSpecHandler.add(
  * Inserts new constructor [MethodSpec] by populating newly created [MethodSpecBuilder] using
  * provided [configuration].
  */
-public fun MethodSpecHandler.addConstructor(
+public inline fun MethodSpecHandler.addConstructor(
     configuration: MethodSpecBuilder.() -> Unit,
 ): MethodSpec {
     contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
@@ -101,8 +105,9 @@ public interface MethodSpecHandler {
 @JavapoetDsl
 public open class MethodSpecHandlerScope private constructor(handler: MethodSpecHandler) :
     MethodSpecHandler by handler {
-        public operator fun String.invoke(configuration: MethodSpecBuilder.() -> Unit): MethodSpec =
-            add(this, configuration)
+        public inline operator fun String.invoke(
+            configuration: MethodSpecBuilder.() -> Unit,
+        ): MethodSpec = add(this, configuration)
 
         public companion object {
             public fun of(handler: MethodSpecHandler): MethodSpecHandlerScope =
@@ -128,7 +133,7 @@ public class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) {
         }
 
     /** Invokes DSL to configure [AnnotationSpec] collection. */
-    public fun annotations(configuration: AnnotationSpecHandlerScope.() -> Unit) {
+    public inline fun annotations(configuration: AnnotationSpecHandlerScope.() -> Unit) {
         contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
         AnnotationSpecHandlerScope
             .of(annotations)
@@ -136,7 +141,7 @@ public class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) {
     }
 
     /** Invokes DSL to configure [ParameterSpec] collection. */
-    public fun parameters(configuration: ParameterSpecHandlerScope.() -> Unit) {
+    public inline fun parameters(configuration: ParameterSpecHandlerScope.() -> Unit) {
         contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
         ParameterSpecHandlerScope
             .of(parameters)
@@ -156,7 +161,7 @@ public class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) {
         }
 
     public fun addJavadoc(format: String, vararg args: Any): Unit =
-        format.internalFormat(args) { format2, args2 ->
+        Internals.format(format, args) { format2, args2 ->
             nativeBuilder.addJavadoc(format2, *args2)
         }
 
@@ -217,17 +222,21 @@ public class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) {
     public inline fun <reified T> addException(): Unit = addException(T::class)
 
     public fun append(format: String, vararg args: Any): Unit =
-        format.internalFormat(args) { format2, args2 -> nativeBuilder.addCode(format2, *args2) }
+        Internals.format(format, args) { format2, args2 -> nativeBuilder.addCode(format2, *args2) }
 
     public fun appendNamed(format: String, args: Map<String, *>): Unit =
-        format.internalFormat(args) { format2, args2 -> nativeBuilder.addNamedCode(format2, args2) }
+        Internals.format(format, args) { format2, args2 ->
+            nativeBuilder.addNamedCode(format2, args2)
+        }
 
     public fun append(code: CodeBlock) {
         nativeBuilder.addCode(code)
     }
 
     public fun addComment(format: String, vararg args: Any): Unit =
-        format.internalFormat(args) { format2, args2 -> nativeBuilder.addComment(format2, *args2) }
+        Internals.format(format, args) { format2, args2 ->
+            nativeBuilder.addComment(format2, *args2)
+        }
 
     public var defaultValue: CodeBlock
         @Deprecated(NO_GETTER, level = DeprecationLevel.ERROR)
@@ -241,7 +250,7 @@ public class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) {
     }
 
     public fun beginControlFlow(format: String, vararg args: Any): Unit =
-        format.internalFormat(args) { format2, args2 ->
+        Internals.format(format, args) { format2, args2 ->
             nativeBuilder.beginControlFlow(format2, *args2)
         }
 
@@ -250,7 +259,7 @@ public class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) {
     }
 
     public fun nextControlFlow(format: String, vararg args: Any): Unit =
-        format.internalFormat(args) { format2, args2 ->
+        Internals.format(format, args) { format2, args2 ->
             nativeBuilder.nextControlFlow(format2, *args2)
         }
 
@@ -263,7 +272,7 @@ public class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) {
     }
 
     public fun endControlFlow(format: String, vararg args: Any): Unit =
-        format.internalFormat(args) { format2, args2 ->
+        Internals.format(format, args) { format2, args2 ->
             nativeBuilder.endControlFlow(format2, *args2)
         }
 
@@ -272,7 +281,7 @@ public class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) {
     }
 
     public fun appendLine(format: String, vararg args: Any): Unit =
-        format.internalFormat(args) { format2, args2 ->
+        Internals.format(format, args) { format2, args2 ->
             nativeBuilder.addStatement(format2, *args2)
         }
 
