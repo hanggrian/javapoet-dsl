@@ -33,7 +33,7 @@
                     <a href="https://app.circleci.com/pipelines/github/hanggrian/javapoet-dsl/"><img alt="CircleCI" src="https://img.shields.io/circleci/build/gh/hanggrian/javapoet-dsl"></a>
 <a href="https://app.codecov.io/gh/hanggrian/javapoet-dsl/"><img alt="Codecov" src="https://img.shields.io/codecov/c/gh/hanggrian/javapoet-dsl"></a>
 <a href="https://repo1.maven.org/maven2/com/hanggrian/javapoet-dsl/"><img alt="Maven Central" src="https://img.shields.io/maven-central/v/com.hanggrian/javapoet-dsl"></a>
-<a href="https://openjdk.org/projects/jdk/11/"><img alt="OpenJDK" src="https://img.shields.io/badge/jdk-11%2B-informational"></a>
+<a href="https://www.java.com/en/download/help/java8.html"><img alt="Java" src="https://img.shields.io/badge/java-8+-informational"></a>
                 </p>
                 
                 <h1>JavaPoet DSL</h1>
@@ -48,8 +48,8 @@ providing Kotlin DSL functionality and other convenient solutions.
                     <li>Full of convenient methods to achieve minimum code writing possible.</li>
                     
                     <li>
-                        Options to invoke DSL. For example, <code>method("main") { ... }</code> is as good as
-<code>methods { "main" { ... } }</code>. Scroll down for more information.
+                        Options to invoke DSL. For example, <code>methods.add("main") { ... }</code> is as good
+as <code>methods { "main" { ... } }</code>. Scroll down for more information.
                     </li>
                     
                     <li>Smooth transition, existing JavaPoet native specs can still be configured with
@@ -59,12 +59,12 @@ DSL.</li>
                 
                 <pre><code class="language-kotlin">buildJavaFile("com.example.helloworld") {
     classType("HelloWorld") {
-        modifiers(PUBLIC, FINAL)
+        addModifiers(PUBLIC, FINAL)
         methods {
             "main" {
-                modifiers(PUBLIC, STATIC)
+                addModifiers(PUBLIC, STATIC)
                 returns = VOID
-                parameter(STRING.array, "args")
+                parameters.add(STRING.array, "args")
                 appendLine("%T.out.println(%S)", System::class, "Hello, JavaPoet!")
             }
         }
@@ -96,7 +96,7 @@ prefix, this is also the approach taken by <a href="https://github.com/square/ko
                 </p>
                 
                 <pre><code class="language-kotlin">buildMethodSpec("getName") {
-    returns&lt;String&gt;()
+    setReturns&lt;String&gt;()
     appendLine("%S", name)
 }
 
@@ -120,13 +120,13 @@ type function whenever possible.
                 
                 <pre><code class="language-kotlin">buildMethodSpec("sortList") {
     returns = int
-    parameter(classNamed("java.util", "List").parameterizedBy(hoverboard), "list")
+    parameters.add(classNamed("java.util", "List").parameterizedBy(hoverboard), "list")
     appendLine("%T.sort(list)", Collections::class)
     appendLine("return list")
 }
 
 buildFieldSpec("count", INT) {
-    initializer("%L", 0)
+    setInitializer("%L", 0)
 }
 </code></pre>
                 
@@ -144,19 +144,21 @@ These containers have ability to add components with/without invoking DSL.</p>
             appendLine("return wheels")
         }
         "setWheels" {
-            parameter(INT, "wheels")
+            parameters {
+                add(INT, "wheels")
+            }
             appendLine("this.wheels = wheels")
         }
     }
 }
 
 types.addClass("Car") {
-    method("getWheels") {
+    methods.add("getWheels") {
         returns = INT
         appendLine("return wheels")
     }
-    method("setWheels") {
-        parameter(INT, "wheels")
+    methods.add("setWheels") {
+        parameters.add(INT, "wheels")
         appendLine("this.wheels = wheels")
     }
 }
@@ -169,8 +171,8 @@ types.addClass("Car") {
 creating a spec can be done by delegating to a property.
                 </p>
                 
-                <pre><code class="language-kotlin">val setWheels by methoding {
-    val wheels by parametering(INT)
+                <pre><code class="language-kotlin">val setWheels by methods.adding {
+    val wheels by parameters.adding(INT)
     appendLine("this.wheels = wheels")
 }
 </code></pre>

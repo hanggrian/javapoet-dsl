@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>MethodSpecBuilder 0.1 API </title>
+    <title>MethodSpecBuilder 0.2 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
@@ -108,14 +108,6 @@ var pathtoroot = "../../../";
                         <dt>All Implemented Interfaces:</dt>
                         <dd>
                             
-                            <code>com.hanggrian.javapoet.AnnotationSpecHandler</code>
-                            
-                            ,
-                            
-                            
-                            <code>com.hanggrian.javapoet.ParameterSpecHandler</code>
-                            
-                            
                         </dd>
                     </dl>
                     
@@ -123,7 +115,7 @@ var pathtoroot = "../../../";
                     <pre class="wrap-overflow">
 
 public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>MethodSpecBuilder</a></span>
- implements <a href=AnnotationSpecHandler.html>AnnotationSpecHandler</a>, <a href=ParameterSpecHandler.html>ParameterSpecHandler</a>
+
                     </pre>
                     <div class="block"><p>Wrapper of MethodSpec.Builder, providing DSL support as a replacement to Java builder.</p></div>
 
@@ -181,8 +173,20 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                         </tr>
                                         
                                         <tr class="altColor">
-                                            <td class="colFirst"><code>private final <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;AnnotationSpec&gt;</code></td>
+                                            <td class="colFirst"><code>private final <a href=AnnotationSpecHandler.html>AnnotationSpecHandler</a></code></td>
                                             <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#annotations>annotations</a></code></th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr class="rowColor">
+                                            <td class="colFirst"><code>private final <a href=ParameterSpecHandler.html>ParameterSpecHandler</a></code></td>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#parameters>parameters</a></code></th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr class="altColor">
+                                            <td class="colFirst"><code>private final <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;AnnotationSpec&gt;</code></td>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#annotationSpecs>annotationSpecs</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
@@ -200,7 +204,7 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                         
                                         <tr class="rowColor">
                                             <td class="colFirst"><code>private final <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;ParameterSpec&gt;</code></td>
-                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#parameters>parameters</a></code></th>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#parameterSpecs>parameterSpecs</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
@@ -212,7 +216,7 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                         
                                         <tr class="rowColor">
                                             <td class="colFirst"><code>private  TypeName</code></td>
-                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#returns()>returns</a></code></th>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#returns>returns</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
@@ -308,7 +312,7 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                         </tr>
                                         
                                         <tr id="i0" class="altColor">
-                                            <td class="colFirst"><code>final <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;AnnotationSpec&gt;</code>
+                                            <td class="colFirst"><code>final <a href=AnnotationSpecHandler.html>AnnotationSpecHandler</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#getAnnotations()>getAnnotations</a>() </code>
                                             </th>
@@ -316,6 +320,22 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                         </tr>
                                         
                                         <tr id="i1" class="rowColor">
+                                            <td class="colFirst"><code>final <a href=ParameterSpecHandler.html>ParameterSpecHandler</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#getParameters()>getParameters</a>() </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i2" class="altColor">
+                                            <td class="colFirst"><code>final <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;AnnotationSpec&gt;</code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#getAnnotationSpecs()>getAnnotationSpecs</a>() </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i3" class="rowColor">
                                             <td class="colFirst"><code>final <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/javax/lang/model/element/Modifier.html>Modifier</a>&gt;</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#getModifiers()>getModifiers</a>() </code>
@@ -323,7 +343,7 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr id="i2" class="altColor">
+                                        <tr id="i4" class="altColor">
                                             <td class="colFirst"><code>final <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;TypeVariableName&gt;</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#getTypeVariables()>getTypeVariables</a>() </code>
@@ -331,15 +351,15 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr id="i3" class="rowColor">
+                                        <tr id="i5" class="rowColor">
                                             <td class="colFirst"><code>final <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;ParameterSpec&gt;</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#getParameters()>getParameters</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#getParameterSpecs()>getParameterSpecs</a>() </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr id="i4" class="altColor">
+                                        <tr id="i6" class="altColor">
                                             <td class="colFirst"><code>final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#getName()>getName</a>() </code>
@@ -347,7 +367,7 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr id="i5" class="rowColor">
+                                        <tr id="i7" class="rowColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#setName(java.lang.String)>setName</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> name) </code>
@@ -355,7 +375,7 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr id="i6" class="altColor">
+                                        <tr id="i8" class="altColor">
                                             <td class="colFirst"><code>final TypeName</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#getReturns()>getReturns</a>() </code>
@@ -363,7 +383,7 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr id="i7" class="rowColor">
+                                        <tr id="i9" class="rowColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#setReturns(com.squareup.javapoet.TypeName)>setReturns</a>(TypeName returns) </code>
@@ -371,7 +391,7 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr id="i8" class="altColor">
+                                        <tr id="i10" class="altColor">
                                             <td class="colFirst"><code>final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#isVarargs()>isVarargs</a>() </code>
@@ -379,7 +399,7 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr id="i9" class="rowColor">
+                                        <tr id="i11" class="rowColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#setVarargs(java.lang.Boolean)>setVarargs</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a> isVarargs) </code>
@@ -387,7 +407,7 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr id="i10" class="altColor">
+                                        <tr id="i12" class="altColor">
                                             <td class="colFirst"><code>final CodeBlock</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#getDefaultValue()>getDefaultValue</a>() </code>
@@ -395,7 +415,7 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr id="i11" class="rowColor">
+                                        <tr id="i13" class="rowColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#setDefaultValue(com.squareup.javapoet.CodeBlock)>setDefaultValue</a>(CodeBlock defaultValue) </code>
@@ -403,42 +423,26 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr id="i12" class="altColor">
-                                            <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
-                                            </td>
-                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#javadoc(java.lang.String,java.lang.Object)>javadoc</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> format, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> args) </code>
-                                            </th>
-                                            <td class="colLast"></td>
-                                        </tr>
-                                        
-                                        <tr id="i13" class="rowColor">
-                                            <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
-                                            </td>
-                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#javadoc(com.squareup.javapoet.CodeBlock)>javadoc</a>(CodeBlock block) </code>
-                                            </th>
-                                            <td class="colLast"></td>
-                                        </tr>
-                                        
                                         <tr id="i14" class="altColor">
-                                            <td class="colFirst"><code><a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
+                                            <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#annotation(com.squareup.javapoet.AnnotationSpec)>annotation</a>(AnnotationSpec annotation) </code>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#annotations(kotlin.jvm.functions.Function1)>annotations</a>(Function1&lt;<a href=AnnotationSpecHandlerScope.html>AnnotationSpecHandlerScope</a>, <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a>&gt; configuration) </code>
                                             </th>
-                                            <td class="colLast"></td>
+                                            <td class="colLast">Invokes DSL to configure AnnotationSpec collection.</td>
                                         </tr>
                                         
                                         <tr id="i15" class="rowColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#modifiers(javax.lang.model.element.Modifier)>modifiers</a>(<a href=https://docs.oracle.com/javase/8/docs/api/javax/lang/model/element/Modifier.html>Modifier</a> modifiers) </code>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#parameters(kotlin.jvm.functions.Function1)>parameters</a>(Function1&lt;<a href=ParameterSpecHandlerScope.html>ParameterSpecHandlerScope</a>, <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a>&gt; configuration) </code>
                                             </th>
-                                            <td class="colLast"></td>
+                                            <td class="colLast">Invokes DSL to configure ParameterSpec collection.</td>
                                         </tr>
                                         
                                         <tr id="i16" class="altColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#typeVariables(java.lang.Iterable)>typeVariables</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html>Iterable</a>&lt;TypeVariableName&gt; typeVariables) </code>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#addJavadoc(java.lang.String,java.lang.Object)>addJavadoc</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> format, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> args) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -446,7 +450,7 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                         <tr id="i17" class="rowColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#typeVariable(com.squareup.javapoet.TypeVariableName)>typeVariable</a>(TypeVariableName typeVariable) </code>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#addJavadoc(com.squareup.javapoet.CodeBlock)>addJavadoc</a>(CodeBlock block) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -454,7 +458,7 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                         <tr id="i18" class="altColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#returns(java.lang.Class)>returns</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html>Class</a>&lt;?&gt; type) </code>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#addModifiers(javax.lang.model.element.Modifier)>addModifiers</a>(<a href=https://docs.oracle.com/javase/8/docs/api/javax/lang/model/element/Modifier.html>Modifier</a> modifiers) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -462,31 +466,31 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                         <tr id="i19" class="rowColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#returns(kotlin.reflect.KClass)>returns</a>(<a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html>KClass</a>&lt;?&gt; type) </code>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#addTypeVariables(com.squareup.javapoet.TypeVariableName)>addTypeVariables</a>(TypeVariableName typeVariables) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
                                         <tr id="i20" class="altColor">
-                                            <td class="colFirst"><code>final &lt;T extends <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html>Any</a>&gt; <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
+                                            <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#returns()>returns</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#setReturns(java.lang.Class)>setReturns</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html>Class</a>&lt;?&gt; type) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
                                         <tr id="i21" class="rowColor">
-                                            <td class="colFirst"><code><a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
+                                            <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#parameter(com.squareup.javapoet.ParameterSpec)>parameter</a>(ParameterSpec parameter) </code>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#setReturns(kotlin.reflect.KClass)>setReturns</a>(<a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html>KClass</a>&lt;?&gt; type) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
                                         <tr id="i22" class="altColor">
-                                            <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
+                                            <td class="colFirst"><code>final &lt;T extends <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html>Any</a>&gt; <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#exceptions(java.lang.Iterable)>exceptions</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html>Iterable</a>&lt;TypeName&gt; exceptions) </code>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#setReturns()>setReturns</a>() </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -494,7 +498,7 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                         <tr id="i23" class="rowColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#exception(com.squareup.javapoet.TypeName)>exception</a>(TypeName exception) </code>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#addExceptions(java.lang.Iterable)>addExceptions</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html>Iterable</a>&lt;TypeName&gt; exceptions) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -502,7 +506,7 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                         <tr id="i24" class="altColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#exception(java.lang.Class)>exception</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html>Class</a>&lt;?&gt; exception) </code>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#addException(com.squareup.javapoet.TypeName)>addException</a>(TypeName exception) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -510,23 +514,23 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                         <tr id="i25" class="rowColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#exception(kotlin.reflect.KClass)>exception</a>(<a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html>KClass</a>&lt;?&gt; exception) </code>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#addException(java.lang.Class)>addException</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html>Class</a>&lt;?&gt; exception) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
                                         <tr id="i26" class="altColor">
-                                            <td class="colFirst"><code>final &lt;T extends <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html>Any</a>&gt; <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
+                                            <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#exception()>exception</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#addException(kotlin.reflect.KClass)>addException</a>(<a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html>KClass</a>&lt;?&gt; exception) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
                                         <tr id="i27" class="rowColor">
-                                            <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
+                                            <td class="colFirst"><code>final &lt;T extends <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html>Any</a>&gt; <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#append(java.lang.String,java.lang.Object)>append</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> format, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> args) </code>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#addException()>addException</a>() </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -534,7 +538,7 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                         <tr id="i28" class="altColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#append(com.squareup.javapoet.CodeBlock)>append</a>(CodeBlock code) </code>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#append(java.lang.String,java.lang.Object)>append</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> format, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> args) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -542,7 +546,7 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                         <tr id="i29" class="rowColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#appendNamed(java.lang.String,java.util.Map)>appendNamed</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> format, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Map.html>Map</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, ?&gt; args) </code>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#append(com.squareup.javapoet.CodeBlock)>append</a>(CodeBlock code) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -550,7 +554,7 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                         <tr id="i30" class="altColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#comment(java.lang.String,java.lang.Object)>comment</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> format, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> args) </code>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#appendNamed(java.lang.String,java.util.Map)>appendNamed</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> format, <a href=https://docs.oracle.com/javase/8/docs/api/java/util/Map.html>Map</a>&lt;<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a>, ?&gt; args) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -558,7 +562,7 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                         <tr id="i31" class="rowColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#defaultValue(java.lang.String,java.lang.Object)>defaultValue</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> format, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> args) </code>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#addComment(java.lang.String,java.lang.Object)>addComment</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> format, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> args) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -566,7 +570,7 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                         <tr id="i32" class="altColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#beginControlFlow(java.lang.String,java.lang.Object)>beginControlFlow</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> format, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> args) </code>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#setDefaultValue(java.lang.String,java.lang.Object)>setDefaultValue</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> format, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> args) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -574,7 +578,7 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                         <tr id="i33" class="rowColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#beginControlFlow(com.squareup.javapoet.CodeBlock)>beginControlFlow</a>(CodeBlock code) </code>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#beginControlFlow(java.lang.String,java.lang.Object)>beginControlFlow</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> format, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> args) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -582,7 +586,7 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                         <tr id="i34" class="altColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#nextControlFlow(java.lang.String,java.lang.Object)>nextControlFlow</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> format, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> args) </code>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#beginControlFlow(com.squareup.javapoet.CodeBlock)>beginControlFlow</a>(CodeBlock code) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -590,7 +594,7 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                         <tr id="i35" class="rowColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#nextControlFlow(com.squareup.javapoet.CodeBlock)>nextControlFlow</a>(CodeBlock code) </code>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#nextControlFlow(java.lang.String,java.lang.Object)>nextControlFlow</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> format, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> args) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -598,7 +602,7 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                         <tr id="i36" class="altColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#endControlFlow()>endControlFlow</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#nextControlFlow(com.squareup.javapoet.CodeBlock)>nextControlFlow</a>(CodeBlock code) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -606,7 +610,7 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                         <tr id="i37" class="rowColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#endControlFlow(java.lang.String,java.lang.Object)>endControlFlow</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> format, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> args) </code>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#endControlFlow()>endControlFlow</a>() </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -614,7 +618,7 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                         <tr id="i38" class="altColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#endControlFlow(com.squareup.javapoet.CodeBlock)>endControlFlow</a>(CodeBlock code) </code>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#endControlFlow(java.lang.String,java.lang.Object)>endControlFlow</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> format, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> args) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -622,7 +626,7 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                         <tr id="i39" class="rowColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#appendLine(java.lang.String,java.lang.Object)>appendLine</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> format, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> args) </code>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#endControlFlow(com.squareup.javapoet.CodeBlock)>endControlFlow</a>(CodeBlock code) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -630,12 +634,20 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                         <tr id="i40" class="altColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#appendLine(com.squareup.javapoet.CodeBlock)>appendLine</a>(CodeBlock code) </code>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#appendLine(java.lang.String,java.lang.Object)>appendLine</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> format, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> args) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
                                         <tr id="i41" class="rowColor">
+                                            <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#appendLine(com.squareup.javapoet.CodeBlock)>appendLine</a>(CodeBlock code) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i42" class="altColor">
                                             <td class="colFirst"><code>final MethodSpec</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=MethodSpecBuilder.html#build()>build</a>() </code>
@@ -648,18 +660,6 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                 </div>
                                 <ul class="blockList">
                                 
-                                    <li class="blockList"><a id="methods.inherited.from.class.com.hanggrian.javapoet.AnnotationSpecHandler">
-                                            <!--   -->
-                                        </a>
-                                            <h3>Methods inherited from class&nbsp;com.hanggrian.javapoet.AnnotationSpecHandler</h3>
-                                            <code>annotation, annotation, annotation</code></li>
-                                 
-                                    <li class="blockList"><a id="methods.inherited.from.class.com.hanggrian.javapoet.ParameterSpecHandler">
-                                            <!--   -->
-                                        </a>
-                                            <h3>Methods inherited from class&nbsp;com.hanggrian.javapoet.ParameterSpecHandler</h3>
-                                            <code>parameter, parameter, parameter, parametering, parametering, parametering</code></li>
-                                 
                                     <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
                                         <!--   -->
                                     </a>
@@ -717,7 +717,53 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                           >
                                     <li class="blockList">
                                         <h4>getAnnotations</h4>
-                                        <pre class="methodSignature"> final <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;AnnotationSpec&gt; <a href=MethodSpecBuilder.html#getAnnotations()>getAnnotations</a>()</pre>
+                                        <pre class="methodSignature"> final <a href=AnnotationSpecHandler.html>AnnotationSpecHandler</a> <a href=MethodSpecBuilder.html#getAnnotations()>getAnnotations</a>()</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="getParameters()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getParameters</h4>
+                                        <pre class="methodSignature"> final <a href=ParameterSpecHandler.html>ParameterSpecHandler</a> <a href=MethodSpecBuilder.html#getParameters()>getParameters</a>()</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="getAnnotationSpecs()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getAnnotationSpecs</h4>
+                                        <pre class="methodSignature"> final <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;AnnotationSpec&gt; <a href=MethodSpecBuilder.html#getAnnotationSpecs()>getAnnotationSpecs</a>()</pre>
                                         <div class="block"></div>
 
                                         <dl>
@@ -778,15 +824,15 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                     </li>
                                 </ul>
                                 
-                                <a id="getParameters()">
+                                <a id="getParameterSpecs()">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>getParameters</h4>
-                                        <pre class="methodSignature"> final <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;ParameterSpec&gt; <a href=MethodSpecBuilder.html#getParameters()>getParameters</a>()</pre>
+                                        <h4>getParameterSpecs</h4>
+                                        <pre class="methodSignature"> final <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;ParameterSpec&gt; <a href=MethodSpecBuilder.html#getParameterSpecs()>getParameterSpecs</a>()</pre>
                                         <div class="block"></div>
 
                                         <dl>
@@ -985,15 +1031,61 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                     </li>
                                 </ul>
                                 
-                                <a id="javadoc(java.lang.String,java.lang.Object)">
+                                <a id="annotations(kotlin.jvm.functions.Function1)">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>javadoc</h4>
-                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MethodSpecBuilder.html#javadoc(java.lang.String,java.lang.Object)>javadoc</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> format, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> args)</pre>
+                                        <h4>annotations</h4>
+                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MethodSpecBuilder.html#annotations(kotlin.jvm.functions.Function1)>annotations</a>(Function1&lt;<a href=AnnotationSpecHandlerScope.html>AnnotationSpecHandlerScope</a>, <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a>&gt; configuration)</pre>
+                                        <div class="block"><p>Invokes DSL to configure AnnotationSpec collection.</p></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="parameters(kotlin.jvm.functions.Function1)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>parameters</h4>
+                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MethodSpecBuilder.html#parameters(kotlin.jvm.functions.Function1)>parameters</a>(Function1&lt;<a href=ParameterSpecHandlerScope.html>ParameterSpecHandlerScope</a>, <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a>&gt; configuration)</pre>
+                                        <div class="block"><p>Invokes DSL to configure ParameterSpec collection.</p></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="addJavadoc(java.lang.String,java.lang.Object)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>addJavadoc</h4>
+                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MethodSpecBuilder.html#addJavadoc(java.lang.String,java.lang.Object)>addJavadoc</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> format, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> args)</pre>
                                         <div class="block"></div>
 
                                         <dl>
@@ -1008,15 +1100,15 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                     </li>
                                 </ul>
                                 
-                                <a id="javadoc(com.squareup.javapoet.CodeBlock)">
+                                <a id="addJavadoc(com.squareup.javapoet.CodeBlock)">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>javadoc</h4>
-                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MethodSpecBuilder.html#javadoc(com.squareup.javapoet.CodeBlock)>javadoc</a>(CodeBlock block)</pre>
+                                        <h4>addJavadoc</h4>
+                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MethodSpecBuilder.html#addJavadoc(com.squareup.javapoet.CodeBlock)>addJavadoc</a>(CodeBlock block)</pre>
                                         <div class="block"></div>
 
                                         <dl>
@@ -1031,15 +1123,15 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                     </li>
                                 </ul>
                                 
-                                <a id="annotation(com.squareup.javapoet.AnnotationSpec)">
+                                <a id="addModifiers(javax.lang.model.element.Modifier)">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>annotation</h4>
-                                        <pre class="methodSignature"> <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MethodSpecBuilder.html#annotation(com.squareup.javapoet.AnnotationSpec)>annotation</a>(AnnotationSpec annotation)</pre>
+                                        <h4>addModifiers</h4>
+                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MethodSpecBuilder.html#addModifiers(javax.lang.model.element.Modifier)>addModifiers</a>(<a href=https://docs.oracle.com/javase/8/docs/api/javax/lang/model/element/Modifier.html>Modifier</a> modifiers)</pre>
                                         <div class="block"></div>
 
                                         <dl>
@@ -1054,15 +1146,15 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                     </li>
                                 </ul>
                                 
-                                <a id="modifiers(javax.lang.model.element.Modifier)">
+                                <a id="addTypeVariables(com.squareup.javapoet.TypeVariableName)">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>modifiers</h4>
-                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MethodSpecBuilder.html#modifiers(javax.lang.model.element.Modifier)>modifiers</a>(<a href=https://docs.oracle.com/javase/8/docs/api/javax/lang/model/element/Modifier.html>Modifier</a> modifiers)</pre>
+                                        <h4>addTypeVariables</h4>
+                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MethodSpecBuilder.html#addTypeVariables(com.squareup.javapoet.TypeVariableName)>addTypeVariables</a>(TypeVariableName typeVariables)</pre>
                                         <div class="block"></div>
 
                                         <dl>
@@ -1077,15 +1169,15 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                     </li>
                                 </ul>
                                 
-                                <a id="typeVariables(java.lang.Iterable)">
+                                <a id="setReturns(java.lang.Class)">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>typeVariables</h4>
-                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MethodSpecBuilder.html#typeVariables(java.lang.Iterable)>typeVariables</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html>Iterable</a>&lt;TypeVariableName&gt; typeVariables)</pre>
+                                        <h4>setReturns</h4>
+                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MethodSpecBuilder.html#setReturns(java.lang.Class)>setReturns</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html>Class</a>&lt;?&gt; type)</pre>
                                         <div class="block"></div>
 
                                         <dl>
@@ -1100,15 +1192,15 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                     </li>
                                 </ul>
                                 
-                                <a id="typeVariable(com.squareup.javapoet.TypeVariableName)">
+                                <a id="setReturns(kotlin.reflect.KClass)">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>typeVariable</h4>
-                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MethodSpecBuilder.html#typeVariable(com.squareup.javapoet.TypeVariableName)>typeVariable</a>(TypeVariableName typeVariable)</pre>
+                                        <h4>setReturns</h4>
+                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MethodSpecBuilder.html#setReturns(kotlin.reflect.KClass)>setReturns</a>(<a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html>KClass</a>&lt;?&gt; type)</pre>
                                         <div class="block"></div>
 
                                         <dl>
@@ -1123,15 +1215,15 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                     </li>
                                 </ul>
                                 
-                                <a id="returns(java.lang.Class)">
+                                <a id="setReturns()">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>returns</h4>
-                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MethodSpecBuilder.html#returns(java.lang.Class)>returns</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html>Class</a>&lt;?&gt; type)</pre>
+                                        <h4>setReturns</h4>
+                                        <pre class="methodSignature"> final &lt;T extends <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html>Any</a>&gt; <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MethodSpecBuilder.html#setReturns()>setReturns</a>()</pre>
                                         <div class="block"></div>
 
                                         <dl>
@@ -1146,15 +1238,15 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                     </li>
                                 </ul>
                                 
-                                <a id="returns(kotlin.reflect.KClass)">
+                                <a id="addExceptions(java.lang.Iterable)">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>returns</h4>
-                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MethodSpecBuilder.html#returns(kotlin.reflect.KClass)>returns</a>(<a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html>KClass</a>&lt;?&gt; type)</pre>
+                                        <h4>addExceptions</h4>
+                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MethodSpecBuilder.html#addExceptions(java.lang.Iterable)>addExceptions</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html>Iterable</a>&lt;TypeName&gt; exceptions)</pre>
                                         <div class="block"></div>
 
                                         <dl>
@@ -1169,15 +1261,15 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                     </li>
                                 </ul>
                                 
-                                <a id="returns()">
+                                <a id="addException(com.squareup.javapoet.TypeName)">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>returns</h4>
-                                        <pre class="methodSignature"> final &lt;T extends <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html>Any</a>&gt; <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MethodSpecBuilder.html#returns()>returns</a>()</pre>
+                                        <h4>addException</h4>
+                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MethodSpecBuilder.html#addException(com.squareup.javapoet.TypeName)>addException</a>(TypeName exception)</pre>
                                         <div class="block"></div>
 
                                         <dl>
@@ -1192,15 +1284,15 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                     </li>
                                 </ul>
                                 
-                                <a id="parameter(com.squareup.javapoet.ParameterSpec)">
+                                <a id="addException(java.lang.Class)">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>parameter</h4>
-                                        <pre class="methodSignature"> <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MethodSpecBuilder.html#parameter(com.squareup.javapoet.ParameterSpec)>parameter</a>(ParameterSpec parameter)</pre>
+                                        <h4>addException</h4>
+                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MethodSpecBuilder.html#addException(java.lang.Class)>addException</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html>Class</a>&lt;?&gt; exception)</pre>
                                         <div class="block"></div>
 
                                         <dl>
@@ -1215,15 +1307,15 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                     </li>
                                 </ul>
                                 
-                                <a id="exceptions(java.lang.Iterable)">
+                                <a id="addException(kotlin.reflect.KClass)">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>exceptions</h4>
-                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MethodSpecBuilder.html#exceptions(java.lang.Iterable)>exceptions</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html>Iterable</a>&lt;TypeName&gt; exceptions)</pre>
+                                        <h4>addException</h4>
+                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MethodSpecBuilder.html#addException(kotlin.reflect.KClass)>addException</a>(<a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html>KClass</a>&lt;?&gt; exception)</pre>
                                         <div class="block"></div>
 
                                         <dl>
@@ -1238,84 +1330,15 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                     </li>
                                 </ul>
                                 
-                                <a id="exception(com.squareup.javapoet.TypeName)">
+                                <a id="addException()">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>exception</h4>
-                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MethodSpecBuilder.html#exception(com.squareup.javapoet.TypeName)>exception</a>(TypeName exception)</pre>
-                                        <div class="block"></div>
-
-                                        <dl>
-
-                                        
-
-                                        
-
-                                        
-
-                                        </dl>
-                                    </li>
-                                </ul>
-                                
-                                <a id="exception(java.lang.Class)">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>exception</h4>
-                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MethodSpecBuilder.html#exception(java.lang.Class)>exception</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Class.html>Class</a>&lt;?&gt; exception)</pre>
-                                        <div class="block"></div>
-
-                                        <dl>
-
-                                        
-
-                                        
-
-                                        
-
-                                        </dl>
-                                    </li>
-                                </ul>
-                                
-                                <a id="exception(kotlin.reflect.KClass)">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>exception</h4>
-                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MethodSpecBuilder.html#exception(kotlin.reflect.KClass)>exception</a>(<a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html>KClass</a>&lt;?&gt; exception)</pre>
-                                        <div class="block"></div>
-
-                                        <dl>
-
-                                        
-
-                                        
-
-                                        
-
-                                        </dl>
-                                    </li>
-                                </ul>
-                                
-                                <a id="exception()">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>exception</h4>
-                                        <pre class="methodSignature"> final &lt;T extends <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html>Any</a>&gt; <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MethodSpecBuilder.html#exception()>exception</a>()</pre>
+                                        <h4>addException</h4>
+                                        <pre class="methodSignature"> final &lt;T extends <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html>Any</a>&gt; <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MethodSpecBuilder.html#addException()>addException</a>()</pre>
                                         <div class="block"></div>
 
                                         <dl>
@@ -1399,15 +1422,15 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                     </li>
                                 </ul>
                                 
-                                <a id="comment(java.lang.String,java.lang.Object)">
+                                <a id="addComment(java.lang.String,java.lang.Object)">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>comment</h4>
-                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MethodSpecBuilder.html#comment(java.lang.String,java.lang.Object)>comment</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> format, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> args)</pre>
+                                        <h4>addComment</h4>
+                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MethodSpecBuilder.html#addComment(java.lang.String,java.lang.Object)>addComment</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> format, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> args)</pre>
                                         <div class="block"></div>
 
                                         <dl>
@@ -1422,15 +1445,15 @@ public final class <span class="typeNameLabel"><a href=MethodSpecBuilder.html>Me
                                     </li>
                                 </ul>
                                 
-                                <a id="defaultValue(java.lang.String,java.lang.Object)">
+                                <a id="setDefaultValue(java.lang.String,java.lang.Object)">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>defaultValue</h4>
-                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MethodSpecBuilder.html#defaultValue(java.lang.String,java.lang.Object)>defaultValue</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> format, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> args)</pre>
+                                        <h4>setDefaultValue</h4>
+                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=MethodSpecBuilder.html#setDefaultValue(java.lang.String,java.lang.Object)>setDefaultValue</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> format, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> args)</pre>
                                         <div class="block"></div>
 
                                         <dl>

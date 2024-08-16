@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <!-- NewPage -->
 <html lang="en"><head>
-    <title>JavaFileBuilder 0.1 API </title>
+    <title>JavaFileBuilder 0.2 API </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="dc.created" content="2020-03-25">
     <link rel="stylesheet" type="text/css" href="../../../stylesheet.css" title="Style">
@@ -108,9 +108,6 @@ var pathtoroot = "../../../";
                         <dt>All Implemented Interfaces:</dt>
                         <dd>
                             
-                            <code>com.hanggrian.javapoet.TypeSpecHandler</code>
-                            
-                            
                         </dd>
                     </dl>
                     
@@ -118,7 +115,7 @@ var pathtoroot = "../../../";
                     <pre class="wrap-overflow">
 
 public final class <span class="typeNameLabel"><a href=JavaFileBuilder.html>JavaFileBuilder</a></span>
- implements <a href=TypeSpecHandler.html>TypeSpecHandler</a>
+
                     </pre>
                     <div class="block"><p>Wrapper of JavaFile.Builder, providing DSL support as a replacement to Java builder.</p></div>
 
@@ -177,23 +174,29 @@ public final class <span class="typeNameLabel"><a href=JavaFileBuilder.html>Java
                                         
                                         <tr class="altColor">
                                             <td class="colFirst"><code>private final <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;TypeSpec&gt;</code></td>
-                                            <th class="colSecond" scope="row"><code><a href=JavaFileBuilder.html#types>types</a></code></th>
+                                            <th class="colSecond" scope="row"><code><a href=JavaFileBuilder.html#typeSpecs>typeSpecs</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
                                         <tr class="rowColor">
+                                            <td class="colFirst"><code>private final <a href=TypeSpecHandler.html>TypeSpecHandler</a></code></td>
+                                            <th class="colSecond" scope="row"><code><a href=JavaFileBuilder.html#types>types</a></code></th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr class="altColor">
                                             <td class="colFirst"><code>private  <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a></code></td>
                                             <th class="colSecond" scope="row"><code><a href=JavaFileBuilder.html#isSkipJavaLangImports()>isSkipJavaLangImports</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr class="altColor">
+                                        <tr class="rowColor">
                                             <td class="colFirst"><code>private  <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code></td>
                                             <th class="colSecond" scope="row"><code><a href=JavaFileBuilder.html#indent>indent</a></code></th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr class="rowColor">
+                                        <tr class="altColor">
                                             <td class="colFirst"><code>private  <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a></code></td>
                                             <th class="colSecond" scope="row"><code><a href=JavaFileBuilder.html#indentSize>indentSize</a></code></th>
                                             <td class="colLast"></td>
@@ -281,12 +284,20 @@ public final class <span class="typeNameLabel"><a href=JavaFileBuilder.html>Java
                                         <tr id="i0" class="altColor">
                                             <td class="colFirst"><code>final <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;TypeSpec&gt;</code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=JavaFileBuilder.html#getTypes()>getTypes</a>() </code>
+                                            <th class="colSecond" scope="row"><code><a href=JavaFileBuilder.html#getTypeSpecs()>getTypeSpecs</a>() </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
                                         <tr id="i1" class="rowColor">
+                                            <td class="colFirst"><code>final <a href=TypeSpecHandler.html>TypeSpecHandler</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=JavaFileBuilder.html#getTypes()>getTypes</a>() </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i2" class="altColor">
                                             <td class="colFirst"><code>final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=JavaFileBuilder.html#isSkipJavaLangImports()>isSkipJavaLangImports</a>() </code>
@@ -294,7 +305,7 @@ public final class <span class="typeNameLabel"><a href=JavaFileBuilder.html>Java
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr id="i2" class="altColor">
+                                        <tr id="i3" class="rowColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=JavaFileBuilder.html#setSkipJavaLangImports(java.lang.Boolean)>setSkipJavaLangImports</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Boolean.html>Boolean</a> isSkipJavaLangImports) </code>
@@ -302,7 +313,7 @@ public final class <span class="typeNameLabel"><a href=JavaFileBuilder.html>Java
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr id="i3" class="rowColor">
+                                        <tr id="i4" class="altColor">
                                             <td class="colFirst"><code>final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=JavaFileBuilder.html#getIndent()>getIndent</a>() </code>
@@ -310,7 +321,7 @@ public final class <span class="typeNameLabel"><a href=JavaFileBuilder.html>Java
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr id="i4" class="altColor">
+                                        <tr id="i5" class="rowColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=JavaFileBuilder.html#setIndent(java.lang.String)>setIndent</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> indent) </code>
@@ -318,7 +329,7 @@ public final class <span class="typeNameLabel"><a href=JavaFileBuilder.html>Java
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr id="i5" class="rowColor">
+                                        <tr id="i6" class="altColor">
                                             <td class="colFirst"><code>final <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=JavaFileBuilder.html#getIndentSize()>getIndentSize</a>() </code>
@@ -326,7 +337,7 @@ public final class <span class="typeNameLabel"><a href=JavaFileBuilder.html>Java
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr id="i6" class="altColor">
+                                        <tr id="i7" class="rowColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=JavaFileBuilder.html#setIndentSize(java.lang.Integer)>setIndentSize</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Integer.html>Integer</a> indentSize) </code>
@@ -334,26 +345,18 @@ public final class <span class="typeNameLabel"><a href=JavaFileBuilder.html>Java
                                             <td class="colLast"></td>
                                         </tr>
                                         
-                                        <tr id="i7" class="rowColor">
-                                            <td class="colFirst"><code><a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
-                                            </td>
-                                            <th class="colSecond" scope="row"><code><a href=JavaFileBuilder.html#type(com.squareup.javapoet.TypeSpec)>type</a>(TypeSpec type) </code>
-                                            </th>
-                                            <td class="colLast"></td>
-                                        </tr>
-                                        
                                         <tr id="i8" class="altColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=JavaFileBuilder.html#comment(java.lang.String,java.lang.Object)>comment</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> format, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> args) </code>
+                                            <th class="colSecond" scope="row"><code><a href=JavaFileBuilder.html#types(kotlin.jvm.functions.Function1)>types</a>(Function1&lt;<a href=TypeSpecHandlerScope.html>TypeSpecHandlerScope</a>, <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a>&gt; configuration) </code>
                                             </th>
-                                            <td class="colLast"></td>
+                                            <td class="colLast">Invokes DSL to configure TypeSpec collection.</td>
                                         </tr>
                                         
                                         <tr id="i9" class="rowColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=JavaFileBuilder.html#staticImport(java.lang.Enum)>staticImport</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Enum.html>Enum</a>&lt;?&gt; constant) </code>
+                                            <th class="colSecond" scope="row"><code><a href=JavaFileBuilder.html#addComment(java.lang.String,java.lang.Object)>addComment</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> format, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> args) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -361,7 +364,7 @@ public final class <span class="typeNameLabel"><a href=JavaFileBuilder.html>Java
                                         <tr id="i10" class="altColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=JavaFileBuilder.html#staticImport(com.squareup.javapoet.ClassName,java.lang.String)>staticImport</a>(ClassName type, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> names) </code>
+                                            <th class="colSecond" scope="row"><code><a href=JavaFileBuilder.html#addStaticImport(java.lang.Enum)>addStaticImport</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Enum.html>Enum</a>&lt;?&gt; constant) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
@@ -369,20 +372,28 @@ public final class <span class="typeNameLabel"><a href=JavaFileBuilder.html>Java
                                         <tr id="i11" class="rowColor">
                                             <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=JavaFileBuilder.html#staticImport(kotlin.reflect.KClass,java.lang.String)>staticImport</a>(<a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html>KClass</a>&lt;?&gt; type, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> names) </code>
+                                            <th class="colSecond" scope="row"><code><a href=JavaFileBuilder.html#addStaticImport(com.squareup.javapoet.ClassName,java.lang.String)>addStaticImport</a>(ClassName type, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> names) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
                                         <tr id="i12" class="altColor">
-                                            <td class="colFirst"><code>final &lt;T extends <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html>Any</a>&gt; <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
+                                            <td class="colFirst"><code>final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
                                             </td>
-                                            <th class="colSecond" scope="row"><code><a href=JavaFileBuilder.html#staticImport(java.lang.String)>staticImport</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> names) </code>
+                                            <th class="colSecond" scope="row"><code><a href=JavaFileBuilder.html#addStaticImport(kotlin.reflect.KClass,java.lang.String)>addStaticImport</a>(<a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html>KClass</a>&lt;?&gt; type, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> names) </code>
                                             </th>
                                             <td class="colLast"></td>
                                         </tr>
                                         
                                         <tr id="i13" class="rowColor">
+                                            <td class="colFirst"><code>final &lt;T extends <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html>Any</a>&gt; <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a></code>
+                                            </td>
+                                            <th class="colSecond" scope="row"><code><a href=JavaFileBuilder.html#addStaticImport(java.lang.String)>addStaticImport</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> names) </code>
+                                            </th>
+                                            <td class="colLast"></td>
+                                        </tr>
+                                        
+                                        <tr id="i14" class="altColor">
                                             <td class="colFirst"><code>final JavaFile</code>
                                             </td>
                                             <th class="colSecond" scope="row"><code><a href=JavaFileBuilder.html#build()>build</a>() </code>
@@ -395,12 +406,6 @@ public final class <span class="typeNameLabel"><a href=JavaFileBuilder.html>Java
                                 </div>
                                 <ul class="blockList">
                                 
-                                    <li class="blockList"><a id="methods.inherited.from.class.com.hanggrian.javapoet.TypeSpecHandler">
-                                            <!--   -->
-                                        </a>
-                                            <h3>Methods inherited from class&nbsp;com.hanggrian.javapoet.TypeSpecHandler</h3>
-                                            <code>annotationType, annotationType, annotationTyping, anonymousType, anonymousType, anonymousTyping, classType, classType, classTyping, interfaceType, interfaceType, interfaceTyping</code></li>
-                                 
                                     <li class="blockList"><a id="methods.inherited.from.class.java.lang.Object">
                                         <!--   -->
                                     </a>
@@ -450,6 +455,29 @@ public final class <span class="typeNameLabel"><a href=JavaFileBuilder.html>Java
                             </a>
                                 <h3>Method Detail</h3>
                                 
+                                <a id="getTypeSpecs()">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>getTypeSpecs</h4>
+                                        <pre class="methodSignature"> final <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;TypeSpec&gt; <a href=JavaFileBuilder.html#getTypeSpecs()>getTypeSpecs</a>()</pre>
+                                        <div class="block"></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
                                 <a id="getTypes()">
                                     <!--   -->
                                 </a>
@@ -458,7 +486,7 @@ public final class <span class="typeNameLabel"><a href=JavaFileBuilder.html>Java
                                           >
                                     <li class="blockList">
                                         <h4>getTypes</h4>
-                                        <pre class="methodSignature"> final <a href=https://docs.oracle.com/javase/8/docs/api/java/util/List.html>List</a>&lt;TypeSpec&gt; <a href=JavaFileBuilder.html#getTypes()>getTypes</a>()</pre>
+                                        <pre class="methodSignature"> final <a href=TypeSpecHandler.html>TypeSpecHandler</a> <a href=JavaFileBuilder.html#getTypes()>getTypes</a>()</pre>
                                         <div class="block"></div>
 
                                         <dl>
@@ -611,15 +639,38 @@ public final class <span class="typeNameLabel"><a href=JavaFileBuilder.html>Java
                                     </li>
                                 </ul>
                                 
-                                <a id="type(com.squareup.javapoet.TypeSpec)">
+                                <a id="types(kotlin.jvm.functions.Function1)">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>type</h4>
-                                        <pre class="methodSignature"> <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=JavaFileBuilder.html#type(com.squareup.javapoet.TypeSpec)>type</a>(TypeSpec type)</pre>
+                                        <h4>types</h4>
+                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=JavaFileBuilder.html#types(kotlin.jvm.functions.Function1)>types</a>(Function1&lt;<a href=TypeSpecHandlerScope.html>TypeSpecHandlerScope</a>, <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a>&gt; configuration)</pre>
+                                        <div class="block"><p>Invokes DSL to configure TypeSpec collection.</p></div>
+
+                                        <dl>
+
+                                        
+
+                                        
+
+                                        
+
+                                        </dl>
+                                    </li>
+                                </ul>
+                                
+                                <a id="addComment(java.lang.String,java.lang.Object)">
+                                    <!--   -->
+                                </a>
+                                <ul class=
+                                              "blockList"
+                                          >
+                                    <li class="blockList">
+                                        <h4>addComment</h4>
+                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=JavaFileBuilder.html#addComment(java.lang.String,java.lang.Object)>addComment</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> format, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> args)</pre>
                                         <div class="block"></div>
 
                                         <dl>
@@ -634,15 +685,15 @@ public final class <span class="typeNameLabel"><a href=JavaFileBuilder.html>Java
                                     </li>
                                 </ul>
                                 
-                                <a id="comment(java.lang.String,java.lang.Object)">
+                                <a id="addStaticImport(java.lang.Enum)">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>comment</h4>
-                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=JavaFileBuilder.html#comment(java.lang.String,java.lang.Object)>comment</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> format, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html>Object</a> args)</pre>
+                                        <h4>addStaticImport</h4>
+                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=JavaFileBuilder.html#addStaticImport(java.lang.Enum)>addStaticImport</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Enum.html>Enum</a>&lt;?&gt; constant)</pre>
                                         <div class="block"></div>
 
                                         <dl>
@@ -657,15 +708,15 @@ public final class <span class="typeNameLabel"><a href=JavaFileBuilder.html>Java
                                     </li>
                                 </ul>
                                 
-                                <a id="staticImport(java.lang.Enum)">
+                                <a id="addStaticImport(com.squareup.javapoet.ClassName,java.lang.String)">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>staticImport</h4>
-                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=JavaFileBuilder.html#staticImport(java.lang.Enum)>staticImport</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/Enum.html>Enum</a>&lt;?&gt; constant)</pre>
+                                        <h4>addStaticImport</h4>
+                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=JavaFileBuilder.html#addStaticImport(com.squareup.javapoet.ClassName,java.lang.String)>addStaticImport</a>(ClassName type, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> names)</pre>
                                         <div class="block"></div>
 
                                         <dl>
@@ -680,15 +731,15 @@ public final class <span class="typeNameLabel"><a href=JavaFileBuilder.html>Java
                                     </li>
                                 </ul>
                                 
-                                <a id="staticImport(com.squareup.javapoet.ClassName,java.lang.String)">
+                                <a id="addStaticImport(kotlin.reflect.KClass,java.lang.String)">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>staticImport</h4>
-                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=JavaFileBuilder.html#staticImport(com.squareup.javapoet.ClassName,java.lang.String)>staticImport</a>(ClassName type, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> names)</pre>
+                                        <h4>addStaticImport</h4>
+                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=JavaFileBuilder.html#addStaticImport(kotlin.reflect.KClass,java.lang.String)>addStaticImport</a>(<a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html>KClass</a>&lt;?&gt; type, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> names)</pre>
                                         <div class="block"></div>
 
                                         <dl>
@@ -703,38 +754,15 @@ public final class <span class="typeNameLabel"><a href=JavaFileBuilder.html>Java
                                     </li>
                                 </ul>
                                 
-                                <a id="staticImport(kotlin.reflect.KClass,java.lang.String)">
+                                <a id="addStaticImport(java.lang.String)">
                                     <!--   -->
                                 </a>
                                 <ul class=
                                               "blockList"
                                           >
                                     <li class="blockList">
-                                        <h4>staticImport</h4>
-                                        <pre class="methodSignature"> final <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=JavaFileBuilder.html#staticImport(kotlin.reflect.KClass,java.lang.String)>staticImport</a>(<a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin.reflect/-k-class/index.html>KClass</a>&lt;?&gt; type, <a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> names)</pre>
-                                        <div class="block"></div>
-
-                                        <dl>
-
-                                        
-
-                                        
-
-                                        
-
-                                        </dl>
-                                    </li>
-                                </ul>
-                                
-                                <a id="staticImport(java.lang.String)">
-                                    <!--   -->
-                                </a>
-                                <ul class=
-                                              "blockList"
-                                          >
-                                    <li class="blockList">
-                                        <h4>staticImport</h4>
-                                        <pre class="methodSignature"> final &lt;T extends <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html>Any</a>&gt; <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=JavaFileBuilder.html#staticImport(java.lang.String)>staticImport</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> names)</pre>
+                                        <h4>addStaticImport</h4>
+                                        <pre class="methodSignature"> final &lt;T extends <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-any/index.html>Any</a>&gt; <a href=https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html>Unit</a> <a href=JavaFileBuilder.html#addStaticImport(java.lang.String)>addStaticImport</a>(<a href=https://docs.oracle.com/javase/8/docs/api/java/lang/String.html>String</a> names)</pre>
                                         <div class="block"></div>
 
                                         <dl>
