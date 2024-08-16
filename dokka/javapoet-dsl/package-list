@@ -1,5 +1,9 @@
 $dokka.format:html-v1
 $dokka.linkExtension:html
+$dokka.location:com.hanggrian.javapoet.internals////PointingToDeclaration/javapoet-dsl/com.hanggrian.javapoet.internals/index.html
+$dokka.location:com.hanggrian.javapoet.internals/Internals///PointingToDeclaration/javapoet-dsl/com.hanggrian.javapoet.internals/-internals/index.html
+$dokka.location:com.hanggrian.javapoet.internals/Internals/format/#kotlin.String#kotlin.Array[*]#kotlin.Function2[kotlin.String,kotlin.Array[*],TypeParam(bounds=[kotlin.Any?])]/PointingToDeclaration/javapoet-dsl/com.hanggrian.javapoet.internals/-internals/format.html
+$dokka.location:com.hanggrian.javapoet.internals/Internals/format/#kotlin.String#kotlin.collections.Map[kotlin.String,*]#kotlin.Function2[kotlin.String,kotlin.collections.Map[kotlin.String,*],TypeParam(bounds=[kotlin.Any?])]/PointingToDeclaration/javapoet-dsl/com.hanggrian.javapoet.internals/-internals/format.html
 $dokka.location:com.hanggrian.javapoet////PointingToDeclaration/javapoet-dsl/com.hanggrian.javapoet/index.html
 $dokka.location:com.hanggrian.javapoet//ABSTRACT/#/PointingToDeclaration/javapoet-dsl/com.hanggrian.javapoet/-a-b-s-t-r-a-c-t.html
 $dokka.location:com.hanggrian.javapoet//ANNOTATION/#/PointingToDeclaration/javapoet-dsl/com.hanggrian.javapoet/-a-n-n-o-t-a-t-i-o-n.html
@@ -330,4 +334,5 @@ $dokka.location:com.hanggrian.javapoet/TypeSpecHandlerScope.Companion/of/#com.ha
 $dokka.location:com.hanggrian.javapoet/TypeSpecHandlerScope///PointingToDeclaration/javapoet-dsl/com.hanggrian.javapoet/-type-spec-handler-scope/index.html
 $dokka.location:com.hanggrian.javapoet/TypeSpecHandlerScope/invoke/kotlin.String#kotlin.Function1[com.hanggrian.javapoet.TypeSpecBuilder,kotlin.Unit]/PointingToDeclaration/javapoet-dsl/com.hanggrian.javapoet/-type-spec-handler-scope/invoke.html
 com.hanggrian.javapoet
+com.hanggrian.javapoet.internals
 

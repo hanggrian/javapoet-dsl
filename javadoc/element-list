@@ -1,9 +1,0 @@
-$dokka.format:javadoc-v1
-$dokka.linkExtension:html
-$dokka.location:com.hanggrian.javapoet/AnnotationSpecHandlerScope.Companion///PointingToDeclaration/com/hanggrian/javapoet/AnnotationSpecHandlerScope.Companion.html
-$dokka.location:com.hanggrian.javapoet/FieldSpecHandlerScope.Companion///PointingToDeclaration/com/hanggrian/javapoet/FieldSpecHandlerScope.Companion.html
-$dokka.location:com.hanggrian.javapoet/MethodSpecHandlerScope.Companion///PointingToDeclaration/com/hanggrian/javapoet/MethodSpecHandlerScope.Companion.html
-$dokka.location:com.hanggrian.javapoet/ParameterSpecHandlerScope.Companion///PointingToDeclaration/com/hanggrian/javapoet/ParameterSpecHandlerScope.Companion.html
-$dokka.location:com.hanggrian.javapoet/TypeSpecHandlerScope.Companion///PointingToDeclaration/com/hanggrian/javapoet/TypeSpecHandlerScope.Companion.html
-com.hanggrian.javapoet
-
