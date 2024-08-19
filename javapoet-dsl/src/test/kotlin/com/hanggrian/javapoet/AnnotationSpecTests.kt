@@ -9,9 +9,32 @@ import com.example.Annotation6
 import com.example.Annotation7
 import com.google.common.truth.Truth.assertThat
 import com.squareup.javapoet.AnnotationSpec
+import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import kotlin.test.Test
 import kotlin.test.assertFalse
+
+class AnnotationSpecCreatorTest {
+    @Test
+    fun of() {
+        assertThat(annotationSpecOf(classNamed("com.example", "MyAnnotation")))
+            .isEqualTo(AnnotationSpec.builder(ClassName.get("com.example", "MyAnnotation")).build())
+    }
+
+    @Test
+    fun build() {
+        assertThat(
+            buildAnnotationSpec(classNamed("com.example", "MyAnnotation")) {
+                addMember("name1", "value1")
+            },
+        ).isEqualTo(
+            AnnotationSpec
+                .builder(ClassName.get("com.example", "MyAnnotation"))
+                .addMember("name1", "value1")
+                .build(),
+        )
+    }
+}
 
 class AnnotationSpecHandlerTest {
     @Test

@@ -1,7 +1,11 @@
+@file:Suppress("ktlint:standard:property-naming")
+
 package com.hanggrian.javapoet
 
 import com.example.Annotation1
 import com.example.Annotation2
+import com.example.Class1
+import com.example.Class2
 import com.example.Field1
 import com.example.Field2
 import com.example.Field3
@@ -10,16 +14,150 @@ import com.example.Field5
 import com.example.Field6
 import com.example.Field7
 import com.google.common.truth.Truth.assertThat
+import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.JavaFile
+import com.squareup.javapoet.MethodSpec
+import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeSpec
 import com.squareup.javapoet.TypeVariableName
 import javax.lang.model.element.Modifier
 import kotlin.test.Test
-import kotlin.test.assertFails
 import kotlin.test.assertFalse
 
-@Suppress("ktlint:standard:property-naming")
+class TypeSpecCreatorTest {
+    @Test
+    fun of() {
+        assertThat(classTypeSpecOf("MyClass"))
+            .isEqualTo(TypeSpec.classBuilder("MyClass").build())
+        assertThat(classTypeSpecOf(Class1::class.name))
+            .isEqualTo(TypeSpec.classBuilder(ClassName.get(Class1::class.java)).build())
+
+        assertThat(interfaceTypeSpecOf("MyClass"))
+            .isEqualTo(TypeSpec.interfaceBuilder("MyClass").build())
+        assertThat(interfaceTypeSpecOf(Class1::class.name))
+            .isEqualTo(TypeSpec.interfaceBuilder(ClassName.get(Class1::class.java)).build())
+
+        assertThat(anonymousTypeSpecOf("Anonymous1"))
+            .isEqualTo(TypeSpec.anonymousClassBuilder("Anonymous1").build())
+        assertThat(anonymousTypeSpecOf(codeBlockOf("Anonymous2")))
+            .isEqualTo(TypeSpec.anonymousClassBuilder(CodeBlock.of("Anonymous2")).build())
+
+        assertThat(annotationTypeSpecOf("MyClass"))
+            .isEqualTo(TypeSpec.annotationBuilder("MyClass").build())
+        assertThat(annotationTypeSpecOf(Class1::class.name))
+            .isEqualTo(TypeSpec.annotationBuilder(ClassName.get(Class1::class.java)).build())
+    }
+
+    @Test
+    fun build() {
+        assertThat(
+            buildClassTypeSpec("MyClass") {
+                addJavadoc("text1")
+            },
+        ).isEqualTo(
+            TypeSpec
+                .classBuilder("MyClass")
+                .addJavadoc("text1")
+                .build(),
+        )
+        assertThat(
+            buildClassTypeSpec(Class1::class.name) {
+                addJavadoc("text2")
+            },
+        ).isEqualTo(
+            TypeSpec
+                .classBuilder(ClassName.get(Class1::class.java))
+                .addJavadoc("text2")
+                .build(),
+        )
+
+        assertThat(
+            buildInterfaceTypeSpec("MyClass") {
+                addJavadoc("text1")
+            },
+        ).isEqualTo(
+            TypeSpec
+                .interfaceBuilder("MyClass")
+                .addJavadoc("text1")
+                .build(),
+        )
+        assertThat(
+            buildInterfaceTypeSpec(Class1::class.name) {
+                addJavadoc("text2")
+            },
+        ).isEqualTo(
+            TypeSpec
+                .interfaceBuilder(ClassName.get(Class1::class.java))
+                .addJavadoc("text2")
+                .build(),
+        )
+
+        assertThat(
+            buildEnumTypeSpec("MyClass") {
+                addEnumConstant("A")
+            },
+        ).isEqualTo(
+            TypeSpec
+                .enumBuilder("MyClass")
+                .addEnumConstant("A")
+                .build(),
+        )
+        assertThat(
+            buildEnumTypeSpec(Class1::class.name) {
+                addEnumConstant("A")
+            },
+        ).isEqualTo(
+            TypeSpec
+                .enumBuilder(ClassName.get(Class1::class.java))
+                .addEnumConstant("A")
+                .build(),
+        )
+
+        assertThat(
+            buildAnonymousTypeSpec("Anonymous1") {
+                addJavadoc("text1")
+            },
+        ).isEqualTo(
+            TypeSpec
+                .anonymousClassBuilder("Anonymous1")
+                .addJavadoc("text1")
+                .build(),
+        )
+        assertThat(
+            buildAnonymousTypeSpec(codeBlockOf("Anonymous2")) {
+                addJavadoc("text2")
+            },
+        ).isEqualTo(
+            TypeSpec
+                .anonymousClassBuilder(CodeBlock.of("Anonymous2"))
+                .addJavadoc("text2")
+                .build(),
+        )
+
+        assertThat(
+            buildAnnotationTypeSpec("MyClass") {
+                addJavadoc("text1")
+            },
+        ).isEqualTo(
+            TypeSpec
+                .annotationBuilder("MyClass")
+                .addJavadoc("text1")
+                .build(),
+        )
+        assertThat(
+            buildAnnotationTypeSpec(Class1::class.name) {
+                addJavadoc("text2")
+            },
+        ).isEqualTo(
+            TypeSpec
+                .annotationBuilder(ClassName.get(Class1::class.java))
+                .addJavadoc("text2")
+                .build(),
+        )
+    }
+}
+
 class TypeSpecHandlerTest {
     @Test
     fun add() {
@@ -81,7 +219,7 @@ class TypeSpecHandlerTest {
                                 .addEnumConstant("B")
                                 .build(),
                         ).addType(TypeSpec.anonymousClassBuilder("Anonymous1").build())
-                        .addType(TypeSpec.anonymousClassBuilder(codeBlockOf("")).build())
+                        .addType(TypeSpec.anonymousClassBuilder(CodeBlock.of("")).build())
                         .addType(
                             TypeSpec
                                 .anonymousClassBuilder("Anonymous2")
@@ -89,7 +227,7 @@ class TypeSpecHandlerTest {
                                 .build(),
                         ).addType(
                             TypeSpec
-                                .anonymousClassBuilder(codeBlockOf(""))
+                                .anonymousClassBuilder(CodeBlock.of(""))
                                 .addJavadoc("text2")
                                 .build(),
                         ).addType(TypeSpec.annotationBuilder("Annotation1").build())
@@ -182,15 +320,75 @@ class TypeSpecHandlerTest {
 
 class TypeSpecBuilderTest {
     @Test
-    fun `Fails when inserted more than 1 types`() {
-        assertFails {
-            buildJavaFile("MyClass") {
-                types {
-                    addClass("Class1")
-                    addClass("Class2")
+    fun annotations() {
+        assertThat(
+            buildClassTypeSpec("MyClass") {
+                annotations.add(Field1::class)
+                annotations {
+                    add(Field2::class)
                 }
-            }
-        }
+            },
+        ).isEqualTo(
+            TypeSpec
+                .classBuilder("MyClass")
+                .addAnnotation(Field1::class.java)
+                .addAnnotation(Field2::class.java)
+                .build(),
+        )
+    }
+
+    @Test
+    fun fields() {
+        assertThat(
+            buildClassTypeSpec("MyClass") {
+                fields.add(INT, "field1", PUBLIC)
+                fields {
+                    add(CHAR, "field2", PRIVATE)
+                }
+            },
+        ).isEqualTo(
+            TypeSpec
+                .classBuilder("MyClass")
+                .addField(TypeName.INT, "field1", Modifier.PUBLIC)
+                .addField(TypeName.CHAR, "field2", Modifier.PRIVATE)
+                .build(),
+        )
+    }
+
+    @Test
+    fun methods() {
+        assertThat(
+            buildClassTypeSpec("MyClass") {
+                methods.add("method1")
+                methods {
+                    add("method2")
+                }
+            },
+        ).isEqualTo(
+            TypeSpec
+                .classBuilder("MyClass")
+                .addMethod(MethodSpec.methodBuilder("method1").build())
+                .addMethod(MethodSpec.methodBuilder("method2").build())
+                .build(),
+        )
+    }
+
+    @Test
+    fun types() {
+        assertThat(
+            buildClassTypeSpec("MyClass") {
+                types.addClass(Class1::class.name)
+                types {
+                    addClass(Class2::class.name)
+                }
+            },
+        ).isEqualTo(
+            TypeSpec
+                .classBuilder("MyClass")
+                .addType(TypeSpec.classBuilder(ClassName.get(Class1::class.java)).build())
+                .addType(TypeSpec.classBuilder(ClassName.get(Class2::class.java)).build())
+                .build(),
+        )
     }
 
     @Test
@@ -308,12 +506,12 @@ class TypeSpecBuilderTest {
         assertThat(
             buildClassTypeSpec("class1") { addStaticBlock("some code") },
         ).isEqualTo(
-            TypeSpec.classBuilder("class1").addStaticBlock(codeBlockOf("some code")).build(),
+            TypeSpec.classBuilder("class1").addStaticBlock(CodeBlock.of("some code")).build(),
         )
         assertThat(
             buildClassTypeSpec("class1") { addStaticBlock(codeBlockOf("some code")) },
         ).isEqualTo(
-            TypeSpec.classBuilder("class1").addStaticBlock(codeBlockOf("some code")).build(),
+            TypeSpec.classBuilder("class1").addStaticBlock(CodeBlock.of("some code")).build(),
         )
     }
 
@@ -322,12 +520,12 @@ class TypeSpecBuilderTest {
         assertThat(
             buildClassTypeSpec("class1") { addInitializerBlock("some code") },
         ).isEqualTo(
-            TypeSpec.classBuilder("class1").addInitializerBlock(codeBlockOf("some code")).build(),
+            TypeSpec.classBuilder("class1").addInitializerBlock(CodeBlock.of("some code")).build(),
         )
         assertThat(
             buildClassTypeSpec("class1") { addInitializerBlock(codeBlockOf("some code")) },
         ).isEqualTo(
-            TypeSpec.classBuilder("class1").addInitializerBlock(codeBlockOf("some code")).build(),
+            TypeSpec.classBuilder("class1").addInitializerBlock(CodeBlock.of("some code")).build(),
         )
     }
 

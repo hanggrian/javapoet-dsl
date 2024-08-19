@@ -178,7 +178,7 @@ public interface FieldSpecHandler {
 }
 
 /** Receiver for the `fields` block providing an extended set of operators for the configuration. */
-@JavapoetDsl
+@JavaPoetDsl
 public open class FieldSpecHandlerScope private constructor(handler: FieldSpecHandler) :
     FieldSpecHandler by handler {
         public inline operator fun String.invoke(
@@ -206,7 +206,7 @@ public open class FieldSpecHandlerScope private constructor(handler: FieldSpecHa
     }
 
 /** Wrapper of [FieldSpec.Builder], providing DSL support as a replacement to Java builder. */
-@JavapoetDsl
+@JavaPoetDsl
 public class FieldSpecBuilder(private val nativeBuilder: FieldSpec.Builder) {
     public val annotations: AnnotationSpecHandler =
         object : AnnotationSpecHandler {

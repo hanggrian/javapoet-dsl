@@ -1,6 +1,7 @@
 package com.hanggrian.javapoet
 
 import com.example.Field1
+import com.example.Field2
 import com.example.Parameter1
 import com.example.Parameter2
 import com.example.Parameter3
@@ -11,8 +12,32 @@ import com.example.Parameter7
 import com.google.common.truth.Truth.assertThat
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.ParameterSpec
+import com.squareup.javapoet.TypeName
+import javax.lang.model.element.Modifier
 import kotlin.test.Test
 import kotlin.test.assertFalse
+
+class ParameterSpecCreatorTest {
+    @Test
+    fun of() {
+        assertThat(parameterSpecOf(INT, "myParameter", FINAL))
+            .isEqualTo(ParameterSpec.builder(TypeName.INT, "myParameter", Modifier.FINAL).build())
+    }
+
+    @Test
+    fun build() {
+        assertThat(
+            buildParameterSpec(INT, "myParameter", FINAL) {
+                addJavadoc("text1")
+            },
+        ).isEqualTo(
+            ParameterSpec
+                .builder(TypeName.INT, "myParameter", Modifier.FINAL)
+                .addJavadoc("text1")
+                .build(),
+        )
+    }
+}
 
 class ParameterSpecHandlerTest {
     @Test
@@ -78,6 +103,24 @@ class ParameterSpecHandlerTest {
 }
 
 class ParameterSpecBuilderTest {
+    @Test
+    fun annotations() {
+        assertThat(
+            buildParameterSpec(INT, "myParameter", FINAL) {
+                annotations.add(Field1::class)
+                annotations {
+                    add(Field2::class)
+                }
+            },
+        ).isEqualTo(
+            ParameterSpec
+                .builder(TypeName.INT, "myParameter", Modifier.FINAL)
+                .addAnnotation(Field1::class.java)
+                .addAnnotation(Field2::class.java)
+                .build(),
+        )
+    }
+
     @Test
     fun addJavadoc() {
         assertThat(

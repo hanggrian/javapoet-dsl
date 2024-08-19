@@ -42,6 +42,19 @@ public inline fun buildMethodSpec(
 }
 
 /**
+ * Builds new constructor [MethodSpec] by populating newly created [MethodSpecBuilder] using
+ * provided [configuration].
+ */
+public inline fun buildConstructorMethodSpec(
+    configuration: MethodSpecBuilder.() -> Unit,
+): MethodSpec {
+    contract { callsInPlace(configuration, InvocationKind.EXACTLY_ONCE) }
+    return MethodSpecBuilder(MethodSpec.constructorBuilder())
+        .apply(configuration)
+        .build()
+}
+
+/**
  * Inserts new [MethodSpec] by populating newly created [MethodSpecBuilder] using provided
  * [configuration].
  */
@@ -102,7 +115,7 @@ public interface MethodSpecHandler {
  * Receiver for the `methods` block providing an extended set of operators for the
  * configuration.
  */
-@JavapoetDsl
+@JavaPoetDsl
 public open class MethodSpecHandlerScope private constructor(handler: MethodSpecHandler) :
     MethodSpecHandler by handler {
         public inline operator fun String.invoke(
@@ -116,7 +129,7 @@ public open class MethodSpecHandlerScope private constructor(handler: MethodSpec
     }
 
 /** Wrapper of [MethodSpec.Builder], providing DSL support as a replacement to Java builder. */
-@JavapoetDsl
+@JavaPoetDsl
 public class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) {
     public val annotations: AnnotationSpecHandler =
         object : AnnotationSpecHandler {

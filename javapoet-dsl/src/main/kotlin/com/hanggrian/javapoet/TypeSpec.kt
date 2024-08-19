@@ -487,7 +487,7 @@ public interface TypeSpecHandler {
 }
 
 /** Receiver for the `types` block providing an extended set of operators for the configuration. */
-@JavapoetDsl
+@JavaPoetDsl
 public open class TypeSpecHandlerScope private constructor(handler: TypeSpecHandler) :
     TypeSpecHandler by handler {
         public inline operator fun String.invoke(
@@ -501,7 +501,7 @@ public open class TypeSpecHandlerScope private constructor(handler: TypeSpecHand
     }
 
 /** Wrapper of [TypeSpec.Builder], providing DSL support as a replacement to Java builder. */
-@JavapoetDsl
+@JavaPoetDsl
 public class TypeSpecBuilder(private val nativeBuilder: TypeSpec.Builder) {
     public val annotations: AnnotationSpecHandler =
         object : AnnotationSpecHandler {

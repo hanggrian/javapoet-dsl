@@ -25,7 +25,7 @@ public inline fun buildJavaFile(
 }
 
 /** Wrapper of [JavaFile.Builder], providing DSL support as a replacement to Java builder. */
-@JavapoetDsl
+@JavaPoetDsl
 public class JavaFileBuilder(private val packageName: String) {
     private var comments: MutableList<Pair<String, Array<*>>> = mutableListOf()
     private var imports: MutableMap<Any, MutableSet<String>> = mutableMapOf()

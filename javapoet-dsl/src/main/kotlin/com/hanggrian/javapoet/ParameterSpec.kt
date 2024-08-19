@@ -191,7 +191,7 @@ public interface ParameterSpecHandler {
  * Receiver for the `parameters` block providing an extended set of operators for the
  * configuration.
  */
-@JavapoetDsl
+@JavaPoetDsl
 public open class ParameterSpecHandlerScope private constructor(handler: ParameterSpecHandler) :
     ParameterSpecHandler by handler {
         public inline operator fun String.invoke(
@@ -219,7 +219,7 @@ public open class ParameterSpecHandlerScope private constructor(handler: Paramet
     }
 
 /** Wrapper of [ParameterSpec.Builder], providing DSL support as a replacement to Java builder. */
-@JavapoetDsl
+@JavaPoetDsl
 public class ParameterSpecBuilder(private val nativeBuilder: ParameterSpec.Builder) {
     public val annotations: AnnotationSpecHandler =
         object : AnnotationSpecHandler {

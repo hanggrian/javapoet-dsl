@@ -6,4 +6,4 @@ package com.hanggrian.javapoet
  */
 @DslMarker
 @Target(AnnotationTarget.CLASS)
-public annotation class JavapoetDsl
+public annotation class JavaPoetDsl

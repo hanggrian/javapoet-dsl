@@ -7,6 +7,18 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFails
 
 class JavaFileBuilderTest {
+    @Test
+    fun `Fails when inserted more than 1 types`() {
+        assertFails {
+            buildJavaFile("MyClass") {
+                types {
+                    addClass("Class1")
+                    addClass("Class2")
+                }
+            }
+        }
+    }
+
     /** A java file may only have one type. */
     @Test
     fun `Invalid number of types`() {
@@ -102,7 +114,6 @@ class JavaFileBuilderTest {
 
     @Test
     fun indent() {
-        // Custom string.
         assertEquals(
             """
             package com.example;
@@ -120,7 +131,10 @@ class JavaFileBuilderTest {
                 indent = ">"
             }.toString(),
         )
-        // Use count.
+    }
+
+    @Test
+    fun indentSize() {
         assertEquals(
             """
             package com.example;

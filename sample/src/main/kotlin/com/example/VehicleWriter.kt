@@ -6,11 +6,8 @@ import com.hanggrian.javapoet.PUBLIC
 import com.hanggrian.javapoet.add
 import com.hanggrian.javapoet.addClass
 import com.hanggrian.javapoet.addInterface
-import com.hanggrian.javapoet.addingClass
-import com.hanggrian.javapoet.buildAnnotationSpec
 import com.hanggrian.javapoet.buildJavaFile
 import com.hanggrian.javapoet.classNamed
-import com.hanggrian.javapoet.name
 import java.nio.file.Paths
 
 class VehicleWriter {

@@ -10,9 +10,32 @@ import com.example.Field7
 import com.google.common.truth.Truth.assertThat
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.FieldSpec
+import com.squareup.javapoet.TypeName
 import javax.lang.model.element.Modifier
 import kotlin.test.Test
 import kotlin.test.assertFalse
+
+class FieldSpecCreatorTest {
+    @Test
+    fun of() {
+        assertThat(fieldSpecOf(INT, "myField", PUBLIC))
+            .isEqualTo(FieldSpec.builder(TypeName.INT, "myField", Modifier.PUBLIC).build())
+    }
+
+    @Test
+    fun build() {
+        assertThat(
+            buildFieldSpec(INT, "myField", PUBLIC) {
+                setInitializer("value1")
+            },
+        ).isEqualTo(
+            FieldSpec
+                .builder(TypeName.INT, "myField", Modifier.PUBLIC)
+                .initializer("value1")
+                .build(),
+        )
+    }
+}
 
 class FieldSpecHandlerTest {
     @Test
@@ -78,6 +101,24 @@ class FieldSpecHandlerTest {
 }
 
 class FieldSpecBuilderTest {
+    @Test
+    fun annotations() {
+        assertThat(
+            buildFieldSpec(INT, "myField", PUBLIC) {
+                annotations.add(Field1::class)
+                annotations {
+                    add(Field2::class)
+                }
+            },
+        ).isEqualTo(
+            FieldSpec
+                .builder(TypeName.INT, "myField", Modifier.PUBLIC)
+                .addAnnotation(Field1::class.java)
+                .addAnnotation(Field2::class.java)
+                .build(),
+        )
+    }
+
     @Test
     fun addJavadoc() {
         assertThat(

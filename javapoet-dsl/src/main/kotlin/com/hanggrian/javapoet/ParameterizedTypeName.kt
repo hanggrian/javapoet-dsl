@@ -17,5 +17,9 @@ public fun ClassName.parameterizedBy(vararg typeArguments: KClass<*>): Parameter
     ParameterizedTypeName.get(this, *typeArguments.map { it.name }.toTypedArray())
 
 /** Returns a parameterized type, applying typeArguments to rawType. */
+public fun ClassName.parameterizedBy(vararg typeArguments: Class<*>): ParameterizedTypeName =
+    ParameterizedTypeName.get(this, *typeArguments.map { it.name2 }.toTypedArray())
+
+/** Returns a parameterized type, applying typeArguments to rawType. */
 public inline fun <reified T> ClassName.parameterizedBy(): ParameterizedTypeName =
     parameterizedBy(T::class.name)

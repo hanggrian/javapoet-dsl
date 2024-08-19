@@ -16,7 +16,7 @@ providing Kotlin DSL functionality and other convenient solutions.
 
 ```kt
 buildJavaFile("com.example.helloworld") {
-    classType("HelloWorld") {
+    types.addClass("HelloWorld") {
         addModifiers(PUBLIC, FINAL)
         methods {
             "main" {
@@ -72,7 +72,7 @@ type function whenever possible.
 
 ```kt
 buildMethodSpec("sortList") {
-    returns = int
+    returns = INT
     parameters.add(classNamed("java.util", "List").parameterizedBy(hoverboard), "list")
     appendLine("%T.sort(list)", Collections::class)
     appendLine("return list")
@@ -91,17 +91,19 @@ These containers have ability to add components with/without invoking DSL.
 For example, 2 examples below will produce the same result.
 
 ```kt
-types.addClass("Car") {
-    methods {
-        "getWheels" {
-            returns = INT
-            appendLine("return wheels")
-        }
-        "setWheels" {
-            parameters {
-                add(INT, "wheels")
+types {
+    addClass("Car") {
+        methods {
+            "getWheels" {
+                returns = INT
+                appendLine("return wheels")
             }
-            appendLine("this.wheels = wheels")
+            "setWheels" {
+                parameters {
+                    add(INT, "wheels")
+                }
+                appendLine("this.wheels = wheels")
+            }
         }
     }
 }

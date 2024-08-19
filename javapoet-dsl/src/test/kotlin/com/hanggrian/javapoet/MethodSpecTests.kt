@@ -11,10 +11,45 @@ import com.example.Field6
 import com.google.common.truth.Truth.assertThat
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.MethodSpec
+import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeVariableName
 import javax.lang.model.element.Modifier
 import kotlin.test.Test
 import kotlin.test.assertFalse
+
+class MethodSpecCreatorTest {
+    @Test
+    fun of() {
+        assertThat(methodSpecOf("myMethod"))
+            .isEqualTo(MethodSpec.methodBuilder("myMethod").build())
+        assertThat(emptyConstructorMethodSpec())
+            .isEqualTo(MethodSpec.constructorBuilder().build())
+    }
+
+    @Test
+    fun build() {
+        assertThat(
+            buildMethodSpec("myMethod") {
+                addJavadoc("text1")
+            },
+        ).isEqualTo(
+            MethodSpec
+                .methodBuilder("myMethod")
+                .addJavadoc("text1")
+                .build(),
+        )
+        assertThat(
+            buildConstructorMethodSpec {
+                addJavadoc("text1")
+            },
+        ).isEqualTo(
+            MethodSpec
+                .constructorBuilder()
+                .addJavadoc("text1")
+                .build(),
+        )
+    }
+}
 
 class MethodSpecHandlerTest {
     @Test
@@ -62,6 +97,42 @@ class MethodSpecHandlerTest {
 }
 
 class MethodSpecBuilderTest {
+    @Test
+    fun annotations() {
+        assertThat(
+            buildMethodSpec("myMethod") {
+                annotations.add(Field1::class)
+                annotations {
+                    add(Field2::class)
+                }
+            },
+        ).isEqualTo(
+            MethodSpec
+                .methodBuilder("myMethod")
+                .addAnnotation(Field1::class.java)
+                .addAnnotation(Field2::class.java)
+                .build(),
+        )
+    }
+
+    @Test
+    fun parameters() {
+        assertThat(
+            buildMethodSpec("myMethod") {
+                parameters.add(INT, "param1", PUBLIC)
+                parameters {
+                    add(CHAR, "param2", PRIVATE)
+                }
+            },
+        ).isEqualTo(
+            MethodSpec
+                .methodBuilder("myMethod")
+                .addParameter(TypeName.INT, "param1", Modifier.PUBLIC)
+                .addParameter(TypeName.CHAR, "param2", Modifier.PRIVATE)
+                .build(),
+        )
+    }
+
     @Test
     fun name() {
         assertThat(
