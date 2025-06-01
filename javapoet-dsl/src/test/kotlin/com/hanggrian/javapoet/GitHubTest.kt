@@ -6,10 +6,10 @@ import java.util.Collections
 import java.util.Date
 import kotlin.test.Test
 
-/** From `https://github.com/square/javapoet`. */
+/** From `https://github.com/square/javapoet/`. */
 class GitHubTest {
     @Test
-    fun `Example`() {
+    fun `Example`() =
         assertThat(
             buildJavaFile("com.example.helloworld") {
                 types.addClass("HelloWorld") {
@@ -37,7 +37,6 @@ class GitHubTest {
 
             """.trimIndent(),
         )
-    }
 
     @Test
     fun `Code & Control Flow`() {
@@ -130,7 +129,7 @@ class GitHubTest {
     }
 
     @Test
-    fun `$L for Literals`() {
+    fun `$L for Literals`() =
         assertThat(
             buildMethodSpec("computeRange") {
                 returns = INT
@@ -152,10 +151,9 @@ class GitHubTest {
 
             """.trimIndent(),
         )
-    }
 
     @Test
-    fun `$S for Strings`() {
+    fun `$S for Strings`() =
         assertThat(
             buildClassTypeSpec("HelloWorld") {
                 addModifiers(PUBLIC, FINAL)
@@ -192,7 +190,6 @@ class GitHubTest {
 
             """.trimIndent(),
         )
-    }
 
     @Test
     fun `$T for Types`() {
@@ -374,7 +371,7 @@ class GitHubTest {
     }
 
     @Test
-    fun `Methods`() {
+    fun `Methods`() =
         assertThat(
             buildClassTypeSpec("HelloWorld") {
                 addModifiers(PUBLIC, ABSTRACT)
@@ -390,10 +387,9 @@ class GitHubTest {
 
             """.trimIndent(),
         )
-    }
 
     @Test
-    fun `Constructors`() {
+    fun `Constructors`() =
         assertThat(
             buildClassTypeSpec("HelloWorld") {
                 addModifiers(PUBLIC)
@@ -416,10 +412,9 @@ class GitHubTest {
 
             """.trimIndent(),
         )
-    }
 
     @Test
-    fun `Parameters`() {
+    fun `Parameters`() =
         assertThat(
             buildMethodSpec("welcomeOverlords") {
                 parameters {
@@ -434,7 +429,6 @@ class GitHubTest {
 
             """.trimIndent(),
         )
-    }
 
     @Test
     fun `Fields`() {
@@ -469,7 +463,7 @@ class GitHubTest {
     }
 
     @Test
-    fun `Interfaces`() {
+    fun `Interfaces`() =
         assertThat(
             buildInterfaceTypeSpec("HelloWorld") {
                 addModifiers(PUBLIC)
@@ -490,7 +484,6 @@ class GitHubTest {
 
             """.trimIndent(),
         )
-    }
 
     @Test
     fun `Enums`() {
@@ -559,7 +552,7 @@ class GitHubTest {
     }
 
     @Test
-    fun `Anonymous Inner Classes`() {
+    fun `Anonymous Inner Classes`() =
         assertThat(
             buildMethodSpec("sortByLength") {
                 parameters.add(LIST.parameterizedBy<String>(), "strings")
@@ -595,7 +588,6 @@ class GitHubTest {
 
             """.trimIndent(),
         )
-    }
 
     @Test
     fun `Annotations`() {

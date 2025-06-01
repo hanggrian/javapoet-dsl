@@ -1,20 +1,20 @@
 package com.hanggrian.javapoet
 
+import com.google.common.truth.Truth.assertThat
 import kotlin.test.Test
-import kotlin.test.assertEquals
 
 class TypeNameTest {
     @Test
     fun staticFields() {
-        assertEquals("void", "$VOID")
-        assertEquals("boolean", "$BOOLEAN")
-        assertEquals("byte", "$BYTE")
-        assertEquals("short", "$SHORT")
-        assertEquals("int", "$INT")
-        assertEquals("long", "$LONG")
-        assertEquals("char", "$CHAR")
-        assertEquals("float", "$FLOAT")
-        assertEquals("double", "$DOUBLE")
-        assertEquals("java.lang.Object", "$OBJECT")
+        assertThat("$VOID").isEqualTo("void")
+        assertThat("$BOOLEAN").isEqualTo("boolean")
+        assertThat("$BYTE").isEqualTo("byte")
+        assertThat("$SHORT").isEqualTo("short")
+        assertThat("$INT").isEqualTo("int")
+        assertThat("$LONG").isEqualTo("long")
+        assertThat("$CHAR").isEqualTo("char")
+        assertThat("$FLOAT").isEqualTo("float")
+        assertThat("$DOUBLE").isEqualTo("double")
+        assertThat("$OBJECT").isEqualTo("java.lang.Object")
     }
 }

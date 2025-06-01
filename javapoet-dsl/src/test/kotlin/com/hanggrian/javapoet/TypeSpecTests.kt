@@ -16,14 +16,18 @@ import com.example.Field7
 import com.google.common.truth.Truth.assertThat
 import com.squareup.javapoet.ClassName
 import com.squareup.javapoet.CodeBlock
-import com.squareup.javapoet.JavaFile
 import com.squareup.javapoet.MethodSpec
 import com.squareup.javapoet.TypeName
 import com.squareup.javapoet.TypeSpec
 import com.squareup.javapoet.TypeVariableName
+import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.Spy
+import org.mockito.junit.jupiter.MockitoExtension
+import org.mockito.kotlin.any
+import org.mockito.kotlin.times
+import org.mockito.kotlin.verify
 import javax.lang.model.element.Modifier
 import kotlin.test.Test
-import kotlin.test.assertFalse
 
 class TypeSpecCreatorTest {
     @Test
@@ -158,167 +162,165 @@ class TypeSpecCreatorTest {
     }
 }
 
+@ExtendWith(MockitoExtension::class)
 class TypeSpecHandlerTest {
+    private val typeSpecs = mutableListOf<TypeSpec>()
+
+    @Spy private val types: TypeSpecHandler =
+        object : TypeSpecHandler {
+            override fun add(type: TypeSpec) {
+                typeSpecs += type
+            }
+        }
+
+    private fun types(configuration: TypeSpecHandlerScope.() -> Unit) =
+        TypeSpecHandlerScope
+            .of(types)
+            .configuration()
+
     @Test
     fun add() {
-        assertThat(
-            buildJavaFile("com.example") {
-                types.addClass("HelloWorld") {
-                    types.addClass("Class1")
-                    types.addClass(Annotation1::class.name)
-                    types.addClass("Class2") { addJavadoc("text2") }
-                    types.addClass(Annotation2::class.name) { addJavadoc("text2") }
-                    types.addInterface("Interface1")
-                    types.addInterface(Annotation1::class.name)
-                    types.addInterface("Interface2") { addJavadoc("text2") }
-                    types.addInterface(Annotation2::class.name) { addJavadoc("text2") }
-                    types.addEnum("Enum2") { addEnumConstant("B") }
-                    types.addEnum(Annotation1::class.name) { addEnumConstant("B") }
-                    types {
-                        addAnonymous("Anonymous1")
-                        addAnonymous(codeBlockOf(""))
-                        addAnonymous("Anonymous2") { addJavadoc("text2") }
-                        addAnonymous(codeBlockOf("")) { addJavadoc("text2") }
-                        addAnnotation("Annotation1")
-                        addAnnotation(Annotation1::class.name)
-                        addAnnotation("Annotation2") { addJavadoc("text2") }
-                        addAnnotation(Annotation2::class.name) { addJavadoc("text2") }
-                    }
-                }
-            },
-        ).isEqualTo(
-            JavaFile
-                .builder(
-                    "com.example",
-                    TypeSpec
-                        .classBuilder("HelloWorld")
-                        .addType(TypeSpec.classBuilder("Class1").build())
-                        .addType(TypeSpec.classBuilder(Annotation1::class.name).build())
-                        .addType(TypeSpec.classBuilder("Class2").addJavadoc("text2").build())
-                        .addType(
-                            TypeSpec
-                                .classBuilder(Annotation2::class.name)
-                                .addJavadoc("text2")
-                                .build(),
-                        ).addType(TypeSpec.interfaceBuilder("Interface1").build())
-                        .addType(TypeSpec.interfaceBuilder(Annotation1::class.name).build())
-                        .addType(
-                            TypeSpec
-                                .interfaceBuilder("Interface2")
-                                .addJavadoc("text2")
-                                .build(),
-                        ).addType(
-                            TypeSpec
-                                .interfaceBuilder(Annotation2::class.name)
-                                .addJavadoc("text2")
-                                .build(),
-                        ).addType(TypeSpec.enumBuilder("Enum2").addEnumConstant("B").build())
-                        .addType(
-                            TypeSpec
-                                .enumBuilder(Annotation1::class.name)
-                                .addEnumConstant("B")
-                                .build(),
-                        ).addType(TypeSpec.anonymousClassBuilder("Anonymous1").build())
-                        .addType(TypeSpec.anonymousClassBuilder(CodeBlock.of("")).build())
-                        .addType(
-                            TypeSpec
-                                .anonymousClassBuilder("Anonymous2")
-                                .addJavadoc("text2")
-                                .build(),
-                        ).addType(
-                            TypeSpec
-                                .anonymousClassBuilder(CodeBlock.of(""))
-                                .addJavadoc("text2")
-                                .build(),
-                        ).addType(TypeSpec.annotationBuilder("Annotation1").build())
-                        .addType(TypeSpec.annotationBuilder(Annotation1::class.name).build())
-                        .addType(
-                            TypeSpec
-                                .annotationBuilder("Annotation2")
-                                .addJavadoc("text2")
-                                .build(),
-                        ).addType(
-                            TypeSpec
-                                .annotationBuilder(Annotation2::class.name)
-                                .addJavadoc("text2")
-                                .build(),
-                        ).build(),
-                ).build(),
+        types.addClass("Class1")
+        types.addClass(Annotation1::class.name)
+        types.addClass("Class2") { addJavadoc("text2") }
+        types.addClass(Annotation2::class.name) { addJavadoc("text2") }
+        types.addInterface("Interface1")
+        types.addInterface(Annotation1::class.name)
+        types.addInterface("Interface2") { addJavadoc("text2") }
+        types.addInterface(Annotation2::class.name) { addJavadoc("text2") }
+        types.addEnum("Enum2") { addEnumConstant("B") }
+        types.addEnum(Annotation1::class.name) { addEnumConstant("B") }
+        types {
+            addAnonymous("Anonymous1")
+            addAnonymous(codeBlockOf(""))
+            addAnonymous("Anonymous2") { addJavadoc("text2") }
+            addAnonymous(codeBlockOf("")) { addJavadoc("text2") }
+            addAnnotation("Annotation1")
+            addAnnotation(Annotation1::class.name)
+            addAnnotation("Annotation2") { addJavadoc("text2") }
+            addAnnotation(Annotation2::class.name) { addJavadoc("text2") }
+        }
+        assertThat(typeSpecs).containsExactly(
+            TypeSpec.classBuilder("Class1").build(),
+            TypeSpec.classBuilder(Annotation1::class.name).build(),
+            TypeSpec.classBuilder("Class2").addJavadoc("text2").build(),
+            TypeSpec
+                .classBuilder(Annotation2::class.name)
+                .addJavadoc("text2")
+                .build(),
+            TypeSpec.interfaceBuilder("Interface1").build(),
+            TypeSpec.interfaceBuilder(Annotation1::class.name).build(),
+            TypeSpec
+                .interfaceBuilder("Interface2")
+                .addJavadoc("text2")
+                .build(),
+            TypeSpec
+                .interfaceBuilder(Annotation2::class.name)
+                .addJavadoc("text2")
+                .build(),
+            TypeSpec.enumBuilder("Enum2").addEnumConstant("B").build(),
+            TypeSpec
+                .enumBuilder(Annotation1::class.name)
+                .addEnumConstant("B")
+                .build(),
+            TypeSpec.anonymousClassBuilder("Anonymous1").build(),
+            TypeSpec.anonymousClassBuilder(CodeBlock.of("")).build(),
+            TypeSpec
+                .anonymousClassBuilder("Anonymous2")
+                .addJavadoc("text2")
+                .build(),
+            TypeSpec
+                .anonymousClassBuilder(CodeBlock.of(""))
+                .addJavadoc("text2")
+                .build(),
+            TypeSpec.annotationBuilder("Annotation1").build(),
+            TypeSpec.annotationBuilder(Annotation1::class.name).build(),
+            TypeSpec
+                .annotationBuilder("Annotation2")
+                .addJavadoc("text2")
+                .build(),
+            TypeSpec
+                .annotationBuilder(Annotation2::class.name)
+                .addJavadoc("text2")
+                .build(),
         )
+        verify(types, times(18)).add(any<TypeSpec>())
     }
 
     @Test
     fun adding() {
-        assertThat(
-            buildJavaFile("com.example") {
-                types.addClass("HelloWorld") {
-                    val Class1 by types.addingClass()
-                    val Class2 by types.addingClass { addJavadoc("text2") }
-                    val Interface1 by types.addingInterface()
-                    val Interface2 by types.addingInterface { addJavadoc("text2") }
-                    val Enum1 by types.addingEnum { addEnumConstant("A") }
-                    val Enum2 by types.addingEnum { addEnumConstant("B") }
-                    val Anonymous1 by types.addingAnonymous()
-                    val Anonymous2 by types.addingAnonymous { addJavadoc("text2") }
-                    val Annotation1 by types.addingAnnotation()
-                    val Annotation2 by types.addingAnnotation { addJavadoc("text2") }
-                }
-            },
-        ).isEqualTo(
-            JavaFile
-                .builder(
-                    "com.example",
-                    TypeSpec
-                        .classBuilder("HelloWorld")
-                        .addType(TypeSpec.classBuilder("Class1").build())
-                        .addType(TypeSpec.classBuilder("Class2").addJavadoc("text2").build())
-                        .addType(TypeSpec.interfaceBuilder("Interface1").build())
-                        .addType(
-                            TypeSpec
-                                .interfaceBuilder("Interface2")
-                                .addJavadoc("text2")
-                                .build(),
-                        ).addType(TypeSpec.enumBuilder("Enum1").addEnumConstant("A").build())
-                        .addType(TypeSpec.enumBuilder("Enum2").addEnumConstant("B").build())
-                        .addType(TypeSpec.anonymousClassBuilder("Anonymous1").build())
-                        .addType(
-                            TypeSpec
-                                .anonymousClassBuilder("Anonymous2")
-                                .addJavadoc("text2")
-                                .build(),
-                        ).addType(TypeSpec.annotationBuilder("Annotation1").build())
-                        .addType(
-                            TypeSpec
-                                .annotationBuilder("Annotation2")
-                                .addJavadoc("text2")
-                                .build(),
-                        ).build(),
-                ).build(),
+        val Class1 by types.addingClass()
+        val Class2 by types.addingClass { addJavadoc("text2") }
+        val Interface1 by types.addingInterface()
+        val Interface2 by types.addingInterface { addJavadoc("text2") }
+        val Enum1 by types.addingEnum { addEnumConstant("A") }
+        val Enum2 by types.addingEnum { addEnumConstant("B") }
+        val Anonymous1 by types.addingAnonymous()
+        val Anonymous2 by types.addingAnonymous { addJavadoc("text2") }
+        val Annotation1 by types.addingAnnotation()
+        val Annotation2 by types.addingAnnotation { addJavadoc("text2") }
+        assertThat(typeSpecs).containsExactly(
+            TypeSpec.classBuilder("Class1").build(),
+            TypeSpec.classBuilder("Class2").addJavadoc("text2").build(),
+            TypeSpec.interfaceBuilder("Interface1").build(),
+            TypeSpec
+                .interfaceBuilder("Interface2")
+                .addJavadoc("text2")
+                .build(),
+            TypeSpec.enumBuilder("Enum1").addEnumConstant("A").build(),
+            TypeSpec.enumBuilder("Enum2").addEnumConstant("B").build(),
+            TypeSpec.anonymousClassBuilder("Anonymous1").build(),
+            TypeSpec
+                .anonymousClassBuilder("Anonymous2")
+                .addJavadoc("text2")
+                .build(),
+            TypeSpec.annotationBuilder("Annotation1").build(),
+            TypeSpec
+                .annotationBuilder("Annotation2")
+                .addJavadoc("text2")
+                .build(),
         )
+        verify(types, times(10)).add(any<TypeSpec>())
     }
 
     @Test
     fun invoke() {
-        assertThat(
-            buildJavaFile("com.example") {
-                types.addClass("OuterClass") {
-                    types {
-                        "Class1" { addJavadoc("text1") }
-                        "Class2" { addJavadoc("text2") }
-                    }
-                }
-            }.typeSpec,
-        ).isEqualTo(
-            TypeSpec
-                .classBuilder("OuterClass")
-                .addType(TypeSpec.classBuilder("Class1").addJavadoc("text1").build())
-                .addType(TypeSpec.classBuilder("Class2").addJavadoc("text2").build())
-                .build(),
+        types {
+            "Class1" { addJavadoc("text1") }
+            "Class2" { addJavadoc("text2") }
+        }
+        assertThat(typeSpecs).containsExactly(
+            TypeSpec.classBuilder("Class1").addJavadoc("text1").build(),
+            TypeSpec.classBuilder("Class2").addJavadoc("text2").build(),
         )
+        verify(types, times(2)).add(any<TypeSpec>())
     }
 }
 
 class TypeSpecBuilderTest {
+    @Test
+    fun of() {
+        assertThat(classTypeSpecOf("MyClass"))
+            .isEqualTo(TypeSpec.classBuilder("MyClass").build())
+        assertThat(classTypeSpecOf(Class1::class.name))
+            .isEqualTo(TypeSpec.classBuilder(ClassName.get(Class1::class.java)).build())
+
+        assertThat(interfaceTypeSpecOf("MyClass"))
+            .isEqualTo(TypeSpec.interfaceBuilder("MyClass").build())
+        assertThat(interfaceTypeSpecOf(Class1::class.name))
+            .isEqualTo(TypeSpec.interfaceBuilder(ClassName.get(Class1::class.java)).build())
+
+        assertThat(anonymousTypeSpecOf("Anonymous1"))
+            .isEqualTo(TypeSpec.anonymousClassBuilder("Anonymous1").build())
+        assertThat(anonymousTypeSpecOf(codeBlockOf("Anonymous2")))
+            .isEqualTo(TypeSpec.anonymousClassBuilder(CodeBlock.of("Anonymous2")).build())
+
+        assertThat(annotationTypeSpecOf("MyClass"))
+            .isEqualTo(TypeSpec.annotationBuilder("MyClass").build())
+        assertThat(annotationTypeSpecOf(Class1::class.name))
+            .isEqualTo(TypeSpec.annotationBuilder(ClassName.get(Class1::class.java)).build())
+    }
+
     @Test
     fun annotations() {
         assertThat(
@@ -412,7 +414,7 @@ class TypeSpecBuilderTest {
         assertThat(
             buildClassTypeSpec("class1") {
                 addModifiers(PUBLIC, FINAL, STATIC)
-                assertFalse(modifiers.isEmpty())
+                assertThat(modifiers.isEmpty()).isFalse()
             },
         ).isEqualTo(
             TypeSpec
@@ -430,7 +432,7 @@ class TypeSpecBuilderTest {
                     "typeVar1".genericsBy(Annotation1::class),
                     "typeVar2".genericsBy(Annotation2::class),
                 )
-                assertFalse(typeVariables.isEmpty())
+                assertThat(typeVariables.isEmpty()).isFalse()
             },
         ).isEqualTo(
             TypeSpec
@@ -476,7 +478,7 @@ class TypeSpecBuilderTest {
                 addSuperinterfaces(Field3::class.java, Field4::class.java)
                 addSuperinterfaces(Field5::class, Field6::class)
                 addSuperinterface<Field7>()
-                assertFalse(superinterfaces.isEmpty())
+                assertThat(superinterfaces.isEmpty()).isFalse()
             },
         ).isEqualTo(
             TypeSpec
@@ -534,7 +536,7 @@ class TypeSpecBuilderTest {
         assertThat(
             buildClassTypeSpec("class1") {
                 alwaysQualify("name1", "name2")
-                assertFalse(alwaysQualifiedNames.isEmpty())
+                assertThat(alwaysQualifiedNames.isEmpty()).isFalse()
             },
         ).isEqualTo(
             TypeSpec.classBuilder("class1").alwaysQualify("name1", "name2").build(),

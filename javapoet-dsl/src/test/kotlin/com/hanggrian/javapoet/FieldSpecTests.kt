@@ -11,19 +11,23 @@ import com.google.common.truth.Truth.assertThat
 import com.squareup.javapoet.CodeBlock
 import com.squareup.javapoet.FieldSpec
 import com.squareup.javapoet.TypeName
+import org.junit.jupiter.api.extension.ExtendWith
+import org.mockito.Spy
+import org.mockito.junit.jupiter.MockitoExtension
+import org.mockito.kotlin.any
+import org.mockito.kotlin.times
+import org.mockito.kotlin.verify
 import javax.lang.model.element.Modifier
 import kotlin.test.Test
-import kotlin.test.assertFalse
 
 class FieldSpecCreatorTest {
     @Test
-    fun of() {
+    fun of() =
         assertThat(fieldSpecOf(INT, "myField", PUBLIC))
             .isEqualTo(FieldSpec.builder(TypeName.INT, "myField", Modifier.PUBLIC).build())
-    }
 
     @Test
-    fun build() {
+    fun build() =
         assertThat(
             buildFieldSpec(INT, "myField", PUBLIC) {
                 setInitializer("value1")
@@ -34,23 +38,34 @@ class FieldSpecCreatorTest {
                 .initializer("value1")
                 .build(),
         )
-    }
 }
 
+@ExtendWith(MockitoExtension::class)
 class FieldSpecHandlerTest {
+    private val fieldSpecs = mutableListOf<FieldSpec>()
+
+    @Spy private val fields: FieldSpecHandler =
+        object : FieldSpecHandler {
+            override fun add(field: FieldSpec) {
+                fieldSpecs += field
+            }
+        }
+
+    private fun fields(configuration: FieldSpecHandlerScope.() -> Unit) =
+        FieldSpecHandlerScope
+            .of(fields)
+            .configuration()
+
     @Test
     fun add() {
-        assertThat(
-            buildClassTypeSpec("test") {
-                fields.add(Field1::class.name, "field1")
-                fields.add(Field2::class.java, "field2")
-                fields.add(Field3::class, "field3")
-                fields.add<Field4>("field4")
-                fields.add(Field5::class.name, "field5") { setInitializer("value5") }
-                fields.add(Field6::class.java, "field6") { setInitializer("value6") }
-                fields.add(Field7::class, "field7") { setInitializer("value7") }
-            }.fieldSpecs,
-        ).containsExactly(
+        fields.add(Field1::class.name, "field1")
+        fields.add(Field2::class.java, "field2")
+        fields.add(Field3::class, "field3")
+        fields.add<Field4>("field4")
+        fields.add(Field5::class.name, "field5") { setInitializer("value5") }
+        fields.add(Field6::class.java, "field6") { setInitializer("value6") }
+        fields.add(Field7::class, "field7") { setInitializer("value7") }
+        assertThat(fieldSpecs).containsExactly(
             FieldSpec.builder(Field1::class.java, "field1").build(),
             FieldSpec.builder(Field2::class.java, "field2").build(),
             FieldSpec.builder(Field3::class.java, "field3").build(),
@@ -59,20 +74,18 @@ class FieldSpecHandlerTest {
             FieldSpec.builder(Field6::class.java, "field6").initializer("value6").build(),
             FieldSpec.builder(Field7::class.java, "field7").initializer("value7").build(),
         )
+        verify(fields, times(7)).add(any<FieldSpec>())
     }
 
     @Test
     fun adding() {
-        assertThat(
-            buildClassTypeSpec("test") {
-                val field1 by fields.adding(Field1::class.name)
-                val field2 by fields.adding(Field2::class.java)
-                val field3 by fields.adding(Field3::class)
-                val field4 by fields.adding(Field4::class.name) { setInitializer("value4") }
-                val field5 by fields.adding(Field5::class.java) { setInitializer("value5") }
-                val field6 by fields.adding(Field6::class) { setInitializer("value6") }
-            }.fieldSpecs,
-        ).containsExactly(
+        val field1 by fields.adding(Field1::class.name)
+        val field2 by fields.adding(Field2::class.java)
+        val field3 by fields.adding(Field3::class)
+        val field4 by fields.adding(Field4::class.name) { setInitializer("value4") }
+        val field5 by fields.adding(Field5::class.java) { setInitializer("value5") }
+        val field6 by fields.adding(Field6::class) { setInitializer("value6") }
+        assertThat(fieldSpecs).containsExactly(
             FieldSpec.builder(Field1::class.java, "field1").build(),
             FieldSpec.builder(Field2::class.java, "field2").build(),
             FieldSpec.builder(Field3::class.java, "field3").build(),
@@ -80,29 +93,28 @@ class FieldSpecHandlerTest {
             FieldSpec.builder(Field5::class.java, "field5").initializer("value5").build(),
             FieldSpec.builder(Field6::class.java, "field6").initializer("value6").build(),
         )
+        verify(fields, times(6)).add(any<FieldSpec>())
     }
 
     @Test
     fun invoke() {
-        assertThat(
-            buildClassTypeSpec("test") {
-                fields {
-                    "field1"(Field1::class.name) { setInitializer("value1") }
-                    "field2"(Field2::class.java) { setInitializer("value2") }
-                    "field3"(Field3::class) { setInitializer("value3") }
-                }
-            }.fieldSpecs,
-        ).containsExactly(
+        fields {
+            "field1"(Field1::class.name) { setInitializer("value1") }
+            "field2"(Field2::class.java) { setInitializer("value2") }
+            "field3"(Field3::class) { setInitializer("value3") }
+        }
+        assertThat(fieldSpecs).containsExactly(
             FieldSpec.builder(Field1::class.java, "field1").initializer("value1").build(),
             FieldSpec.builder(Field2::class.java, "field2").initializer("value2").build(),
             FieldSpec.builder(Field3::class.java, "field3").initializer("value3").build(),
         )
+        verify(fields, times(3)).add(any<FieldSpec>())
     }
 }
 
 class FieldSpecBuilderTest {
     @Test
-    fun annotations() {
+    fun annotations() =
         assertThat(
             buildFieldSpec(INT, "myField", PUBLIC) {
                 annotations.add(Field1::class)
@@ -117,10 +129,9 @@ class FieldSpecBuilderTest {
                 .addAnnotation(Field2::class.java)
                 .build(),
         )
-    }
 
     @Test
-    fun addJavadoc() {
+    fun addJavadoc() =
         assertThat(
             buildFieldSpec(Field1::class.name, "field1") {
                 addJavadoc("javadoc1")
@@ -133,15 +144,14 @@ class FieldSpecBuilderTest {
                 .addJavadoc(CodeBlock.of("javadoc2"))
                 .build(),
         )
-    }
 
     @Test
-    fun addModifiers() {
+    fun addModifiers() =
         assertThat(
             buildFieldSpec(Field1::class.name, "field1") {
                 addModifiers(PUBLIC)
                 modifiers += listOf(STATIC, FINAL)
-                assertFalse(modifiers.isEmpty())
+                assertThat(modifiers.isEmpty()).isFalse()
             },
         ).isEqualTo(
             FieldSpec
@@ -150,7 +160,6 @@ class FieldSpecBuilderTest {
                 .addModifiers(Modifier.STATIC, Modifier.FINAL)
                 .build(),
         )
-    }
 
     @Test
     fun initializer() {

@@ -1,11 +1,9 @@
 package com.hanggrian.javapoet
 
+import com.google.common.truth.Truth.assertThat
 import kotlin.test.Test
-import kotlin.test.assertEquals
 
 class ArrayTypeNameTest {
     @Test
-    fun array() {
-        assertEquals("java.lang.String[]", "${STRING.array}")
-    }
+    fun array() = assertThat("${STRING.array}").isEqualTo("java.lang.String[]")
 }

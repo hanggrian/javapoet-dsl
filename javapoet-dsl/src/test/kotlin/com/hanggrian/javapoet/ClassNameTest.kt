@@ -1,31 +1,29 @@
 package com.hanggrian.javapoet
 
+import com.google.common.truth.Truth.assertThat
 import kotlin.test.Test
-import kotlin.test.assertEquals
 
 class ClassNameTest {
     @Test
     fun staticFields() {
-        assertEquals("java.lang.String", "$STRING")
-        assertEquals("java.lang.CharSequence", "$CHAR_SEQUENCE")
-        assertEquals("java.lang.Comparable", "$COMPARABLE")
-        assertEquals("java.lang.Throwable", "$THROWABLE")
-        assertEquals("java.lang.Annotation", "$ANNOTATION")
-        assertEquals("java.lang.Iterable", "$ITERABLE")
-        assertEquals("java.util.Collection", "$COLLECTION")
-        assertEquals("java.util.List", "$LIST")
-        assertEquals("java.util.Set", "$SET")
-        assertEquals("java.util.Map", "$MAP")
+        assertThat("$STRING").isEqualTo("java.lang.String")
+        assertThat("$CHAR_SEQUENCE").isEqualTo("java.lang.CharSequence")
+        assertThat("$COMPARABLE").isEqualTo("java.lang.Comparable")
+        assertThat("$THROWABLE").isEqualTo("java.lang.Throwable")
+        assertThat("$ANNOTATION").isEqualTo("java.lang.Annotation")
+        assertThat("$ITERABLE").isEqualTo("java.lang.Iterable")
+        assertThat("$COLLECTION").isEqualTo("java.util.Collection")
+        assertThat("$LIST").isEqualTo("java.util.List")
+        assertThat("$SET").isEqualTo("java.util.Set")
+        assertThat("$MAP").isEqualTo("java.util.Map")
     }
 
     @Test
-    fun name() {
-        assertEquals("java.lang.String", "${String::class.name}")
-    }
+    fun name() = assertThat("${String::class.name}").isEqualTo("java.lang.String")
 
     @Test
     fun classNamed() {
-        assertEquals("java.lang.String", "${classNamed("java.lang.String")}")
-        assertEquals("java.lang.String", "${classNamed("java.lang", "String")}")
+        assertThat("${classNamed("java.lang.String")}").isEqualTo("java.lang.String")
+        assertThat("${classNamed("java.lang", "String")}").isEqualTo("java.lang.String")
     }
 }

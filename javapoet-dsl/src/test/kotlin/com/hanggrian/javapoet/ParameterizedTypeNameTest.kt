@@ -1,31 +1,24 @@
 package com.hanggrian.javapoet
 
+import com.google.common.truth.Truth.assertThat
 import kotlin.test.Test
-import kotlin.test.assertEquals
 
 class ParameterizedTypeNameTest {
     @Test
     fun parameterizedBy() {
-        assertEquals(
-            "kotlin.Pair<java.lang.Integer, java.lang.String>",
-            "${Pair::class.name.parameterizedBy(INT.box(), STRING)}",
-        )
-        assertEquals(
-            "kotlin.Pair<java.lang.Integer, java.lang.String>",
-            "${Pair::class.name.parameterizedBy(java.lang.Integer::class, String::class)}",
-        )
-        assertEquals(
-            "kotlin.Pair<java.lang.Integer, java.lang.String>",
+        assertThat("${Pair::class.name.parameterizedBy(INT.box(), STRING)}")
+            .isEqualTo("kotlin.Pair<java.lang.Integer, java.lang.String>")
+        assertThat("${Pair::class.name.parameterizedBy(java.lang.Integer::class, String::class)}")
+            .isEqualTo("kotlin.Pair<java.lang.Integer, java.lang.String>")
+        assertThat(
             "${
                 Pair::class.name.parameterizedBy(
                     java.lang.Integer::class.java,
                     String::class.java,
                 )
             }",
-        )
-        assertEquals(
-            "java.util.List<java.lang.String>",
-            "${LIST.parameterizedBy<String>()}",
-        )
+        ).isEqualTo("kotlin.Pair<java.lang.Integer, java.lang.String>")
+        assertThat("${LIST.parameterizedBy<String>()}")
+            .isEqualTo("java.util.List<java.lang.String>")
     }
 }
