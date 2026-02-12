@@ -87,10 +87,21 @@ public inline fun FieldSpecHandler.add(
         .also(::add)
 }
 
+/** Convenient method to insert [FieldSpec] using reified type. */
+public inline fun <reified T> FieldSpecHandler.add(
+    name: String,
+    vararg modifiers: Modifier,
+): FieldSpec =
+    FieldSpec
+        .builder(T::class.java, name, *modifiers)
+        .build()
+        .also(::add)
+
 /**
  * Property delegate for inserting new [FieldSpec] by populating newly created [FieldSpecBuilder]
  * using provided [configuration].
  */
+@Suppress("ktlint:rulebook:contract-function-definition")
 public fun FieldSpecHandler.adding(
     type: TypeName,
     vararg modifiers: Modifier,
@@ -109,6 +120,7 @@ public fun FieldSpecHandler.adding(
  * Property delegate for inserting new [FieldSpec] by populating newly created [FieldSpecBuilder]
  * using provided [configuration].
  */
+@Suppress("ktlint:rulebook:contract-function-definition")
 public fun FieldSpecHandler.adding(
     type: Type,
     vararg modifiers: Modifier,
@@ -127,6 +139,7 @@ public fun FieldSpecHandler.adding(
  * Property delegate for inserting new [FieldSpec] by populating newly created [FieldSpecBuilder]
  * using provided [configuration].
  */
+@Suppress("ktlint:rulebook:contract-function-definition")
 public fun FieldSpecHandler.adding(
     type: KClass<*>,
     vararg modifiers: Modifier,
@@ -140,16 +153,6 @@ public fun FieldSpecHandler.adding(
             .also(::add)
     }
 }
-
-/** Convenient method to insert [FieldSpec] using reified type. */
-public inline fun <reified T> FieldSpecHandler.add(
-    name: String,
-    vararg modifiers: Modifier,
-): FieldSpec =
-    FieldSpec
-        .builder(T::class.java, name, *modifiers)
-        .build()
-        .also(::add)
 
 /** Responsible for managing a set of [FieldSpec] instances. */
 public interface FieldSpecHandler {

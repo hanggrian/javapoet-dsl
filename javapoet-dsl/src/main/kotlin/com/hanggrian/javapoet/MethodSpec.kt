@@ -87,6 +87,7 @@ public inline fun MethodSpecHandler.addConstructor(
  * Property delegate for inserting new [MethodSpec] by populating newly created [MethodSpecBuilder]
  * using provided [configuration].
  */
+@Suppress("ktlint:rulebook:contract-function-definition")
 public fun MethodSpecHandler.adding(
     configuration: MethodSpecBuilder.() -> Unit,
 ): SpecDelegateProvider<MethodSpec> {
@@ -130,6 +131,7 @@ public open class MethodSpecHandlerScope private constructor(handler: MethodSpec
 
 /** Wrapper of [MethodSpec.Builder], providing DSL support as a replacement to Java builder. */
 @JavaPoetDsl
+@Suppress("ktlint:rulebook:overload-function-position")
 public class MethodSpecBuilder(private val nativeBuilder: MethodSpec.Builder) {
     public val annotations: AnnotationSpecHandler =
         object : AnnotationSpecHandler {

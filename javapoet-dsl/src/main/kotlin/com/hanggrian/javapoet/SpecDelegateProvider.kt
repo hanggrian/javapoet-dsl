@@ -10,6 +10,6 @@ public class SpecDelegateProvider<T>(private val getSpec: (String) -> T) {
         property: KProperty<*>,
     ): ReadOnlyProperty<Any?, T> {
         val spec = getSpec(property.name)
-        return ReadOnlyProperty { _, _ -> spec }
+        return { _, _ -> spec }
     }
 }

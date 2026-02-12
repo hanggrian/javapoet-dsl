@@ -25,6 +25,7 @@ public inline fun buildCodeBlock(configuration: CodeBlockBuilder.() -> Unit): Co
 
 /** Wrapper of [CodeBlock.Builder], providing DSL support as a replacement to Java builder. */
 @JavaPoetDsl
+@Suppress("ktlint:rulebook:overload-function-position")
 public class CodeBlockBuilder(private val nativeBuilder: CodeBlock.Builder) {
     /** Returns true if this builder contains no code. */
     public fun isEmpty(): Boolean = nativeBuilder.isEmpty

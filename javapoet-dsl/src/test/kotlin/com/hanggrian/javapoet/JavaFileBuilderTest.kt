@@ -33,7 +33,7 @@ class JavaFileBuilderTest {
         }
         // no type
         assertFails {
-            buildJavaFile("com.example") { }
+            buildJavaFile("com.example") {}
         }
     }
 

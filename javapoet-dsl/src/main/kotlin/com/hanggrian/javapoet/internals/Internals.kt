@@ -19,7 +19,9 @@ public object Internals {
                     }
                     isTemplate = false
                 }
+
                 c == '%' -> isTemplate = true
+
                 else -> s += c
             }
             if (index == format.lastIndex && isTemplate) {

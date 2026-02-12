@@ -518,8 +518,8 @@ class GitHubTest {
                             setReturns<String>()
                         }
                     }
-                addEnumConstant("SCISSORS", buildAnonymousTypeSpec("%S", "peace") { })
-                addEnumConstant("PAPER", buildAnonymousTypeSpec("%S", "flat") { })
+                addEnumConstant("SCISSORS", buildAnonymousTypeSpec("%S", "peace") {})
+                addEnumConstant("PAPER", buildAnonymousTypeSpec("%S", "flat") {})
                 fields.add<String>("handsign", PRIVATE, FINAL)
                 methods.addConstructor {
                     parameters.add<String>("handsign")
