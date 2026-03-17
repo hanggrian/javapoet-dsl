@@ -11,19 +11,6 @@ import com.hanggrian.javapoet.classNamed
 import java.nio.file.Paths
 
 class VehicleWriter {
-    companion object {
-        private const val PACKAGE_NAME = "com.example.output"
-        private const val SOURCE_PATH = "sample/src/main/kotlin"
-
-        @JvmStatic
-        fun main(args: Array<String>) {
-            val writer = VehicleWriter()
-            writer.prepare()
-            writer.write("Bike", 2)
-            writer.write("Car", 4)
-        }
-    }
-
     fun prepare() {
         buildJavaFile(PACKAGE_NAME) {
             types.addInterface("Vehicle") {
@@ -61,5 +48,18 @@ class VehicleWriter {
                 }
             }
         }.writeTo(Paths.get(SOURCE_PATH))
+    }
+
+    companion object {
+        private const val PACKAGE_NAME = "com.example.output"
+        private const val SOURCE_PATH = "sample/src/main/kotlin"
+
+        @JvmStatic
+        fun main(args: Array<String>) {
+            val writer = VehicleWriter()
+            writer.prepare()
+            writer.write("Bike", 2)
+            writer.write("Car", 4)
+        }
     }
 }
