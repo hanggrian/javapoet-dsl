@@ -1,4 +1,4 @@
-[![GitHub Actions](https://img.shields.io/github/actions/workflow/status/hanggrian/javapoet-dsl/code-analysis.yml)](https://github.com/hanggrian/javapoet-dsl/actions/workflows/code-analysis.yml)
+[![GitHub Actions](https://img.shields.io/github/actions/workflow/status/hanggrian/javapoet-dsl/code-analysis.yaml)](https://github.com/hanggrian/javapoet-dsl/actions/workflows/code-analysis.yaml)
 [![Codecov](https://img.shields.io/codecov/c/gh/hanggrian/javapoet-dsl)](https://app.codecov.io/gh/hanggrian/javapoet-dsl/)
 [![Renovate](https://img.shields.io/badge/dependency-mend-blue)](https://developer.mend.io/github/hanggrian/javapoet-dsl/)
 [![Maven Central](https://img.shields.io/maven-central/v/com.hanggrian/javapoet-dsl)](https://repo1.maven.org/maven2/com/hanggrian/javapoet-dsl/)
